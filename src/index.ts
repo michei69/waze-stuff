@@ -6,6 +6,8 @@ import https from "https"
 import path from "path"
 import { exec } from "child_process"
 import { randomUUID } from "crypto"
+import Fuse, { FuseResult } from "fuse.js"
+import { handleCommand, initializeRTHandler, searchAutocomplete } from "./RealtimeCommandHandler"
 
 const promisify = <T>(fn: any): Promise<T> => new Promise((resolve, reject) => {
     try {
@@ -32,6 +34,8 @@ async function main() {
 
     const Batch: protobuf.Type = root.loadSync("linqmap/proto/rt/Container.proto").lookupType("linqmap.proto.rt.Batch")
 
+    initializeRTHandler()
+
     app.post("/rtserver/distrib/login", async (req, res) => {
         const { body } = req
         const temp = await axios.post("https://rt.waze.com/rtserver/distrib/login", body, {
@@ -55,22 +59,48 @@ async function main() {
         res.setHeader("via", "1.1 google")
         res.send(Batch.encode(parsed).finish())
     })
+    app.post("/rtserver/distrib/command", async (req, res) => {
+        var { body }: { body: string } = req
+
+        const temp = await axios.post("https://rt-xlb-row.waze.com/rtserver/distrib/command", body, {
+            headers: {
+                "X-Waze-Network-Version": "3",
+                "Sequence-Number": "1",
+                "X-Waze-Wait-Timeout": "3500",
+                "UID": req.headers.uid
+            },
+            responseType: "arraybuffer"
+        })
+        const data = temp.data
+
+        const resp = await handleCommand(body)
+
+        if (body.startsWith("ProtoBase64,")) {
+            body = body.split(",")[1]
+            const parsed = Batch.decode(Buffer.from(body, "base64"));
+            try {
+                const parsedResp = Batch.decode(data)
+        
+                console.log("====> IN")
+                console.dir(parsed.toJSON(), { depth: null })
+                console.dir(parsedResp.toJSON(), { depth: null })
+                console.log("<==== OUT")
+            } catch (_) {
+                console.log("====> IN")
+                console.dir(parsed.toJSON(), { depth: null })
+                console.log("<==== OUT")
+            }
+        }
+        if (resp) {
+            res.send(resp)
+        } else {
+            res.send(data)
+        }
+    })
 
     var nextTileId = -1
     app.get("/TileServer/multi-get", async (req, res) => {
         const q = new URLSearchParams(req.query as any)
-        // if (nextTileId == -1) nextTileId = parseInt(q.get("t0"))
-        // if (nextTileId != parseInt(q.get("t0"))) {
-        //     console.log(`Skipping tile ${q.get("t0")} because we are waiting for ${nextTileId}`)
-        //     res.sendStatus(500)
-        //     return
-        // }
-        // nextTileId++
-        // if (!q.toString().includes("373675715")) {
-        //     res.send(500)
-        //     return
-        // }
-        // console.log("yay")
         console.log(`https://ctilesgcs-row.waze.com/TileServer/multi-get?${q.toString()}`)
         const temp = await axios.get(`https://ctilesgcs-row.waze.com/TileServer/multi-get?${q.toString()}`, {
             responseType: "arraybuffer",
@@ -96,6 +126,11 @@ async function main() {
         const new_data = fs.readFileSync(`./temp/${uuid}.map_pkg`)
         fs.rmSync(`./temp/${uuid}.map_pkg`)
         res.send(new_data)
+    })
+
+    app.get("/autocomplete/q", async (req, res) => {
+        const { q, lang, sll } = req.query // sll = current location (lat, lon)
+        res.json(await searchAutocomplete(q as string))
     })
 
     https.createServer({

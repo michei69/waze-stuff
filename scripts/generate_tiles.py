@@ -1,3 +1,4 @@
+from waze_util import rescale_tile
 import json
 import random
 
@@ -174,8 +175,9 @@ def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, 
 
         f.write(data)
 
-def generate(tile_id):
-    tile_id = str(tile_id)
+def generate(tile_id, scale = 0):
+    actual_tile_id = str(tile_id)
+    tile_id = str(tile_id) if scale == 0 else str(rescale_tile(tile_id, scale))
     if tile_id not in data:
         return False
 
@@ -220,7 +222,7 @@ def generate(tile_id):
             if i < len(line["points"]) - 1:
                 addLine(line["points"][i] + 4, line["points"][i + 1] + 4, line["type"])
 
-    create_wzt(tile_id, lineData, pointData, pointId, lineRoute, lineSpeedAvg, lineExtType, lineExtId, lineExtLevelByLine, lineSpeedMax, lineAttribute, laneType)
+    create_wzt(actual_tile_id, lineData, pointData, pointId, lineRoute, lineSpeedAvg, lineExtType, lineExtId, lineExtLevelByLine, lineSpeedMax, lineAttribute, laneType)
     return True
 
 if __name__ == "__main__":

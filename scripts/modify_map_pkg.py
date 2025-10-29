@@ -8,6 +8,7 @@ from create_dummy_wzt import create_dummy_wzt, create_dummy_wzt_with_text
 from waze_scales import ScaleData, MAX_SCALE
 from generate_tiles import generate
 from waze_tile_classes import WazeTile
+from waze_util import id_to_latlon
 import sys
 import os
 # from uuid import uuid4
@@ -22,9 +23,17 @@ tiles = split_package_raw(data)
 # d = []
 
 for tile_id in tiles:
-    exists = os.path.exists("temp/" + tile_id + ".wzt")
+    scale = 0
+    tile_id = int(tile_id)
+    for i in range(1, MAX_SCALE + 1):
+        if ScaleData[i]["base_index"] > tile_id:
+            scale = i - 1
+            break
+    tile_id = str(tile_id)
+
+    exists = os.path.exists(f"temp/{tile_id}.wzt")
     if not exists:
-        exists = generate(tile_id)
+        exists = generate(tile_id, scale)
     if exists:
         print(f"Serving {tile_id} from generated")
         with open(f"temp/{tile_id}.wzt", "rb") as f:
@@ -36,19 +45,7 @@ for tile_id in tiles:
     #     print(f"Thomas in {tile_id}")
     # d.append(WazeTile(decompress_raw(tiles[tile_id])))
 
-    scale = 0
-    tile_id = int(tile_id)
-    for i in range(1, MAX_SCALE + 1):
-        if ScaleData[i]["base_index"] > tile_id:
-            scale = i - 1
-            break
-
-    temp = tile_id - ScaleData[scale]["base_index"]
-    lat_index = temp % ScaleData[scale]["num_rows"]
-    lon_index = temp // ScaleData[scale]["num_rows"]
-
-    latitude = (lat_index - 9000) / 100
-    longitude = (lon_index - 18000) / 100
+    latitude, longitude = id_to_latlon(tile_id)
 
     # print(f"tile(id = {tile_id}, lat = {latitude}, lon = {longitude}, scale = {scale})")
 

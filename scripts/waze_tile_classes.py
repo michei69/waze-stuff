@@ -13,7 +13,7 @@ def get_string_at_offset(data: bytes, offset: int) -> str:
     return data[offset:end].decode('utf-8', errors='ignore')
 
 def get_current_data(raw_data: bytes, size: int, offset: int) -> bytes:
-    return raw_data[offset*size:offset*size+size]
+    return raw_data[offset*size:offset*size+size] if raw_data and offset <= len(raw_data)//size else b""
 
 @dataclass
 class LineSummary():
@@ -41,6 +41,7 @@ class LineRouteData():
 
     def __init__(self, offset = 0, raw_data: bytes = b""):
         raw_data = get_current_data(raw_data, 4, offset)
+        if raw_data == b"": return
         self.from_flags = raw_data[0]
         self.to_flags = raw_data[1]
         self.from_turn_flags = raw_data[2]
@@ -215,8 +216,8 @@ class SquareData():
         lat_index = temp % ScaleData[self.actual_scale]["num_rows"]
         lon_index = temp // ScaleData[self.actual_scale]["num_rows"]
 
-        self.latitude = (lat_index - 9000) / 100
-        self.longitude = (lon_index - 18000) / 100
+        self.latitude = (lat_index * ScaleData[self.actual_scale]["scale_factor"] - 9000) / 100
+        self.longitude = (lon_index * ScaleData[self.actual_scale]["scale_factor"] - 18000) / 100
     
 @dataclass
 class PolygonEx():

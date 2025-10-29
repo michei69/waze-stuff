@@ -25,7 +25,7 @@ type Feature = {
 
 async function main() {
     console.log("reading")
-    const data: { features: Feature[] } = await Bun.file("D:/maps/ets2-pmtiles/ets2.geojson").json()
+    const data: { features: Feature[] } = await Bun.file("./ets2-search.geojson").json()
 
     const scale = 1/19
 
@@ -48,7 +48,7 @@ async function main() {
     }
 
     console.log("writing")
-    await Bun.write("./ets2-scaled.geojson", JSON.stringify(data))
+    await Bun.write("./ets2-search-scaled.geojson", JSON.stringify(data))
     console.log("done")
 }
 main()

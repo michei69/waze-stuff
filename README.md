@@ -179,6 +179,10 @@ a tile has a size of 10000x10000, which represents 0.01x0.01 (deg lat x deg lon)
 
 tile_id is calculated via a simple formula from latitude, longitude, and scale. check the scripts to find out how (im too lazy to copy paste)
 
+no idea why streets seem slimmer than they normally are on the map, but it might also be because they lack most data lol
+
+routing seems painful to even THINK about starting. Check [UserDriveV2.proto](./protos/v2/UserDriveV2.proto) (StartNavigationInfo), and just try to understand it lmfao. i mean, its not hard to understand, but oh my god the amount of calculations that seem to be required... ill do it eventually™
+
 # scweenshot!
 
 ![screenshot showcasing ETS2 running alongside waze](./images/screenshot1.png)

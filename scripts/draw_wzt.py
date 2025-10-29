@@ -41,7 +41,10 @@ def main(data: bytes):
                 pygame.draw.polygon(sc, (255,0,0), [(p.x / 15 + 125, 725 - p.y / 15 + 125) for p in polygon.points])
             elif polygon.cfcc == 20:
                 pygame.draw.polygon(sc, (0,255,255), [(p.x / 15 + 125, 725 - p.y / 15 + 125) for p in polygon.points])
-
+            elif polygon.cfcc == 12:
+                pygame.draw.polygon(sc, (0,255,0), [(p.x / 15 + 125, 725 - p.y / 15 + 125) for p in polygon.points])
+            else:
+                print("unkown polygon type: ", polygon.cfcc)
 
         pygame.display.flip()
 
