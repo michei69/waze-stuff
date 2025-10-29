@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "SocialMedia.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message AddMeetingInfo {
+    optional socialmedia.MeetingInfo meetingInfo = 1;
+    optional bool isInMeeting = 2;
+    optional bool isExpired = 3;
+    optional string ownerPersistentId = 4;
+    optional bool onDemand = 5;
+}
+
+message UpdateMeetings {
+    repeated AddMeetingInfo meetings = 1;
+    optional bool replace = 2;
+}

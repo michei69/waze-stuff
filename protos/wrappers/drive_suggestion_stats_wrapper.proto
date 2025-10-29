@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/drive_suggestion_stats_wrapper/server_suggestion_requested_stat.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_clicked_stat.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_dismissed_stat.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_result_stat.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_rt_info_updated_stat.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_shown_stat.proto";
+import "stats/drive_suggestion_stats_wrapper/wait_for_server_suggestion_started_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DriveSuggestionStatsWrapper {
+    oneof stat {
+        ServerSuggestionRequestedStat server_suggestion_requested = 1;
+        SuggestionCardClickedStat suggestion_card_clicked = 2;
+        SuggestionCardDismissedStat suggestion_card_dismissed = 3;
+        SuggestionCardResultStat suggestion_card_result = 4;
+        SuggestionCardRtInfoUpdatedStat suggestion_card_rt_info_updated = 5;
+        SuggestionCardShownStat suggestion_card_shown = 6;
+        WaitForServerSuggestionStartedStat wait_for_server_suggestion_started = 7;
+    }
+}

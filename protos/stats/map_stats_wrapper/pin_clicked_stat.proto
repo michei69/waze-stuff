@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/map_stats_wrapper/pin_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PinClickedStat {
+    PinType pin_type = 2;
+    
+    oneof _tooltip {
+        bool tooltip = 1;
+    }
+}

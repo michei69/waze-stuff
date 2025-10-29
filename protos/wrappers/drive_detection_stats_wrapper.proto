@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/drive_detection_stats_wrapper/app_wake_up_stat.proto";
+import "stats/drive_detection_stats_wrapper/audio_connection_detection_stat.proto";
+import "stats/drive_detection_stats_wrapper/motion_detection_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DriveDetectionStatsWrapper {
+    oneof stat {
+        MotionDetectionStat motion_detection = 1;
+        AppWakeUpStat app_wake_up = 2;
+        AudioConnectionDetectionStat audio_connection_detection = 3;
+    }
+}

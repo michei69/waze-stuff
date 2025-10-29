@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+import "stats/reusable_types/location_provider.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GpsQualityStat {
+    LocationProvider position_provider = 7;
+    LatLng coordinates = 8;
+    
+    oneof _sample_count {
+        int64 sample_count = 1;
+    }
+    
+    oneof _bad_sample_count {
+        int64 bad_sample_count = 2;
+    }
+    
+    oneof _duplicate_sample_count {
+        int64 duplicate_sample_count = 3;
+    }
+    
+    oneof _accuracy_avg_meters {
+        int64 accuracy_avg_meters = 4;
+    }
+    
+    oneof _accuracy_min_meters {
+        int64 accuracy_min_meters = 5;
+    }
+    
+    oneof _accuracy_max_meters {
+        int64 accuracy_max_meters = 6;
+    }
+}

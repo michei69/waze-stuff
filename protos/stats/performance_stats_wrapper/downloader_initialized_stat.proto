@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DownloaderInitializedStat {
+    oneof _concurrent_downloads {
+        int64 concurrent_downloads = 1;
+    }
+    
+    oneof _concurrent_downloads_extra {
+        int64 concurrent_downloads_extra = 2;
+    }
+}

@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package linqmap.proto.events;
+
+import "Types.proto";
+import "google/protobuf/descriptor.proto";
+
+option objc_class_prefix = "LPEV";
+option java_package = "linqmap.proto.events";
+
+message SessionEventWrapper {
+    optional int64 userId = 1;
+    optional string sessionId = 2;
+    optional int32 idInSession = 3;
+    optional int64 timestamp = 4;
+    optional bytes event = 5;
+    optional string name = 6;
+    
+    optional Type type = 7 [deprecated = true];
+    enum Type {
+        option deprecated = true;
+        UKNOWN = 0;
+        START = 1;
+        MIDDLE = 2;
+        END = 3;
+    }
+    
+    optional Envelope box = 8;
+    optional StringMap attributes = 9;
+    optional string protoEventType = 10;
+    optional bytes protoEventBytes = 11;
+}
+
+message RTSession {
+    repeated SessionEventWrapper events = 1;
+}
+
+message CommonEventData {
+    optional string session = 1;
+    optional int64 user_id = 2;
+    optional string experiment_group_hint = 3;
+}
+
+extend google.protobuf.FieldOptions {
+    optional bool partition_code = 88001;
+}

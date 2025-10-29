@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/destination_card_stats_wrapper/destination_card.proto";
+import "stats/reusable_types/rt_info.proto";
+import "stats/start_state_stats_wrapper/destination_chip.proto";
+import "stats/start_state_stats_wrapper/drawer_state.proto";
+import "stats/start_state_stats_wrapper/favorites_carousel.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message StartStateDrawerClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        DESTINATION_CARD = 1;
+        SCROLL = 2;
+        SEARCH_FIELD = 3;
+        SUGGESTED_INFO = 4;
+        VOICE_SEARCH = 5;
+        DESTINATION_CHIP = 6;
+        CAROUSEL_SCROLL = 7;
+    }
+    
+    ClickType click_type = 2;
+    enum ClickType {
+        CLICK_TYPE_UNSPECIFIED = 0;
+        CLICK = 1;
+        LONG_PRESS = 2;
+        OPTIONS_FROM_SWIPE = 3;
+    }
+    
+    DestinationCard clicked_card = 4;
+    DestinationChip clicked_chip = 7;
+    DrawerState drawer_state = 8;
+    RtInfo rt_info = 11;
+    FavoritesCarousel favorites_carousel = 12;
+    
+    oneof _clicked_card_index {
+        int64 clicked_card_index = 5;
+    }
+    
+    oneof _list_cards_count {
+        int64 list_cards_count = 6;
+    }
+    
+    oneof _planned_drive_cards_count {
+        int64 planned_drive_cards_count = 9;
+    }
+    
+    oneof _calendar_cards_count {
+        int64 calendar_cards_count = 10;
+    }
+    
+    reserved 3;
+}

@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+package linqmap.proto.rtng;
+
+import "google/protobuf/descriptor.proto";
+import "Types.proto";
+
+option objc_class_prefix = "LRTNG";
+option java_package = "linqmap.proto.rtng";
+
+message UserID {
+    optional int64 id = 1;
+    optional string uuid = 2;
+}
+
+message UserInfo {
+    optional UserID id = 1;
+    optional bool disconnected = 3;
+    optional Coordinate real_position = 4;
+    optional string nickname = 7;
+    optional int32 capabilities = 11;
+    optional Coordinate destination = 17;
+    optional int64 eta = 18;
+    optional int32 mood = 19;
+    optional int64 user_points = 30;
+    optional int32 country_id = 31;
+    optional int64 entry_date = 32;
+}
+
+message GetUserInfoRequest {
+    optional int64 user_id = 1;
+}
+
+message GetUserInfoResponse {
+    optional UserInfo user_info = 1;
+}
+
+extend google.protobuf.MessageOptions {
+    optional string server_type = 888125;
+    optional bool plain_response = 888126;
+}
+
+extend google.protobuf.FieldOptions {
+    optional string fill_with = 999123;
+    optional string fill_into = 999124;
+    optional bool fill_message = 999126;
+    optional bool session_update = 999127;
+    optional bool field_deleter = 999128;
+    optional bool response_message = 999129;
+    optional bool inner_response_message = 999130;
+    optional string execute_method = 999131;
+    optional bool executor = 999132;
+    optional string add_into = 999133;
+    optional string ignore_fill = 999134;
+    optional string fill_with_and_clear = 999135;
+}

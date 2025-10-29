@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum InCarMainScreenButton {
+    IN_CAR_BUTTON_UNSPECIFIED = 0;
+    IN_CAR_BUTTON_HOME = 1;
+    IN_CAR_BUTTON_WORK = 2;
+    IN_CAR_BUTTON_FAVORITES = 3;
+    IN_CAR_BUTTON_SEARCH = 4;
+    IN_CAR_BUTTON_VOICE_ASSISTANT = 5;
+    IN_CAR_BUTTON_SETTINGS = 6;
+    IN_CAR_BUTTON_RECENTER = 7;
+    IN_CAR_BUTTON_ALTERNATE_ROUTES = 8;
+    IN_CAR_BUTTON_SOUNDS = 9;
+    IN_CAR_BUTTON_REPORT = 10;
+    IN_CAR_BUTTON_STOP_NAVIGATION = 11;
+    IN_CAR_BUTTON_PAN = 12;
+    IN_CAR_BUTTON_ZOOM_IN = 13;
+    IN_CAR_BUTTON_ZOOM_OUT = 14;
+    IN_CAR_BUTTON_COMPASS = 15;
+}

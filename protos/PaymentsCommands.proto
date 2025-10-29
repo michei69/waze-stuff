@@ -1,0 +1,79 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GetPaymentsTokenRequest {
+    optional string currency = 1;
+}
+
+message GetPaymentsTokenResponse {
+    optional string token = 1;
+}
+
+message MakePaymentRequest {
+    optional string nonce = 1;
+    optional int32 amount_times_100 = 2;
+    optional string currency = 3;
+    optional string ride_id = 4;
+    optional string carpool_id = 8;
+    optional string obfuscated_passenger_id = 5;
+    
+    optional PaymentType payment_type = 6 [default = MANUAL];
+    enum PaymentType {
+        AUTO = 0;
+        MANUAL = 1;
+    }
+    
+    optional string payment_method_token = 7;
+}
+
+message MakePaymentResponse {
+    optional bool success = 1;
+    optional string message = 2;
+    
+    optional Reason reason = 3;
+    enum Reason {
+        PAYMENT_METHOD_COUNTRY_VALIDATION_FAILED = 0;
+        PAYMENT_METHOD_NOT_SUPORTED_FOR_COUNTRY = 1;
+        CC_NOT_SUPPORTED_FOR_COUNTRY = 2;
+        TRANSACTION_FAILED = 3;
+    }
+    
+    optional string order_id = 4;
+    optional string masked_credit_card = 5;
+    optional string secret = 6;
+}
+
+message SetDefaultPaymentMethodRequest {
+    optional string nonce = 1;
+    optional string currency = 2;
+}
+
+message SetDefaultPaymentMethodResponse {
+    optional string default_payment_method_token = 1;
+}
+
+message DeletePaymentMethodRequest {
+    optional string nonce = 1;
+    optional string currency = 2;
+}
+
+message DeletePaymentMethodResponse {
+    optional bool success = 1;
+    optional string message = 2;
+}
+
+message GetDefaultPaymentMethodRequest {
+    repeated string nonce = 1;
+    optional string currency = 2;
+}
+
+message GetDefaultPaymentMethodResponse {
+    optional string nonce = 1;
+    optional string payment_method_token = 2;
+}

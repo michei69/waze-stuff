@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RemoveParkingMarkStat {
+    LatLng parking_coordinates = 2;
+    string parking_id = 4;
+    
+    Reason reason = 5;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        EDIT = 1;
+        WRONG = 2;
+        NEW = 3;
+        OBSOLETE = 4;
+        SPEED = 5;
+    }
+    
+    oneof _gps_time_seconds {
+        sint64 gps_time_seconds = 1;
+    }
+    
+    oneof _lifetime_seconds {
+        sint64 lifetime_seconds = 3;
+    }
+}

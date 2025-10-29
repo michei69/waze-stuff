@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool.common.datetime;
+
+option objc_class_prefix = "LPCCD";
+option java_package = "linqmap.proto.carpool.common.datetime";
+
+message Date {
+    optional int32 year = 1;
+    optional Month month = 2;
+    optional int32 day_of_month = 3;
+}
+
+message TimeOfDay {
+    optional int32 hour_of_day = 1;
+    optional int32 minute_of_hour = 2;
+}
+
+message DateTime {
+    optional Date date = 1;
+    optional TimeOfDay time_of_day = 2;
+}
+
+message TimeWindow {
+    optional TimeOfDay start_time = 3;
+    optional TimeOfDay end_time = 4;
+}
+
+enum Month {
+    UNKNOWN_MONTH = 0;
+    JANUARY = 1;
+    FEBRUARY = 2;
+    MARCH = 3;
+    APRIL = 4;
+    MAY = 5;
+    JUNE = 6;
+    JULY = 7;
+    AUGUST = 8;
+    SEPTEMBER = 9;
+    OCTOBER = 10;
+    NOVEMBER = 11;
+    DECEMBER = 12;
+}
+
+enum Weekday {
+    MONDAY = 1;
+    TUESDAY = 2;
+    WEDNESDAY = 3;
+    THURSDAY = 4;
+    FRIDAY = 5;
+    SATURDAY = 6;
+    SUNDAY = 7;
+}

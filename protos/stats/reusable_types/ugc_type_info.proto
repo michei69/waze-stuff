@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcTypeInfo {
+    UgcType type = 1;
+    enum UgcType {
+        UGC_TYPE_UNSPECIFIED = 0;
+        ADD_PLACE = 1;
+        BLOCKED_LANE = 2;
+        CLOSURE = 3;
+        CRASH = 4;
+        DEBUG = 5;
+        GAS = 6;
+        HAZARD_ON_ROAD = 7;
+        HAZARD = 8;
+        MAP_CHAT = 9;
+        MAP_ISSUE = 10;
+        POLICE = 11;
+        ROADSIDE_HELP = 12;
+        TRAFFIC = 13;
+        WEATHER = 14;
+        PERSONAL_SAFETY = 15;
+    }
+    
+    UgcSubtype subtype = 2;
+    enum UgcSubtype {
+        UGC_SUBTYPE_UNSPECIFIED = 0;
+        BLOCKED_LANE_DEFAULT = 1;
+        BLOCKED_LANE_CENTER = 2;
+        BLOCKED_LANE_LEFT = 3;
+        BLOCKED_LANE_RIGHT = 4;
+        CLOSURE_DEFAULT = 5;
+        CLOSURE_CONSTRUCTION = 6;
+        CLOSURE_EVENT = 7;
+        CLOSURE_HAZARD = 8;
+        CRASH_DEFAULT = 9;
+        CRASH_MAJOR = 10;
+        CRASH_MINOR = 11;
+        CRASH_OTHER_SIDE = 12;
+        CRASH_PILE_UP = 13;
+        HAZARD_DEFAULT = 14;
+        HAZARD_ANIMALS = 15;
+        HAZARD_BROKEN_TRAFFIC_LIGHT = 16;
+        HAZARD_CONSTRUCTION = 17;
+        HAZARD_MISSING_SIGN = 18;
+        HAZARD_OBJECT_ON_ROAD = 19;
+        HAZARD_POTHOLE = 20;
+        HAZARD_ROAD_KILL = 21;
+        HAZARD_SHOULDER_VEHICLE_STOPPED = 22;
+        HAZARD_VEHICLE_STOPPED = 23;
+        MAP_CHAT_DEFAULT = 24;
+        MAP_ISSUE_DEFAULT = 25;
+        MAP_ISSUE_GENERAL_MAP_PROBLEM = 26;
+        MAP_ISSUE_INCORRECT_ADDRESS = 27;
+        MAP_ISSUE_INCORRECT_ROUTE = 28;
+        MAP_ISSUE_INCORRECT_TURN = 29;
+        MAP_ISSUE_ISSUE = 30;
+        MAP_ISSUE_MISSING_ROAD = 31;
+        MAP_ISSUE_MISSING_ROUNDABOUT = 32;
+        MAP_ISSUE_PAVE = 33;
+        POLICE_DEFAULT = 34;
+        POLICE_HIDDEN = 35;
+        POLICE_OTHER_SIDE = 36;
+        POLICE_MOBILE_CAMERA = 54;
+        ROADSIDE_HELP_DEFAULT = 37;
+        ROADSIDE_HELP_BATTERY_ISSUE = 38;
+        ROADSIDE_HELP_EMPTY_TANK = 39;
+        ROADSIDE_HELP_FLAT_TIRE = 40;
+        ROADSIDE_HELP_MEDICAL_ISSUE = 41;
+        TRAFFIC_DEFAULT = 42;
+        TRAFFIC_HEAVY = 43;
+        TRAFFIC_MODERATE = 44;
+        TRAFFIC_STANDSTILL = 45;
+        WEATHER_DEFAULT = 46;
+        WEATHER_FLOOD = 47;
+        WEATHER_FOG = 48;
+        WEATHER_HAIL = 49;
+        WEATHER_ICY_ROAD = 50;
+        WEATHER_SLIPPERY_ROAD = 51;
+        WEATHER_UNPLOWED_ROAD = 52;
+        PERSONAL_SAFETY_DEFAULT = 53;
+    }
+    
+    UgcLevel level = 3;
+    enum UgcLevel {
+        UGC_LEVEL_UNSPECIFIED = 0;
+        LEVEL_1 = 1;
+        LEVEL_2 = 2;
+    }
+    
+    UgcMode mode = 4;
+    enum UgcMode {
+        UGC_MODE_UNSPECIFIED = 0;
+        COMPACT = 1;
+        EXPANDED = 2;
+    }
+}

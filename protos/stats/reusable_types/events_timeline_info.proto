@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/timeline_alert_info.proto";
+import "stats/reusable_types/timeline_traffic_incidents_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EventsTimelineInfo {
+    repeated TimelineAlertInfo timeline_alerts = 1;
+    repeated TimelineTrafficIncidentsInfo timeline_traffic_incidents = 2;
+}

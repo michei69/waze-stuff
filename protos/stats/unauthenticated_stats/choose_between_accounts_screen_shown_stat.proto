@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/regulation_flags.proto";
+import "stats/uid_stats_wrapper/onboarding_context.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ChooseBetweenAccountsScreenShownStat {
+    RegulationFlags regulation_flags = 1;
+    OnboardingContext context = 2;
+}

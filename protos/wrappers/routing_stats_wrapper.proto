@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/routing_stats_wrapper/add_stop_popup_clicked_stat.proto";
+import "stats/routing_stats_wrapper/add_stop_popup_shown_stat.proto";
+import "stats/routing_stats_wrapper/add_stop_requested_stat.proto";
+import "stats/routing_stats_wrapper/navigate_to_dangerous_area_popup_clicked_stat.proto";
+import "stats/routing_stats_wrapper/offline_route_stat.proto";
+import "stats/routing_stats_wrapper/one_stop_limit_popup_clicked_stat.proto";
+import "stats/routing_stats_wrapper/one_stop_limit_popup_shown_stat.proto";
+import "stats/routing_stats_wrapper/route_changed_bubble_displayed_stat.proto";
+import "stats/routing_stats_wrapper/route_instrumentation_ended_stat.proto";
+import "stats/routing_stats_wrapper/route_instrumentation_started_stat.proto";
+import "stats/routing_stats_wrapper/route_through_dangerous_area_popup_clicked_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RoutingStatsWrapper {
+    oneof stat {
+        OfflineRouteStat offline_route = 1;
+        AddStopPopupClickedStat add_stop_popup_clicked = 2;
+        AddStopPopupShownStat add_stop_popup_shown = 3;
+        AddStopRequestedStat add_stop_requested = 4;
+        NavigateToDangerousAreaPopupClickedStat navigate_to_dangerous_area_popup_clicked = 5;
+        OneStopLimitPopupClickedStat one_stop_limit_popup_clicked = 6;
+        OneStopLimitPopupShownStat one_stop_limit_popup_shown = 7;
+        RouteChangedBubbleDisplayedStat route_changed_bubble_displayed = 8;
+        RouteThroughDangerousAreaPopupClickedStat route_through_dangerous_area_popup_clicked = 9;
+        RouteInstrumentationStartedStat route_instrumentation_started = 10;
+        RouteInstrumentationEndedStat route_instrumentation_ended = 11;
+    }
+}

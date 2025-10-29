@@ -1,0 +1,95 @@
+syntax = "proto2";
+
+package com.waze.proto.userdrive.v2;
+
+import "v2/UserDriveV2.proto";
+import "Questions.proto";
+
+option objc_class_prefix = "UD2";
+
+message CalculateRouteAndStartNavigationRequest {
+    optional RouteCalculationParams route_calculation_params = 1;
+    
+    oneof flow {
+        BeginNavigationFlow begin_navigation = 2;
+        ResumeNavigationFlow resume_navigation = 3;
+        OfflineRecoveryNavigationFlow offline_recovery = 4;
+    }
+    
+    message BeginNavigationFlow {
+        
+    }
+    
+    message ResumeNavigationFlow {
+        
+    }
+    
+    message OfflineRecoveryNavigationFlow {
+        
+    }
+}
+
+message RerouteRequest {
+    optional RouteCalculationParams route_calculation_params = 1;
+    optional string current_route_uuid = 2;
+    
+    oneof flow {
+        WrongTurnFlow wrong_turn = 3;
+        SettingsChangedFlow settings_changed = 4;
+        ClosureAddedFlow closure = 5;
+        AddWayPointFlow add_waypoint = 6;
+        RerouteWhenNotNavigatingFlow reroute_when_not_navigating = 7;
+        LegacyRerouteSuggestionFlow legacy_reroute_suggestion = 8;
+    }
+    
+    message WrongTurnFlow {
+        
+    }
+    
+    message SettingsChangedFlow {
+        
+    }
+    
+    message ClosureAddedFlow {
+        
+    }
+    
+    message AddWayPointFlow {
+        
+    }
+    
+    message RerouteWhenNotNavigatingFlow {
+        
+    }
+    
+    message LegacyRerouteSuggestionFlow {
+        
+    }
+}
+
+message RerouteResponse {
+    oneof result {
+        SuccessResult success = 1;
+        ErrorResult error = 2;
+    }
+    
+    message SuccessResult {
+        optional FullRoute route = 1;
+        repeated Detour detours = 2;
+        optional StartNavigationInfo start_navigation_info = 3;
+    }
+}
+
+message CalculateRouteAndStartNavigationResponse {
+    oneof result {
+        SuccessResult success = 1;
+        ErrorResult error = 2;
+    }
+    
+    message SuccessResult {
+        optional FullRoute route = 1;
+        repeated Detour detours = 2;
+        optional linqmap.proto.questions.Question question = 3;
+        optional StartNavigationInfo start_navigation_info = 4;
+    }
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message VehicleTypeSelectedStat {
+    VehicleType changed_from = 1;
+    enum VehicleType {
+        TYPE_UNSPECIFIED = 0;
+        MOTORCYCLE = 1;
+        PRIVATE = 2;
+        TAXI = 3;
+    }
+    
+    VehicleType changed_to = 2;
+    
+    oneof _this_drive_only {
+        bool this_drive_only = 3;
+    }
+}

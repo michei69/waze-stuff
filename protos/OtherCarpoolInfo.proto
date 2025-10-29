@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool.common;
+
+import "carpool_data.proto";
+import "CarpoolCommon.proto";
+import "CarpoolCommonGroups.proto";
+
+option objc_class_prefix = "LPCC";
+option java_outer_classname = "OtherCarpoolInfoProto";
+option java_package = "linqmap.proto.carpool.common";
+
+message OtherCarpoolInfo {
+    optional OtherCarpoolHistory driver_history = 1;
+    optional OtherCarpoolHistory rider_history = 2;
+    optional bool carpooled_together = 3;
+    optional bool work_email_verified = 4;
+    optional string work_email_domain = 5;
+    optional string work_name = 6;
+    repeated google.carpool.ExtendedInfo.EndorsementCount endoresement = 7;
+    optional bool confirmed_credit_card = 8;
+    optional bool multi_offerable = 9 [deprecated = true];
+    optional int32 response_rate = 10 [deprecated = true];
+    optional int32 acceptance_rate = 11 [deprecated = true];
+    optional int32 average_response_time_seconds = 12 [deprecated = true];
+    repeated groups.ShortGroupDescription shared_group = 13;
+    optional RidePreferences ride_preferences = 14;
+}
+
+message OtherCarpoolHistory {
+    optional int32 join_time_seconds = 1;
+    optional int32 last_seen_time_seconds = 5;
+    optional int32 rating_times_10 = 2;
+    optional int32 number_of_carpools = 3;
+    optional int32 number_of_carpool_kilometers = 4;
+}

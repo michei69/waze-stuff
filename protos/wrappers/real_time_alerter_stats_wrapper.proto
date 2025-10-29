@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/real_time_alerter_stats_wrapper/alert_dismiss_called_without_relevant_info_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/alerter_clicked_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/alerter_location_resolved_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/alerter_not_shown_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/alerter_shown_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/client_alerter_shown_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/crash_prone_alerter_shown_for_be_capping_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/new_alerter_shown_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/old_alerter_shown_stat.proto";
+import "stats/real_time_alerter_stats_wrapper/speed_enforcement_zone_bar_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RealTimeAlerterStatsWrapper {
+    oneof stat {
+        AlerterShownStat alerter_shown = 1;
+        AlerterLocationResolvedStat alerter_location_resolved = 2;
+        AlerterClickedStat alerter_clicked = 3;
+        AlerterNotShownStat alerter_not_shown = 4;
+        SpeedEnforcementZoneBarShownStat speed_enforcement_zone_bar_shown = 5;
+        AlertDismissCalledWithoutRelevantInfoStat alert_dismiss_called_without_relevant_info = 6;
+        NewAlerterShownStat new_alerter_shown = 7;
+        OldAlerterShownStat old_alerter_shown = 8;
+        CrashProneAlerterShownForBeCappingStat crash_prone_alerter_shown_for_be_capping = 9;
+        ClientAlerterShownStat client_alerter_shown = 10 [deprecated = true];
+    }
+}

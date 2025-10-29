@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_information.proto";
+import "stats/reusable_types/venue_opening_status.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAdBottomSheetShownStat {
+    GoogleAdInformation google_ad_information = 1;
+    VenueOpeningStatus venue_opening_information = 2;
+    
+    oneof _venue_rating_information {
+        float venue_rating_information = 3;
+    }
+    
+    oneof _logo_displayed {
+        bool logo_displayed = 4;
+    }
+}

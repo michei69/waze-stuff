@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message TouchPoint {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message TouchData {
+    repeated TouchPoint points = 1;
+    int64 timestampMs = 2;
+}

@@ -1,0 +1,132 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+import "SocialMedia.proto";
+import "CarpoolAdapter.proto";
+import "Favorites.proto";
+import "google/protobuf/timestamp.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GetMyProfileRequest {
+    optional bool is_short_timeout = 1;
+}
+
+message MyProfile {
+    optional int64 user_id = 9;
+    optional MyBasicInfo basic_info = 1;
+    optional MySocialInfo social_info = 2;
+    optional carpooladapter.MyCarpoolInfo carpool_info = 3;
+    optional MyFavoritesInfo favorites_info = 5;
+    optional bool carpool_onboarded = 8 [deprecated = true];
+    optional int32 completed_percent = 10;
+    optional string picture_id = 11;
+    optional int32 mood_id = 12;
+    optional string username = 13;
+    
+    reserved 4;
+}
+
+message MyBasicInfo {
+    optional string first_name = 1;
+    optional string last_name = 2;
+    optional string phone = 3;
+    optional string email = 4;
+    optional bool email_verified = 5;
+    optional string work_email = 6 [deprecated = true];
+    optional bool work_email_verified = 7 [deprecated = true];
+    optional string free_text = 8;
+    optional int32 join_date_sec = 10;
+    optional int64 points = 11;
+    optional google.protobuf.Timestamp points_update_time = 25;
+    optional int64 last_login_sec = 12;
+    optional string public_user_name = 13;
+    optional bool anonymous = 14;
+    optional bool is_registered = 15;
+    optional EmailVerificationAuthorityMessage.EmailVerificationAuthority email_verification_authority = 16;
+    optional int64 birth_date_sec = 17;
+    optional bool is_aadc_restricted = 18;
+    optional bool is_u18_restricted = 19;
+    optional bool is_u16_restricted = 22;
+    optional bool is_age_confirmed = 23;
+    optional int32 addon = 20;
+    
+    optional ExclusiveMoodsLevel exclusive_moods_level = 24;
+    enum ExclusiveMoodsLevel {
+        NONE = 0;
+        BRONZE = 1;
+        SILVER = 2;
+        GOLD = 3;
+    }
+    
+    reserved 9, 21;
+    
+    reserved "locale", "mood_extension";
+}
+
+message MySocialInfo {
+    repeated MyCommunitySocialInfo community = 4;
+    optional string image_url = 3;
+    optional socialmedia.ImageTaggingResponse.FacialTaggingStatus facial_tagging_status = 5;
+    optional Gender gender = 9;
+    optional string gender_text = 10;
+}
+
+message MyCommunitySocialInfo {
+    optional string name = 1;
+    optional bool was_uploaded = 3;
+    optional string user_id = 4;
+    optional string job_title = 5;
+    optional string profile_url = 6;
+    optional socialmedia.AccessToken.Status accessTokenStatus = 7;
+    optional Gender gender = 8;
+    optional string gender_text = 9;
+    optional string email = 10;
+    optional string first_name = 11;
+    optional string last_name = 12;
+}
+
+message MyFavoritesInfo {
+    optional favorites.Favorite home = 1;
+    optional favorites.Favorite work = 2;
+    optional int32 num_favorites = 3;
+}
+
+message UpdateProfileFieldsRequest {
+    optional MyProfile profile = 1;
+}
+
+message DeleteProfileFieldsRequest {
+    optional MyProfile profile = 1;
+}
+
+message GetUserProfileRequest {
+    optional int64 user_id = 1;
+    optional AppType app_type = 2;
+    optional int64 timeout_millis = 3;
+    optional Coordinate position = 4;
+}
+
+message GetUserProfileResponse {
+    optional MyProfile user_profile = 1;
+}
+
+message IsAadcRestrictedRequest {
+    optional int64 birth_date_sec = 1;
+    optional Coordinate location = 2;
+}
+
+message IsAadcRestrictedResponse {
+    optional bool is_aadc_restricted = 1;
+    optional bool is_u16_restricted = 2;
+}
+
+enum Gender {
+    MALE = 1;
+    FEMALE = 2;
+    OTHER = 3;
+    UNDEFINED = 4;
+}

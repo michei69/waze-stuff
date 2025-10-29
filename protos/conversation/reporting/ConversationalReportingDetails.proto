@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap.conversation.reporting;
+
+import "AlertsOnMap.proto";
+import "RTCommonTypes.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "CWPACR";
+option java_package = "com.waze.proto.alertsonmap.conversation.reporting";
+
+message AlertReportedDetails {
+    optional AddUserReportedAlertResponse reported_alert_response = 1;
+}
+
+message ConversationalReportRequestDetails {
+    optional rtcommon.MatchedGPSPosition position = 1;
+    optional int32 azymuth = 2;
+}
+
+message ConversationalReportSessionDetailsUpdate {
+    optional rtcommon.MatchedGPSPosition position = 1;
+    optional int32 azymuth = 2;
+    repeated int32 delete_field = 100;
+}
+
+message ConversationalReportSessionDetails {
+    optional rtcommon.MatchedGPSPosition position = 1;
+    optional int32 azymuth = 2;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AudioConnectionDetectionStat {
+    string audio_device_name = 1;
+    string audio_device_type = 2;
+    
+    oneof _detection_timestamp_ms {
+        int64 detection_timestamp_ms = 3;
+    }
+    
+    oneof _wakeup_session_id {
+        int64 wakeup_session_id = 4;
+    }
+}

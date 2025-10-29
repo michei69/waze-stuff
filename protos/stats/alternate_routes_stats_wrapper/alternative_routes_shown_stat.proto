@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/alternate_routes_stats_wrapper/alternative_route.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlternativeRoutesShownStat {
+    repeated AlternativeRoute alternative_routes = 1;
+    
+    Reason reason = 2;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        INITIAL = 1;
+        ALTERNATIVE_RETURNED = 2;
+        REROUTE = 3;
+        REACHED_WAYPOINT = 4;
+        ROUTE_SETTINGS_CHANGED = 5;
+        HOV_TOGGLE = 6;
+    }
+}

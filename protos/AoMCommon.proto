@@ -1,0 +1,428 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap;
+
+option objc_class_prefix = "WAOM";
+option java_package = "com.waze.proto.alertsonmap";
+
+message ReportedAlertDetails {
+    oneof alert_details {
+        TrafficAlert traffic = 1;
+        PoliceAlert police = 2;
+        CrashAlert crash = 3;
+        HazardOnRoadAlert hazard_on_road = 4;
+        WeatherAlert weather = 5;
+        BlockedLaneAlert blocked_lane = 6;
+        PermanentHazardAlert permanent_hazard = 7;
+        ClosureAlert closure = 8;
+        TurnClosureAlert turn_closure = 9;
+        PersonalSafetyAlert personal_safety = 10;
+        CameraAlert camera = 11;
+    }
+    
+    message TrafficAlert {
+        optional Alert_Traffic type = 1;
+    }
+    
+    message PoliceAlert {
+        optional Alert_Police type = 1;
+    }
+    
+    message CrashAlert {
+        optional Alert_Crash type = 1;
+    }
+    
+    message HazardOnRoadAlert {
+        optional Alert_HazardOnRoad type = 1;
+    }
+    
+    message WeatherAlert {
+        optional Alert_Weather type = 1;
+    }
+    
+    message BlockedLaneAlert {
+        optional Alert_BlockedLane type = 1;
+    }
+    
+    message PermanentHazardAlert {
+        optional Alert_PermanentHazard type = 1;
+    }
+    
+    message ClosureAlert {
+        optional Alert_Closure type = 1;
+        optional int32 from_node_id = 2;
+        optional int32 to_node_id = 3;
+        optional int32 lat_times_1000000 = 4;
+        optional int32 lon_times_1000000 = 5;
+        optional int32 azimuth = 6;
+    }
+    
+    message TurnClosureAlert {
+        optional Alert_TurnClosure type = 1;
+    }
+    
+    message PersonalSafetyAlert {
+        optional Alert_PersonalSafety type = 1;
+    }
+    
+    message CameraAlert {
+        optional Alert_Camera type = 1;
+        repeated CameraDetectionType camera_detection_types = 2;
+    }
+}
+
+message SurfacedAlertDetails {
+    oneof alert_details {
+        TrafficAlert traffic = 1;
+        PoliceAlert police = 2;
+        CrashAlert crash = 3;
+        HazardOnRoadAlert hazard_on_road = 4;
+        WeatherAlert weather = 5;
+        BlockedLaneAlert blocked_lane = 6;
+        PermanentHazardAlert permanent_hazard = 7;
+        ClosureAlert closure = 8;
+        SpeedLimitDecreaseAlert speed_limit_decrease = 9;
+        TurnClosureAlert turn_closure = 10;
+        CrashProneAlert crash_prone = 11;
+        PersonalSafetyAlert personal_safety = 12;
+        CameraAlert camera = 13;
+    }
+    
+    message TrafficAlert {
+        optional Alert_Traffic type = 1;
+    }
+    
+    message PoliceAlert {
+        optional Alert_Police type = 1;
+    }
+    
+    message CrashAlert {
+        optional Alert_Crash type = 1;
+    }
+    
+    message HazardOnRoadAlert {
+        optional Alert_HazardOnRoad type = 1;
+    }
+    
+    message WeatherAlert {
+        optional Alert_Weather type = 1;
+    }
+    
+    message BlockedLaneAlert {
+        optional Alert_BlockedLane type = 1;
+    }
+    
+    message PermanentHazardAlert {
+        optional Alert_PermanentHazard type = 1;
+    }
+    
+    message ClosureAlert {
+        optional Alert_Closure type = 1;
+    }
+    
+    message SpeedLimitDecreaseAlert {
+        optional Alert_SpeedLimitDecrease type = 1;
+        optional int32 speed_limit_kmph = 2;
+    }
+    
+    message TurnClosureAlert {
+        optional Alert_TurnClosure type = 1;
+    }
+    
+    message CrashProneAlert {
+        optional Alert_CrashProne type = 1;
+        optional int64 length_meters = 2;
+        optional int64 creation_time_millis = 3;
+    }
+    
+    message PersonalSafetyAlert {
+        optional Alert_PersonalSafety type = 1;
+    }
+    
+    message CameraAlert {
+        optional Alert_Camera type = 1;
+        repeated CameraDetectionType camera_detection_types = 2;
+    }
+}
+
+message Alerts {
+    repeated int64 id = 1;
+}
+
+message AlertAndComment {
+    optional string id = 1;
+    optional int64 comment_id = 2;
+}
+
+message ReportedAlerts {
+    repeated string id = 1;
+    repeated AlertAndComment alert_and_comment = 2;
+}
+
+message Enums {
+    enum AlertDuration {
+        ALERT_DURATION_NONE = 0;
+        ALERT_DURATION_DONT_KNOW = 1;
+        ALERT_DURATION_LESS_THAN_AN_HOUR = 2;
+        ALERT_DURATION_SEVERAL_HOURS = 3;
+        ALERT_DURATION_ALL_DAY = 4;
+        ALERT_DURATION_SEVERAL_DAYS = 5;
+        ALERT_DURATION_LONG_TERM = 6;
+    }
+    
+    enum ReportingContext {
+        REPORTING_CONTEXT_UNSPECIFIED = 0;
+        LEGACY_UGC = 1;
+        NEW_UGC = 2;
+        PING_WAZER = 3;
+        REPORTING_TOOL = 4;
+        PARTNER_FEED = 5;
+        CLOSURES = 6;
+        CONTEXT_PERMANENT_HAZARD = 7;
+        CONTEXT_ALERT_ENRICHMENT = 8;
+    }
+}
+
+enum AlertType {
+    UNKNOWN_TYPE = 0;
+    CHIT_CHAT = 1;
+    POLICE = 2;
+    ACCIDENT = 3;
+    JAM = 4;
+    TRAFFIC_INFO = 5;
+    HAZARD = 6;
+    MISC = 7;
+    CONSTRUCTION = 8;
+    PARKING = 9;
+    DYNAMIC = 10;
+    CAMERA = 11;
+    __NOT_IN_USE__PARKED = 12;
+    ROAD_CLOSED = 13;
+    TURN_CLOSED = 19;
+    SYSTEM_ROAD_CLOSED = 14;
+    UNKNOWN = 15;
+    SOS = 16;
+    CRASH_PRONE = 17;
+    NEW_BAD_WEATHER = 100;
+    NEW_LANE_CLOSED = 101;
+    PERMANENT_HAZARD = 103;
+    PERSONAL_SAFETY = 104;
+}
+
+enum AlertSubType {
+    NO_SUBTYPE = 0;
+    POLICE_VISIBLE = 201;
+    POLICE_HIDING = 202;
+    POLICE_WITH_MOBILE_CAMERA = 203;
+    ACCIDENT_MINOR = 301;
+    ACCIDENT_MAJOR = 302;
+    JAM_MODERATE_TRAFFIC = 401;
+    JAM_HEAVY_TRAFFIC = 402;
+    JAM_STAND_STILL_TRAFFIC = 403;
+    JAM_LIGHT_TRAFFIC = 404;
+    HAZARD_ON_ROAD = 601;
+    HAZARD_ON_SHOULDER = 602;
+    HAZARD_WEATHER = 603;
+    HAZARD_ON_ROAD_OBJECT = 604;
+    HAZARD_ON_ROAD_POT_HOLE = 605;
+    HAZARD_ON_ROAD_ROAD_KILL = 606;
+    HAZARD_ON_SHOULDER_CAR_STOPPED = 607;
+    HAZARD_ON_SHOULDER_ANIMALS = 608;
+    HAZARD_ON_SHOULDER_MISSING_SIGN = 609;
+    HAZARD_WEATHER_FOG = 610;
+    HAZARD_WEATHER_HAIL = 611;
+    HAZARD_WEATHER_HEAVY_RAIN = 612;
+    HAZARD_WEATHER_HEAVY_SNOW = 613;
+    HAZARD_WEATHER_FLOOD = 614;
+    HAZARD_WEATHER_MONSOON = 615;
+    HAZARD_WEATHER_TORNADO = 616;
+    HAZARD_WEATHER_HEAT_WAVE = 617;
+    HAZARD_WEATHER_HURRICANE = 618;
+    HAZARD_WEATHER_FREEZING_RAIN = 619;
+    HAZARD_ON_ROAD_LANE_CLOSED = 620;
+    HAZARD_ON_ROAD_OIL = 621;
+    HAZARD_ON_ROAD_ICE = 622;
+    HAZARD_ON_ROAD_CONSTRUCTION = 623;
+    HAZARD_ON_ROAD_CAR_STOPPED = 624;
+    HAZARD_ON_ROAD_TRAFFIC_LIGHT_FAULT = 625;
+    HAZARD_ON_ROAD_EMERGENCY_VEHICLE = 626;
+    ROAD_CLOSED_HAZARD = 1301;
+    ROAD_CLOSED_CONSTRUCTION = 1302;
+    ROAD_CLOSED_EVENT = 1303;
+    TURN_CLOSED_EVENT = 1901;
+    __NOT_IN_USE__PARKED_ON = 1201;
+    __NOT_IN_USE__PARKED_OFF = 1202;
+    SOS_FLAT_TIRE = 1601;
+    SOS_NO_FUEL = 1602;
+    SOS_MEDICAL_HELP = 1603;
+    SOS_MECHANICAL_PROBLEM = 1604;
+    SOS_OTHER = 1605;
+    SOS_BATTERY_ISSUE = 1606;
+    CRASH_PRONE_SHORT_ALERT_LENGTH = 1701;
+    CRASH_PRONE_LONG_ALERT_LENGTH = 1702;
+    BAD_WEATHER_DEFAULT = 2000;
+    BAD_WEATHER_SLIPPERY_ROAD = 2001;
+    LANE_CLOSURE_BLOCKED_LANES = 2002;
+    LANE_CLOSURE_LEFT_LANE = 2003;
+    LANE_CLOSURE_RIGHT_LANE = 2004;
+    LANE_CLOSURE_CENTER_LANE = 2005;
+    PERMANENT_HAZARD_SPEED_BUMP = 3001;
+    PERMANENT_HAZARD_TOPES = 3002;
+    PERMANENT_HAZARD_TOLL_BOOTH = 3003;
+    PERMANENT_HAZARD_DANGEROUS_CURVE = 3004;
+    PERMANENT_HAZARD_DANGEROUS_INTERSECTION = 3005;
+    PERMANENT_HAZARD_DANGEROUS_SPLIT = 3006;
+    PERMANENT_HAZARD_DANGEROUS_MERGE = 3007;
+    PERMANENT_HAZARD_SCHOOL_ZONE = 3008;
+    DEFAULT_PERSONAL_SAFETY = 4001;
+    DEFAULT_CAMERA = 5001;
+}
+
+enum Alert_Traffic {
+    TRAFFIC_UNSPECIFIED = 0;
+    TRAFFIC_DEFAULT = 1;
+    TRAFFIC_STANDSTILL = 2;
+    TRAFFIC_LIGHT = 3;
+    TRAFFIC_MODERATE = 4;
+    TRAFFIC_HEAVY = 5;
+}
+
+enum Alert_Police {
+    POLICE_UNSPECIFIED = 0;
+    POLICE_DEFAULT = 1;
+    POLICE_HIDDEN = 2;
+    POLICE_MOBILE_CAMERA = 3;
+}
+
+enum Alert_Crash {
+    CRASH_UNSPECIFIED = 0;
+    CRASH_DEFAULT = 1;
+    CRASH_PILE_UP = 2;
+    CRASH_MAJOR = 3;
+    CRASH_MINOR = 4;
+}
+
+enum Alert_HazardOnRoad {
+    HAZARD_UNSPECIFIED = 0;
+    HAZARD_DEFAULT = 1;
+    HAZARD_CONSTRUCTION = 2;
+    HAZARD_VEHICLE_STOPPED = 3;
+    HAZARD_OBJECT_ON_ROAD = 4;
+    HAZARD_POTHOLE = 5;
+    HAZARD_BROKEN_TRAFFIC_LIGHT = 6;
+    HAZARD_OIL = 7;
+    HAZARD_ANIMALS = 8;
+    HAZARD_MISSING_SIGN = 9;
+    HAZARD_ROAD_KILL = 10;
+    HAZARD_SHOULDER = 11;
+    HAZARD_SHOULDER_VEHICLE_STOPPED = 12;
+    HAZARD_EMERGENCY_VEHICLE = 13;
+}
+
+enum Alert_Weather {
+    WEATHER_UNSPECIFIED = 0;
+    WEATHER_DEFAULT = 1;
+    WEATHER_SLIPPERY_ROAD = 2;
+    WEATHER_FLOOD = 3;
+    WEATHER_UNPLOWED_ROAD = 4;
+    WEATHER_FOG = 5;
+    WEATHER_ICY_ROAD = 6;
+    WEATHER_HEAT_WAVE = 7;
+    WEATHER_TORNADO = 8;
+    WEATHER_HEAVY_RAIN = 9;
+    WEATHER_HAIL = 10;
+    WEATHER_HURRICANE = 11;
+    WEATHER_MONSOON = 12;
+}
+
+enum Alert_BlockedLane {
+    BLOCKED_LANE_UNSPECIFIED = 0;
+    BLOCKED_LANE_DEFAULT = 1;
+    BLOCKED_LANE_LEFT = 2;
+    BLOCKED_LANE_CENTER = 3;
+    BLOCKED_LANE_RIGHT = 4;
+}
+
+enum Alert_PermanentHazard {
+    PH_UNSPECIFIED = 0;
+    PH_SPEED_BUMP = 1;
+    PH_TOPES = 2;
+    PH_TOLL_BOOTH = 3;
+    PH_DANGEROUS_CURVE = 4;
+    PH_DANGEROUS_INTERSECTION = 5;
+    PH_DANGEROUS_SPLIT = 6;
+    PH_DANGEROUS_MERGE = 7;
+    PH_SCHOOL_ZONE = 8;
+}
+
+enum Alert_Closure {
+    CLOSURE_UNSPECIFIED = 0;
+    CLOSURE_DEFAULT = 1;
+    CLOSURE_HAZARD = 2;
+    CLOSURE_CONSTRUCTION = 3;
+    CLOSURE_EVENT = 4;
+}
+
+enum Alert_TurnClosure {
+    TURN_CLOSURE_UNSPECIFIED = 0;
+    TURN_CLOSURE_DEFAULT = 1;
+    TURN_CLOSURE_EVENT = 2;
+}
+
+enum Alert_CrashProne {
+    CRASH_PRONE_UNSPECIFIED = 0;
+    CRASH_PRONE_SHORT_LENGTH = 1;
+    CRASH_PRONE_LONG_LENGTH = 2;
+}
+
+enum Alert_SpeedLimitDecrease {
+    SPEED_LIMIT_DECREASE_UNSPECIFIED = 0;
+    SPEED_LIMIT_DECREASE_DEFAULT = 1;
+}
+
+enum Alert_PersonalSafety {
+    PERSONAL_SAFETY_UNSPECIFIED = 0;
+    PERSONAL_SAFETY_DEFAULT = 1;
+}
+
+enum Alert_Camera {
+    ALERT_CAMERA_UNSPECIFIED = 0;
+    CAMERA_DEFAULT = 1;
+}
+
+enum CameraDetectionType {
+    CAMERA_TYPE_UNSPECIFIED = 0;
+    SPEED_CAMERA = 1;
+    RED_LIGHT_CAMERA = 2;
+    DUMMY_CAMERA = 3;
+    SEATBELT_CAMERA = 4;
+    MOBILE_PHONE_CAMERA = 5;
+    STOP_CAMERA = 6;
+    NOISE_CAMERA = 7;
+    DISTANCE_CAMERA = 8;
+    CARPOOL_LANE_CAMERA = 9;
+    BUS_LANE_CAMERA = 10;
+    HOV_LANE_CAMERA = 11;
+}
+
+enum MapIssueType {
+    MAP_ISSUE_UNSPECIFIED = 0;
+    MAP_ISSUE_OTHER = 5;
+    MAP_ISSUE_INCORRECT_TURN = 6;
+    MAP_ISSUE_INCORRECT_ADDRESS = 7;
+    MAP_ISSUE_INCORRECT_ROUTE = 8;
+    MAP_ISSUE_MISSING_ROUNDABOUT = 9;
+    MAP_ISSUE_GENERAL_PROBLEM = 10;
+    MAP_ISSUE_TURN_NOT_ALLOWED = 11;
+    MAP_ISSUE_INCORRECT_JUNCTION = 12;
+    MAP_ISSUE_MISSING_BRIDGE_OVERPASS = 13;
+    MAP_ISSUE_WRONG_DRIVING_DIRECTIONS = 14;
+    MAP_ISSUE_MISSING_EXIT = 15;
+    MAP_ISSUE_MISSING_ROAD_UPDATE_REQUEST = 16;
+    MAP_ISSUE_MISPLACED_GAS_STATION = 17;
+    MAP_ISSUE_MISSING_LANDMARK = 18;
+    MAP_ISSUE_MISSING_STREET_NAME = 21;
+    MAP_ISSUE_INCORRECT_STREET_PREFIX_OR_SUFFIX = 22;
+    MAP_ISSUE_MISSING_OR_INCORRECT_SPEED_LIMIT = 23;
+    MAP_ISSUE_BLOCKED_ROAD = 24;
+}

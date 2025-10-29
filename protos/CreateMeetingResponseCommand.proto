@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "SocialMedia.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message CreateMeetingResponse {
+    optional string meetingID = 1;
+    optional string meetingUrl = 2;
+    optional socialmedia.MeetingInfo meetingInfo = 3;
+}

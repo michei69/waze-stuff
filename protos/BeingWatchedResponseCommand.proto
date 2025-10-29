@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message BeingWatchedResponse {
+    optional bool watched = 1;
+    optional int32 currentWatchers = 2;
+    optional int32 totalWatchers = 3;
+    optional bool changeEtaPushSent = 4;
+    optional bool almostTherePushSent = 5;
+    repeated string watcherNames = 6;
+    
+    optional ShareType shareType = 7;
+    enum ShareType {
+        ROUTE_AND_ETA = 1;
+        ETA_ONLY = 2;
+        ETA_AND_LOCATION = 3;
+    }
+}

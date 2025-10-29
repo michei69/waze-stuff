@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/zero_speed_stats_wrapper/product_takeover_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ProductTakeoverInfo {
+    string message_name = 2;
+    ProductTakeoverType type = 3;
+    
+    SubType sub_type = 4;
+    enum SubType {
+        SUB_TYPE_UNSPECIFIED = 0;
+        TRAFFIC = 1;
+        HAZARD = 2;
+        POLICE = 3;
+        ACCIDENT = 4;
+        CHAT = 5;
+        BAD_WEATHER = 6;
+        CLOSURE = 7;
+        BLOCKED_LANE = 8;
+        ASSISTANCE = 9;
+    }
+    
+    string pto_id = 5;
+    
+    oneof _id {
+        int64 id = 1 [deprecated = true];
+    }
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcReportErrorStat {
+    repeated Reason reasons = 1;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        NO_GPS = 1;
+        USER_INVISIBLE = 2;
+        USER_OFFLINE = 3;
+        OTHER = 4;
+        CLOSURE_SEGMENT_CALCULATION_FAILED = 5;
+        BE_COMMUNICATION_FAILED = 6;
+        BE_COMMUNICATION_FAILED_AND_RETRY_PENDING = 7;
+        BE_REACHED_MAX_COUNT = 8;
+    }
+}

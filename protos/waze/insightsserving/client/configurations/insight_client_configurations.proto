@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+import "waze/insightsserving/client/configurations/alert/alert_client_configurations.proto";
+import "waze/insightsserving/client/configurations/common_client_configurations.proto";
+import "waze/insightsserving/client/configurations/permanenthazard/permanent_hazard_client_configurations.proto";
+import "waze/insightsserving/client/configurations/question_client_configurations.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "InsightClientConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message PermanentHazardConfiguration {
+    oneof PermanentHazardTypeConfiguration {
+        SpeedBumpConfiguration speed_bump_configuration = 1;
+        TopesConfiguration topes_configuration = 2;
+        TollBoothConfiguration toll_booth_configuration = 3;
+        DangerousCurveConfiguration dangerous_curve_configuration = 4;
+        DangerousIntersectionConfiguration dangerous_intersection_configuration = 5;
+        DangerousMergeConfiguration dangerous_merge_configuration = 7;
+        CameraConfiguration camera_configuration = 8;
+    }
+}
+
+message AlertConfiguration {
+    oneof AlertTypeConfiguration {
+        HazardOnRoadConfiguration hazard_on_road_configuration = 1;
+        WeatherConfiguration weather_configuration = 2;
+    }
+}
+
+message InsightConfigurations {
+    repeated PermanentHazardConfiguration permanent_hazard_configurations = 1;
+    repeated AlertConfiguration alerts_configurations = 2;
+    
+    oneof _question_configuration {
+        QuestionConfiguration question_configuration = 3;
+    }
+}

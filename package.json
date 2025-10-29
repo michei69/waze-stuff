@@ -1,0 +1,31 @@
+{
+	"name": "waze-stuff",
+	"version": "0.0.0",
+	"description": "rev eng stuff regarding waze tilemaps",
+	"main": "src/index.ts",
+	"scripts": {
+		"build": "tsc -p .",
+		"run": "node dist/index.js",
+		"clean": "rmdir /s /q dist",
+		"host": "bun ./src/index.ts",
+		"parse-geojson": "bun ./src/parseGeoJSON.ts",
+		"scale-geojson": "bun ./src/scaleGeoJSON.ts"
+	},
+	"author": {
+		"name": "mikey",
+		"email": "michei69@proton.me"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"axios": "^1.10.0",
+		"express": "^5.1.0",
+		"protobufjs": "^7.5.3",
+		"typescript": "^5.8.3"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.3.1",
+		"@types/express": "^5.0.3",
+		"@types/node": "^24.0.3",
+		"ts-node": "^10.9.2"
+	}
+}

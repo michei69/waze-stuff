@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BeaconPowerSample {
+    oneof _interval_from_prev_sample_ms {
+        int64 interval_from_prev_sample_ms = 1;
+    }
+    
+    oneof _relative_power {
+        sint64 relative_power = 2;
+    }
+}

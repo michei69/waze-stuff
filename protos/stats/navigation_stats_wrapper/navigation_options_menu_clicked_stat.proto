@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NavigationOptionsMenuClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ALTERNATIVE_ROUTES = 1;
+        CALENDAR_SETTINGS = 2;
+        DELETE_PLANNED_DRIVE = 3;
+        EDIT_PLANNED_DRIVE = 4;
+        INFO = 5;
+        FIND_PARKING = 6;
+        SHARE_LOCATION = 7;
+    }
+    
+    string venue_id = 2;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PolygonRenderErrorStat {
+    RenderErrorType render_error_type = 3;
+    enum RenderErrorType {
+        RENDER_ERROR_TYPE_UNSPECIFIED = 0;
+        MISSING_BEGIN_POLYGON = 1;
+        MISSING_END_POLYGON = 2;
+        MISSING_BEGIN_CONTOUR = 3;
+        MISSING_END_CONTOUR = 4;
+        COORD_TOO_LARGE = 5;
+        NEED_COMBINE_CALLBACK = 6;
+    }
+    
+    PolygonRendererType polygon_renderer_type = 4;
+    enum PolygonRendererType {
+        RENDERER_TYPE_UNSPECIFIED = 0;
+        LEGACY_RENDERER = 1;
+        GODOT_RENDERER = 2;
+    }
+    
+    oneof _tile_id {
+        int64 tile_id = 1;
+    }
+    
+    oneof _tile_timestamp_ms {
+        int64 tile_timestamp_ms = 2;
+    }
+}

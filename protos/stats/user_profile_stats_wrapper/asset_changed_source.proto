@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum AssetChangedSource {
+    ASSET_CHANGED_SOURCE_UNSPECIFIED = 0;
+    ASSET_CHANGED_SOURCE_DEEPLINK = 1;
+    ASSET_CHANGED_SOURCE_LEGACY_COPILOT = 2;
+    ASSET_CHANGED_SOURCE_MARKETPLACE = 3;
+    ASSET_CHANGED_SOURCE_SETTINGS = 4;
+    ASSET_CHANGED_SOURCE_DEFAULT = 5;
+    ASSET_CHANGED_SOURCE_TRANSPORT_SDK = 6;
+}

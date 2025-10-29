@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/destination_card_stats_wrapper/destination_card.proto";
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/search_stats_wrapper/search_category_group.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchMenuClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        VOICE_SEARCH = 1;
+        CATEGORY = 2;
+        BACK = 3;
+        DESTINATION_CARD = 4;
+        MAIN_MENU = 5;
+    }
+    
+    SearchCategoryGroup category = 2;
+    DestinationCard clicked_card = 6;
+    TriggeringPlatform triggering_platform = 8;
+    
+    oneof _featured_category {
+        bool featured_category = 3;
+    }
+    
+    oneof _category_index {
+        int64 category_index = 4;
+    }
+    
+    oneof _destination_card_index {
+        int64 destination_card_index = 5;
+    }
+    
+    oneof _list_cards_count {
+        int64 list_cards_count = 7;
+    }
+}

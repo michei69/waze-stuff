@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/start_state_stats_wrapper/server_suggestions_content_received_stat.proto";
+import "stats/start_state_stats_wrapper/server_suggestions_content_requested_stat.proto";
+import "stats/start_state_stats_wrapper/start_state_drawer_changed_stat.proto";
+import "stats/start_state_stats_wrapper/start_state_drawer_clicked_stat.proto";
+import "stats/start_state_stats_wrapper/start_state_drawer_shown_stat.proto";
+import "stats/start_state_stats_wrapper/start_state_rt_info_updated_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message StartStateStatsWrapper {
+    oneof stat {
+        StartStateDrawerChangedStat start_state_drawer_changed = 1;
+        ServerSuggestionsContentReceivedStat server_suggestions_content_received = 2;
+        ServerSuggestionsContentRequestedStat server_suggestions_content_requested = 3;
+        StartStateDrawerClickedStat start_state_drawer_clicked = 4;
+        StartStateRtInfoUpdatedStat start_state_rt_info_updated = 5;
+        StartStateDrawerShownStat start_state_drawer_shown = 6;
+    }
+}

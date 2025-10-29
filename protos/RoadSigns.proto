@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package linqmap.geocoding.proto;
+
+option objc_class_prefix = "LGP";
+
+message RoadSign {
+    repeated ExitSign exit_signs = 1;
+    repeated RoadShield road_shields = 2;
+    optional string primary_markup = 3;
+    optional string secondary_markup = 4;
+    optional string text_representation = 5;
+}
+
+message ExitSign {
+    optional int32 type = 1;
+    optional string text = 2;
+}
+
+message RoadShield {
+    optional int32 type = 1;
+    optional string text = 2;
+    optional string direction = 3;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message LatLng {
+    oneof _latitude {
+        double latitude = 1;
+    }
+    
+    oneof _longitude {
+        double longitude = 2;
+    }
+}

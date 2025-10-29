@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.ev;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.ev";
+
+message EVNetworkData {
+    repeated string ev_networks = 1;
+}

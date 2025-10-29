@@ -1,0 +1,414 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.map;
+
+import "Graphics.proto";
+import "MapPopup.proto";
+import "Position.proto";
+import "RoutingResult.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.map";
+
+message WazeMapInitialization {
+    MapUsageType map_usage_type = 1;
+    enum MapUsageType {
+        TYPE_UNKNOWN = 0;
+        TYPE_MAIN_FOR_MOBILE = 1;
+        TYPE_MAIN_FOR_INCAR = 2;
+    }
+}
+
+message MapWidgets {
+    bool show_speedometer = 1;
+    bool show_loading_indicator = 2;
+    
+    oneof _active_pill {
+        Pill active_pill = 3;
+    }
+    
+    message Pill {
+        Type type = 1;
+        enum Type {
+            PILL_TYPE_CURRENT_STREET = 0;
+            PILL_TYPE_TRAFFIC_METER = 1;
+            PILL_TYPE_AVG_SPEED_CAM = 2;
+        }
+        
+        NativeBitmap image = 2;
+    }
+}
+
+message MapContent {
+    AdditionalContent additional_content = 1;
+    message AdditionalContent {
+        bool show_user_location = 1;
+        bool show_realtime_traffic = 3;
+        bool show_realtime_external_poi = 4;
+        bool show_ads = 5;
+        bool show_wazers = 6;
+        bool show_tile_alerts = 7;
+        
+        MapPois map_pois = 8;
+        message MapPois {
+            bool show_home_poi = 1;
+            bool show_work_poi = 2;
+            bool show_destination_poi = 3;
+            bool show_waypoint_poi = 4;
+            bool show_parked_poi = 5;
+            bool show_departure_poi = 6;
+        }
+        
+        oneof _show_realtime_alerts {
+            RealtimeAlerts show_realtime_alerts = 2;
+        }
+        
+        message RealtimeAlerts {
+            bool show_alerts_on_route_only = 1;
+        }
+    }
+    
+    NavigationContent navigation_content = 2;
+    message NavigationContent {
+        oneof active_route {
+            bool no_active_route = 1;
+            ShowActiveRoute show_active_route = 2;
+        }
+        
+        message ShowActiveRoute {
+            bool show_routing_labels = 4;
+            bool show_detour_routes = 5;
+            bool show_suggested_parking = 6;
+            
+            oneof routing_arrow {
+                bool arrow_automatic = 1;
+                RoutingArrowOnSegment arrow_on_segment = 2;
+                bool arrow_hidden = 3;
+            }
+            
+            message RoutingArrowOnSegment {
+                int32 navigation_segment_index = 1;
+            }
+        }
+    }
+    
+    repeated ExtendedPolyline polylines = 3;
+    repeated ExtendedRouteData extended_routes = 4;
+    repeated EventsOnRoute events_on_route = 5;
+    repeated Marker markers = 6;
+    
+    ColorScheme color_scheme = 7;
+    enum ColorScheme {
+        UNKNOWN = 0;
+        LIGHT_REGULAR = 1;
+        DARK_REGULAR = 2;
+        LIGHT_EDITORS = 3;
+        DARK_EDITORS = 4;
+    }
+}
+
+message MapConfiguration {
+    CameraConfiguration camera = 1;
+    message CameraConfiguration {
+        bool handle_touches = 1;
+    }
+}
+
+message EventsOnRoute {
+    repeated linqmap.proto.rt.EventOnRoute event = 1;
+    
+    EventStyle event_style = 2;
+    message EventStyle {
+        Type type = 1;
+        enum Type {
+            SELECTED = 0;
+            NOT_SELECTED = 1;
+        }
+    }
+    
+    EventOnRouteAnimationParams event_on_route_animation_params = 3;
+    message EventOnRouteAnimationParams {
+        int64 animation_start_time_ms = 1;
+    }
+}
+
+message Polyline {
+    int32 id = 1;
+    repeated IntPosition position = 3;
+}
+
+message ZoomLevelDisplayRange {
+    float min_zoom_level = 1;
+    float max_zoom_level = 2;
+}
+
+message ExtendedPolyline {
+    Polyline polyline = 1;
+    
+    Style style = 2;
+    enum Style {
+        PREVIEW_PRIMARY = 0;
+        PREVIEW_SECONDARY = 1;
+        TRAFFIC_LIGHT_PRIMARY = 2;
+        TRAFFIC_LIGHT_SECONDARY = 3;
+        TRAFFIC_HEAVY_PRIMARY = 4;
+        TRAFFIC_HEAVY_SECONDARY = 5;
+        TRAFFIC_CLOSURE = 6;
+        TRAFFIC_CLOSURE_ON_ROUTE = 7;
+        TRAFFIC_DASHED_CLOSURE = 8;
+        TRAFFIC_WIDE_CLOSURE = 9;
+        SELECTION_HIGHLIGHT = 10;
+    }
+    
+    ZoomLevelDisplayRange zoom_level_display_range = 3;
+    
+    CutTrailingBehavior cut_trailing_behavior = 6;
+    enum CutTrailingBehavior {
+        NONE = 0;
+        FROM_USER_LOCATION_POSITION = 1;
+    }
+    
+    oneof _tag {
+        string tag = 4;
+    }
+    
+    oneof _animation_params {
+        AnimationParams animation_params = 5;
+    }
+}
+
+message AnimationParams {
+    int64 animation_start_time_ms = 1;
+    int64 animation_duration_ms = 2;
+    
+    CurveType curveType = 3;
+    enum CurveType {
+        LINEAR = 0;
+        STRONG_EASE_IN = 1;
+        STRONG_EASE_OUT = 2;
+        SMOOTH_EASE_OUT = 3;
+        SMOOTH_EASE_IN = 4;
+        EASE_IN_EASE_OUT = 5;
+        KINETIC_EASE_OUT = 6;
+    }
+}
+
+message ExtendedRouteData {
+    linqmap.proto.rt.RoutingResult route_proto = 1;
+    RouteOption options = 2;
+    
+    RouteStyle style = 3;
+    message RouteStyle {
+        Type type = 1;
+        enum Type {
+            UNKNOWN_STYLE = 0;
+            SELECTED = 1;
+            CARPOOL = 2;
+            NOT_SELECTED = 3;
+        }
+    }
+    
+    AnimationParams animationParams = 4;
+}
+
+message ScreenPoint {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message Marker {
+    string id = 1;
+    NativeBitmap image = 2;
+    
+    Alignment alignment = 3;
+    enum Alignment {
+        ALIGNMENT_UNKNOWN = 0;
+        TOP_LEFT = 1;
+        BOTTOM_LEFT = 2;
+        BOTTOM_RIGHT = 3;
+        TOP_RIGHT = 4;
+        CENTER = 5;
+    }
+    
+    ScreenPoint anchor_offset = 6;
+    
+    Priority priority = 4;
+    enum Priority {
+        ALERTS = 0;
+        POIS = 1;
+        UNSELECTED_ROUTING_LABEL = 2;
+        SELECTED_ROUTING_LABEL = 3;
+        CLOSURE_PINS = 4;
+    }
+    
+    IntPosition position = 5;
+    
+    HitBoxInset hit_box_inset = 7;
+    message HitBoxInset {
+        int32 left = 1;
+        int32 top = 2;
+        int32 right = 3;
+        int32 bottom = 4;
+    }
+    
+    MarkerAnimationParams marker_animation_params = 9;
+    message MarkerAnimationParams {
+        AnimationType animation_type = 1;
+        enum AnimationType {
+            POP_IN = 0;
+            FADE_IN = 1;
+            DROP_IN = 2;
+            FADE_OUT = 3;
+            ANIMATE_IN_WHEN_INVISIBLE = 4;
+        }
+        
+        AnimationParams animation_params = 2;
+    }
+    
+    ZoomLevelDisplayRange zoom_level_display_range = 10;
+    
+    oneof _scale {
+        float scale = 8;
+    }
+}
+
+message RouteOption {
+    bool showTraffic = 1;
+    
+    SnailTrailBehavior snailTrailBehavior = 2;
+    enum SnailTrailBehavior {
+        KEEP = 0;
+        REMOVE = 1;
+    }
+}
+
+message MapBounds {
+    int64 animation_duration_ms = 1;
+    RelativeViewPort view_port = 6;
+    
+    oneof map_bounds_fit {
+        MapFitArea fit_area = 2;
+        MapFitCoordinate fit_coordinate = 3;
+        MapFitContent fit_content = 4;
+        ContinuouslyTrackUserLocation continuously_track_user_location = 5;
+    }
+    
+    oneof _north_lock {
+        NorthLockBehavior north_lock = 7;
+    }
+    
+    message ActivelyTrackUser {
+        oneof zoom_behavior {
+            bool dynamic_zoom = 1;
+            float static_zoom = 2;
+        }
+    }
+    
+    message MapFitArea {
+        repeated IntPosition coordinates = 1;
+        float bounds_factor = 2;
+        MapDisplayState display_state = 3;
+        bool automatic_user_recenter = 4;
+    }
+    
+    message MapFitContent {
+        bool automatic_user_recenter = 1;
+    }
+    
+    message MapFitCoordinate {
+        IntPosition coordinate = 1;
+        float zoom = 2;
+        MapDisplayState display_state = 3;
+        float orientation = 4;
+        bool automatic_user_recenter = 5;
+        
+        oneof _position_percentage {
+            PositionPercentage position_percentage = 6;
+        }
+    }
+    
+    message ContinuouslyTrackUserLocation {
+        bool automatic_user_recenter = 4;
+        
+        oneof zoom {
+            float static_zoom = 1;
+            bool dynamic_zoom = 2;
+        }
+        
+        oneof _user_location_position_percentage {
+            PositionPercentage user_location_position_percentage = 3;
+        }
+    }
+    
+    message PositionPercentage {
+        float x_percentage = 1;
+        float y_percentage = 2;
+    }
+}
+
+message MapNorthLockChanged {
+    NorthLockBehavior north_lock = 1;
+}
+
+message MapVisibleAreaChanged {
+    MapVisibleArea new_area = 1;
+    message MapVisibleArea {
+        CornersPolygon viewportCornersPolygon = 1;
+        CornersPolygon fullscreenCornersPolygon = 2;
+        float orientation_degrees = 3;
+        float zoom_normalized = 4;
+        IntPosition viewport_center = 5;
+    }
+    
+    message CornersPolygon {
+        IntPosition topLeft = 1;
+        IntPosition topRight = 2;
+        IntPosition bottomRight = 3;
+        IntPosition bottomLeft = 4;
+    }
+}
+
+message MapOrientationModeChanged {
+    OrientationMode orientation_mode = 1;
+    enum OrientationMode {
+        DYNAMIC = 0;
+        FIXED = 1;
+    }
+}
+
+message RelativeViewPort {
+    float width = 1;
+    float height = 2;
+    float offset_x = 3;
+    float offset_y = 4;
+}
+
+message MapLine {
+    int32 tile_id = 1;
+    int32 line_id = 2;
+    bool reversed = 3;
+    repeated IntPosition positions = 4;
+    IntPosition center_position = 5;
+}
+
+message PoiClicked {
+    ClickedPoiType type = 1;
+}
+
+enum MapDisplayState {
+    DEFAULT = 0;
+    OVERVIEW = 1;
+}
+
+enum NorthLockBehavior {
+    UNLOCKED = 0;
+    STRONG_LOCK = 1;
+    WEAK_LOCK_WITH_AUTOMATIC_UNLOCK = 2;
+}
+
+enum ClickedPoiType {
+    HOME = 0;
+    WORK = 1;
+    PARKED = 2;
+    DEPARTURE = 3;
+}

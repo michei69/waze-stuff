@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/search_stats_wrapper/autocomplete_item_shown_stat.proto";
+import "stats/search_stats_wrapper/autocomplete_request_stat.proto";
+import "stats/search_stats_wrapper/autocomplete_result_clicked_stat.proto";
+import "stats/search_stats_wrapper/autocomplete_shown_stat.proto";
+import "stats/search_stats_wrapper/autocomplete_text_deleted_stat.proto";
+import "stats/search_stats_wrapper/gas_popup_clicked_stat.proto";
+import "stats/search_stats_wrapper/gas_popup_shown_stat.proto";
+import "stats/search_stats_wrapper/gas_prices_screen_shown_stat.proto";
+import "stats/search_stats_wrapper/gas_type_selected_stat.proto";
+import "stats/search_stats_wrapper/more_categories_screen_clicked_stat.proto";
+import "stats/search_stats_wrapper/more_categories_screen_shown_stat.proto";
+import "stats/search_stats_wrapper/recenter_clicked_stat.proto";
+import "stats/search_stats_wrapper/saved_places_menu_clicked_stat.proto";
+import "stats/search_stats_wrapper/search_again_button_clicked_stat.proto";
+import "stats/search_stats_wrapper/search_again_button_hidden_stat.proto";
+import "stats/search_stats_wrapper/search_again_button_shown_stat.proto";
+import "stats/search_stats_wrapper/search_failed_stat.proto";
+import "stats/search_stats_wrapper/search_filter_clicked_stat.proto";
+import "stats/search_stats_wrapper/search_from_share_flow_requested_stat.proto";
+import "stats/search_stats_wrapper/search_menu_clicked_stat.proto";
+import "stats/search_stats_wrapper/search_menu_shown_stat.proto";
+import "stats/search_stats_wrapper/search_result_clicked_stat.proto";
+import "stats/search_stats_wrapper/search_result_item_shown_stat.proto";
+import "stats/search_stats_wrapper/search_results_filtered_stat.proto";
+import "stats/search_stats_wrapper/search_results_shown_stat.proto";
+import "stats/search_stats_wrapper/search_results_sorted_stat.proto";
+import "stats/search_stats_wrapper/search_success_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchStatsWrapper {
+    oneof stat {
+        AutocompleteResultClickedStat autocomplete_result_clicked = 1;
+        SearchMenuClickedStat search_menu_clicked = 2;
+        SearchResultClickedStat search_result_clicked = 3;
+        AutocompleteRequestStat autocomplete_request = 4;
+        SearchSuccessStat search_success = 5;
+        AutocompleteItemShownStat autocomplete_item_shown = 6;
+        AutocompleteShownStat autocomplete_shown = 7;
+        AutocompleteTextDeletedStat autocomplete_text_deleted = 8;
+        GasPopupClickedStat gas_popup_clicked = 9;
+        GasPopupShownStat gas_popup_shown = 10;
+        GasPricesScreenShownStat gas_prices_screen_shown = 11;
+        SavedPlacesMenuClickedStat saved_places_menu_clicked = 12;
+        SearchFailedStat search_failed = 13;
+        SearchMenuShownStat search_menu_shown = 14;
+        SearchResultItemShownStat search_result_item_shown = 15;
+        SearchResultsShownStat search_results_shown = 16;
+        SearchResultsSortedStat search_results_sorted = 17;
+        MoreCategoriesScreenClickedStat more_categories_screen_clicked = 18;
+        MoreCategoriesScreenShownStat more_categories_screen_shown = 19;
+        GasTypeSelectedStat gas_type_selected = 20;
+        RecenterClickedStat recenter_clicked = 21;
+        SearchAgainButtonClickedStat search_again_button_clicked = 22;
+        SearchAgainButtonHiddenStat search_again_button_hidden = 23;
+        SearchAgainButtonShownStat search_again_button_shown = 24;
+        SearchFilterClickedStat search_filter_clicked = 25;
+        SearchResultsFilteredStat search_results_filtered = 26;
+        SearchFromShareFlowRequestedStat search_from_share_flow_requested = 27;
+    }
+}

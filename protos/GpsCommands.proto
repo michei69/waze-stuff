@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "RealtimeNg.proto";
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GpsFakeStatus {
+    optional Status status = 1;
+    enum Status {
+        UNKNOWN = 0;
+        REAL = 1;
+        FAKE = 2;
+    }
+}
+
+message GpsLocationPath {
+    repeated GPSPosition positions = 1;
+}
+
+message GPSPosition {
+    optional Coordinate3 coordinate = 1;
+    optional double horizontal_accuracy_meters = 2;
+    optional int64 time_epoch_ms = 3;
+}

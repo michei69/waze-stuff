@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlerterClickedStat {
+    AlerterInfo alerter_info = 1;
+    
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        THUMBS_UP = 1;
+        THUMBS_DOWN = 2;
+        REROUTE = 3;
+        CANCEL_REROUTE = 4;
+        BACK = 5;
+        COLLAPSE = 6;
+        DRAG_MAP = 7;
+        TAP_BACKGROUND = 8;
+        TIMEOUT = 9;
+        ALTERNATIVE_ROUTE = 10;
+    }
+    
+    BeforeOrAfterReport before_or_after_report = 5;
+    enum BeforeOrAfterReport {
+        BEFORE_OR_AFTER_REPORT_UNSPECIFIED = 0;
+        BEFORE = 1;
+        AFTER = 2;
+    }
+    
+    TimerDefault timer_default = 8;
+    enum TimerDefault {
+        TIMER_DEFAULT_UNSPECIFIED = 0;
+        ACCEPT = 1;
+        REJECT = 2;
+    }
+    
+    oneof _above_speed_limit {
+        bool above_speed_limit = 3;
+    }
+    
+    oneof _timeout_seconds {
+        int64 timeout_seconds = 4;
+    }
+    
+    oneof _new_alerter_component {
+        bool new_alerter_component = 6;
+    }
+    
+    oneof _sound_enabled {
+        bool sound_enabled = 7;
+    }
+    
+    oneof _distance_to_report_meters {
+        int64 distance_to_report_meters = 9;
+    }
+}

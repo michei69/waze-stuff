@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/permissions_stats_wrapper/bluetooth_access_request_trigger.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BluetoothPermissionRequestPopupShownStat {
+    BlutoothAccessRequestTrigger request_trigger = 1;
+}

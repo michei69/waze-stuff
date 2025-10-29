@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/voice_instructions_sound.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAssistantPostActionStat {
+    UserAction user_action = 1;
+    enum UserAction {
+        USER_ACTION_UNSPECIFIED = 0;
+        REPORT_CRASH = 1;
+        REPORT_HAZARD = 2;
+        REPORT_POLICE = 3;
+        REPORT_TRAFFIC = 4;
+    }
+    
+    VoiceInstructionsSound voice_instructions_sound = 2;
+}

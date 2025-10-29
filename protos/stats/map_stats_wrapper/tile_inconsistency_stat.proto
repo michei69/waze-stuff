@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TileInconsistencyStat {
+    InconsistencyType inconsistency_type = 1;
+    enum InconsistencyType {
+        INCONSISTENCY_TYPE_UNSPECIFIED = 0;
+        MISSING_TILE = 1;
+        TILE_CONTENT_MISMATCH = 2;
+        OLD_ROUTING_TILE_VERSION = 3;
+        OLD_TRAFFIC_TILE_VERSION = 4;
+    }
+    
+    oneof _tile_id {
+        int64 tile_id = 2;
+    }
+    
+    oneof _client_tile_version {
+        int64 client_tile_version = 3;
+    }
+    
+    oneof _server_tile_version {
+        int64 server_tile_version = 4;
+    }
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UserAgeWarningScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CONFIRM = 1;
+        EDIT_BIRTHDATE = 2;
+    }
+    
+    oneof _birthdate_timestamp_seconds {
+        sint64 birthdate_timestamp_seconds = 2;
+    }
+}

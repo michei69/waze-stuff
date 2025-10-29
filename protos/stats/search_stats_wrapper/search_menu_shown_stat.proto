@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/triggering_platform.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchMenuShownStat {
+    TriggeringPlatform triggering_platform = 5;
+    
+    oneof _main_menu_button_shown {
+        bool main_menu_button_shown = 1;
+    }
+    
+    oneof _categories_shown {
+        bool categories_shown = 2;
+    }
+    
+    oneof _portrait {
+        bool portrait = 3;
+    }
+    
+    oneof _list_cards_count {
+        int64 list_cards_count = 4;
+    }
+}

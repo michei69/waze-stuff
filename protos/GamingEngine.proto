@@ -1,0 +1,664 @@
+syntax = "proto2";
+
+package linqmap.proto.gaming.engine;
+
+import "google/protobuf/timestamp.proto";
+import "Model.proto";
+import "Types.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPGE";
+option java_package = "linqmap.proto.gaming.engine";
+
+message PointsHistory {
+    optional string id = 1;
+    optional string activity = 2;
+    optional int64 timestamp = 3;
+    optional Points points = 4;
+}
+
+message Activity {
+    optional string id = 1;
+    optional string action = 2;
+    optional int64 amount = 3 [default = 1];
+    optional int64 timestamp = 4;
+    repeated Property property = 5;
+    optional string session = 6;
+    optional int64 override_points = 7;
+}
+
+message ConditionState {
+    optional string condition_id = 1;
+    optional int64 target = 2;
+    optional int64 current = 3;
+}
+
+message ActionState {
+    optional string id = 1;
+    optional string type_id = 2;
+    repeated ConditionState condition_state = 3;
+    optional bool hidden = 4;
+    optional int64 timestamp = 5;
+}
+
+message Action {
+    optional ActionType type = 1;
+    optional ActionState state = 2;
+}
+
+message AchievementState {
+    optional string id = 1 [deprecated = true];
+    optional string type_id = 2;
+    optional bool unlocked = 3;
+    repeated ConditionState condition_state = 4;
+    optional int64 timestamp = 5;
+    optional bool claimed = 6;
+    optional bool seen = 7;
+    optional string unlock_session = 8;
+}
+
+message Achievement {
+    optional AchievementType type = 1;
+    optional AchievementState state = 2;
+    optional string id = 3;
+}
+
+message LevelState {
+    optional string id = 1;
+    optional string type_id = 2;
+    repeated ConditionState condition_state = 3;
+    optional bool hidden = 4;
+    optional int64 timestamp = 5;
+}
+
+message Level {
+    optional LevelType type = 1;
+    optional LevelState state = 2;
+}
+
+message ActivityCount {
+    optional string action = 1;
+    optional int64 count = 2;
+}
+
+message UserGamingModel {
+    repeated Action action = 1;
+    repeated Achievement achievement = 2;
+    repeated Level level = 3;
+    repeated CategoryType category_type = 6;
+    repeated SeriesType series_type = 7;
+    
+    reserved 4, 5;
+    
+    reserved "challenge", "reward";
+}
+
+message LeaderboardRecord {
+    optional int64 user_id = 2;
+    optional int64 points = 3;
+    optional string username = 4;
+    optional string mood_url = 5;
+    optional string country_code = 6;
+    optional int64 map_edit_count = 7;
+}
+
+message Alert {
+    optional Location location = 1;
+    optional AlertType type = 2;
+    optional AlertSubType sub_type = 3;
+    optional int64 num_views = 4;
+    optional int64 num_thumbsup = 5;
+    repeated AlertComment comment = 6;
+    optional bool is_alive = 7;
+    optional bool is_voice = 8;
+}
+
+message AlertComment {
+    optional int64 time = 1;
+    optional int64 user_id = 2;
+    optional string comment = 3;
+}
+
+message Feedback {
+    optional Location location = 1;
+    optional AlertType type = 2;
+    optional AlertSubType sub_type = 3;
+    optional bool thumbs_up = 4;
+    optional int64 reporter_user_id = 5;
+    optional bool is_alive = 6;
+}
+
+message Location {
+    optional Coordinate latlng = 1;
+    optional string street = 2;
+    optional string city = 3;
+    optional string state = 4;
+}
+
+message Element {
+    optional int64 event_time = 1;
+    optional string id = 4;
+    
+    oneof element {
+        Alert alert = 2;
+        Feedback feedback = 3;
+    }
+}
+
+message GetUserGamingModelRequest {
+    optional int64 user_id = 1;
+    optional bool return_all_achievements = 2;
+}
+
+message GetUserGamingModelResponse {
+    optional UserGamingModel model = 1;
+}
+
+message GetGamingStatusRequest {
+    optional int64 user_id = 1;
+    
+    optional Options options = 3;
+    message Options {
+        optional bool return_level_info = 1;
+        optional bool return_points_info = 2;
+        optional bool return_achievements_info = 4;
+        optional bool return_unseen_count = 7;
+        optional bool return_all_achievements = 8;
+        optional bool return_activity_counts = 9;
+        optional bool return_leaderboard_info = 10;
+        optional bool return_mood_info = 11;
+        
+        reserved 3, 5, 6;
+        
+        reserved "return_rewards_info", "return_challenges_info", "return_current_rewards_info";
+    }
+    
+    optional bool replay_mode = 4;
+}
+
+message GetGamingStatusResponse {
+    optional LevelType current_level = 1;
+    optional Points points = 2;
+    optional Points points_to_next_reward = 3;
+    repeated Achievement achievement = 6;
+    optional int32 unseen_count = 10;
+    
+    repeated ActivityCount activity_count = 11;
+    message ActivityCount {
+        optional string activity = 1;
+        optional int64 count = 2;
+    }
+    
+    optional LeaderboardInfo leaderboard = 12;
+    message LeaderboardInfo {
+        optional int64 global_rank = 1;
+        optional string country_code = 2;
+        optional int64 country_rank = 3;
+        optional string state_code = 4;
+        optional int64 state_rank = 5;
+        optional bool included = 6;
+        optional string fixed_locality_country_code = 7;
+        optional string fixed_locality_state_code = 8;
+    }
+    
+    optional MoodInfo mood = 13;
+    message MoodInfo {
+        optional string mood_name = 1;
+        optional string mood_url = 2;
+    }
+    
+    reserved 4, 5, 7, 8, 9;
+    
+    reserved "total_reward_count", "total_unlocked_reward_count", "challenge", "last_reward_points", "current_rewards";
+}
+
+message GetPointsHistoryRequest {
+    optional int64 user_id = 1;
+    optional string activity = 2 [deprecated = true];
+    repeated string activities = 3;
+    optional int64 history_window_millis = 4;
+}
+
+message GetPointsHistoryResponse {
+    repeated PointsHistory points_history = 1;
+}
+
+message GetLeaderboardRequest {
+    optional int64 user_id = 1;
+    optional LookbackPeriod lookback_period = 6;
+    
+    oneof locality {
+        string country_code = 2;
+        bool wazer_country_leaderboard = 4;
+        string state_code = 5;
+    }
+}
+
+message GetLeaderboardResponse {
+    repeated LeaderboardRecord record = 1;
+    optional LeaderboardRecord wazer_details = 2;
+    optional int32 rank = 3;
+}
+
+message ClaimPointsRequest {
+    optional int64 user_id = 1;
+    optional string achievement_id = 2;
+    optional string challenge_id = 3;
+}
+
+message ClaimPointsResponse {
+    optional Status status = 1;
+}
+
+message MarkSeenRequest {
+    optional int64 user_id = 1;
+    repeated string achievement_id = 2;
+}
+
+message MarkSeenResponse {
+    optional Status status = 1;
+}
+
+message ReportActivityRequest {
+    optional int64 user_id = 1;
+    optional Activity activity = 2;
+    optional int32 repeat = 3;
+    optional bool notify = 4 [default = true];
+}
+
+message ReportActivityResponse {
+    optional Status status = 1;
+}
+
+message GetPointsRequest {
+    optional int64 user_id = 1;
+    
+    reserved 2;
+    
+    reserved "return_rank_info";
+}
+
+message GetPointsResponse {
+    optional Points points = 1;
+    
+    reserved 2;
+    
+    reserved "rank";
+}
+
+message GetIsGrownUpRequest {
+    optional int64 user_id = 1;
+}
+
+message GetIsGrownUpResponse {
+    optional bool grown_up = 1;
+}
+
+message ProductPricesUpdate {
+    optional int64 user_id = 1;
+    optional string update_uuid = 2;
+    optional google.protobuf.Timestamp update_time = 3;
+    optional Coordinate position = 4;
+    optional int32 points = 5;
+}
+
+message GamingMapEditUpdate {
+    optional int64 user_id = 1;
+    optional google.protobuf.Timestamp edit_time = 2;
+    optional string uuid = 3;
+    optional int32 num_edits = 4;
+    optional int32 points = 5;
+}
+
+message WrapUpGamingLogoutRequest {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+    optional string client_session_uuid = 3;
+    optional double total_distance_meters = 4;
+    optional bool silent_session = 5;
+}
+
+message WrapUpGamingLogoutResponse {
+    
+}
+
+message RevealAchievementRequest {
+    optional int64 user_id = 1;
+    optional string achievement_id = 2;
+}
+
+message RevealAchievementResponse {
+    optional Status status = 1;
+}
+
+message UnlockAchievementRequest {
+    optional int64 user_id = 1;
+    optional string achievement_id = 2;
+}
+
+message UnlockAchievementResponse {
+    optional Status status = 1;
+}
+
+message AddPointsRequest {
+    optional int64 user_id = 1;
+    optional int64 points = 2;
+}
+
+message AddPointsResponse {
+    optional Status status = 1;
+}
+
+message GetHistoryRequest {
+    optional int64 user_id = 1;
+    optional int32 limit = 2 [default = 100];
+}
+
+message GetHistoryResponse {
+    repeated Element element = 1;
+}
+
+message DeleteHistoryRequest {
+    optional int64 user_id = 1;
+    repeated string id = 2;
+}
+
+message DeleteHistoryResponse {
+    optional Status status = 1;
+}
+
+message GetGamingModelRequest {
+    
+}
+
+message GetGamingModelResponse {
+    optional GamingModel model = 1;
+}
+
+message CreateActionTypeRequest {
+    
+}
+
+message CreateActionTypeResponse {
+    
+}
+
+message GetActionTypeRequest {
+    
+}
+
+message GetActionTypeResponse {
+    
+}
+
+message GetActionTypesRequest {
+    
+}
+
+message GetActionTypesResponse {
+    
+}
+
+message UpdateActionTypeRequest {
+    
+}
+
+message UpdateActionTypeResponse {
+    
+}
+
+message DeleteActionTypeRequest {
+    
+}
+
+message DeleteActionTypeResponse {
+    
+}
+
+message ActivateActionTypeRequest {
+    
+}
+
+message ActivateActionTypeResponse {
+    
+}
+
+message DeactivateActionTypeRequest {
+    
+}
+
+message DeactivateActionTypeResponse {
+    
+}
+
+message CreateAchievementTypeRequest {
+    
+}
+
+message CreateAchievementTypeResponse {
+    
+}
+
+message GetAchievementTypeRequest {
+    
+}
+
+message GetAchievementTypeResponse {
+    
+}
+
+message GetAchievementTypesRequest {
+    
+}
+
+message GetAchievementTypesResponse {
+    
+}
+
+message UpdateAchievementTypeRequest {
+    
+}
+
+message UpdateAchievementTypeResponse {
+    
+}
+
+message DeleteAchievementTypeRequest {
+    
+}
+
+message DeleteAchievementTypeResponse {
+    
+}
+
+message ActivateAchievementTypeRequest {
+    
+}
+
+message ActivateAchievementTypeResponse {
+    
+}
+
+message DeactivateAchievementTypeRequest {
+    
+}
+
+message DeactivateAchievementTypeResponse {
+    
+}
+
+message CreateLevelTypeRequest {
+    
+}
+
+message CreateLevelTypeResponse {
+    
+}
+
+message GetLevelTypeRequest {
+    
+}
+
+message GetLevelTypeResponse {
+    
+}
+
+message GetLevelTypesRequest {
+    
+}
+
+message GetLevelTypesResponse {
+    
+}
+
+message UpdateLevelTypeRequest {
+    
+}
+
+message UpdateLevelTypeResponse {
+    
+}
+
+message DeleteLevelTypeRequest {
+    
+}
+
+message DeleteLevelTypeResponse {
+    
+}
+
+message ActivateLevelTypeRequest {
+    
+}
+
+message ActivateLevelTypeResponse {
+    
+}
+
+message DeactivateLevelTypeRequest {
+    
+}
+
+message DeactivateLevelTypeResponse {
+    
+}
+
+message GetActivityCountRequest {
+    optional int64 user_id = 1;
+    optional Activity activity = 2;
+    optional Target target = 3;
+    optional Property property = 4;
+}
+
+message GetActivityCountResponse {
+    optional int64 activity_count = 1;
+}
+
+message GetActivityCountsRequest {
+    optional int64 user_id = 1;
+    repeated Activity activity = 2;
+    optional Target target = 3;
+    optional string client = 4;
+    optional string reason = 5;
+}
+
+message GetActivityCountsResponse {
+    repeated ActivityCount activity_count = 1;
+}
+
+message GetExclusionRequest {
+    optional int64 user_id = 1;
+}
+
+message GetExclusionResponse {
+    optional bool excluded = 1;
+}
+
+message SetExclusionRequest {
+    optional int64 user_id = 1;
+    optional bool excluded = 2;
+    optional string requesting_user_ldap = 3;
+    optional string reason = 4;
+    optional string case_id = 5;
+}
+
+message SetExclusionResponse {
+    
+}
+
+message SetFixedLocalityRequest {
+    optional int64 user_id = 1;
+    optional string country_code = 2;
+    optional string state_code = 3;
+    optional string requesting_user_ldap = 4;
+    optional string reason = 5;
+}
+
+message SetFixedLocalityResponse {
+    
+}
+
+message GetFixedLocalityRequest {
+    optional int64 user_id = 1;
+}
+
+message GetFixedLocalityResponse {
+    optional string country_code = 1;
+    optional string state_code = 2;
+}
+
+message DeleteFixedLocalityRequest {
+    optional int64 user_id = 1;
+}
+
+message DeleteFixedLocalityResponse {
+    
+}
+
+message AchievementUnlockedEvent {
+    optional int64 user_id = 1;
+    optional string achievement_id = 2;
+}
+
+message LevelReachedEvent {
+    optional int64 user_id = 1;
+    optional string level_id = 2;
+}
+
+message SessionEndNotificationRequest {
+    optional int64 user_id = 1;
+    optional string session = 2;
+}
+
+message SessionEndNotificationResponse {
+    optional Status status = 1;
+    repeated AchievementState states = 2;
+}
+
+message MarkFirstDriveRequest {
+    optional int64 user_id = 1;
+}
+
+message MarkFirstDriveResponse {
+    
+}
+
+message UserLocality {
+    optional string country_code = 1;
+    optional string state_code = 3;
+    optional int64 global_rank = 4;
+    optional int64 country_rank = 5;
+    optional int64 state_rank = 6;
+    optional int64 points = 7;
+    optional int64 map_edit_count = 8;
+    
+    reserved 2;
+    
+    reserved "state_name";
+}
+
+enum LookbackPeriod {
+    ALL_TIME = 0;
+    PAST_WEEK = 1;
+    PAST_MONTH = 2;
+}

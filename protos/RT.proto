@@ -1,0 +1,158 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+import "Doc.proto";
+import "Types.proto";
+import "brands_server.proto";
+import "Search.proto";
+import "Fields.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message CheckPictureAccessRequest {
+    optional int64 pictureUserId = 1;
+    
+    oneof requester_details {
+        string token = 2;
+        int64 user_id = 3;
+        string secret_key = 4;
+    }
+}
+
+message CheckPictureAccessResponse {
+    optional bool allowed = 1;
+}
+
+message RoutingContext {
+    optional int32 created_seconds = 5;
+    optional int32 version = 6;
+    optional bool snap_to_street = 1;
+    optional SideOfTheRoad side_of_the_road = 2;
+    optional string original_venue_id = 3;
+    optional Coordinate original_venue_location = 4;
+    optional string venue_context = 7;
+    optional int64 segment_id = 8;
+}
+
+message BrandsWrapper {
+    repeated brandsserver.Brand brands = 1;
+    repeated search.SearchResult search_results = 2;
+}
+
+message SeeMe {
+    optional int32 see_me_level = 1;
+    optional int32 show_nickname_next_to_my_reports = 2;
+    optional bool show_users = 3;
+    optional bool show_alerts = 4;
+    optional bool show_traffic = 5;
+    optional PingStatus ping_status = 6;
+    optional int32 events_distance = 7;
+    optional PingStatus private_ping_status = 8;
+    optional int32 capabilities = 9;
+}
+
+message SeeMeEcho {
+    optional int32 see_me_level = 1;
+}
+
+message AttestationGetNonceRequest {
+    optional string token = 1;
+}
+
+message AttestationGetNonceResponse {
+    optional string nonce = 1;
+}
+
+message AttestationSetDeviceTokenRequest {
+    optional string installation_id = 1;
+    optional string device_token = 2;
+}
+
+message GetSelfInfoRequest {
+    
+}
+
+message SelfInfoResponse {
+    optional int64 waze_id = 1;
+}
+
+message GetSosProvidersRequest {
+    optional Coordinate loc = 1;
+}
+
+message GetSosProvidersResponse {
+    repeated SosProvider provider = 1;
+    optional search.SearchResult advertisement = 2 [deprecated = true];
+}
+
+message SosProvider {
+    optional Type type = 1;
+    enum Type {
+        EMERGENCY = 0;
+        ASSISTANCE = 1;
+        OTHER = 2;
+    }
+    
+    optional SubType subtype = 2;
+    enum SubType {
+        POLICE = 0;
+        AMBULANCE = 1;
+        FIRE = 2;
+        ROADSIDE_ASSISTANCE = 3;
+    }
+    
+    optional string phone = 3;
+    optional SosShareLocation shareLocation = 4;
+    optional string name = 5;
+    optional string url = 6;
+}
+
+message SosShareLocation {
+    optional string phone = 1;
+    optional string email = 2;
+}
+
+message SleepDelayRequest {
+    optional int64 sleep_ms = 1;
+}
+
+message SleepDelayResponse {
+    optional int64 count = 1;
+}
+
+message InvalidateUserSessionsRequest {
+    optional int64 user_id = 1;
+}
+
+enum SideOfTheRoad {
+    NONE = 0;
+    RIGHT = 1;
+    LEFT = 2;
+    CALC = 3;
+}
+
+enum SeeMeLevel {
+    SEEME_HIDE_NICKNAME = 1;
+    SEEME_SHOW_ON_MAP = 2;
+    SEEME_FULL_NAME = 4;
+    SEEME_PICTURE = 8;
+    SEEME_FULL_NAME_TO_FRIENDS = 16;
+    SEEME_PICTURE_TO_FRIENDS = 32;
+}
+
+enum ReporterDetailLevel {
+    REPORTER_NICKNAME = 2;
+    REPORTER_FULL_NAME = 4;
+    REPORTER_PICTURE = 8;
+    REPORTER_FULL_NAME_TO_FRIENDS = 16;
+    REPORTER_PICTURE_TO_FRIENDS = 32;
+}
+
+enum PingStatus {
+    PING_UNSUPPORTED = 0;
+    PING_ALLOWED = 1;
+    PING_DISALLOWED = 2;
+}

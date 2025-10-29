@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/encouragement_stats_wrapper/encouragement_info.proto";
+import "stats/reusable_types/ucomm_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EncouragementSkippedStat {
+    Reason reason = 1;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        ENCOURAGEMENT_SHOWN = 1;
+        NAVIGATING = 2;
+        NO_IMAGE = 3;
+        POPUP_SHOWN = 4;
+        RESUMING_NAV_POPUP = 5;
+        IN_CAR_PROJECTED_CONNECTED = 6;
+        DEEPLINK = 7;
+        BAD_PARAMS = 8;
+    }
+    
+    UcommInfo ucomm_info = 2;
+    EncouragementInfo encouragement_info = 3;
+}

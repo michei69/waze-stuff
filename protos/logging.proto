@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package linqmap.proto;
+
+import "google/protobuf/descriptor.proto";
+
+option objc_class_prefix = "LPR";
+option java_package = "linqmap.proto";
+
+message CustomProtoLogger {
+    optional string class_name = 1;
+    optional string method_name = 2;
+}
+
+enum LoggingOption {
+    NONE = 0;
+    HIDE = 1;
+}
+
+extend google.protobuf.FieldOptions {
+    optional LoggingOption logging = 99001;
+    repeated string conditional_logging_field_to_hide = 99005;
+    repeated string conditional_logging_if_value_is = 99006;
+    optional CustomProtoLogger custom_field_logger = 99010;
+    optional int32 logging_repeated_max = 99007;
+}
+
+extend google.protobuf.MessageOptions {
+    optional CustomProtoLogger custom_logger = 99011;
+}

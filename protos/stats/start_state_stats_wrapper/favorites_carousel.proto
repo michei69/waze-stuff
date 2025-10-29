@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message FavoritesCarousel {
+    oneof _favorites_count {
+        int64 favorites_count = 1;
+    }
+    
+    oneof _home_available {
+        bool home_available = 2;
+    }
+    
+    oneof _work_available {
+        bool work_available = 3;
+    }
+}

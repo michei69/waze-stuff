@@ -1,0 +1,95 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Questions.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message TakeoversDisplayed {
+    repeated DisplayedTakeover takeover = 1;
+}
+
+message GetTakeoversRequest {
+    
+}
+
+message GetTakeoversResponse {
+    repeated Takeover takeovers = 1;
+}
+
+message DisplayedTakeover {
+    optional Takeover takeover = 1;
+    optional int32 timeDisplayedMillis = 2;
+    optional bool userInteracted = 3;
+    
+    optional CloseReason closeReason = 4;
+    enum CloseReason {
+        DRIVE_RESUMED = 1;
+        TIME_COMPLETED = 2;
+        USER_CLOSED = 3;
+        USER_CLICKED = 4;
+    }
+    
+    optional string clicked_button_id = 5;
+}
+
+message Takeover {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN = 0;
+        AD = 1;
+        REPORT = 2;
+        FRIENDS = 3;
+        CARPOOL_RTR_NOW = 4;
+        FEATURE_TIP = 5;
+    }
+    
+    optional string id = 2;
+    optional int32 displayTimeSeconds = 3;
+    optional string statInfo = 8;
+    
+    oneof takeover {
+        AdTakeover ads = 4;
+        ReportTakeover alerts = 5;
+        FriendsTakeover friends = 6;
+        CarpoolTakeover carpool = 7;
+        FeatureTipTakeover feature_tip = 9;
+    }
+}
+
+message FeatureTipTakeover {
+    optional questions.Question question = 1;
+}
+
+message AdTakeover {
+    optional ExternalPoi poi = 1;
+}
+
+message ReportTakeover {
+    optional Report report = 1;
+}
+
+message FriendsTakeover {
+    repeated Friend friend = 1;
+}
+
+message ExternalPoi {
+    optional int64 clientPinId = 1;
+    optional int64 pinId = 2;
+    optional int64 promotionId = 3;
+}
+
+message Report {
+    optional int32 id = 1;
+    optional string alert_uuid = 2;
+}
+
+message Friend {
+    optional int64 id = 1;
+}
+
+message CarpoolTakeover {
+    optional string ride_id = 1;
+}

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AppWakeUpStat {
+    Method method = 1;
+    enum Method {
+        METHOD_UNSPECIFIED = 0;
+        VISITS = 1;
+        SLC = 2;
+        OTHER = 3;
+    }
+    
+    oneof _visit_departure_timestamp_ms {
+        int64 visit_departure_timestamp_ms = 2;
+    }
+    
+    oneof _visit_arrival_timestamp_ms {
+        int64 visit_arrival_timestamp_ms = 3;
+    }
+    
+    oneof _horizontal_accuracy_meters {
+        int64 horizontal_accuracy_meters = 4;
+    }
+    
+    oneof _wakeup_session_id {
+        int64 wakeup_session_id = 5;
+    }
+}

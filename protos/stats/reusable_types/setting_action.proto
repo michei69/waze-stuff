@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum SettingAction {
+    SETTING_ACTION_UNSPECIFIED = 0;
+    SETTING_ACTION_SCREEN_SHOWN = 1;
+    SETTING_ACTION_BACK_BUTTON_CLICKED = 2;
+    SETTING_ACTION_SETTING_CHANGED = 3;
+    SETTING_ACTION_BUTTON_CLICKED = 4;
+    SETTING_ACTION_SCREEN_CLOSED = 5;
+    SETTING_ACTION_SETTINGS_SAVED = 6;
+}

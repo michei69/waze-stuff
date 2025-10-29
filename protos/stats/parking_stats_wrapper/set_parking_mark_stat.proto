@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SetParkingMarkStat {
+    Method method = 1;
+    enum Method {
+        METHOD_UNSPECIFIED = 0;
+        MANUAL = 1;
+    }
+    
+    string dest_venue_id = 2;
+    LatLng destination_coordinates = 3;
+    LatLng user_current_coordinates = 4;
+}

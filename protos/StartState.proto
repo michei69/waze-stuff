@@ -1,0 +1,249 @@
+syntax = "proto2";
+
+package linqmap.proto.startstate;
+
+import "Types.proto";
+import "SocialMedia.proto";
+import "Favorites.proto";
+import "TripClient.proto";
+import "FutureDrives.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPSS";
+option java_package = "linqmap.proto.startstate";
+
+message GetDriveSuggestionsRequest {
+    optional int64 userId = 1 [deprecated = true];
+    optional CoordinateLocation userLocation = 2;
+    optional UserInfo userInfo = 3;
+    optional UserSettings userSettings = 4;
+    
+    reserved 5;
+}
+
+message GetDriveSuggestionsResponse {
+    repeated DriveSuggestion driveSuggestions = 1;
+    optional ResponseStatus status = 2;
+    optional DestinationsSuggestion destinations_suggestion = 3;
+}
+
+message ListSuggestionsRequest {
+    optional CoordinateLocation userLocation = 1;
+    optional UserInfo userInfo = 2;
+    optional UserSettings userSettings = 3;
+    
+    reserved 4;
+}
+
+message ListSuggestionsResponse {
+    optional Status status = 2;
+    repeated Suggestion suggestions = 3;
+}
+
+message WrapupStartStateLogoutRequest {
+    optional UserInfo user_info = 1;
+}
+
+message WrapupStartStateLogoutResponse {
+    optional Status status = 1;
+}
+
+message Suggestion {
+    optional string name = 1;
+    
+    oneof suggestion {
+        DriveSuggestion drive_suggestion = 2;
+        DestinationSuggestion destination_suggestion = 3;
+    }
+}
+
+message GetDriveSuggestionRouteInfoRequest {
+    optional UserInfo userInfo = 1;
+    optional DrivePlan drivePlan = 2;
+    optional DriveType driveType = 3;
+}
+
+message GetDriveSuggestionRouteInfoResponse {
+    optional RouteInfo routeInfo = 1;
+    optional ResponseStatus status = 2;
+}
+
+message SetTripForecastsPreferenceRequest {
+    optional UserInfo userInfo = 1;
+    optional TripForecastsPreference preferences = 2;
+}
+
+message SetTripForecastsPreferenceResponse {
+    optional ResponseStatus status = 1;
+}
+
+message GetDriveIfRelevantRequest {
+    optional int64 user_id = 1;
+    optional int32 future_hours_to_check = 4;
+    optional bool use_online_scoring = 5;
+    
+    oneof id {
+        string event_id = 2;
+        int32 drive_id = 3;
+    }
+}
+
+message GetDriveIfRelevantResponse {
+    optional ResponseStatus status = 1;
+    optional com.waze.proto.futuredrives.FutureDrive drive = 2;
+    optional bool isRelevant = 3;
+    
+    reserved 4;
+    
+    reserved "isFirstSuggestion";
+}
+
+message ResponseStatus {
+    optional Code code = 1;
+    enum Code {
+        UNKNOWN = 0;
+        SUCCESS = 1;
+        GENERAL_ERROR = 2;
+    }
+    
+    optional string message = 2;
+}
+
+message UserInfo {
+    optional int64 id = 1;
+    optional StringMap config = 2 [deprecated = true];
+    optional string session_id = 3;
+    optional int32 max_suggestions_count = 4;
+    optional double dest_suggestions_score_threshold = 5;
+    optional bool suggest_eta_checks = 6;
+    optional int64 future_drive_max_look_back_millis = 7;
+    optional int64 future_drive_max_look_forward_millis = 8;
+    optional bool use_personalize_eta = 10;
+    
+    reserved 9;
+    
+    reserved "permit_mapping";
+}
+
+message UserSettings {
+    optional bool filterPredictions = 1;
+    optional bool shouldSimulatePredictions = 2;
+    optional bool getDestinationSuggestions = 3;
+    optional bool return_unverified_calendar_events = 4;
+    optional bool get_top_suggestion_leave_now = 5;
+}
+
+message CoordinateLocation {
+    optional Coordinate location = 1;
+    optional int64 lastUpdateTimeInEpochSec = 2;
+    optional int64 accuracyInMeters = 3;
+}
+
+message DriveSuggestion {
+    optional DrivePlan drivePlan = 2;
+    optional RouteInfo routeInfo = 3;
+    optional AdditionalInfo additionalInfo = 4;
+    optional string suggestionId = 5;
+    optional DriveType type = 1 [deprecated = true];
+}
+
+message DestinationsSuggestion {
+    repeated DestinationSuggestion destination_suggestions = 1;
+    optional ResponseStatus status = 2;
+}
+
+message DestinationSuggestion {
+    optional Place destination = 1;
+    
+    reserved 2;
+    
+    reserved "ad";
+}
+
+message DrivePlan {
+    optional Place origin = 1;
+    optional Place dest = 2;
+    optional DriveTime time = 3;
+}
+
+message RouteInfo {
+    optional DriveDuration drivePlanDuration = 1;
+    optional DriveDuration leavingNowDuration = 2;
+    optional string viaName = 3;
+    optional bool isPreferred = 4;
+}
+
+message DriveDuration {
+    optional int64 crossTimeInSec = 1;
+    optional int64 historicalCrossTimeInSec = 2;
+}
+
+message Place {
+    optional socialmedia.LocationInfo location = 1;
+    optional FavoriteInfo favoriteInfo = 2;
+    optional string brand_icon = 3;
+}
+
+message DriveTime {
+    oneof departOrArriveTime {
+        int64 departureTimeInEpochSec = 1;
+        int64 arrivalTimeInEpochSec = 2;
+    }
+}
+
+message FavoriteInfo {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional favorites.Favorite.Type type = 3;
+}
+
+message AdditionalInfo {
+    oneof info {
+        PlannedDriveInfo plannedDriveInfo = 1;
+        PredictionInfo predictionInfo = 2;
+        EtaCheckInfo etaCheckInfo = 3;
+    }
+}
+
+message PlannedDriveInfo {
+    optional string meetingId = 1;
+    
+    optional Type type = 2;
+    enum Type {
+        UNKNOWN = 0;
+        USER_GENERATED = 1;
+        CALENDAR_DRIVE = 2;
+        FACEBOOK_DRIVE = 3;
+    }
+    
+    optional string meetingName = 3;
+    optional com.waze.proto.futuredrives.CalendarEventInfo calendar_event_info = 4;
+}
+
+message PredictionInfo {
+    optional trip.client.TimePreferences timePreferences = 1;
+    optional double score = 2;
+    optional string compositeId = 3;
+    optional com.waze.proto.futuredrives.ExtendedRoutineID extendedRoutineId = 4 [deprecated = true];
+    optional int32 drive_id = 5;
+}
+
+message EtaCheckInfo {
+    optional double score = 1;
+    optional string compositeId = 2;
+    optional int32 drive_id = 5;
+}
+
+message TripForecastsPreference {
+    optional bool allowForecasts = 1;
+}
+
+enum DriveType {
+    UNKNOWN = 0;
+    PREDICTION = 1;
+    PLANNED_FUTURE_DRIVE = 2;
+    PLANNED_CARPOOL_DRIVE = 3;
+    PLANNED_CALENDAR_DRIVE = 4;
+    PLANNED_FACEBOOK_DRIVE = 5;
+    ETA_CHECK = 6;
+}

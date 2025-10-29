@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SavedPlacesMenuClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CLOSE = 1;
+        EDIT = 2;
+        NEW = 3;
+        SELECT = 4;
+    }
+    
+    Type type = 2;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        HOME = 1;
+        OTHER_PLACE = 2;
+        WORK = 3;
+    }
+}

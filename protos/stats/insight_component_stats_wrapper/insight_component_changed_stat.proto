@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/insight_available_click_options.proto";
+import "stats/insight_component_stats_wrapper/insight_component_info.proto";
+import "stats/insight_component_stats_wrapper/insight_component_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentChangedStat {
+    InsightComponentState from_insight_state = 1;
+    InsightComponentState to_insight_state = 2;
+    InsightComponentInfo insight_component_info = 3;
+    
+    repeated ChangeReason change_reason = 4;
+    enum ChangeReason {
+        CHANGE_REASON_UNSPECIFIED = 0;
+        ENTER_SEGMENT = 1;
+        EXIT_SEGMENT = 2;
+        INSIGHT_COMPONENT_TERMINATED = 3;
+        HIDDEN_BY_OTHER_UI_COMPONENT = 4;
+        AVAILABLE_CLICK_OPTION_CHANGED = 5;
+        TIMER_CHANGED = 6;
+        DISTANCE_CHANGED = 7;
+        NUMBER_OF_INSIGHTS_CHANGED = 8;
+    }
+    
+    repeated InsightAvailableClickOptions available_click_options = 5;
+}

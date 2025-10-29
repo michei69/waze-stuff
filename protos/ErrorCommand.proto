@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message UserErrorMessage {
+    optional string title = 1;
+    optional string body = 2;
+    optional string button = 3;
+    optional string deep_link = 4;
+    optional bool show_as_toast = 5;
+    optional string analytics_id = 6;
+    optional bool hide_close_button = 7;
+    optional bool terminal = 8;
+}
+
+message Error {
+    optional int32 code = 10101;
+    optional string description = 10102;
+    optional string internal_code = 10103;
+    optional string request = 10105;
+    optional string server = 10106;
+    optional string errorCode = 10107;
+    optional StringMap parameters = 10108;
+    optional UserErrorMessage user_error_message = 10104;
+}

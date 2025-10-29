@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/navigation_stats_wrapper/segment_instruction.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NavigationSegment {
+    SegmentInstruction instruction = 1;
+    
+    oneof _total_lanes_count {
+        int64 total_lanes_count = 2;
+    }
+    
+    oneof _instruction_lanes_count {
+        int64 instruction_lanes_count = 3;
+    }
+}

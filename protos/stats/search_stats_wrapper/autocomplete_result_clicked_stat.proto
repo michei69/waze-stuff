@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+import "stats/reusable_types/triggering_platform.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AutocompleteResultClickedStat {
+    Type type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        PLACE = 1;
+        CONTACT = 2;
+        FAVORITE = 3;
+        HISTORY = 4;
+        QUERY = 5;
+        RETURN = 6;
+        SEARCH = 7;
+        ALGO_TRANSPARENCY_LINK = 8;
+    }
+    
+    string query = 4;
+    
+    DistanceSource distance_source = 7;
+    enum DistanceSource {
+        DISTANCE_SOURCE_UNSPECIFIED = 0;
+        AERIAL = 1;
+        CLIENT = 2;
+        HUBCAPS = 3;
+    }
+    
+    ResultSource result_source = 8;
+    enum ResultSource {
+        RESULT_SOURCE_UNSPECIFIED = 0;
+        GOOGLE = 1;
+        WAZE = 2;
+        WAZE_AD = 3;
+    }
+    
+    string result_id = 9;
+    string result_name = 10;
+    string venue_id = 11;
+    LatLng dest_coordinate = 12;
+    TriggeringPlatform triggering_platform = 13;
+    
+    oneof _line_number {
+        int64 line_number = 2;
+    }
+    
+    oneof _line_number_organic {
+        int64 line_number_organic = 3;
+    }
+    
+    oneof _query_characters_count {
+        int64 query_characters_count = 5;
+    }
+    
+    oneof _distance_from_result_meters {
+        double distance_from_result_meters = 6;
+    }
+}

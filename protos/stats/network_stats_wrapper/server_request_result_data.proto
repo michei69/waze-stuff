@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ServerRequestResultData {
+    Api api = 1;
+    enum Api {
+        API_UNSPECIFIED = 0;
+        ADD_USER_REPORTED_ALERT = 1;
+        AUTH_SERVICE_GET_TOKEN = 2;
+        CHECK_USER_AUTH = 3;
+        COMPLETE_VERIFY_EMAIL = 4;
+        CONNECT_GUEST_TO_IDENTIFIER = 5;
+        CREATE_MEETING = 6;
+        BACK_FROM_TRIP_OVERVIEW = 7;
+        GET_COPILOT_ASSETS = 8;
+        GET_GAMING_STATUS = 9;
+        GET_MAIN_MENU_BANNERS = 10;
+        GET_MARKETPLACE_NEW_CONTENT_AVAILABILITY = 11;
+        IS_AADC_RESTRICTED = 12;
+        LIST_SUGGESTIONS = 13;
+        LOCATE_ACCOUNT_BY_COMMUNITY = 14;
+        LOGIN = 15;
+        LOGOUT = 16;
+        QR_LOGIN_CREATE_LOGIN_CREDENTIALS_REQUEST = 17;
+        QR_LOGIN_GET_CREDENTIAL_FOR_QR_TOKEN_REQUEST = 18;
+        QR_LOGIN_NOTIFY_QR_SCANNED_REQUEST = 19;
+        REGISTER = 20;
+        REGISTER_CONNECT = 21;
+        REPORT_EVENTS = 22;
+        REPORT_THUMBS_DOWN = 23;
+        REPORT_THUMBS_UP = 24;
+        ROUTES_DURATION = 25;
+        ROUTING_REQUEST = 26;
+        SELECT_ROUTE = 27;
+        SWITCH_ACCOUNT = 28;
+        UPDATE_MAIN_MENU_BANNER_ACTION = 29;
+        UPDATE_USER_FIELDS = 30;
+        VERIFY_EMAIL = 31;
+        ALTERNATIVE_ROUTES_REQUEST = 32;
+        DETOUR_SELECTED_REQUEST = 33;
+        SEARCH_V2 = 34;
+        COPILOT_GET_CARS = 35;
+        REFRESH_CYCLE = 36;
+        GET_MAP_BANNERS = 37;
+        UPDATE_MAP_BANNER_ACTION = 38;
+        GET_GEO_CONFIG = 39;
+        PUSH_DISPLAYED_REQUEST = 40;
+        ENGAGEMENT_DISPLAYED_REQUEST = 41;
+        ENGAGEMENT_BUTTON_CLICKED_REQUEST = 42;
+        ENABLE_LOCATION_REPORTING_REQUEST = 43;
+        START_WALKING_REQUEST = 44;
+        NOTIFY_REFERRER_RECEIVED_REQUEST = 45;
+        GET_UPDATE_MEETINGS_REQUEST = 46;
+        INITIATE_CONVERSATION = 47;
+        SEND_CONVERSATION_MESSAGE = 48;
+        TRIP_OVERVIEW_REQUEST = 49;
+        START_NAVIGATION_REQUEST = 50;
+        ADD_WAYPOINT = 51;
+        WAZE_ASKS = 52;
+        GET_VOICE_INSTRUCTIONS = 53;
+        AUTHENTICATE = 54;
+        GENERATE_TEXT_VOICE_ASSET = 55;
+        GENERATE_INSTRUCTION_VOICE_ASSETS = 56;
+        ESTIMATE_WAYPOINT_DETOUR = 57;
+        GET_ROUTE_DESCRIPTION = 58;
+        GET_PIN_ADS = 59;
+        DRIVE_DETECTION = 60;
+        USER_PERFORMED_PLAN_DRIVE_CHECK = 61;
+        GET_VOICES_SETTINGS = 62;
+        REPORT_MAP_ISSUE = 63;
+        ROUTE_UPDATE_REQUEST = 64;
+        CHAT_REQUEST = 65;
+        CALCULATE_AND_START_NAVIGATION_REQUEST = 66;
+        REROUTE_REQUEST = 67;
+        QR_LOGIN_CREATE_QR_TOKEN_REQUEST = 68;
+        QR_LOGIN_USER_REFUSED_REQUEST = 69;
+        SEARCH = 70;
+        QUERY_PROFILE = 71;
+        COMPLETE_ONBOARDING = 72;
+        VENUE_SEARCH = 73;
+        ANSWER_QUESTION = 74;
+        REVOKE_CREDENTIALS_TOKENS_REQUEST = 75;
+    }
+    
+    string failure_reason = 4;
+    
+    FailureReasonSource failure_reason_source = 6;
+    enum FailureReasonSource {
+        ERROR_SOURCE_UNSPECIFIED = 0;
+        CLIENT = 1;
+        SERVER = 2;
+    }
+    
+    QualityOfService quality_of_service = 11;
+    enum QualityOfService {
+        QUALITY_OF_SERVICE_UNSPECIFIED = 0;
+        USER_AWAITED = 1;
+        USER_VISIBLE = 2;
+        DATA_FETCH = 3;
+        DATA_SEND = 4;
+    }
+    
+    RequestQueue request_queue = 12;
+    enum RequestQueue {
+        REQUEST_QUEUE_UNSPECIFIED = 0;
+        GENERAL = 1;
+        ROUTING = 2;
+        BACKGROUND = 3;
+        REGISTER_USER = 4;
+        DRIVE_SUGGESTIONS = 5;
+        GEO_CONFIG = 6;
+        USERNAME = 7;
+        ROUTING_UPDATE = 8;
+    }
+    
+    oneof _success {
+        bool success = 2;
+    }
+    
+    oneof _latency_ms {
+        int64 latency_ms = 3;
+    }
+    
+    oneof _error_code {
+        int64 error_code = 5;
+    }
+    
+    oneof _client_queue_latency_ms {
+        int64 client_queue_latency_ms = 7;
+    }
+    
+    oneof _server_processing_latency_ms {
+        int64 server_processing_latency_ms = 8;
+    }
+    
+    oneof _roundtrip_latency_ms {
+        int64 roundtrip_latency_ms = 9;
+    }
+    
+    oneof _retries {
+        int64 retries = 10;
+    }
+    
+    oneof _request_size_bytes {
+        int64 request_size_bytes = 13;
+    }
+    
+    oneof _response_size_bytes {
+        int64 response_size_bytes = 14;
+    }
+    
+    oneof _app_check_token_generation_latency_ms {
+        int64 app_check_token_generation_latency_ms = 15;
+    }
+}

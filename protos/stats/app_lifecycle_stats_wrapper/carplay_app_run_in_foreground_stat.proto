@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CarplayAppRunInForegroundStat {
+    ForegroundMode foreground_mode = 1;
+    enum ForegroundMode {
+        CARPLAY_NEW_MODE_UNSPECIFIED = 0;
+        CARPLAY_NEW_MODE_DASHBOARD = 1;
+        CARPLAY_NEW_MODE_FULL_SCREEN = 2;
+    }
+}

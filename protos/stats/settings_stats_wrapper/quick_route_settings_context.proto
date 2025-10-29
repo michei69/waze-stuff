@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum QuickRouteSettingsContext {
+    QUICK_ROUTE_SETTINGS_CONTEXT_UNSPECIFIED = 0;
+    QUICK_ROUTE_SETTINGS_CONTEXT_TRIP_OVERVIEW = 1;
+    QUICK_ROUTE_SETTINGS_CONTEXT_ALTERNATIVE_ROUTES = 2;
+}

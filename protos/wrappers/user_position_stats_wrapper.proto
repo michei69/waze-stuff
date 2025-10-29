@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/user_position_stats_wrapper/car_compass_detected_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UserPositionStatsWrapper {
+    oneof stat {
+        CarCompassDetectedStat car_compass_detected = 1;
+    }
+}

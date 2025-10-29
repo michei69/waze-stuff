@@ -1,0 +1,888 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool;
+
+import "CarpoolCommon.proto";
+import "Types.proto";
+import "MegabloxAlert.proto";
+import "MegabloxControl.proto";
+import "MegabloxService.proto";
+import "PIIManagement.proto";
+
+option objc_class_prefix = "LPCR";
+option java_package = "linqmap.proto.carpool";
+
+message AddInvoiceRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional common.Invoice invoice = 3;
+    optional TransactionHistory transaction_history = 4 [deprecated = true];
+    optional bool replace_if_exists = 5;
+}
+
+message UserInfo {
+    optional int64 user_id = 8;
+    optional string name = 1;
+    optional string email = 2;
+    optional string address = 3;
+    optional string country = 4;
+    optional string gaia_id = 5;
+    optional string phone = 6;
+    optional string state = 7;
+    optional bool test_user = 9;
+}
+
+message AddInvoiceResponse {
+    optional Status status = 1;
+    optional string transaction_id = 2;
+}
+
+message GetInvoicesRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional int64 from_date = 3;
+    optional int64 to_date = 4;
+    optional int64 from_status_timestamp = 7;
+    repeated common.Invoice.Status filter_status = 5;
+    repeated common.PaymentProvider filter_provider = 6;
+}
+
+message InvoiceWithHistory {
+    optional common.Invoice invoice = 1;
+    optional TransactionHistory transaction_history = 2 [deprecated = true];
+}
+
+message GetInvoicesResponse {
+    repeated InvoiceWithHistory invoice = 1;
+}
+
+message GetInvoiceRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional string invoice_id = 3;
+    optional string itinerary_id = 4;
+}
+
+message GetInvoiceResponse {
+    optional InvoiceWithHistory invoice = 1;
+}
+
+message GetInvoicesByIdRequest {
+    repeated string invoice_id = 1;
+}
+
+message UserInvoice {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional common.Invoice invoice = 3;
+}
+
+message GetInvoicesByIdResponse {
+    repeated UserInvoice invoice = 1;
+}
+
+message GetInvoicesByCarpoolIdRequest {
+    optional string carpool_id = 1;
+    optional bool include_invoices_by_reference_carpool_id = 2;
+}
+
+message GetInvoicesByCarpoolIdResponse {
+    repeated UserInvoice invoice = 1;
+}
+
+message SendInvoiceReceiptRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional string invoice_id = 3;
+    optional string itinerary_id = 4;
+}
+
+message SendInvoiceReceiptResponse {
+    optional Status status = 1;
+}
+
+message ChargeRiderForCarpoolsRequest {
+    optional int64 rider_id = 1;
+    repeated common.CarpoolAndItineraryId carpool_and_itinerary_id = 2;
+    repeated common.Itinerary itinerary = 4;
+    optional bool dry_run = 3;
+}
+
+message ChargeRiderForCarpoolsResponse {
+    repeated TransactionInfo ride_transaction_info = 1;
+    message TransactionInfo {
+        optional Status status = 1;
+        optional string transaction_id = 2;
+        optional string invoice_id = 3;
+        optional common.CarpoolAndItineraryId carpool_and_itinerary_id = 4;
+        optional common.PricingWithCurrency amount = 5;
+    }
+}
+
+message PayRiderRequest {
+    optional int64 user_id = 1;
+    optional common.PricingDetails total = 2;
+    optional string country_code = 3;
+    optional string reason = 4;
+    optional bool dry_run = 5;
+    optional string case_id = 6;
+    optional string details = 7;
+}
+
+message PayRiderResponse {
+    optional Status status = 1;
+    optional string transaction_id = 2;
+}
+
+message PayDriverRequest {
+    optional int64 user_id = 1;
+    optional common.PricingDetails total = 2;
+    optional string country_code = 3;
+    optional string reason = 4;
+    optional bool dry_run = 5;
+    optional bool increase_balance_if_unregistered = 6;
+    optional string case_id = 7;
+    optional string details = 8;
+}
+
+message PayDriverResponse {
+    optional Status status = 1;
+    optional string transaction_id = 2;
+}
+
+message PayDriverSafelyRequest {
+    optional PayDriverRequest request = 1;
+}
+
+message PayDriverSafelyResponse {
+    optional PayDriverResponse response = 1;
+}
+
+message ChargeDriverRequest {
+    optional int64 user_id = 1;
+    optional common.PricingDetails total = 2;
+    optional string country_code = 3;
+    optional string reason = 4;
+    optional bool dry_run = 5;
+    optional string case_id = 6;
+    optional string details = 7;
+}
+
+message ChargeDriverResponse {
+    optional Status status = 1;
+    optional string transaction_id = 2;
+}
+
+message PayNewlyApprovedDriverRequest {
+    optional int64 user_id = 1;
+    optional bool dry_run = 2;
+}
+
+message PayNewlyApprovedDriverResponse {
+    optional Status status = 1;
+    repeated string transaction_id = 2;
+}
+
+message GetBalanceRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional bool fetch_provider_balance = 3;
+}
+
+message GetBalanceResponse {
+    optional common.PricingDetails total_paid = 1;
+    optional common.PricingDetails total_outstanding = 2;
+    optional common.PricingDetails total_paid_to_shared_driver_account = 3;
+    optional string provider_balance = 4;
+    optional string currency_code = 5;
+    optional Status status = 6;
+}
+
+message GetMonthlyDriverEarningsRequest {
+    optional int64 user_id = 1;
+    optional int64 min_timestamp_millis = 2;
+    optional int64 max_timestamp_millis = 3;
+    optional string time_zone = 4;
+}
+
+message GetMonthlyDriverEarningsResponse {
+    optional common.PricingDetails total_monthly_earnings = 1;
+    optional string currency_code = 2;
+    optional int64 min_timestamp_millis = 3;
+    optional int64 max_timestamp_millis = 4;
+    optional string time_zone = 5;
+}
+
+message GetPaymentAccountRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional bool include_pending_account = 3;
+}
+
+message GetPaymentAccountResponse {
+    optional common.PaymentAccount payment_account = 1;
+    optional common.PaymentBalance payment_balance = 2;
+    optional google.waze.ridematchpayments.ScoreCard score_card = 3;
+    optional Status status = 4;
+}
+
+message GetPaymentAccountsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetPaymentAccountsResponse {
+    optional common.PaymentAccount driver_account = 1;
+    optional common.PaymentAccount rider_account = 2;
+}
+
+message GetAllPaymentAccountsRequest {
+    optional bool use_only_validated_accounts = 3;
+    
+    oneof id {
+        int64 user_id = 1;
+        string obfuscated_gaia_id = 2;
+    }
+}
+
+message GetAllPaymentAccountsResponse {
+    repeated common.PaymentAccount payment_account = 1;
+}
+
+message UpdatePaymentAccountStatusRequest {
+    optional string account_id = 1;
+    optional common.PaymentAccount.Status new_status = 2;
+    optional string reason = 3;
+}
+
+message UpdatePaymentAccountStatusResponse {
+    optional Status status = 1;
+    optional common.PaymentAccount payment_account = 2;
+}
+
+message GetPayeeInfoRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional string country_code = 3;
+    optional bool include_pending_account = 4;
+}
+
+message GetPayeeInfoResponse {
+    optional common.PricingDetails total_paid = 1;
+    optional common.PricingDetails total_outstanding = 2;
+    
+    optional MaskedPayoutAccount masked_payout_account = 3;
+    message MaskedPayoutAccount {
+        optional PayoutAccountType type = 1;
+        enum PayoutAccountType {
+            UNKNOWN = 0;
+            PAYOUT_ACCOUNT_BANK_ACCOUNT = 1;
+        }
+        
+        optional string value = 2;
+    }
+    
+    optional string currency = 4;
+    optional string payee_id = 5;
+    optional common.PaymentAccount payout_account = 6;
+    optional common.PricingDetails total_paid_to_shared_driver_account = 7;
+}
+
+message HandleUnsupportedCallbackRequest {
+    optional string callback_name = 1;
+    optional string primary_id = 2;
+    optional string secondary_id = 3;
+}
+
+message GetPaymentRegistrationDataRequest {
+    optional int64 user_id = 1;
+    optional string locale = 2;
+    optional string country_code = 3 [deprecated = true];
+    optional string time_zone = 4;
+    optional common.PaymentProvider provider = 5;
+    optional common.CarpoolRole role = 6;
+    optional string obfuscated_gaia_id = 7;
+    optional string email = 8;
+    optional google.waze.ridematchpayments.CustomizationParameters buyflow_params = 9;
+    optional PaymentsFlowType flow_type = 10;
+}
+
+message GetPaymentRegistrationDataResponse {
+    optional PayoutProviderStatus status = 1;
+    optional PaymentsFlowData flow_data = 2;
+}
+
+message PaymentsFlowData {
+    optional DataType data_type = 1;
+    enum DataType {
+        NONE = 0;
+        URL = 1;
+        TOKEN = 2;
+    }
+    
+    optional string data = 2;
+    optional PaymentsFlowType flow_type = 3;
+}
+
+message GetPaymentsRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+}
+
+message GetPaymentsResponse {
+    repeated common.Payment payment = 1;
+    optional Status status = 2;
+}
+
+message ListPaymentsRequest {
+    optional string filter = 1;
+}
+
+message ListPaymentsResponse {
+    optional Status status = 1;
+    repeated common.Payment payment = 2;
+}
+
+message GetPaymentMovementsRequest {
+    optional string payment_id = 1;
+    optional bool include_by_original_payment_id = 2;
+}
+
+message GetPaymentMovementsResponse {
+    optional Status status = 1;
+}
+
+message GetInvoiceLinesRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+}
+
+message GetInvoiceLinesResponse {
+    optional Status status = 1;
+    repeated google.waze.ridematchpayments.CarpoolInvoiceLine invoice_line = 2;
+}
+
+message ListInvoiceLinesRequest {
+    optional string filter = 1;
+}
+
+message ListInvoiceLinesResponse {
+    optional Status status = 1;
+    repeated google.waze.ridematchpayments.CarpoolInvoiceLine invoice_line = 2;
+}
+
+message WaiveInvoiceRequest {
+    optional string waived_by_user_id = 1;
+    optional int64 user_id = 2;
+    optional common.CarpoolRole role = 3;
+    optional string invoice_id = 4;
+    optional string comment = 5;
+}
+
+message WaiveInvoiceResponse {
+    optional Status status = 1;
+}
+
+message RefundInvoiceRequest {
+    optional string refunded_by_user_id = 1;
+    optional int64 user_id = 2;
+    optional common.CarpoolRole role = 3;
+    optional string invoice_id = 4;
+    optional string comment = 5;
+}
+
+message RefundInvoiceResponse {
+    optional Status status = 1;
+    optional string transaction_id = 2;
+}
+
+message RefundCarpoolRequest {
+    optional string carpool_id = 1;
+    optional string comment = 2;
+    optional string refunding_user_id = 3;
+    optional bool dry_run = 4;
+    optional bool refund_also_bonuses = 5;
+}
+
+message RefundCarpoolResponse {
+    optional Status status = 1;
+    optional string carpool_id = 2;
+    optional bool applied_legacy_flow = 3;
+    
+    repeated PaymentRefundInfo refund_info = 4;
+    message PaymentRefundInfo {
+        optional Status status = 1;
+        optional string transaction_id = 2;
+        optional string original_transaction_id = 3;
+        repeated string invoice_id = 4;
+    }
+}
+
+message GetUserIdByPayeeIdRequest {
+    optional common.PaymentProvider provider = 1;
+    optional string payee_id = 2;
+}
+
+message GetUserIdByPayeeIdResponse {
+    optional int64 user_id = 1;
+}
+
+message UpdateInvoiceStatusRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional string invoice_id = 3;
+    optional common.Invoice.Status status = 4;
+}
+
+message UpdateInvoiceStatusResponse {
+    optional Status status = 1;
+}
+
+message UpdatePaymentStatusRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional string payment_id = 3;
+    optional common.Payment.Status status = 4;
+}
+
+message UpdatePaymentStatusResponse {
+    optional Status status = 1;
+}
+
+message FundsGuarantee {
+    optional int64 user_id = 1;
+    optional string day = 2;
+    
+    optional Window window = 3;
+    enum Window {
+        MORNING = 0;
+        EVENING = 1;
+    }
+    
+    optional string country_code = 4;
+    optional string currency_code = 5;
+    optional common.PricingDetails total = 6;
+    optional int64 total_time_millis = 13;
+    repeated common.PricingDetails obsolete = 12 [deprecated = true];
+    
+    repeated TotalContext total_history = 14;
+    message TotalContext {
+        optional common.PricingDetails total = 1;
+        optional int64 time_millis = 2;
+    }
+    
+    optional Status status = 7;
+    enum Status {
+        UNKNOWN = 0;
+        PROCESSING = 1;
+        SUCCEEDED = 2;
+        FAILED = 3;
+        CANCELED = 4;
+        EXPIRED = 5;
+    }
+    
+    optional int64 status_time_millis = 10;
+    
+    repeated StatusContext status_history = 11;
+    message StatusContext {
+        optional Status status = 1;
+        optional int64 time_millis = 2;
+    }
+    
+    optional string id = 8;
+    optional int64 timestamp = 9;
+    
+    optional MegabloxContext megablox_context = 15;
+    message MegabloxContext {
+        optional google.waze.ridematchpayments.FundsGuaranteeStatus status = 1;
+        optional google.waze.ridematchpayments.DeclineReason decline_reason = 2;
+        optional string decline_reason_user_message = 3;
+        optional int64 timestamp_millis = 4;
+        optional int64 latest_sequence_number = 5;
+        optional int64 amount_charged_micros = 6;
+    }
+    
+    repeated MegabloxContext previous_megablox_context = 16;
+    optional common.TimeslotIdentifier timeslot_identifier = 17;
+}
+
+message UnlinkPaymentAccountRequest {
+    optional int64 user_id = 1;
+    optional common.CarpoolRole role = 2;
+    optional string email = 3;
+}
+
+message UnlinkPaymentAccountResponse {
+    optional Status status = 1;
+    enum Status {
+        UNKNOWN = 0;
+        SUCCEEDED = 1;
+        FAILED_INVALID_REQUEST = 2;
+        FAILED_ALREADY_APPROVED = 3;
+        FAILED_SUSPENDED = 4;
+        FAILED_NOT_FOUND = 5;
+        FAILED_SERVER_ERROR = 6;
+        FAILED_OTHER = 7;
+    }
+}
+
+message DeletePaymentAccountRequest {
+    optional int64 user_id = 1;
+    optional string account_id = 4;
+    optional common.CarpoolRole role = 2;
+    optional bool include_pending_account = 3;
+}
+
+message SetPaymentAccountAsDefaultRequest {
+    optional string account_id = 1;
+    optional bool default = 2;
+}
+
+message GetFundsGuaranteesRequest {
+    optional int64 from_timestamp = 3;
+    repeated FundsGuarantee.Status filter_status = 4;
+    optional int64 from_status_timestamp = 6;
+    optional bool check_status_history = 5;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message GetFundsGuaranteesResponse {
+    optional int64 user_id = 1;
+    optional string account_id = 2;
+    repeated FundsGuarantee funds_guarantee = 3;
+}
+
+message GetReceiptContentRequest {
+    optional string funds_guarantee_id = 3;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message GetReceiptContentResponse {
+    optional google.waze.ridematchpayments.ReceiptContent receipt_content = 1;
+}
+
+message GetScoreCardRequest {
+    optional common.CarpoolRole role = 3;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message GetScoreCardResponse {
+    optional google.waze.ridematchpayments.ScoreCard score_card = 1;
+}
+
+message GetAlertsRequest {
+    optional common.CarpoolRole role = 3;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message GetAlertsResponse {
+    repeated google.waze.ridematchpayments.Alert alert = 1;
+    optional Status status = 2;
+}
+
+message GetControlsRequest {
+    optional common.CarpoolRole role = 3;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message GetControlsResponse {
+    repeated google.waze.ridematchpayments.Control control = 1;
+    optional Status status = 2;
+}
+
+message AddControlsRequest {
+    optional common.CarpoolRole role = 3;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message AddControlsResponse {
+    repeated google.waze.ridematchpayments.Control control = 1;
+    optional Status status = 2;
+}
+
+message RemoveControlsRequest {
+    optional common.CarpoolRole role = 3;
+    optional bool avoid_account_verification = 4;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message RemoveControlsResponse {
+    repeated google.waze.ridematchpayments.Control control = 1;
+}
+
+message GetAbuseSignalRequest {
+    optional common.CarpoolRole role = 3;
+    optional bool force = 4;
+    
+    oneof user {
+        int64 user_id = 1;
+        string account_id = 2;
+    }
+}
+
+message GetAbuseSignalResponse {
+    repeated AccountAbuseSignalResponse account_abuse_signal_response = 1;
+    message AccountAbuseSignalResponse {
+        optional int64 user_id = 1;
+        optional common.CarpoolRole role = 2;
+        optional string account_id = 3;
+        optional Status status = 4;
+        optional AbuseSignalResponse abuse_signal_response = 5;
+        optional int64 last_update_time_millis = 6;
+    }
+    
+    message AbuseSignalResponse {
+        optional int64 payment_method_count = 1;
+    }
+}
+
+message ReverseSuspendedUserIncentivesRequest {
+    optional int64 user_id = 1;
+    optional int64 driver_suspension_time_millis = 2;
+    optional int64 rider_suspension_time_millis = 3;
+    optional string time_zone = 4;
+}
+
+message ReverseSuspendedUserIncentivesResponse {
+    optional Status status = 1;
+    repeated IncentivesReversalResult invoices_reversal_details = 2;
+}
+
+message GetDeletionDelayRequest {
+    optional int64 user_id = 1;
+}
+
+message GetDeletionDelayResponse {
+    optional int64 deletion_delay_millis = 1;
+}
+
+message GetFundsGuaranteeFixFlowTokenRequest {
+    optional string funds_guarantee_id = 1;
+}
+
+message GetFundsGuaranteeFixFlowTokenResponse {
+    optional string fix_flow_token = 1;
+}
+
+message WakeUpExpireFundsGuaranteeRequest {
+    optional int64 user_id = 1;
+    optional string funds_guarantee_id = 2;
+}
+
+message CancelDeletedUserSubscriptionRequest {
+    optional string account_id = 1;
+    optional bool sandbox = 2;
+}
+
+message SendEmptyRequestToProviderRequest {
+    optional bool force_sandbox = 1;
+}
+
+message GetCarpoolPaymentStatusRequest {
+    optional string carpool_id = 1;
+}
+
+message GetCarpoolPaymentStatusResponse {
+    optional Status status = 1;
+    optional common.PaymentFlow paid_with_payment_flow = 2;
+    
+    repeated InvoiceData invoice_data = 3;
+    message InvoiceData {
+        optional string id = 1;
+        optional int64 user_id = 2;
+        optional common.CarpoolRole role = 3;
+        optional string funds_guarantee_id = 4;
+        optional common.Invoice.Status status = 5;
+    }
+}
+
+message PaymentInfo {
+    optional Status status = 1;
+    optional int64 user_id = 2;
+    optional string invoice_id = 3;
+    optional string transaction_id = 4;
+}
+
+message MakeNonCarpoolPaymentRequest {
+    repeated string invoice_id = 1;
+    optional bool dry_run = 2;
+}
+
+message MakeNonCarpoolPaymentResponse {
+    repeated PaymentInfo payment_info = 1;
+}
+
+message MakeCarpoolPaymentRequest {
+    repeated string invoice_id = 1;
+    repeated common.Itinerary itinerary = 2;
+    optional bool dry_run = 3;
+}
+
+message MakeCarpoolPaymentResponse {
+    optional Status status = 1;
+    repeated PaymentInfo rider_payment_info = 2;
+}
+
+message SendEmailForDriverInvoicesRequest {
+    optional int64 user_id = 1;
+    optional bool dry_run = 2;
+}
+
+message SendEmailForDriverInvoicesResponse {
+    optional Status status = 1;
+}
+
+message ReverseInvoiceIncentivesRequest {
+    repeated string invoice_id = 1;
+    optional bool dry_run = 2;
+    optional string force_account_id = 3;
+}
+
+message ReverseInvoiceIncentivesResponse {
+    repeated IncentivesReversalResult reversal_results = 1;
+}
+
+message IncentivesReversalResult {
+    optional string invoice_id = 1;
+    optional Status status = 2;
+    optional common.PricingDetails total_reversed_micros = 3;
+}
+
+message SimulateNotifyFundsGuaranteeRequest {
+    
+}
+
+message SimulateNotifyFundsGuaranteeResponse {
+    
+}
+
+message TransactionHistory {
+    repeated common.OfferPricing offer_pricing = 1;
+    optional UserInfo payeeInfo = 2;
+    repeated UserInfo payerInfo = 3;
+    optional int64 ride_time = 4;
+    optional string time_zone = 5;
+    optional common.OfferPricing last_driver_offer = 6;
+}
+
+message MakePaymentRequest {
+    repeated string invoice_id = 1;
+    optional bool dry_run = 2;
+    repeated common.Itinerary itinerary = 3;
+}
+
+message MakePaymentResponse {
+    optional Status status = 1 [deprecated = true];
+    repeated string transaction_id = 2 [deprecated = true];
+    
+    repeated TransactionInfo ride_transaction_info = 3;
+    message TransactionInfo {
+        optional Status status = 1;
+        optional string transaction_id = 2;
+        repeated string invoice_id = 3;
+    }
+    
+    repeated TransactionInfo extra_transaction_info = 4;
+}
+
+message MakePaymentByCarpoolRequest {
+    repeated string carpool_id = 1;
+    optional bool dry_run = 2;
+}
+
+message MakePaymentByCarpoolResponse {
+    repeated CarpoolPaymentInfo carpool_payment_info = 1;
+}
+
+message CarpoolPaymentInfo {
+    optional Status status = 1;
+    optional string carpool_id = 2;
+    repeated string transaction_id = 3;
+    
+    repeated InvoiceInfo invoice_info = 4;
+    message InvoiceInfo {
+        optional string invoice_id = 1;
+        optional int64 user_id = 2;
+        optional common.CarpoolRole role = 3;
+        optional common.PricingDetails total = 4;
+    }
+}
+
+message PayDriversForCarpoolRequest {
+    optional string carpool_id = 1;
+    repeated string invoice_id = 2;
+    optional bool dry_run = 3;
+}
+
+message PayDriversForCarpoolResponse {
+    repeated TransactionInfo ride_transaction_info = 1;
+    message TransactionInfo {
+        optional Status status = 1;
+        optional string transaction_id = 2;
+        repeated string invoice_id = 3;
+    }
+    
+    repeated TransactionInfo extra_transaction_info = 2;
+}
+
+message TwoSidedRefundRequest {
+    optional RefundData driver_refund_data = 1;
+    message RefundData {
+        optional int64 user_id = 1;
+        optional string invoice_id = 2;
+    }
+    
+    repeated RefundData rider_refund_data = 2;
+    optional string comment = 3;
+    optional string refunded_by_user_id = 4;
+}
+
+message TwoSidedRefundResponse {
+    optional Status status = 1;
+    optional CarpoolPaymentInfo payment_info = 2;
+}
+
+enum PayoutProviderStatus {
+    UNKNOWN = 0;
+    OK = 1;
+    PROVIDER_UNAVAILABLE = 2;
+    USER_COUNTRY_UNAVAILABLE = 3;
+    USER_COUNTRY_UNSUPPORTED = 4;
+    USER_GAIA_ID_ALREADY_IN_USE = 5;
+    MISSING_FIX_FLOW_TOKEN_ALERT = 6;
+}
+
+enum PaymentsFlowType {
+    NO_FLOW = 0;
+    CREATE_ACCOUNT_FLOW = 1;
+    UPDATE_ACCOUNT_FLOW = 2;
+    PAYMENT_METHODS_FLOW = 3;
+    FIX_FLOW = 4;
+}

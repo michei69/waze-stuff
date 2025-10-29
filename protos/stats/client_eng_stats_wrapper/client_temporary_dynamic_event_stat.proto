@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ClientTemporaryDynamicEventStat {
+    string event = 1;
+    
+    Parameter p0 = 2;
+    message Parameter {
+        string parameter = 1;
+        
+        oneof value {
+            int64 int_val = 2;
+            float float_val = 3;
+            bool bool_val = 4;
+            string string_val = 5;
+        }
+    }
+    
+    Parameter p1 = 3;
+    Parameter p2 = 4;
+    Parameter p3 = 5;
+    Parameter p4 = 6;
+    Parameter p5 = 7;
+    Parameter p6 = 8;
+    Parameter p7 = 9;
+    Parameter p8 = 10;
+    Parameter p9 = 11;
+}

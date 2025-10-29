@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum OnboardingType {
+    TYPE_UNSPECIFIED = 0;
+    SIGN_IN = 1;
+    EDIT_EMAIL = 2;
+    REGISTER_GUEST_WAZER = 3;
+    NO_EMAIL = 4;
+}

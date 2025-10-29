@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/insight_component_info.proto";
+import "stats/insight_component_stats_wrapper/insight_component_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentEngagedStat {
+    InsightComponentState insight_component_state = 1;
+    InsightComponentInfo insight_component_info = 2;
+    
+    Action action = 3;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        THERE = 1;
+        NOT_THERE = 2;
+        ACCEPT_REROUTE = 3;
+        DECLINE_REROUTE = 4;
+        CLOSE = 5;
+        GENERAL_COMPONENT_TAP = 6;
+        EMPTY_MAP_CLICK = 7;
+        BACK_CLICK = 8;
+    }
+}

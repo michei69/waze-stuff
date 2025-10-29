@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package waze.maps_api;
+
+import "assistant/FeatureId.proto";
+
+message PlaceId {
+    optional geostore.FeatureId feature_id = 1;
+}

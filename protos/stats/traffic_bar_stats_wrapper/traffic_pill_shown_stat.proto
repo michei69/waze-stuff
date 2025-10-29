@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/traffic_bar_stats_wrapper/traffic_pill_alert.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TrafficPillShownStat {
+    repeated TrafficPillAlert traffic_pill_alerts = 1;
+    
+    oneof _duration_seconds {
+        int64 duration_seconds = 2;
+    }
+}

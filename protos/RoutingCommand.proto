@@ -1,0 +1,494 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "AddWazerCommand.proto";
+import "CarpoolClient.proto";
+import "Types.proto";
+import "Venues.proto";
+import "RealtimeNg.proto";
+import "RoutingResult.proto";
+import "RoutingAPIExternal.proto";
+import "AoMCommon.proto";
+import "GeoCoding.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message RoutingResponse {
+    optional RoutingResponseCode routingResponseCode = 1;
+    repeated RoutingResult alternativeResponse = 2;
+    optional RoutingCarpoolSuggestions carpool_suggestions = 3;
+    optional ClosuresImpactInfo closures_impact_info = 4;
+}
+
+message RoutingUpdate {
+    optional int64 routeId = 1;
+    optional RoutingResult routingResult = 2;
+    
+    reserved 3;
+    
+    reserved "isSilent";
+}
+
+message UserRouting {
+    optional RoutingResult routingResult = 1;
+    optional int64 otherUserId = 2;
+}
+
+message SelectRouteRequest {
+    optional int64 routeId = 1;
+    optional int64 altId = 2;
+}
+
+message SelectRouteResponse {
+    optional RoutingResult routingResult = 1;
+    optional RoutingResponseCode selectRouteResponseCode = 2;
+}
+
+message AddWaypointRequest {
+    optional int64 routeId = 1;
+    optional int64 altId = 2;
+    optional bool autoSelectRoute = 3;
+    repeated Destination waypoint = 4;
+}
+
+message AddWaypointResponse {
+    optional RoutingResponseCode addWaypointResponseCode = 1;
+    repeated RoutingResult alternativeResponse = 2;
+}
+
+message RoutingResponseCode {
+    optional int64 id = 1;
+    optional int64 code = 3;
+    optional string description = 4;
+    optional string trafficComment = 5;
+    optional string voiceTrafficComment = 6;
+    optional string routingServerUniqueId = 7;
+    optional string response_id = 8;
+    optional TranslatableFormattedString trafficCommentWithArguments = 9;
+    optional TranslatableFormattedString voiceTrafficCommentWithArguments = 10;
+}
+
+message SubRoute {
+    optional int64 detourId = 1;
+    optional int32 subRouteId = 2;
+    repeated RouteSegment routeSegment = 3;
+    optional int32 length = 4;
+    optional int32 seconds = 5;
+    optional int32 otherLength = 6;
+    optional int32 otherSeconds = 7;
+}
+
+message RefreshDetourInfo {
+    optional string alternative_route_uuid = 1;
+    optional int64 detourId = 2;
+    optional int64 naiveTotalSeconds = 3;
+    optional int64 detourTotalSeconds = 4;
+    optional bool trendingUp = 7;
+    optional DetourLabel detourLabel = 9;
+    optional AlertType mainAlertType = 5 [deprecated = true];
+    optional AlertSubType mainAlertSubType = 6 [deprecated = true];
+    
+    reserved 8;
+    
+    reserved "alertDetails";
+}
+
+message RemoveDetourInfo {
+    optional string alternative_route_uuid = 1;
+    optional int64 detourId = 2;
+    
+    optional Reason removeReason = 3;
+    enum Reason {
+        DETOUR_REMOVE_REASON_UNSPECIFIED = 0;
+        BLOCKED = 1;
+        INVALID = 2;
+        NO_LONGER_SIMILAR_ETA = 3;
+    }
+}
+
+message AddDetourInfo {
+    optional string alternative_route_uuid = 1;
+    optional int32 routeSegmentIndex = 2;
+    optional DetourInfo info = 3;
+}
+
+message SelectDetourRouteRequest {
+    optional string alternative_route_uuid = 1;
+    optional int64 detourId = 2;
+    optional DriverPosition driver_position = 3;
+}
+
+message SelectDetourRouteResponse {
+    optional RoutingResult routingResult = 1;
+    optional RoutingResponseCode routingResponseCode = 2;
+}
+
+message DriverPosition {
+    optional Coordinate coordinate = 1;
+    optional int64 fromNode = 2;
+    optional int64 toNode = 3;
+    optional int64 timestamp_milliseconds = 4;
+}
+
+message RoutingRequest {
+    optional int32 id = 1;
+    optional string tripId = 3;
+    optional GraphLocation fromLoc = 7;
+    repeated Destination destination = 8;
+    optional int32 maxRoutes = 4;
+    optional int32 maxSegments = 5;
+    optional int32 maxGeometries = 24;
+    optional int32 maxPoints = 6;
+    optional string vehicleType = 18;
+    optional IntegerBoolMap options = 11 [deprecated = true];
+    repeated routing.proto.external.RoutingOptionFieldEntry routing_options = 42;
+    optional bool reroute = 13;
+    optional bool retry = 14;
+    optional string licensePlateSuffix = 17;
+    optional GpsInfo gpsInfo = 21;
+    optional routing.proto.external.RoutingLocationInfo routing_location_info = 47;
+    repeated Destination waypoint = 22;
+    optional bool autoSelectRoute = 23;
+    optional RouteType routeType = 25;
+    optional NavigationType navigationType = 26;
+    repeated string permit = 28;
+    optional CarpoolParams carpoolParams = 31;
+    optional string use_case = 33;
+    optional int64 useNaiveDetourId = 34;
+    optional bool withInstructions = 10;
+    optional bool returnEventGeometry = 35;
+    optional bool returnRouteInsights = 36;
+    optional bool returnQuestions = 37;
+    repeated StringEntry debug_query_params = 40;
+    optional EVData evData = 41;
+    optional bool returnAdditionalRouteSegmentDetails = 43;
+    optional bool etaOnlyObsolete = 20 [deprecated = true];
+    optional int32 navigationTypeObsolete = 15 [deprecated = true];
+    optional string frequentRouteIdObsolete = 16 [deprecated = true];
+    optional int32 maxRoutesWithEvents = 29 [deprecated = true];
+    optional bool selectable = 30 [deprecated = true];
+    optional int64 timeout = 32 [deprecated = true];
+    optional int32 timeOfDayObsolete = 12 [deprecated = true];
+    optional bool withGeomertiesObsolete = 9 [deprecated = true];
+    optional int32 routeTypeObsolete = 2 [deprecated = true];
+    optional RouteGeometryParams routeGeometryParams = 44;
+    optional bool returnClosureImpactInfo = 45;
+    
+    oneof time_oneof {
+        int64 startTime = 27;
+        int64 arriveTime = 38;
+    }
+    
+    oneof histogram_request_oneOf {
+        RangeCostParams rangeCostParams = 19;
+        HistogramRequest show_histogram = 39;
+    }
+}
+
+message RouteGeometryParams {
+    optional bool useS2 = 1;
+}
+
+message HistogramRequest {
+    optional int32 range = 1;
+    optional int32 interval = 2;
+    optional bool arrive_at = 3;
+}
+
+message CarpoolParams {
+    optional string carpool_id = 1;
+    optional string via_point_id = 2;
+}
+
+message GpsInfo {
+    optional int32 curSatellites = 1;
+    optional int32 curAccuracy = 2;
+    optional int32 curHeading = 3;
+    optional int32 curCompass = 4;
+    optional Coordinate3 curGyro = 5;
+    optional Coordinate lastPos = 6;
+    optional int32 lastHeading = 7;
+}
+
+message RangeCostParams {
+    optional int64 startTimeSeconds = 1;
+    optional int64 endTimeSeconds = 2;
+    optional int32 stepSeconds = 3;
+}
+
+message GraphLocation {
+    optional Coordinate position = 1;
+    optional int32 dbSegmentId = 2;
+    optional int64 fromNode = 3;
+    optional int64 toNode = 4;
+    optional string streetName = 5;
+    optional string cityName = 6;
+    optional string stateName = 7;
+    optional bool allowBidi = 8;
+}
+
+message Destination {
+    optional int32 id = 1;
+    optional GraphLocation toLoc = 2;
+    optional string venueId = 3;
+    optional string routingContext = 4;
+    repeated venue.EntryExitPoint entryPoint = 5;
+}
+
+message RerouteSuggestionCompletion {
+    optional string alternative_route_uuid = 1;
+    
+    oneof oneof_reason {
+        AcceptReason accepted_reason = 2;
+        DeclineReason declined_reason = 3;
+    }
+    
+    enum AcceptReason {
+        ACCEPT_REASON_UNSPECIFIED = 0;
+        EXPLICIT_ACCEPT = 1;
+        DEFAULT_ACCEPT = 2;
+        SILENT = 3;
+    }
+    
+    enum DeclineReason {
+        DECLINE_REASON_UNSPECIFIED = 0;
+        EXPLICIT_DECLINE = 1;
+        DEFAULT_DECLINE = 2;
+        TOO_SOON = 3;
+        TOO_CLOSE = 4;
+    }
+}
+
+message SuggestReroute {
+    optional int32 id = 1;
+    optional int32 rerouteSegment = 2;
+    optional int32 secondsBefore = 3;
+    optional int32 secondsAfter = 4;
+    optional string trafficComment = 5;
+    optional int64 detourId = 6 [deprecated = true];
+    optional RoutingResult rerouteRoutingResult = 7;
+    optional RerouteExplanation rerouteExplanation = 8;
+    optional bool isSilent = 9;
+    optional bool acceptByDefault = 10;
+    optional bool promptToConfirm = 11;
+    optional TranslatableFormattedString trafficCommentWithArguments = 12;
+}
+
+message RerouteExplanation {
+    optional VisualExplanation visual_explanation = 1;
+    optional VocalExplanation vocal_explanation = 2;
+}
+
+message VisualExplanation {
+    optional string display_brief_explanation = 1;
+    optional string display_verbose_explanation = 2;
+    optional TranslatableFormattedString brief_explanation_with_arguments = 3;
+    optional TranslatableFormattedString verbose_explanation_with_arguments = 4;
+}
+
+message VocalExplanation {
+    optional string tts = 1;
+    optional TranslatableFormattedString ttsWithArguments = 2;
+}
+
+message CheckRoutingRequest {
+    optional Coordinate destination = 1;
+}
+
+message CheckRoutingResponse {
+    optional CheckRoutingStatus status = 1;
+    optional string error_message = 2;
+    optional string route_name = 3;
+    optional int32 total_route_meters = 4;
+    optional int32 total_route_seconds = 5;
+    optional int32 waypoint_diff_meters = 6;
+    optional int32 waypoint_diff_seconds = 7;
+    optional int32 waypoint_aerial_distance_meters = 8;
+}
+
+message StandaloneRoutingRequest {
+    optional RoutingRequest request = 1;
+}
+
+message StandaloneRoutingResponse {
+    optional RoutingResponse response = 1;
+}
+
+message DebugSetupRequest {
+    optional string debug_speed_container_name = 1;
+}
+
+message DebugSetupResponse {
+    optional string debug_speed_container_name = 1;
+}
+
+message EVData {
+    optional bool is_electric_vehicle = 1;
+}
+
+message ClosuresImpactInfo {
+    optional ImpactType impact = 1;
+    enum ImpactType {
+        IMPACT_TYPE_UNSPECIFIED = 0;
+        UNREACHABLE_DESTINATION_LONG = 1;
+        UNAVAILABLE_PREFERRED_ROUTE = 2;
+        UNAVAILABLE_NATURAL_ROUTE = 3;
+        LONGER_DRIVE_TIME = 4;
+        UNREACHABLE_DESTINATION_SHORT = 5;
+    }
+    
+    repeated ClosureInfo impacting_closures = 4 [deprecated = true];
+    optional VisualClosureInfo visual_closure_info = 5;
+    
+    oneof closure_info {
+        string mte_name = 2;
+        string street_name = 3;
+    }
+}
+
+message ClosureInfo {
+    oneof closure {
+        ClosedSegment closed_segment = 1;
+        ClosedTurn closed_turn = 2;
+    }
+    
+    message ClosedSegment {
+        optional int32 server_segment_id = 1;
+        optional bytes encoded_s2_points = 2;
+    }
+    
+    message ClosedTurn {
+        optional int32 server_from_segment_id = 1;
+        optional bytes from_segment_encoded_s2_points = 2;
+        optional bytes to_segment_encoded_s2_points = 3;
+    }
+}
+
+message VisualClosureInfo {
+    repeated ClosurePolyline polylines = 1;
+    message ClosurePolyline {
+        repeated int32 server_segment_id = 1;
+        optional geocoding.proto.RoadType road_type = 2;
+        optional bytes encoded_s2_points = 3;
+    }
+    
+    repeated ClosurePin segment_closure_pins = 2;
+    message ClosurePin {
+        repeated int32 server_segment_id = 1;
+        optional geocoding.proto.RoadType road_type = 2;
+        optional Coordinate pin_location = 3;
+    }
+    
+    repeated ClosurePin turn_closure_pins = 3;
+}
+
+message RoutingCarpoolSuggestions {
+    repeated RouteRtrSuggestion route_rtr_suggestions = 1;
+    repeated AddWazer add_wazers = 2;
+    optional string context_id = 3;
+    
+    optional Status status = 4;
+    enum Status {
+        ROUTING_CARPOOL_SUGGESTIONS_STATUS_UNSPECIFIED = 0;
+        DONE_EMPTY = 1;
+        DONE_NOT_EMPTY = 2;
+        NOT_DONE = 3;
+    }
+}
+
+message RouteRtrSuggestion {
+    optional RoutingResult carpool_routing_result = 1;
+    
+    repeated RouteAndSuggestion route_and_suggestions = 2;
+    message RouteAndSuggestion {
+        optional string alternative_route_uuid_link = 1;
+        optional carpool.common.ExtendedOffer suggestion = 2;
+    }
+}
+
+enum TollParameterName {
+    PASS_BASED_MISSING_PASS_NAME = 0;
+    PASS_BASED_PRICE_CHANGE_TO = 1;
+    PASS_BASED_USER_PASS_NAME = 2;
+    TIME_BASED_PRICE_CHANGE_TO = 3;
+    TIME_BASED_PRICE_CHANGE_AT = 4;
+}
+
+enum RoutingRequestUseCase {
+    ADD_WAYPOINT = 1;
+    CATEGORY_SEARCH = 2;
+    TRIP_OVERVIEW_SELECT_ROUTE = 3;
+    ALTERNATE_ROUTES_SELECT_ROUTE = 4;
+    LIVEMAP_PLANNING = 5;
+    MAIN_NAVIGATION = 6;
+    TRIP_OVERVIEW = 7;
+    ETA_UPDATE = 10;
+    WRONG_TURN = 11;
+    REROUTE_SUGGESTION = 12;
+    CLOSURE_REROUTE = 13;
+    PERIODIC_RETRY = 14;
+    NA_1 = 15;
+    FAILED_AFTER_NETWORK_RESUME = 16;
+    ALTERNATIVE_ROUTES = 17;
+    OFFLINE_RECOVERY = 18;
+    RESUME_NAVIGATION = 19;
+    SETTINGS_CHANGE = 20;
+    SELECT_NAIVE_ROUTE = 21;
+    SELECT_REASSURANCE_ROUTE = 22;
+    REROUTE_SUGGESTION_ACCEPTED = 23;
+    ROUTE_COMPARISON = 24;
+    REROUTE_SUGGESTION_ALTERNATIVE = 25;
+    ROUTES_DURATION = 26;
+    SELECT_VENUE_ENTRY_POINT = 27;
+    CANCEL_WAYPOINT = 28;
+    WAYPOINT_MISSING = 29;
+    MULTIPLE_ETA = 33;
+    PARKING_ETA = 34;
+    QUICK_DRIVE = 30;
+    ETA_RANGE = 32;
+    FUTURE_DELAY_CHECK_WITH_REALTIME = 8;
+    FUTURE_DELAY_CHECK_IGNORE_REALTIME = 9;
+    GEO_RSS = 31;
+    WORK_HOME_ETA_FOR_PUSH_NOTIFICATION = 35;
+    TRAFFIC_VIEW_GET_ROUTE = 36;
+    TRAFFIC_VIEW_RECOST_ROUTE = 37;
+    TRAFFIC_VIEW_GET_ALTERNATIVES = 38;
+    CURRENT_AND_ALTERNATIVE_ROUTES = 39;
+    ETA_CHECK_NO_IMPACT = 40;
+    CURRENT_AND_ALTERNATIVES_SELECT_ROUTE = 41;
+    TRIP_OVERVIEW_V2A = 42;
+    START_NAVIGATION_V2A = 43;
+    PARTNER_HUB_GET_ROUTE = 44;
+    REASSURANCE = 45;
+    REASSURANCE_REJECTED = 46;
+    SAFETY_INCIDENTS_FREE_ALTERNATIVE_ROUTE = 47;
+}
+
+enum RouteType {
+    NO_ROUTE_TYPE = 0;
+    HISTORIC_TIME = 3;
+    WALKING = 4;
+    DISTANCE = 1;
+    TIME = 2;
+    FAST = 5;
+    PARKING = 6;
+}
+
+enum NavigationType {
+    NO_NAV_TYPE = 0;
+    TRIP = 1;
+    CALENDAR = 2;
+    FACEBOOK_MEETING = 3;
+    PICKUP = 4 [deprecated = true];
+    CARPOOL = 5 [deprecated = true];
+    FUTURE_DRIVE = 6;
+}
+
+enum CheckRoutingStatus {
+    UNKNOWN = 0;
+    ROUTE = 1;
+    WAYPOINT = 2;
+    ERROR = 3;
+}

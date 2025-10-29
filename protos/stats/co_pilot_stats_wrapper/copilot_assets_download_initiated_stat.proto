@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CopilotAssetsDownloadInitiatedStat {
+    string car_id = 2;
+    string mood_id = 3;
+    string voice_id = 4;
+    
+    oneof _campaign_id {
+        int64 campaign_id = 1;
+    }
+}

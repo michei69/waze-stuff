@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = false;
+option java_package = "com.waze.jni.protos";
+
+message IntPosition {
+    int32 latitude = 1;
+    int32 longitude = 2;
+    
+    oneof _altitude {
+        int32 altitude = 3;
+    }
+}
+
+message IntArea {
+    int32 north = 1;
+    int32 south = 2;
+    int32 east = 3;
+    int32 west = 4;
+}

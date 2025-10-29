@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message TtsVoice {
+    string voice_id = 1;
+    int32 version = 2;
+    string lang = 3;
+    string locale = 4;
+}

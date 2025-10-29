@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/beacon_stats_wrapper/beacon_power_sample.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BeaconDataStat {
+    repeated BeaconPowerSample samples = 1;
+    string suffix = 2 [deprecated = true];
+    string beacon_id_suffix = 4;
+    
+    oneof _first_sample_timestamp_unix_ms {
+        int64 first_sample_timestamp_unix_ms = 3 [deprecated = true];
+    }
+    
+    oneof _first_sample_timestamp_ms {
+        int64 first_sample_timestamp_ms = 5;
+    }
+}

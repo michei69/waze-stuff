@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RerouteSuggestionFilteredStat {
+    Reason reason = 1;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        NOT_NAVIGATING = 1;
+        PASSED_RELEVANT_SEGMENT = 2;
+        ROUTE_ID_MISMATCH = 3;
+    }
+    
+    string suggested_alternate_route_uuid = 4;
+    
+    oneof _client_active_route_id {
+        int64 client_active_route_id = 2;
+    }
+    
+    oneof _server_active_route_id {
+        int64 server_active_route_id = 3;
+    }
+}

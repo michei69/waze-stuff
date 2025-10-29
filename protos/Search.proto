@@ -1,0 +1,313 @@
+syntax = "proto2";
+
+package linqmap.proto.search;
+
+import "Types.proto";
+import "Venues.proto";
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+
+option objc_class_prefix = "LPS";
+option java_package = "linqmap.proto.search";
+
+message SearchRequest {
+    optional string id = 1;
+    repeated string provider = 2;
+    optional UserInfo user_info = 3;
+    optional int32 max_results = 4;
+    optional string query = 5;
+    repeated string category = 6;
+    optional string category_group = 13;
+    repeated string services = 16;
+    optional bool along_route = 7;
+    optional string brand = 8;
+    optional string product = 9;
+    
+    optional Intent intent = 11;
+    enum Intent {
+        UNKNOWN = 0;
+        REGULAR = 1;
+        ALONG_ROUTE = 2;
+        AUTOCOMPLETE = 3;
+        CATEGORY_REGULAR = 4;
+        CATEGORY_ALONG_ROUTE = 5;
+        CATEGORY_UPDATE = 6;
+    }
+    
+    optional string url_params = 10;
+    optional int32 max_distance_meters = 12;
+    optional bool return_match_info = 14;
+    optional SearchVenueFilterAttributes venue_filter_attributes = 15;
+    optional RequestTraceFormat trace_format = 17;
+    optional int32 trace_level = 18;
+    optional EVSearchData ev_search_data = 19;
+}
+
+message GetRequest {
+    optional string id = 1;
+    optional UserInfo user_info = 2;
+    optional string venue_id = 3;
+    optional string venue_reference = 4;
+    optional string venue_context = 5;
+    optional bool return_all_data = 6;
+    optional AutocompleteDetails autocompleteDetails = 7;
+    optional RequestTraceFormat trace_format = 8;
+    optional int32 trace_level = 9;
+}
+
+message GetPlaceDetailsRequest {
+    optional GetRequest request = 1;
+    optional GetRequestSessionInfo session_data = 2;
+}
+
+message GetPlaceDetailsResponse {
+    optional SearchResponse response = 1;
+    optional GetRequestSessionUpdate session_update = 2;
+}
+
+message GetRequestSessionInfo {
+    optional int64 id = 1;
+    optional string username = 2;
+    optional com.waze.proto.rtcommon.UserPosition location = 3;
+    repeated StringEntry config = 5;
+    optional string country_code = 6;
+    optional string session_uuid = 7;
+    repeated string higher_privacy_venue_ids = 8;
+    
+    reserved 4;
+}
+
+message GetRequestSessionUpdate {
+    repeated string higher_privacy_venue_ids = 2;
+}
+
+message AutocompleteDetails {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN = 0;
+        GOOGLE = 1;
+        VENUES = 2;
+    }
+    
+    optional string query = 2;
+    optional string response = 3;
+}
+
+message GetAutocompleteAlternativesRequest {
+    optional string id = 1;
+    optional UserInfo user_info = 2;
+    optional string url_params = 3;
+}
+
+message UserInfo {
+    optional int64 id = 1;
+    optional string session = 2;
+    optional string username = 3;
+    optional Coordinate location = 4;
+    repeated Coordinate view = 5 [deprecated = true];
+    optional StringMap config = 7;
+    optional StringMap social_tokens = 8;
+    repeated Coordinate route_point = 9;
+    optional string country_code = 10;
+    optional string session_uuid = 11;
+    
+    reserved 6;
+}
+
+message SearchResponse {
+    optional string id = 1;
+    repeated DisplayGroup display_group = 2;
+    optional string server_hostname = 3;
+    optional string trace = 4;
+}
+
+message DisplayGroup {
+    optional string id = 1;
+    repeated SearchResult result = 2;
+}
+
+message SearchResult {
+    optional string id = 1;
+    optional string provider = 20;
+    optional venue.Venue venue = 3;
+    optional string accreditation_icon = 4;
+    optional bool updateable = 21;
+    optional bool can_copy_geocoding_data = 29;
+    repeated string attribute = 5;
+    optional string price_unit = 6;
+    repeated string keyword = 19;
+    optional bool sponsered = 8;
+    optional Deal deal = 9;
+    optional string list_icon = 10;
+    optional string preview_icon = 27;
+    optional int64 advertiser_point_id = 11;
+    optional int64 advertiser_service_id = 12;
+    optional int64 advertiser_provider_id = 13;
+    optional string info_url = 14;
+    optional bool info_url_append_client_data = 15;
+    optional string advertiser_custom_query = 18;
+    optional string poi_info_url = 22;
+    optional string advertiser_preview_query = 23;
+    optional string context = 24;
+    optional string provider_info_url = 32 [deprecated = true];
+    optional bool provider_info_url_append_client_data = 33;
+    optional bool confident_house_number = 26;
+    optional bool navigable = 25 [default = true];
+    optional SearchServerInternal search_server_internal = 28;
+    optional string routing_context = 30;
+    optional bool show_as_sponsored = 31;
+    optional string frame = 34;
+    optional string badge = 35;
+    optional string logo_type = 36;
+    optional string match_info = 37;
+    optional bool hide_ad_details = 38;
+    optional int32 aerial_distance_to_route_meters = 39;
+}
+
+message MatchInfo {
+    optional double score = 1;
+    optional ResultType resultType = 2;
+    optional bool street_name_matched = 3;
+    optional bool city_name_matched = 4;
+}
+
+message SearchServerInternal {
+    optional string display_group = 1;
+    optional StringMap additional_data = 2;
+}
+
+message Deal {
+    optional string id = 1;
+    optional string type = 2;
+    optional string title = 3;
+    optional string text = 4;
+}
+
+message HouseNumberChangeRequest {
+    optional int64 street_id = 1;
+    optional string house_number = 2;
+    optional Coordinate location = 3;
+}
+
+message HouseNumberChangeResponse {
+    optional Response response = 1;
+    enum Response {
+        UNKNOWN = 0;
+        OK = 1;
+        WARN = 2;
+    }
+}
+
+message StreetNameMatchRequest {
+    optional string street_name = 1;
+    optional Coordinate location = 2;
+    optional int32 radius_meters = 3;
+    optional string logging_context = 4;
+}
+
+message StreetNameMatchResponse {
+    optional string street_name = 1;
+    optional int64 segment_id = 2;
+    optional int64 street_id = 3;
+}
+
+message CalendarLocationSearchRequest {
+    optional string query = 1;
+    optional Coordinate location = 2;
+    optional int32 radius_meters = 3;
+    optional string logging_context = 4;
+    optional RequestTraceFormat trace_format = 5;
+    optional int32 trace_level = 6;
+}
+
+message CalendarLocationSearchResponse {
+    optional bool is_navigable_location = 1;
+    optional SearchResult confident_search_result = 2;
+    
+    optional Type type = 3;
+    enum Type {
+        UNKNOWN = 0;
+        STREET_WITH_NUMBER = 1;
+        STREET = 2;
+        CITY = 3;
+        STATE = 4;
+        COUNTRY = 5;
+        PLACE = 6;
+    }
+    
+    optional string trace = 4;
+}
+
+message SearchParkingRequest {
+    optional UserInfo user_info = 2;
+    optional Coordinate location = 3;
+    optional string venue_id = 4;
+    optional int32 max_results = 5;
+    optional int32 radius_meters = 6;
+    optional string venue_context = 7;
+    optional bool get_popular = 8;
+    optional SearchVenueFilterAttributes venue_filter_attributes = 9;
+}
+
+message SearchParkingResponse {
+    repeated SearchParkingResult result = 1;
+}
+
+message SearchParkingResult {
+    optional SearchResult search_result = 1;
+    optional int32 walking_distance = 2;
+    optional bool is_popular = 3;
+    optional bool is_best = 4;
+    optional int32 walking_minutes = 5;
+    
+    reserved 6;
+}
+
+message SearchVenueFilterAttributes {
+    optional venue.EVChargingAttributes.EVChargingPort require_ev_charging_port = 1 [deprecated = true];
+    optional venue.EVChargingAttributes.EVChargingPort require_ev_availability = 2 [deprecated = true];
+    optional int32 availability_update_during_last_millis = 3 [deprecated = true];
+}
+
+message EVSearchData {
+    repeated string ev_connector_type_ids = 1;
+    repeated string ev_networks = 2;
+}
+
+message SearchParkingRequestWrapper {
+    optional SearchParkingRequest request = 1;
+    
+    optional SearchParkingSessionData search_parking_session_data = 2;
+    message SearchParkingSessionData {
+        optional int64 user_id = 1;
+        optional string username = 2;
+        optional string session_id = 3;
+        optional com.waze.proto.rtcommon.UserPosition real_position = 4;
+        optional int32 max_results_count = 5;
+        optional bool get_popular = 6;
+        optional int32 radius_meters = 7;
+        optional int32 max_walking_distance_meters = 8;
+        optional int32 max_walking_time_seconds = 9;
+    }
+}
+
+message SearchParkingResponseWrapper {
+    optional SearchParkingResponse response = 1;
+}
+
+enum RequestTraceFormat {
+    DISABLED = 0;
+    XML = 1;
+    TEXT = 2;
+    YAML = 3;
+}
+
+enum ResultType {
+    UNKNOWN = 0;
+    STREET_WITH_NUMBER = 1;
+    STREET = 2;
+    CITY = 3;
+    STATE = 4;
+    COUNTRY = 5;
+    PLACE = 6;
+}

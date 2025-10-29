@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GpsReceptionStat {
+    ReceptionQuality changed_from = 1;
+    enum ReceptionQuality {
+        RECEPTION_QUALITY_UNSPECIFIED = 0;
+        GOOD = 1;
+        POOR = 2;
+        UNAVAILABLE = 3;
+    }
+    
+    ReceptionQuality changed_to = 2;
+}

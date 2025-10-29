@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package linqmap.proto.custom_prompts;
+
+option objc_class_prefix = "CUPR";
+option java_package = "linqmap.proto.custom_prompts";
+
+message CustomPrompt {
+    string uuid = 1;
+    string set_name = 2;
+    string owner = 3;
+    int32 revision = 4;
+    int32 is_uploaded = 5;
+    int32 has_new_version = 6;
+}

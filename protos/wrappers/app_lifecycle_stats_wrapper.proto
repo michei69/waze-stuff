@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/app_lifecycle_stats_wrapper/android_auto_connected_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/android_auto_disconnected_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/app_crashed_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/app_recovered_from_crash_loop_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/app_run_in_background_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/app_run_in_foreground_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/carplay_app_run_in_background_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/carplay_app_run_in_foreground_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/carplay_connected_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/carplay_disconnected_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/dynamic_splash_screen_hidden_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/dynamic_splash_screen_shown_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/first_login_after_version_update_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/first_use_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/hybrid_platform_mode_ended_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/hybrid_platform_mode_started_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/screen_orientation_set_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/waze_shut_down_popup_clicked_stat.proto";
+import "stats/app_lifecycle_stats_wrapper/waze_shut_down_popup_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AppLifecycleStatsWrapper {
+    oneof stat {
+        CarplayDisconnectedStat carplay_disconnected = 1;
+        CarplayConnectedStat carplay_connected = 2;
+        CarplayAppRunInForegroundStat carplay_app_run_in_foreground = 3;
+        CarplayAppRunInBackgroundStat carplay_app_run_in_background = 4;
+        AppRunInForegroundStat app_run_in_foreground = 5;
+        AppRunInBackgroundStat app_run_in_background = 6;
+        AndroidAutoConnectedStat android_auto_connected = 7;
+        AndroidAutoDisconnectedStat android_auto_disconnected = 8;
+        AppCrashedStat app_crashed = 9;
+        FirstUseStat first_use = 10;
+        WazeShutDownPopupClickedStat waze_shut_down_popup_clicked = 11;
+        WazeShutDownPopupShownStat waze_shut_down_popup_shown = 12;
+        FirstLoginAfterVersionUpdateStat first_login_after_version_update = 13;
+        ScreenOrientationSetStat screen_orientation_set = 14;
+        AppRecoveredFromCrashLoopStat app_recovered_from_crash_loop = 15;
+        DynamicSplashScreenHiddenStat dynamic_splash_screen_hidden = 16;
+        DynamicSplashScreenShownStat dynamic_splash_screen_shown = 17;
+        HybridPlatformModeEndedStat hybrid_platform_mode_ended = 18;
+        HybridPlatformModeStartedStat hybrid_platform_mode_started = 19;
+    }
+}

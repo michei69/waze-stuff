@@ -1,0 +1,66 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "RTCommonTypes.proto";
+import "Types.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message AdPinInfo {
+    optional int64 campaign_id = 1;
+    optional int64 location_id = 2;
+    optional Coordinate pin_position = 3;
+    optional bool first_time_shown = 4;
+}
+
+message AdPinFailureReasonCount {
+    optional FailureReason reason = 1;
+    enum FailureReason {
+        FAILURE_REASON_UNSPECIFIED = 0;
+        FAILURE_REASON_REACHED_MAX = 1;
+        FAILURE_REASON_NOT_VISIBLE = 2;
+        FAILURE_REASON_OVERLAPPING = 3;
+        FAILURE_REASON_PIN_CREATION = 4;
+        FAILURE_REASON_FAKE = 5;
+        FAILURE_REASON_OTHER = 6;
+    }
+    
+    optional int32 count = 2;
+}
+
+message MapBounderiesSample {
+    optional Coordinate top_left = 1;
+    optional Coordinate top_right = 2;
+    optional Coordinate bottom_left = 3;
+    optional Coordinate bottom_right = 4;
+    optional int64 timestamp = 5;
+    optional string timezone = 6;
+    optional int32 max_number_displayable_pins = 7;
+    repeated AdPinInfo displayed_pins = 8;
+    repeated AdPinFailureReasonCount pin_failure_reason_count = 9;
+    optional int32 zoom = 10;
+    optional bool is_navigating = 11;
+    optional bool is_in_background = 12;
+    
+    optional ViewMode view_mode = 13;
+    enum ViewMode {
+        VIEW_MODE_UNSPECIFIED = 0;
+        VIEW_MODE_AUTO = 1;
+        VIEW_MODE_2D = 2;
+        VIEW_MODE_3D = 3;
+        VIEW_MODE_UNKNOWN = 4;
+    }
+    
+    optional int32 number_available_pins = 14;
+    optional com.waze.proto.rtcommon.SegmentDirectionID segment_direction_id = 15;
+}
+
+message InventoryPredictionInfo {
+    repeated MapBounderiesSample sample = 1;
+    optional int32 max_number_displayable_pins = 3;
+    optional AppType app_type = 4;
+    repeated Display displays = 5;
+}

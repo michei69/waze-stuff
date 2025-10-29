@@ -1,0 +1,392 @@
+syntax = "proto2";
+
+package com.waze.proto.futuredrives;
+
+import "Types.proto";
+import "SocialMedia.proto";
+import "Favorites.proto";
+import "RealtimeNg.proto";
+import "TripClient.proto";
+import "RoutingAPI.proto";
+import "RoutingAPIExternal.proto";
+import "linqmap/geocoding/proto/Schedule.proto";
+import "TollPrice.proto";
+import "logging.proto";
+
+option objc_class_prefix = "WPFD";
+option java_package = "com.waze.proto.futuredrives";
+
+message GetFutureDrivesRequest {
+    optional int64 user_id = 1;
+    optional TimeRange departure_epoch_time = 2;
+}
+
+message GetFutureDrivesResponse {
+    repeated FutureDrive future_drives = 1;
+    optional linqmap.proto.Status status = 2;
+}
+
+message RemoveFutureDriveRequest {
+    optional UserInfo userInfo = 1;
+    optional ExtendedRoutineID drive_id = 2 [deprecated = true];
+    optional bool recurring_event = 3;
+    optional int32 unique_drive_id = 4;
+}
+
+message RemoveFutureDriveResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message EditFutureDriveRequest {
+    optional UserInfo userInfo = 1;
+    optional bool recurring_event = 2;
+    optional int32 unique_drive_id = 3;
+    optional FutureDrive new_drive = 4;
+}
+
+message EditFutureDriveResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message AddRoutineRequest {
+    optional UserInfo userInfo = 1;
+    optional FutureDrive drive = 2;
+}
+
+message AddRoutineResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message GetManualEditsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetManualEditsResponse {
+    optional ManualEdits edits = 1;
+    optional linqmap.proto.Status status = 2;
+}
+
+message AddTestPredictionRequest {
+    optional int64 user_id = 1;
+    optional DBAlgorithmPredictions predictions = 2;
+    optional EtaCheckUpdatePubsubMessage eta_check = 3;
+}
+
+message AddTestPredictionResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message ClearTestUserDataRequest {
+    optional int64 user_id = 1;
+    optional bool is_prober = 2;
+}
+
+message ClearTestUserDataResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message PlannedDrivesUpdateInfo {
+    optional int64 user_id = 1;
+    optional string event_id = 2;
+}
+
+message UserMeetings {
+    repeated linqmap.proto.socialmedia.MeetingInfo meetings_to_merge = 1;
+}
+
+message UpdatePlannedDrivesRequest {
+    optional PlannedDrivesUpdateInfo update_info = 1;
+    optional UserMeetings user_meetings = 2;
+}
+
+message UpdatePlannedDrivesResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message PlannedDrivesUpdatePubsubMessage {
+    optional PlannedDrivesUpdateInfo update_info = 1;
+}
+
+message EtaCheckUpdatePubsubMessage {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+    optional EtaUpdateType update_type = 3;
+    optional RoutingMetadata routing_metadata = 4;
+    repeated Route routes = 6 [deprecated = true];
+    optional Familiarity drive_familiarity = 7;
+    optional EtaCheckUserStats user_stats = 8;
+    optional linqmap.routing.proto.Request routing_request = 9;
+    optional linqmap.routing.proto.Responses routing_responses = 10;
+    optional linqmap.proto.AppType app_type = 13;
+}
+
+message EtaCheckUserStats {
+    optional int32 num_of_trips = 1;
+    optional int32 num_of_eta_trips = 2;
+    optional int32 num_of_eta_for_given_dest = 3;
+    optional int32 num_of_eta_during_last_hour = 4;
+    optional int32 num_of_unique_eta_dest_during_last_hour = 6;
+    optional int32 num_of_dow_trips = 7;
+    optional int32 num_of_dow_eta = 8;
+}
+
+message RoutingMetadata {
+    repeated linqmap.routing.proto.RoutingOptionFieldEntry routingOptions = 1;
+    optional double from_fraction = 2;
+    optional double from_x = 3;
+    optional double from_y = 4;
+    optional double to_fraction = 5;
+    optional double to_x = 6;
+    optional double to_y = 7;
+    optional string client_version = 8;
+    optional bool reverse = 9;
+    optional linqmap.routing.proto.TollPriceVector toll_price_user_vector = 11;
+    repeated linqmap.proto.StringBoolEntry feature_flags = 12;
+    optional linqmap.routing.proto.RoutingStyle routing_style = 13;
+    optional linqmap.geocoding.proto.DriveProfile drive_profile = 14;
+    optional int64 server_start_time_millis = 15;
+    optional int32 local_start_time_HHMM = 16;
+    optional int64 source_poi_id = 17;
+    optional int64 dest_poi_id = 18;
+    optional int64 route_id = 19;
+}
+
+message Route {
+    optional int32 route_id = 1 [deprecated = true];
+    optional int32 total_sec = 2;
+    repeated linqmap.routing.proto.SegmentStart segmentsStart = 3 [deprecated = true];
+    repeated linqmap.routing.proto.external.RouteType.Enum type = 4;
+    optional string alternative_route_id = 5;
+    repeated Segment segments = 6;
+    optional bool passes_through_danger_area = 7;
+}
+
+message Segment {
+    optional linqmap.routing.proto.SegmentStart segmentStart = 1;
+    optional int32 length = 2;
+    optional int32 cross_time = 3;
+}
+
+message UserInfo {
+    optional int64 user_id = 1;
+}
+
+message UserFutureDrives {
+    repeated FutureDrive drives = 1;
+}
+
+message FutureDrive {
+    optional DriveInfo drive_info = 3;
+    optional TimeRange epoch_time = 4;
+    optional TimeType time_type = 5;
+    optional Routine routine = 6;
+    
+    oneof id {
+        ExtendedRoutineID routine_id = 1 [deprecated = true];
+        string event_id = 2;
+        int32 drive_id = 7;
+    }
+}
+
+message DriveInfo {
+    optional string name = 1;
+    optional Place origin = 2;
+    optional Place destination = 3;
+    optional DriveType type = 4;
+    optional DriveAttributes attributes = 5;
+    optional RTTripRoute preferred_route_info = 6;
+    optional bool flexible_origin = 7;
+    optional string session_id = 8;
+}
+
+message ManualEdits {
+    repeated ManualEditEntry entries = 1;
+    optional int32 next_entry_id = 2;
+}
+
+message ManualEditEntry {
+    optional int32 id = 1;
+    optional FutureDrive edited_drive = 2;
+    optional bool removal = 3;
+    optional bool recurring = 4;
+    optional int64 entry_created_epoch = 5;
+    
+    optional EntryType type = 6;
+    enum EntryType {
+        REMOVE = 0;
+        CREATE = 1;
+        EDIT = 2;
+    }
+    
+    optional FutureDrive new_drive = 7;
+    optional FutureDriveId future_drive_id = 9;
+    
+    reserved 8;
+    
+    reserved "carpool_locator";
+}
+
+message Routine {
+    optional int64 id = 1;
+    optional TimeRange time_in_day = 2;
+    
+    repeated Weekday weekdays = 3;
+    enum Weekday {
+        MONDAY = 1;
+        TUESDAY = 2;
+        WEDNESDAY = 3;
+        THURSDAY = 4;
+        FRIDAY = 5;
+        SATURDAY = 6;
+        SUNDAY = 7;
+    }
+    
+    optional TimeType time_type = 4;
+}
+
+message TimeRange {
+    optional int64 min_time = 1;
+    optional int64 max_time = 2;
+    optional int64 specific_time = 3;
+}
+
+message ExtendedRoutineID {
+    optional int64 routine_id = 1;
+    optional int64 drive_time = 2;
+    
+    optional RoutineType type = 3;
+    enum RoutineType {
+        UNKNOWN_ROUTINE_TYPE = 0;
+        ML = 1;
+        MANUAL = 2;
+    }
+}
+
+message DriveAttributes {
+    optional double prediction_score = 1;
+    repeated Route suggested_route = 2 [deprecated = true];
+    optional RoutingMetadata routing_metadata = 3;
+    optional Familiarity familiarity = 4;
+    optional linqmap.routing.proto.Request routing_request = 7;
+    optional linqmap.routing.proto.Responses routing_responses = 8;
+    optional CalendarEventInfo calendar_event_info = 11;
+    
+    reserved 5, 6;
+    
+    reserved "carpool_info", "carpool_locator";
+}
+
+message CalendarEventInfo {
+    optional string recurring_event_id = 1;
+    optional bool is_instance_of_recurrent_event = 2;
+    optional bool address_is_validated = 3;
+}
+
+message FutureDriveId {
+    oneof id {
+        string event_id = 1;
+        int32 drive_id = 2;
+    }
+}
+
+message Place {
+    optional linqmap.proto.socialmedia.LocationInfo location = 1;
+    optional FavoriteInfo favorite_info = 2;
+    repeated string venue_categories = 3;
+    optional string brand_icon = 4;
+}
+
+message FavoriteInfo {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional linqmap.proto.favorites.Favorite.Type type = 3;
+    optional bool is_user_created = 4;
+}
+
+message DBAlgorithmPrediction {
+    optional double score = 1;
+    optional linqmap.proto.trip.client.TimePreference.DayOfWeek day_of_week = 2;
+    optional int32 median_depart_local_time_HHMM = 3;
+    optional int32 min_depart_local_time_HHMM = 4;
+    optional int32 max_depart_local_time_HHMM = 5;
+    optional int64 source_poi_id = 6;
+    optional int64 dest_poi_id = 7;
+    optional string timezone = 8;
+    optional linqmap.proto.Coordinate source_location = 9;
+    optional linqmap.proto.Coordinate dest_location = 10;
+    optional int32 group_id = 11;
+    optional int32 drive_id = 12;
+    
+    optional ModelType model_type = 13;
+    enum ModelType {
+        UNKNOWN_MODEL_TYPE = 0;
+        ML = 1;
+        ML_ONLINE = 2;
+    }
+}
+
+message DBAlgorithmPredictions {
+    repeated DBAlgorithmPrediction prediction = 1;
+    optional string model_id = 2;
+    optional int64 timestamp = 3;
+}
+
+message RouteSegment {
+    optional int64 segment_id = 1;
+    optional int64 node_id = 2;
+    optional linqmap.proto.Coordinate coord = 3;
+}
+
+message RTTripRoute {
+    optional int64 id = 1;
+    optional int32 weight = 2;
+    optional linqmap.proto.Coordinate start_point = 3;
+    optional linqmap.proto.Coordinate end_point = 4;
+    repeated RouteSegment route_segments = 5;
+    optional int64 last_drive_time = 6;
+}
+
+message FutureDriveUpdateMessage {
+    optional int64 user_id = 1;
+    optional FutureDrive future_drive = 2;
+    
+    optional UpdateType update_type = 3;
+    enum UpdateType {
+        UNKNOWN_UPDATE_TYPE = 0;
+        FUTURE_DRIVE_ADDED = 1;
+        FUTURE_DRIVE_MODIFIED = 2;
+        FUTURE_DRIVE_REMOVED = 3;
+    }
+    
+    optional linqmap.proto.AppType app_type = 4;
+}
+
+enum EtaUpdateType {
+    UNKNOWN_ETA_UPDATE_TYPE = 0;
+    CREATION = 1;
+    REMOVAL = 2;
+}
+
+enum Familiarity {
+    UNKNOWN_FAMILIARITY = 0;
+    FAMILIAR = 1;
+    UNFAMILIAR = 2;
+}
+
+enum DriveType {
+    UNKNOWN_DRIVE_TYPE = 0;
+    ROUTINE = 1;
+    ML_ROUTINE = 2;
+    MANUAL_ROUTINE = 3;
+    PLANNED = 4;
+    CALENDAR_MEETING = 5;
+    CALENDAR_ROUTINE = 6;
+    FACEBOOK_EVENT = 7;
+    ETA_CHECK = 9;
+    ML_ROUTINE_ONLINE = 10;
+}
+
+enum TimeType {
+    ARRIVAL = 1;
+    DEPARTURE = 2;
+}

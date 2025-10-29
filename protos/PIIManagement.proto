@@ -1,0 +1,89 @@
+syntax = "proto2";
+
+package linqmap.proto;
+
+import "Doc.proto";
+import "google/protobuf/descriptor.proto";
+
+option objc_class_prefix = "LPR";
+option java_package = "linqmap.proto";
+
+message GetPIIRequest {
+    optional int64 user_id = 1;
+}
+
+message PIIItem {
+    optional string proto_class_name = 1;
+    optional bytes serialized_proto = 2;
+}
+
+message GetPIIResponse {
+    repeated PIIItem items = 1;
+}
+
+message DeletePIIRequest {
+    optional int64 user_id = 1;
+    optional PIICategoryOption category = 2;
+}
+
+enum PIICategoryOption {
+    UNDEFINED = 0;
+    PERSONAL_AND_CALENDAR = 1;
+    FAVORITES = 2;
+    DRIVE_AND_USAGE = 3;
+    CARPOOL = 4;
+    OTHER = 5;
+    CONTRIBUTION = 6;
+    CARPOOL_COUPON = 7;
+    CARPOOL_CREDIT = 8;
+    CARPOOL_BONUS = 9;
+    CARPOOL_REFERRAL = 10;
+    CARPOOL_INVOICE = 11;
+    CARPOOL_PAYMENT = 12;
+    CARPOOL_PAYMENT_ACCOUNT = 13;
+    CARPOOL_REVIEW = 14;
+    CARPOOL_REPORT = 15;
+    CARPOOL_ITINERARY = 16;
+    CARPOOL_OFFER = 17;
+    CARPOOL_CARPOOL = 18;
+    CARPOOL_MESSAGES = 19;
+    CARPOOL_PREFERENCES = 21;
+    PLACES_PHOTOS = 20;
+    SOCIAL = 22;
+    CONTRIBUTION_FEEDBACK = 23;
+}
+
+enum PIIResolutionOption {
+    DUMMY = 0;
+    LONG_TO_DATE = 1;
+    METERS_TO_KILOMETERS = 2;
+    COORDINATE = 3;
+    PLACE = 4;
+    FAVORITE_TYPE = 5;
+    IMAGE_TO_URL = 6;
+    FIELDSTRING_TO_STRING = 7;
+    USAGE_PARSE = 8;
+    USAGE_PERIOD = 9;
+    PRICING_DETAILS = 10;
+    CREDIT_STATE_CONTEXT = 11;
+    PRICING_QUOTE = 12;
+    PAYMENTS_PROVIDER_INFO = 13;
+    ENDORSEMENTS_SUMMARY = 14;
+    GROUP_DESCRIPTION = 15;
+    TIME_FRAME = 16;
+    CONSTRAINED_LOCATION = 17;
+    CARPOOL_VIA_POINTS = 18;
+    CARPOOL_STATES = 19;
+    GEO_CENTROID = 20;
+    GEO_INDEX_ID = 21;
+    PRETTY_ENUM = 22;
+    COMMUNITY_TO_DISPLAY_NAME = 23;
+    LOCATION_TO_ADDRESS_AND_COORDS = 24;
+    MESSAGING_PLATFORM_IDENTIFIER = 25;
+    MESSAGING_PLATFORM_TEXT = 26;
+}
+
+extend google.protobuf.FieldOptions {
+    optional PIICategoryOption PIICategory = 99008;
+    optional PIIResolutionOption PIIResolution = 99009;
+}

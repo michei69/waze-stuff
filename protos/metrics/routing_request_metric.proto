@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package stats.metrics;
+
+import "stats/network_stats_wrapper/server_routing_request_result_use_case.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.metrics";
+
+message RoutingRequestMetric {
+    ResultStatus result = 2;
+    enum ResultStatus {
+        RESULT_STATUS_UNSPECIFIED = 0;
+        SUCCESS = 1;
+        FAILURE = 2;
+    }
+    
+    oneof _use_case {
+        events.RoutingUseCase use_case = 1;
+    }
+    
+    oneof _error_code {
+        int64 error_code = 3;
+    }
+    
+    oneof _attempt_num {
+        sint64 attempt_num = 4;
+    }
+    
+    oneof _failure_reason {
+        string failure_reason = 5;
+    }
+}

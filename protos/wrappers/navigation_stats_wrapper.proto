@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/navigation_stats_wrapper/drive_type_stat.proto";
+import "stats/navigation_stats_wrapper/driving_stat.proto";
+import "stats/navigation_stats_wrapper/eta_changed_stat.proto";
+import "stats/navigation_stats_wrapper/falcon_acausal_sum_stat.proto";
+import "stats/navigation_stats_wrapper/message_box_clicked_stat.proto";
+import "stats/navigation_stats_wrapper/message_box_shown_stat.proto";
+import "stats/navigation_stats_wrapper/mobile_screen_lock_stat.proto";
+import "stats/navigation_stats_wrapper/mobile_screen_unlock_stat.proto";
+import "stats/navigation_stats_wrapper/navigation_destination_reached_stat.proto";
+import "stats/navigation_stats_wrapper/navigation_guidance_shown_stat.proto";
+import "stats/navigation_stats_wrapper/navigation_guidance_tapped_stat.proto";
+import "stats/navigation_stats_wrapper/navigation_options_menu_clicked_stat.proto";
+import "stats/navigation_stats_wrapper/navigation_started_stat.proto";
+import "stats/navigation_stats_wrapper/navigation_through_multilane_roundabout_stat.proto";
+import "stats/navigation_stats_wrapper/places_near_destination_shown_stat.proto";
+import "stats/navigation_stats_wrapper/route_deviation_reroute_stat.proto";
+import "stats/navigation_stats_wrapper/special_guidance_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NavigationStatsWrapper {
+    oneof stat {
+        EtaChangedStat eta_changed = 1;
+        NavigationStartedStat navigation_started = 2;
+        DriveTypeStat drive_type = 3;
+        RouteDeviationRerouteStat route_deviation_reroute = 4;
+        FalconAcausalSumStat falcon_acausal_sum = 5;
+        NavigationDestinationReachedStat navigation_destination_reached = 6;
+        DrivingStat driving = 7;
+        NavigationGuidanceShownStat navigation_guidance_shown = 8;
+        SpecialGuidanceShownStat special_guidance_shown = 9;
+        MessageBoxClickedStat message_box_clicked = 10;
+        MessageBoxShownStat message_box_shown = 11;
+        NavigationGuidanceTappedStat navigation_guidance_tapped = 12;
+        PlacesNearDestinationShownStat places_near_destination_shown = 13;
+        NavigationOptionsMenuClickedStat navigation_options_menu_clicked = 14;
+        NavigationThroughMultilaneRoundaboutStat navigation_through_multilane_roundabout = 15;
+        MobileScreenLockStat mobile_screen_lock = 16;
+        MobileScreenUnlockStat mobile_screen_unlock = 17;
+    }
+}

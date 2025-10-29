@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message HealthReportStat {
+    oneof _total_received_bytes {
+        int64 total_received_bytes = 1;
+    }
+    
+    oneof _total_sent_bytes {
+        int64 total_sent_bytes = 2;
+    }
+    
+    oneof _native_heap_size_bytes {
+        int64 native_heap_size_bytes = 3;
+    }
+    
+    oneof _native_heap_allocated_bytes {
+        int64 native_heap_allocated_bytes = 4;
+    }
+    
+    oneof _current_jvm_heap_size_bytes {
+        int64 current_jvm_heap_size_bytes = 5;
+    }
+    
+    oneof _current_jvm_heap_allocated_bytes {
+        int64 current_jvm_heap_allocated_bytes = 6;
+    }
+    
+    oneof _current_app_size_bytes {
+        int64 current_app_size_bytes = 7;
+    }
+    
+    oneof _current_data_size_bytes {
+        int64 current_data_size_bytes = 8;
+    }
+    
+    oneof _current_cache_size_bytes {
+        int64 current_cache_size_bytes = 9;
+    }
+    
+    oneof _total_uptime_seconds {
+        int64 total_uptime_seconds = 10;
+    }
+    
+    oneof _total_foreground_seconds {
+        int64 total_foreground_seconds = 11;
+    }
+}

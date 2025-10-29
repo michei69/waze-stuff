@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/carplay_stats_wrapper/carplay_disconnect_without_shutdown_stat.proto";
+import "stats/carplay_stats_wrapper/carplay_topbar_nav_routes_stat.proto";
+import "stats/carplay_stats_wrapper/carplay_topbar_nav_search_stat.proto";
+import "stats/carplay_stats_wrapper/carplay_topbar_nav_stop_stat.proto";
+import "stats/carplay_stats_wrapper/carplay_topbar_roam_search_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CarplayStatsWrapper {
+    oneof stat {
+        CarplayTopbarNavRoutesStat carplay_topbar_nav_routes = 1;
+        CarplayTopbarNavSearchStat carplay_topbar_nav_search = 2;
+        CarplayTopbarNavStopStat carplay_topbar_nav_stop = 3;
+        CarplayTopbarRoamSearchStat carplay_topbar_roam_search = 4;
+        CarplayDisconnectWithoutShutdownStat carplay_disconnect_without_shutdown = 5;
+    }
+}

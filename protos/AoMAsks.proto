@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap.asks;
+
+import "AoMCommon.proto";
+
+option objc_class_prefix = "CWPAA";
+option java_package = "com.waze.proto.alertsonmap.asks";
+
+message EnrichAlertQuestion {
+    optional QuestionTitleType question_title_type = 1;
+    enum QuestionTitleType {
+        QUESTION_TITLE_TYPE_UNSPECIFIED = 0;
+        QUESTION_TITLE_TYPE_WHAT_DO_YOU_SEE = 1;
+        QUESTION_TITLE_TYPE_IS_LANE_CLOSED = 2;
+    }
+    
+    repeated EnrichAlertAnswer answers = 2;
+}
+
+message EnrichAlertAnswer {
+    optional string answer_key = 2;
+    
+    oneof answer_option {
+        HazardAnswerOption hazard = 1;
+        BlockedLaneOption blocked_lane = 4;
+        ValidationAnswerOption validation = 3;
+    }
+    
+    message HazardAnswerOption {
+        optional Alert_HazardOnRoad sub_type = 1;
+    }
+    
+    message BlockedLaneOption {
+        optional Alert_BlockedLane sub_type = 1;
+    }
+    
+    message ValidationAnswerOption {
+        optional ValidationAnswerType type = 1;
+        enum ValidationAnswerType {
+            VALIDATION_UNSPECIFIED = 0;
+            VALIDATION_THUMBS_DOWN = 1;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.questions;
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "QuestionsTriggersProto";
+option java_package = "com.waze.insightsserving.proto.questions";
+
+message InsightTrigger {
+    string insight_id = 1;
+    QuestionableInsightType insight_type = 2;
+}
+
+message Trigger {
+    oneof trigger_type {
+        InsightTrigger insight_trigger = 1;
+    }
+}
+
+enum QuestionableInsightType {
+    QUESTIONABLE_INSIGHT_TYPE_UNSPECIFIED = 0;
+    QUESTIONABLE_INSIGHT_TYPE_HAZARD_DEFAULT = 1;
+    QUESTIONABLE_INSIGHT_TYPE_HAZARD_CONSTRUCTION = 2;
+}

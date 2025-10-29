@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/co_pilot_stats_wrapper/copilot_assets_download_finished_stat.proto";
+import "stats/co_pilot_stats_wrapper/copilot_assets_download_initiated_stat.proto";
+import "stats/co_pilot_stats_wrapper/marketplace_fte_popup_clicked_stat.proto";
+import "stats/co_pilot_stats_wrapper/marketplace_fte_popup_shown_stat.proto";
+import "stats/co_pilot_stats_wrapper/marketplace_header_clicked_stat.proto";
+import "stats/co_pilot_stats_wrapper/marketplace_header_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CoPilotStatsWrapper {
+    oneof stat {
+        CopilotAssetsDownloadFinishedStat copilot_assets_download_finished = 1;
+        CopilotAssetsDownloadInitiatedStat copilot_assets_download_initiated = 2;
+        MarketplaceFtePopupClickedStat marketplace_fte_popup_clicked = 3;
+        MarketplaceFtePopupShownStat marketplace_fte_popup_shown = 4;
+        MarketplaceHeaderClickedStat marketplace_header_clicked = 5;
+        MarketplaceHeaderShownStat marketplace_header_shown = 6;
+    }
+}

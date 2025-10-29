@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.places;
+
+import "google/protobuf/wrappers.proto";
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.places";
+
+message Address {
+    string house_number = 1;
+    string street = 2;
+    string city = 3;
+    string state = 4;
+    string country = 5;
+    string zip = 6;
+}
+
+message Place {
+    string name = 1;
+    IntPosition position = 2;
+    Address address = 3;
+    string venue_id = 4;
+    string routing_context = 5;
+    string venue_context = 6;
+    string internal_id = 7;
+    google.protobuf.Int32Value db_id = 8;
+    google.protobuf.BoolValue is_residential = 9;
+}
+
+message PlaceKey {
+    int32 db_id = 1;
+    
+    Type type = 2;
+    enum Type {
+        None = 0;
+        Favorite = 1;
+        Recent = 2;
+        Event = 3;
+    }
+}

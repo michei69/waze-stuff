@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/consent_stats_wrapper/age_screen_context.proto";
+import "stats/consent_stats_wrapper/age_screen_regulation.proto";
+import "stats/reusable_types/regulation_flags.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UserAgeWarningPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CONFIRM = 1;
+        EDIT_BIRTHDATE = 2;
+    }
+    
+    AgeScreenRegulation age_screen_flow = 2;
+    RegulationFlags regulation_flags = 3;
+    AgeScreenContext context = 4;
+    
+    oneof _birthdate_timestamp_seconds {
+        sint64 birthdate_timestamp_seconds = 5;
+    }
+}

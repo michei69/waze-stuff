@@ -1,0 +1,501 @@
+syntax = "proto2";
+
+package google.carpool;
+
+import "logging.proto";
+import "CarpoolCommonGroups.proto";
+import "carpool_data.proto";
+
+option objc_class_prefix = "CPP";
+option java_package = "google.carpool";
+
+message SanctionsCheckRequest {
+    optional string record_key = 2;
+    optional string product_account_key = 3;
+}
+
+message SanctionsCheckResponse {
+    optional PerformSanctionsCheckResponseScreenResult screen_result = 1;
+    enum PerformSanctionsCheckResponseScreenResult {
+        UNKNOWN = 0;
+        NO_MATCH = 1;
+        MATCH = 2;
+    }
+}
+
+message GetReferralCodeForUserRequest {
+    optional string user_id = 1;
+    optional ReferralCode.ReferrerSource referrer_source = 2;
+    
+    optional ReferralAttribution referral_attribution = 7;
+    enum ReferralAttribution {
+        UNKNOWN_FLOW = 0;
+        SETTINGS_FLOW = 1;
+        UNSUPPORTED_AREA_FLOW = 2;
+        SHARE_AND_REFER_FLOW = 3;
+        GROUPS_INVITE = 4;
+        END_OF_RIDE_FLOW = 5;
+        LIVE_RIDE_FLOW = 6;
+        PARTNER_GROUPS_INVITE = 7;
+    }
+    
+    optional string group_id = 8;
+    optional string secret = 3;
+    optional TrackingId tracking_id = 4;
+    optional LatLngPoint current_latlng = 5;
+    optional string country_code = 6;
+}
+
+message GetReferralCodeForUserResponse {
+    optional ReferralCodeStatus status = 1;
+    enum ReferralCodeStatus {
+        OK = 0;
+        USER_MUST_COMPLETE_FIRST_RIDE = 1;
+        USER_MUST_COMPLETE_FIRST_PAID_RIDE = 2;
+        USER_NOT_ELIGIBLE_YET = 3;
+    }
+    
+    optional string referral_code = 2;
+    optional string referral_token = 3;
+    optional GetReferralCodeForUserRequest.ReferralAttribution referral_attribution = 4;
+    optional string group_id = 5;
+    optional string long_url = 6;
+    optional string short_url = 7;
+    optional linqmap.proto.carpool.common.groups.PartnerDetails partner_details = 8;
+}
+
+message EnterCouponCodeRequest {
+    optional string user_id = 1;
+    optional string coupon_code = 2;
+    optional LatLngPoint current_latlng = 4;
+    optional string secret = 5;
+    optional TrackingId tracking_id = 6;
+    
+    optional Client client = 7;
+    enum Client {
+        UNDEFINED = 0;
+        DRIVER = 1;
+        RIDER = 2;
+    }
+    
+    optional string country_code = 8;
+}
+
+message EnterCouponCodeResponse {
+    optional CouponCodeStatus status = 1;
+    enum CouponCodeStatus {
+        OK = 0;
+        REFERRAL_OK_PENDING_REFEREE_FIRST_RIDE_COMPLETION = 8;
+        INVALID_COUPON_CODE = 1;
+        COUPON_CODE_EXPIRED = 2;
+        USER_NOT_ELIGIBLE = 3;
+        USER_CURRENT_LOCATION_UNKNOWN = 6;
+        USER_CURRENT_LOCATION_OUTSIDE_GEOFENCED_AREA = 4;
+        COUPON_CODE_ALREADY_USED = 5;
+        USER_EMAIL_DOMAIN_MISMATCH = 7;
+        COUPON_CODE_ONLY_AVAILABLE_TO_RIDERS = 9;
+        CANNOT_REFER_SELF = 10;
+        CANNOT_ENTER_MORE_THAN_ONE_REFERRAL_CODE = 11;
+        CANNOT_ENTER_REFERRAL_CODE_AFTER_COMPLETED_OR_IN_CONTRACT_RIDE = 12;
+        CANNOT_ENTER_OWN_REFEREE_CODE = 13;
+        SUSPENDED_OR_DELETED_REFERRER_OR_REFEREE = 14;
+    }
+    
+    optional int32 number_of_coupons_added = 2;
+    optional int32 coupon_expiration_days = 3;
+    optional UserBonus bonus = 4;
+}
+
+message TrackingId {
+    optional string session_id = 1;
+    optional int64 rt_timestamp = 2;
+    optional int64 client_timestamp = 3;
+}
+
+message ResendWorkEmailConfirmationRequest {
+    optional string user_id = 1;
+    optional string secret = 2;
+}
+
+message GetUserRequest {
+    optional string self_id = 3;
+    optional string user_id = 1;
+    optional string secret = 5;
+}
+
+message GetMinAppVersionRequest {
+    optional string version = 1;
+    optional PushMapping.DeviceType device_type = 3;
+    optional PushMapping.AppType view = 5;
+}
+
+message GetMinAppVersionResponse {
+    optional int32 min_app_version = 1 [deprecated = true];
+    optional bool ok = 2;
+}
+
+message SendRidePingRequest {
+    optional string user_id = 1;
+    optional string secret = 6;
+    optional string ride_id = 2;
+    optional string recipient_id = 3;
+    optional bytes serialized_gcm_payload = 4;
+}
+
+message RegisterDeviceRequest {
+    optional string user_id = 1;
+    optional string secret = 9;
+    optional PushMapping.DeviceType device_type = 3;
+    optional PushMapping.AppType view = 5;
+    optional string app_version = 6;
+    optional string device_id = 2 [deprecated = true];
+    optional string android_installation_id = 4 [deprecated = true];
+    optional string duplicate_id = 8 [deprecated = true];
+}
+
+message UpdateRideStateRequest {
+    optional string user_id = 1;
+    optional string secret = 11;
+    optional string ride_id = 2;
+    
+    optional StateTransition state_transition = 3;
+    enum StateTransition {
+        STATE_TRANSITION_UNSPECIFIED = 0;
+        SEEN = 1;
+        SOFT_REJECTED = 2;
+        REJECTED = 3;
+        CONFIRMED = 4;
+        RECEIVED = 5;
+        REMOVED_FROM_LIST = 18;
+        DRIVER_STARTED = 10;
+        DRIVER_STARTED_WITH_ETA = 8003;
+        DRIVER_STARTED_WITH_SHARE = 8001;
+        PAX_PICKED_UP = 11;
+        PAX_PICKED_UP_IN_DROPOFF_RADIUS = 8002;
+        PAX_DROPPED_OFF = 12;
+        REVIEWED = 13;
+        SHARED_DRIVE_TOKEN = 14;
+        METADATA = 15;
+        RT_CONFIRMED = 16;
+        DRIVER_ARRIVED = 17;
+        RIDER_ARRIVED = 19;
+    }
+    
+    optional StateSource source = 12;
+    optional double accuracy_meters = 13;
+    optional LatLngPoint latlng = 14;
+    
+    optional Metadata metadata = 9;
+    message Metadata {
+        repeated string entry = 1;
+    }
+    
+    oneof extras {
+        DispatchState.Rejected rejected = 4;
+        Confirmed confirmed = 5;
+        Review review = 7;
+        string waze_shared_drive_token = 8;
+    }
+    
+    message Confirmed {
+        optional int64 pickup_time = 1;
+        optional int64 waze_driver_mood = 2;
+        optional bool is_debug = 4;
+        optional string waze_shared_drive_token = 3 [deprecated = true];
+        optional string waze_id_hash = 5;
+    }
+}
+
+message Empty {
+    
+}
+
+message ApiDrive {
+    optional string uuid = 1;
+    optional DriveItinerary itinerary = 2;
+    optional DriveState state = 3;
+    repeated DriveState historical_state = 10;
+    optional DriveType type = 4;
+    optional ApiUser driver = 5;
+    repeated ApiRide ride = 6;
+    optional ApiRide primary_ride = 7;
+    optional int64 current_membership_time_ms = 13;
+    repeated DriveMembership historical_membership = 11;
+    repeated ApiRide former_ride = 12;
+    optional DriveMatchInfo drive_match_info = 8;
+    optional ClientAck driver_client_ack = 9;
+    optional int64 last_modified_timestamp = 14;
+    optional string latest_carpool_id = 15;
+}
+
+message ApiRide {
+    optional string uuid = 1;
+    optional Itinerary itinerary = 2;
+    optional ApiUser pax = 3;
+    optional RideState state = 5;
+    repeated RideState historical_state = 6;
+    optional RideFeedback pax_feedback_of_driver = 7;
+    optional RideFeedback driver_feedback_of_pax = 8;
+    optional RideMatchInfo ride_match_info = 9;
+    optional int32 num_pingable_drivers = 10;
+    optional int32 num_pinged_drivers = 11;
+    optional int64 response_deadline_time_seconds = 12;
+    optional int64 expected_notification_time_seconds = 14;
+    optional bool rider_arrived_at_pickup_point = 13;
+    optional LatLngPoint rider_arrived_latlng = 15;
+    repeated UserBonus bonus = 16;
+    optional ApiDispatch dispatch = 4 [deprecated = true];
+}
+
+message ApiUser {
+    optional string user_id = 1;
+    
+    optional PublicInfo public = 2;
+    message PublicInfo {
+        optional PaxSpecificPublicInfo pax_specific = 1;
+        message PaxSpecificPublicInfo {
+            optional bool confirmed_credit_card = 1;
+            optional int32 completed_rides = 2;
+            optional float star_rating = 3;
+            optional User.SocialNetworks social_networks = 4;
+            optional int64 join_time_seconds = 5;
+            optional int32 total_carpooled_meters = 6;
+            optional int32 capabilities = 7;
+        }
+        
+        optional DriverSpecificPublicInfo driver_specific = 2;
+        message DriverSpecificPublicInfo {
+            optional bool bank_account_updated = 1;
+            optional int32 completed_rides = 2;
+            optional float star_rating = 3;
+            optional CarInfo car_info = 4;
+            optional User.SocialNetworks social_networks = 5;
+            optional int32 total_carpooled_meters = 6;
+            optional int32 capabilities = 7;
+        }
+        
+        optional string name = 3;
+        optional string given_name = 4;
+        optional string family_name = 5;
+        optional string photo_url = 6;
+        optional string org_email_domain = 7;
+        optional bool is_org_email_verified = 8;
+        optional string organization = 9;
+        optional string free_text = 10;
+        repeated ExtendedInfo.EndorsementCount endorsement_count = 11;
+        optional int64 waze_join_time_seconds = 12;
+    }
+    
+    optional PrivateInfo private = 3;
+    message PrivateInfo {
+        optional PaxSpecificPrivateInfo pax_specific = 1;
+        message PaxSpecificPrivateInfo {
+            optional bool is_pax = 1;
+            optional bool is_pax_onboarded = 2;
+            optional int32 available_coupons = 3;
+            optional int64 coupon_expiration_time = 4;
+            repeated Location home = 5;
+            repeated Location work = 6;
+            optional bool whitelisted_as_pax = 8;
+            optional PaxPromo pax_promo = 9;
+            repeated ApiUser recent_driver = 10;
+            repeated string recent_driver_id = 7 [deprecated = true];
+        }
+        
+        optional DriverSpecificPrivateInfo driver_specific = 2;
+        message DriverSpecificPrivateInfo {
+            optional bool is_driver = 1;
+        }
+        
+        repeated string blocked_user = 3;
+        optional string email = 4;
+        optional string work_email = 5;
+        optional string phone = 6;
+        optional string locale = 7;
+        optional User.Private.AbuseStatus photo_abuse_status = 8;
+        optional UserGender user_gender = 9;
+    }
+    
+    optional MutualInfo mutual = 4;
+    message MutualInfo {
+        optional bool carpooled_together = 1;
+    }
+}
+
+message ApiDispatch {
+    optional ApiUser driver = 1 [deprecated = true];
+    optional DispatchState state = 2 [deprecated = true];
+}
+
+message RideFeedback {
+    optional int32 star_rating = 1;
+    optional Endorsement endorsement = 2;
+}
+
+message DriveMatchInfo {
+    optional Location pickup = 1;
+    optional Location dropoff = 2;
+    optional int64 pickup_time_seconds = 3;
+    optional int32 pickup_window_duration = 17;
+    optional int32 detour_duration_seconds = 6;
+    optional double detour_distance_meters = 7;
+    optional int32 origin_to_pickup_duration_seconds = 8;
+    optional double origin_to_pickup_distance_meters = 9;
+    optional int32 dropoff_to_destination_duration_seconds = 10;
+    optional double dropoff_to_destination_distance_meters = 11;
+    optional int32 pickup_to_dropoff_duration_seconds = 4;
+    optional int32 pickup_to_dropoff_distance_meters = 15;
+    optional int32 pickup_window_default_offset_seconds = 12;
+    optional int32 meters_willing_to_walk = 16;
+    optional string waze_shared_drive_token = 5;
+    
+    optional DriverPricing driver_pricing = 13;
+    message DriverPricing {
+        optional int32 total_fee_minor_units = 1;
+        optional int32 reference_total_fee_minor_units = 2;
+        optional PriceBreakdown price_breakdown = 3;
+    }
+    
+    optional DrivingDirection driving_direction = 14;
+}
+
+message PriceBreakdown {
+    optional TopLevelPriceBreakdown top_level_breakdown = 1;
+    repeated PriceBreakdownLine detailed_line = 2;
+    optional string currency = 3;
+}
+
+message TopLevelPriceBreakdown {
+    repeated PriceBreakdownLine line = 1;
+    optional string icon_id = 2;
+}
+
+message PriceBreakdownLine {
+    optional Text text = 1;
+    message Text {
+        optional string text_identifier_id = 1;
+        repeated string param = 2;
+    }
+    
+    optional Value value = 2;
+    message Value {
+        oneof value {
+            int64 price_minor_units = 1;
+            string text_identifier_id = 2;
+        }
+    }
+    
+    optional string format_id = 3;
+    optional string icon_id = 4;
+}
+
+message RideMatchInfo {
+    optional PaxPricing pax_pricing = 1;
+    message PaxPricing {
+        optional int32 pax_actual_payment_minor_units = 1;
+        optional int32 reference_pax_actual_payment_minor_units = 2;
+        optional PriceBreakdown price_breakdown = 3;
+    }
+    
+    optional int32 walking_seconds_to_pickup = 2;
+    optional int32 walking_meters_to_pickup = 3;
+    optional PathDirections walking_path_to_pickup = 11;
+    optional int32 walking_seconds_from_dropoff = 4;
+    optional int32 walking_meters_from_dropoff = 5;
+    optional PathDirections walking_path_from_dropoff = 12;
+    optional string driver_proxy_number = 6;
+    optional string pax_proxy_number = 7;
+    optional string drive_id = 8;
+    optional Dispatch.DispatchType dispatch_type = 9;
+    optional DispatchState dispatch_state = 10;
+    optional RideSeenState seen_state = 13;
+    
+    optional Price.Quality ping_quality = 15;
+    enum Quality {
+        QUALITY_UNSPECIFIED = 0;
+        MATCH = 1;
+        SIMILAR = 2;
+        POOR = 3;
+    }
+    
+    optional double dispatch_score = 16;
+    optional int64 last_message_timestamp_seconds = 17;
+    optional double acceptance_probability = 14 [deprecated = true];
+    optional Quality match_quality = 18;
+    optional string pax_dispatch_id = 19;
+    
+    optional DispatchAcceptanceStrategy acceptance_strategy = 20;
+    enum DispatchAcceptanceStrategy {
+        STRATEGY_UNSPECIFIED = 0;
+        IMMEDIATELY_JOIN = 1;
+        REQUEST_TO_JOIN = 2;
+    }
+    
+    optional PaxDispatchState pax_dispatch_state = 21;
+    optional PaxDispatch.PaxDispatchType pax_dispatch_type = 22;
+    optional string conversation_id = 100;
+}
+
+message DeleteUserRequest {
+    optional string user_id = 1;
+    optional string secret = 2;
+    optional int64 waze_id = 4;
+}
+
+message AckMessageRequest {
+    optional string user_id = 1;
+    optional string secret = 4;
+    optional string message_id = 2;
+}
+
+message GetConfigurationRequest {
+    optional string user_id = 1;
+    optional LatLngPoint location = 2;
+    optional string locale = 3;
+    optional int32 current_string_map_version_number = 4;
+    optional string country_code = 6;
+    optional string config_name = 7;
+}
+
+message GetUserByReferralTokenRequest {
+    optional string self_id = 1;
+    optional string referral_token = 2;
+    optional LatLngPoint current_latlng = 3;
+    optional string secret = 4;
+    optional TrackingId tracking_id = 5;
+    optional string country_code = 6;
+}
+
+message GetUserByReferralTokenResponse {
+    optional ReferralCodeStatus status = 1;
+    enum ReferralCodeStatus {
+        OK = 1;
+        INVALID_TOKEN = 2;
+        REFERRER_DELETED_OR_SUSPENDED = 3;
+        REFERRAL_CODE_EXPIRED = 4;
+    }
+    
+    optional string referral_code = 2;
+    optional ApiUser user = 3;
+    optional int64 user_id = 101;
+    optional int32 driver_referee_bonus_amount_minors = 4;
+    optional string currency_code = 5;
+    optional int32 driver_referrer_bonus_amount_minors = 6;
+    optional int32 rider_referrer_n_coupons = 7;
+    optional int32 rider_referee_n_coupons = 8;
+    
+    optional Role referrer_role = 9;
+    enum Role {
+        UNSPECIFIED = 0;
+        DRIVER = 1;
+        RIDER = 2;
+    }
+    
+    optional string referrer_country_code = 10;
+}
+
+enum DrivingDirection {
+    DRIVING_DIRECTION_UNSPECIFIED = 0;
+    HOME_WORK = 1;
+    WORK_HOME = 2;
+}

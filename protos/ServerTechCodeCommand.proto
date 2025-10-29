@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message ServerTechCodeRequest {
+    optional string code = 1;
+}
+
+message ServerTechCodeResponse {
+    optional string success_message = 1;
+}

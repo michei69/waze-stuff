@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/inbox_stats_wrapper/inbox_clicked_stat.proto";
+import "stats/inbox_stats_wrapper/inbox_open_from_push_stat.proto";
+import "stats/inbox_stats_wrapper/inbox_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InboxStatsWrapper {
+    oneof stat {
+        InboxShownStat inbox_shown = 1;
+        InboxClickedStat inbox_clicked = 2;
+        InboxOpenFromPushStat inbox_open_from_push = 3;
+    }
+}

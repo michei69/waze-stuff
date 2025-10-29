@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum SuggestionCardButtonCta {
+    SUGGESTION_CARD_CTA_UNSPECIFIED = 0;
+    SUGGESTION_CARD_CTA_RESUME_DRIVE = 1;
+    SUGGESTION_CARD_CTA_VIEW_ROUTES = 2;
+    SUGGESTION_CARD_CTA_GO_NOW = 3;
+}

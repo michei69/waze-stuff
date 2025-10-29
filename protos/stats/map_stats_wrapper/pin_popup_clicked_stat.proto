@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/map_stats_wrapper/pin_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PinPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CLOSE = 1;
+        PRIMARY = 2;
+        SECONDARY = 3;
+        INFO = 4;
+        NEXT = 5;
+        PHOTO = 6;
+        MORE = 7;
+    }
+    
+    PinType pin_type = 2;
+}

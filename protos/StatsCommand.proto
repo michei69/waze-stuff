@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message Stats {
+    optional string event_id = 1;
+    optional string event_name = 2;
+    optional StringMap params = 3;
+    optional int32 duration = 4;
+}

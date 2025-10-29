@@ -1,0 +1,141 @@
+syntax = "proto2";
+
+package com.waze.auth;
+
+import "logging.proto";
+import "RealtimeNg.proto";
+import "Types.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "WZA";
+option java_outer_classname = "WazeAuthProto";
+option java_package = "com.waze.auth";
+
+message GetTokenRequest {
+    optional linqmap.proto.rt.ClientInfo client_info = 3;
+    
+    oneof credential {
+        string refresh_token = 1;
+        PasswordCredential password_credential = 2;
+    }
+}
+
+message UserCredentials {
+    oneof credential {
+        string refresh_token = 1;
+        PasswordCredential password_credential = 2;
+    }
+}
+
+message PasswordCredential {
+    optional string username = 1;
+    optional string password = 2;
+}
+
+message GetTokenResponse {
+    optional string token = 1;
+    optional int64 token_expire_time = 2;
+}
+
+message WazeAuthToken {
+    optional bytes metadata = 1;
+    optional bytes payload = 2;
+}
+
+message MobileTokenPayload {
+    optional int64 user_id = 1;
+}
+
+message BookingTokenPayload {
+    optional int64 user_id = 1;
+}
+
+message CreateAuthenticationQrTokenRequest {
+    optional linqmap.proto.rt.ClientInfo client_info = 1;
+}
+
+message CreateAuthenticationQrTokenResponse {
+    optional string qr_authentication_token = 1;
+    optional linqmap.proto.Status status = 2;
+}
+
+message CreateLoginCredentialsForQrTokenRequest {
+    optional string qr_authentication_token = 1;
+    optional GetTokenRequest get_token_request = 2;
+    optional linqmap.proto.rt.ClientInfo client_info = 3;
+}
+
+message CreateLoginCredentialsForQrTokenResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message GetLoginCredentialsForQrTokenRequest {
+    optional string authentication_token = 1;
+    optional linqmap.proto.rt.ClientInfo client_info = 2;
+}
+
+message GetLoginCredentialsForQrTokenResponse {
+    optional PendingStatus status = 1;
+    enum PendingStatus {
+        STATUS_UNKNOWN = 0;
+        WAIT_FOR_MOBILE = 1;
+        MOBILE_LOGIN = 2;
+        USER_APPROVAL = 3;
+        EXPIRED = 4;
+        CANCELED = 5;
+        INVALID = 6;
+        SUCCESS = 7;
+    }
+    
+    optional string login_token = 2;
+}
+
+message NotifyQrTokenWasScannedRequest {
+    optional string authentication_token = 1;
+    optional linqmap.proto.rt.ClientInfo client_info = 2;
+}
+
+message NotifyQrTokenWasScannedResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message InvalidateQrTokenRequest {
+    optional string authentication_token = 1;
+    optional linqmap.proto.rt.ClientInfo client_info = 2;
+}
+
+message InvalidateQrTokenResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message RevokeCredentialsTokensRequest {
+    optional UserCredentials user_credentials = 1;
+    
+    optional Type revoke_for_device = 2;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        IN_CAR_AAOS = 1;
+    }
+}
+
+message RevokeCredentialsTokensResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message GetIosChallengeRequest {
+    optional linqmap.proto.rt.ClientInfo client_info = 3;
+}
+
+message GetIosChallengeResponse {
+    optional string Challenge = 1;
+}
+
+message ValidateAppAttestObjectRequest {
+    optional linqmap.proto.rt.ClientInfo client_info = 1;
+    optional bytes app_attest_object = 2;
+    optional string key_id = 3;
+}
+
+message ValidateAppAttestObjectResponse {
+    optional linqmap.proto.Status status = 1;
+}

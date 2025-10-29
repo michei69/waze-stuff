@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.common;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.common";
+
+message Price {
+    double price = 1;
+    string currency_code = 2;
+}
+
+message RawImage {
+    int32 width = 1;
+    int32 height = 2;
+    bytes data = 3;
+}
+
+enum SkinState {
+    DAY = 0;
+    NIGHT = 1;
+}

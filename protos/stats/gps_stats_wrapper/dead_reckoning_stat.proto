@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DeadReckoningStat {
+    LatLng start_coordinates = 2;
+    LatLng end_coordinates = 3;
+    
+    oneof _duration_ms {
+        int64 duration_ms = 1;
+    }
+    
+    oneof _error_distance_meters {
+        int64 error_distance_meters = 4;
+    }
+    
+    oneof _wait_ms {
+        int64 wait_ms = 5;
+    }
+    
+    oneof _passed_through_tunnel {
+        bool passed_through_tunnel = 6;
+    }
+}

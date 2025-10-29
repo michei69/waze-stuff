@@ -1,0 +1,301 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+import "Lanes.proto";
+import "Venues.proto";
+import "RoadSigns.proto";
+import "Questions.proto";
+import "RoutingAPIExternal.proto";
+import "AoMCommon.proto";
+import "GeoCoding.proto";
+import "RouteExplainabilityPrompt.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message RoutingResultAttributes {
+    optional bool changedDeparture = 1;
+    optional bool changedDestination = 2;
+    optional bool toll = 3 [deprecated = true];
+    optional bool ferry = 4 [deprecated = true];
+    optional bool dangerZone = 5 [deprecated = true];
+    optional bool hov = 6 [deprecated = true];
+}
+
+message EventOnRoute {
+    optional int64 alertId = 1;
+    optional AlertType alertType = 2;
+    optional AlertSubType alertSubType = 3;
+    optional string alertAddon = 4;
+    optional int32 roadInfoSeverity = 5;
+    optional Coordinate posStart = 6 [deprecated = true];
+    optional Coordinate posEnd = 7 [deprecated = true];
+    optional double ratioOnRoadStart = 8;
+    optional double ratioOnRoadEnd = 9;
+    optional bool isMajorEvent = 10;
+    optional int32 duration = 11;
+    optional int32 numThanked = 12;
+    optional int32 numReported = 13;
+    optional string street = 14;
+    optional string city = 15;
+    optional string startName = 16;
+    optional string endName = 17;
+    optional Coordinate location = 18;
+    repeated Coordinate geometryPoints = 19;
+    optional int64 firstReportedTimestamp = 20;
+    optional int64 lastReportedTimestamp = 21;
+    optional int64 jamId = 22;
+    optional bool isPartialLaneClosure = 23;
+    optional com.waze.proto.alertsonmap.SurfacedAlertDetails alertDetails = 24;
+    repeated int32 serverSegmentId = 25;
+    optional int32 delaySeconds = 26;
+    optional int32 historicDelaySeconds = 27;
+    optional int32 totalTimeSeconds = 28;
+    optional int32 totalLengthMeters = 29;
+}
+
+message WaypointResult {
+    optional int32 id = 1;
+    optional int32 lengthToWaypointMeters = 2;
+    optional int32 secondsToWaypoint = 3;
+    optional int32 waypointIndexInPoints = 4;
+}
+
+message TollPriceInfo {
+    optional double tollPrice = 1;
+    optional string tollPriceCurrencyCode = 2;
+    optional TollPopupEnum popupId = 3;
+    optional string actionUrl = 4;
+    optional string serverParameterizedHeader = 5;
+    optional string serverParameterizedMessage = 6;
+    optional string pass_based_missing_pass_name = 10;
+    optional double pass_based_price_change_to_price = 11;
+    optional string pass_based_user_pass_name = 12;
+    optional string toll_road_name = 13;
+    optional double time_based_price_change_to_price = 14;
+    optional int32 time_based_price_change_at_seconds = 15;
+}
+
+message HistogramPoint {
+    optional int64 time_to_leave = 1;
+    optional int64 eta = 2;
+    optional int32 route_length_in_minutes = 3;
+    optional string text = 4;
+}
+
+message RouteInsight {
+    optional int64 irregularEventId = 4;
+    optional int64 causingAlertId = 5;
+    
+    oneof insight {
+        int32 irregularEventIndex = 1;
+    }
+    
+    oneof cause {
+        int32 causingAlertIndex = 2;
+        int32 causingOffRouteAlertIndex = 3;
+    }
+}
+
+message HovRouteInfo {
+    optional int64 normalRouteAltId = 1;
+    optional int32 minPassengers = 2;
+}
+
+message RouteSegment {
+    optional int32 tileId = 1;
+    optional int32 tileTimestamp = 2;
+    optional int32 clientId = 3;
+    optional int32 serverSegmentId = 15;
+    optional int32 fromNode = 4;
+    optional double fromNodeX = 18;
+    optional double fromNodeY = 17;
+    optional bool direction = 19;
+    optional int32 lengthMeters = 5;
+    optional int32 crosstimeSeconds = 6;
+    optional int32 crosstimeSecondsWithoutRealtime = 16;
+    optional int32 instruction = 7;
+    optional int32 exitNumber = 8;
+    optional int32 destNameObsolete = 9;
+    optional int32 lane = 10;
+    optional int32 laneType = 11;
+    optional DetourInfo detourInfo = 12;
+    optional geocoding.proto.ClientLaneSet laneSet = 13;
+    optional geocoding.proto.RoadSign roadSign = 14;
+}
+
+message DetourInfo {
+    optional int64 detourId = 1;
+    repeated RouteSegment naiveRouteSegment = 2;
+    optional int64 naiveTotalLength = 3;
+    optional int64 naiveTotalSeconds = 4;
+    optional int64 detourTotalLength = 5;
+    optional int64 detourTotalSeconds = 6;
+    optional string naiveRouteName = 10;
+    repeated routing.proto.external.RouteAttr.Enum naiveRouteAttr = 11;
+    optional DetourLabel detourLabel = 13;
+    optional routing.proto.external.DetourType.Enum detourType = 14;
+    optional bool isReassurance = 7 [deprecated = true];
+    optional AlertType mainAlertType = 8 [deprecated = true];
+    optional AlertSubType mainAlertSubType = 9 [deprecated = true];
+    optional com.waze.proto.alertsonmap.SurfacedAlertDetails alertDetails = 12 [deprecated = true];
+}
+
+message DetourLabel {
+    optional ImageLabelType imageLabelType = 1;
+    enum ImageLabelType {
+        UNKNOWN = 1;
+        SIMILAR = 2;
+        SLOWER = 3;
+        FASTER = 4;
+        PREFERRED = 5;
+        TRAFFIC = 6;
+        ACCIDENT = 7;
+        CONSTRUCTION = 8;
+        POTHOLE = 9;
+        BROKEN_TRAFFIC_LIGHT = 10;
+        WEATHER = 11;
+        SLIPPERY_ROAD = 12;
+        FLOOD = 13;
+        UNPLOWED_ROAD = 14;
+        FOG = 15;
+        ICY_ROAD = 16;
+        BLOCKED_LANE = 17;
+    }
+    
+    optional string labelText = 2;
+    optional int32 differenceMinutes = 3;
+    
+    oneof label {
+        ImageLabelType labelImage = 4;
+        geocoding.proto.RoadShield roadShield = 5;
+        com.waze.proto.alertsonmap.SurfacedAlertDetails alertDetails = 6;
+    }
+}
+
+message RouteLabel {
+    optional MapViewLabel map_view_label = 1;
+    optional ExtraInfoLabel extra_info_label = 2;
+    optional string tts = 3;
+}
+
+message MapViewLabel {
+    optional string route_type_label = 1;
+}
+
+message ExtraInfoLabel {
+    optional string route_type_label = 1;
+    optional string traffic_status_label = 2;
+}
+
+message LowerSpeedItinerary {
+    optional int32 num_minutes_added = 1;
+    optional int32 max_allowed_millimeter_per_sec = 2;
+}
+
+message RoutingResult {
+    optional int64 destinationId = 1;
+    optional int64 altId = 3;
+    optional string alternative_route_uuid = 49;
+    optional string altDescription = 4;
+    optional int64 totalLength = 5;
+    optional int64 totalSeconds = 6;
+    optional int64 carbonEmissionsGrams = 51;
+    optional int64 numSegments = 7;
+    optional RoutingResultAttributes attributes = 8;
+    optional string trafficComment = 12;
+    optional string voiceTrafficComment = 17;
+    optional int64 costForTime = 14;
+    repeated EventOnRoute eventOnRoute = 18;
+    repeated Coordinate routePoint = 19;
+    repeated RouteSegment routeSegment = 20;
+    repeated WaypointResult waypoint = 21;
+    optional HovRouteInfo hovRouteInfo = 23;
+    repeated string neededPermit = 24 [deprecated = true];
+    optional bool alternativesHaveHov = 25;
+    optional double tollPrice = 26;
+    optional string currency = 27;
+    repeated string altGroupComment = 28;
+    repeated string areas = 31;
+    repeated string required_permits = 50;
+    repeated questions.Question question = 33;
+    optional TollPriceInfo tollPriceInfo = 37;
+    optional venue.EntryExitPoint currentEntryPoint = 38;
+    optional bool isInvalidForPrivateVehicle = 39;
+    repeated RouteInsight routeInsight = 40;
+    optional RouteLabel label = 41;
+    optional int64 totalHistoricSeconds = 43;
+    repeated routing.proto.external.RouteType.Enum route_type = 44;
+    repeated routing.proto.external.RouteAttr.Enum route_attr = 45;
+    repeated HistogramPoint eta_histogram = 48;
+    optional LowerSpeedItinerary lowerSpeedItinerary = 52;
+    optional ExplainabilityHint explainability_hint = 57;
+    optional RoutingResultStatus routingStatusObsolete = 22 [deprecated = true];
+    optional int64 statusObsolete = 2 [deprecated = true];
+    optional string entryPointObsolete = 34 [deprecated = true];
+    optional int64 originObsolete = 9 [deprecated = true];
+    optional int64 numEventsOnRouteObsolete = 10 [deprecated = true];
+    optional int64 time2ParkSecondsObsolete = 15 [deprecated = true];
+    optional int64 otherUserIdObsolete = 13 [deprecated = true];
+    repeated EventOnRoute eventOffRoute = 42;
+    optional TranslatableFormattedString trafficCommentWithArguments = 53;
+    optional TranslatableFormattedString voiceTrafficCommentWithArguments = 54;
+    optional RoutingResultMteInfo mteInfo = 55;
+    optional RouteGeometry routeGeometry = 56;
+    
+    reserved 32, 29 to 30;
+    
+    reserved "popup", "time2ParkMinSeconds", "time2ParkMaxSeconds";
+}
+
+message ExplainabilityHint {
+    oneof hint {
+        RouteExplainabilityPrompt prompt = 1;
+    }
+}
+
+message RouteGeometry {
+    optional bytes encodedS2Points = 1;
+}
+
+message RoutingResultMteInfo {
+    optional MteInfo destinationInMte = 1;
+    repeated MteInfo mteOnRoute = 2;
+}
+
+message MteInfo {
+    repeated string category = 1;
+    optional string uniqueName = 2;
+    optional StringMap name = 3;
+}
+
+enum TollPopupEnum {
+    TOLL_INFO_DYNAMIC_PRICE_NOT_SHOWN = 0;
+    TOLL_INFO_MISSING_PASS = 1;
+    TOLL_INFO_MISSING_PASS_WITH_PRICE = 2;
+    TOLL_INFO_PRICE_CHANGE_AT = 3;
+    TOLL_INFO_PRICE_CHANGE_BY_TIME = 4;
+    TOLL_INFO_WITH_PASS = 5;
+    TOLL_INFO_DEFAULT = 6;
+    TOLL_INFO_NO_PRICE = 7;
+    TOLL_INFO_DISABLED_BY_CONFIG = 8;
+    TOLL_INFO_DYNAMIC_PRICE_SHOWN = 9;
+}
+
+enum RoutePopupType {
+    NO_POPUP_TYPE = 0;
+    CRITAIR_NOT_CONFIGURED = 1;
+    CRITAIR_WRONG_LEVEL = 2;
+    ZTL_NOT_CONFIGURED = 3;
+    ZTL_NO_MATCH = 4;
+    LICENSE_PLATE_NOT_CONFIGURED = 5;
+    LICENSE_PLATE_MISMATCH = 6;
+}
+
+enum RoutingResultStatus {
+    NO_STATUS = 0;
+    ORIGINAL = 1;
+    UPDATE = 2;
+}

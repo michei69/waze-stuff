@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool;
+
+option objc_class_prefix = "LPCR";
+option java_outer_classname = "PointAddressOuterClass";
+option java_package = "linqmap.proto.carpool";
+
+message PointAddress {
+    optional int32 segment_id = 2 [default = 0];
+    optional bool segment_direction = 3 [default = false];
+    optional string street = 4;
+    optional string house_number = 5;
+    optional string city = 6;
+    optional string junction_with_street = 7;
+    
+    optional Direction direction_from_junction = 8;
+    enum Direction {
+        N = 1;
+        NE = 2;
+        E = 3;
+        SE = 4;
+        S = 5;
+        SW = 6;
+        W = 7;
+        NW = 8;
+    }
+    
+    optional int32 meters_from_junction = 9;
+}

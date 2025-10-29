@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message AuditEventMessage {
+    int32 name = 1;
+    int32 context = 2;
+    int32 value = 3;
+    string selectedOption = 4;
+    repeated int32 displayStrings = 5;
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/navigation_stats_wrapper/navigation_guidance_mode.proto";
+import "stats/reusable_types/triggering_platform.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NavigationGuidanceShownStat {
+    NavigationGuidanceMode mode = 1;
+}

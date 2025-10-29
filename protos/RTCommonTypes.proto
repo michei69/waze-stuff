@@ -1,0 +1,158 @@
+syntax = "proto2";
+
+package com.waze.proto.rtcommon;
+
+import "Types.proto";
+import "GpsCommands.proto";
+import "RoutingAPIExternal.proto";
+
+option objc_class_prefix = "WPRTC";
+option java_package = "com.waze.proto.rtcommon";
+
+message ClientDisplay {
+    optional linqmap.proto.Envelope env = 1;
+    optional double scale = 2;
+    optional linqmap.proto.Coordinate poi = 4;
+    
+    reserved 3, 5;
+}
+
+message RoutingSegment {
+    optional int32 node_id = 1;
+    optional int32 cross_time = 2;
+    optional int32 length = 3;
+    optional int32 segment_id = 4;
+    optional linqmap.proto.Coordinate point = 5;
+    optional bool segment_direction = 6;
+    repeated RoutingSegment reassurance_detours = 7;
+}
+
+message UserRouting {
+    repeated RoutingSegment segments = 1;
+    optional bool is_completed = 2;
+    optional int32 now_at_seg = 3;
+    optional linqmap.proto.Coordinate navigate_from_point = 4;
+    optional linqmap.proto.Coordinate navigate_to_point = 5;
+    optional linqmap.proto.Coordinate way_point = 6;
+    optional int32 route_id = 7;
+    optional int64 start_time = 8;
+    optional int32 id = 9;
+    optional int32 altid = 10;
+    optional string alternative_route_uuid = 11;
+    optional string use_case = 12;
+    optional int32 total_route_time_without_ml = 13;
+    repeated linqmap.routing.proto.external.RouteAttr.Enum route_attr = 14;
+}
+
+message SegmentDirectionID {
+    optional int32 from_node = 1;
+    optional int32 to_node = 2;
+}
+
+message TurnDirectionId {
+    optional SegmentDirectionID from_segment = 1;
+    optional SegmentDirectionID to_segment = 2;
+}
+
+message UserGroup {
+    optional string name = 1;
+    optional int32 id = 2;
+    optional string icon = 3;
+    optional bool priority_alerts = 4;
+    optional bool enterprise = 5;
+}
+
+message UserPosition {
+    optional linqmap.proto.Coordinate coordinate = 1;
+    optional int32 azimuth = 2;
+    optional SegmentDirectionID segment_id = 3;
+    optional double speed = 4;
+    optional int64 timestamp = 6;
+    optional int32 metro_id = 7;
+    optional int32 state_id = 8;
+    optional string ipc_area_id = 9;
+    optional string ipc_server_id = 10;
+    optional int32 score = 11;
+    optional int32 alt_score = 12;
+    optional SegmentDirectionID alt_segment_id = 13;
+    
+    reserved 5;
+    
+    reserved "road_type";
+}
+
+message ExtraPoints {
+    optional int32 points = 1;
+    optional int64 updated_by = 2;
+}
+
+message PassedNode {
+    optional int32 node_id = 1;
+    optional int64 millis = 2;
+    optional bool suspect = 3;
+    optional ExtraPoints extra_points = 4;
+}
+
+message NodeTrack {
+    repeated PassedNode node = 1;
+}
+
+message GpsSample {
+    optional linqmap.proto.Coordinate3 position = 1;
+    optional int32 azymuth = 2;
+    optional double speed = 3;
+    optional int64 millis = 4;
+    optional linqmap.proto.rt.GpsFakeStatus.Status fake_status = 5;
+    optional double horizontal_accuracy_meters = 6;
+}
+
+message GpsTrack {
+    repeated GpsSample samples = 1;
+}
+
+message MatchedGPSPosition {
+    optional linqmap.proto.rt.GPSPosition gps_position = 1;
+    optional SegmentDirectionID segment_nodes = 2;
+}
+
+message CountryEntry {
+    optional int32 id = 1;
+    optional string name = 2;
+    optional string abbr = 3;
+    optional string official_lang = 4;
+    optional string other_lang = 5;
+    optional string fallback_lang = 6;
+}
+
+message QuotaValueItem {
+    optional string name = 1;
+    repeated int64 times = 2;
+}
+
+message QuotaValues {
+    repeated QuotaValueItem item = 1;
+}
+
+message City {
+    optional int32 id = 1;
+    optional string name = 2;
+    optional int32 state_id = 3;
+    optional string state = 4;
+    optional linqmap.proto.Coordinate center_point = 5;
+}
+
+message UserIdDbid {
+    optional int64 user_id = 1;
+    optional int64 db_id = 2;
+}
+
+message UserSessionUsersMap {
+    repeated UserIdDbid user = 1;
+}
+
+enum SegDirection {
+    UNKNOWN_DIRECTION = 0;
+    BOTH = 1;
+    FORWARDS = 2;
+    BACKWARDS = 3;
+}

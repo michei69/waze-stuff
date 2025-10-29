@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message WhatsMyIpRequest {
+    
+}
+
+message WhatsMyIpResponse {
+    optional string ip = 1;
+}
+
+message SetClientIpRequest {
+    optional string ip = 1;
+}

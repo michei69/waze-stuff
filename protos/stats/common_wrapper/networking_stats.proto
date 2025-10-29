@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/common_wrapper/result.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ServerRequestResult {
+    string api = 1;
+    Result result = 2;
+    
+    oneof _elapsed_time_ms {
+        int64 elapsed_time_ms = 3;
+    }
+}
+
+message NetworkState {
+    Mode mode = 1;
+    enum Mode {
+        NOT_AVAILABLE = 0;
+        WIFI = 1;
+        CELL = 2;
+        WIMAX = 3;
+    }
+}

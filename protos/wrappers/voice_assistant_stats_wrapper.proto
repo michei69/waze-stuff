@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/voice_assistant_stats_wrapper/dictation_screen_clicked_stat.proto";
+import "stats/voice_assistant_stats_wrapper/dictation_screen_finished_stat.proto";
+import "stats/voice_assistant_stats_wrapper/dictation_screen_initiated_stat.proto";
+import "stats/voice_assistant_stats_wrapper/search_by_voice_auto_language_changed_stat.proto";
+import "stats/voice_assistant_stats_wrapper/search_by_voice_language_changed_stat.proto";
+import "stats/voice_assistant_stats_wrapper/search_by_voice_listening_cancelled_stat.proto";
+import "stats/voice_assistant_stats_wrapper/voice_search_finished_stat.proto";
+import "stats/voice_assistant_stats_wrapper/voice_search_initiated_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message VoiceAssistantStatsWrapper {
+    oneof stat {
+        SearchByVoiceAutoLanguageChangedStat search_by_voice_auto_language_changed = 1;
+        SearchByVoiceLanguageChangedStat search_by_voice_language_changed = 2;
+        SearchByVoiceListeningCancelledStat search_by_voice_listening_cancelled = 3;
+        VoiceSearchFinishedStat voice_search_finished = 4;
+        DictationScreenClickedStat dictation_screen_clicked = 5;
+        DictationScreenFinishedStat dictation_screen_finished = 6;
+        DictationScreenInitiatedStat dictation_screen_initiated = 7;
+        VoiceSearchInitiatedStat voice_search_initiated = 8;
+    }
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/planned_drive_stats_wrapper/planned_drive_screen_clicked_stat.proto";
+import "stats/planned_drive_stats_wrapper/planned_drive_shown_stat.proto";
+import "stats/planned_drive_stats_wrapper/schedule_planned_drive_screen_clicked_stat.proto";
+import "stats/planned_drive_stats_wrapper/schedule_planned_drive_screen_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PlannedDriveStatsWrapper {
+    oneof stat {
+        SchedulePlannedDriveScreenClickedStat schedule_planned_drive_screen_clicked = 1;
+        SchedulePlannedDriveScreenShownStat schedule_planned_drive_screen_shown = 2;
+        PlannedDriveScreenClickedStat planned_drive_screen_clicked = 3;
+        PlannedDriveShownStat planned_drive_shown = 4;
+    }
+}

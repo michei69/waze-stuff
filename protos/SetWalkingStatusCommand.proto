@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message SetWalkingStatus {
+    optional bool walking = 1;
+}
+
+message WalkingDistanceRequest {
+    optional Coordinate from = 1;
+    optional Coordinate to = 2;
+}
+
+message WalkingDistanceResponse {
+    optional int32 meters = 1;
+    optional Status status = 2;
+}

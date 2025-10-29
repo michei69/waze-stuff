@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SoundOptionsPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ALERTS_ONLY = 1;
+        CLOSE = 2;
+        LISTENING_WITH = 3;
+        SOUNDS_OFF = 4;
+        SOUNDS_ON = 5;
+        VOICE_DIRECTIONS = 6;
+        BRIEF = 7;
+    }
+}

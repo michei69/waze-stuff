@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/encouragement_stats_wrapper/encouragement_info.proto";
+import "stats/reusable_types/ucomm_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EncouragementReceivedStat {
+    UcommInfo ucomm_info = 1;
+    EncouragementInfo encouragement_info = 2;
+}

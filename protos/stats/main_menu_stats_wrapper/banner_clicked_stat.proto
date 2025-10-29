@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/main_menu_stats_wrapper/banner_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BannerClickedStat {
+    BannerInfo banner_info = 1;
+    
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BANNER_CLICKED = 1;
+    }
+    
+    string url = 3;
+}

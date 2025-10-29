@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SetCommuteMenuShownStat {
+    LocationStatus location_status = 1;
+    enum LocationStatus {
+        LOCATION_STATUS_UNSPECIFIED = 0;
+        TO_BE_SET = 1;
+        TO_BE_EDITED = 2;
+    }
+    
+    LocationType location_type = 2;
+    enum LocationType {
+        LOCATION_TYPE_UNSPECIFIED = 0;
+        HOME = 1;
+        WORK = 2;
+    }
+}

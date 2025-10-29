@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DownloaderFinishedDownloadAggregateStat {
+    oneof _first_session {
+        bool first_session = 1;
+    }
+    
+    oneof _time_since_login_seconds {
+        sint64 time_since_login_seconds = 2;
+    }
+    
+    oneof _network_version {
+        int64 network_version = 3;
+    }
+    
+    oneof _tasks_count {
+        int64 tasks_count = 4;
+    }
+    
+    oneof _tasks_in_queue_avg {
+        double tasks_in_queue_avg = 5;
+    }
+    
+    oneof _tasks_in_queue_max {
+        int64 tasks_in_queue_max = 6;
+    }
+    
+    oneof _downloader_manager_version {
+        int64 downloader_manager_version = 7;
+    }
+    
+    oneof _time_since_app_startup_seconds {
+        sint64 time_since_app_startup_seconds = 8;
+    }
+    
+    oneof _time_to_complete_task_avg_ms {
+        sint64 time_to_complete_task_avg_ms = 9;
+    }
+    
+    oneof _time_to_complete_task_max_ms {
+        sint64 time_to_complete_task_max_ms = 10;
+    }
+    
+    oneof _time_in_queue_avg_ms {
+        sint64 time_in_queue_avg_ms = 11;
+    }
+    
+    oneof _time_in_queue_max_ms {
+        int64 time_in_queue_max_ms = 12;
+    }
+}

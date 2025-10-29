@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/detour_stats_wrapper/detour.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DetourShownStat {
+    Detour detour = 1;
+    
+    oneof _map_is_tracked {
+        bool map_is_tracked = 2;
+    }
+}

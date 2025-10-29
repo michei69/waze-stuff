@@ -1,0 +1,116 @@
+syntax = "proto2";
+
+package waze.wazegeoads.proto;
+
+import "google/protobuf/duration.proto";
+import "ClientInfoCommand.proto";
+import "GeoCoding.proto";
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+import "Types.proto";
+
+option objc_class_prefix = "WGA";
+option java_multiple_files = true;
+option java_outer_classname = "WazeGeoAdsProto";
+option java_package = "com.waze.wazegeoads";
+
+message GetPinAdsRequestWrapper {
+    optional GetPinAdsRequest request = 1;
+    optional UserSessionData user_session_data = 2;
+}
+
+message GetPinAdsRequest {
+    optional com.waze.proto.rtcommon.MatchedGPSPosition user_position = 1;
+    optional string alternative_route_uuid = 2;
+    optional linqmap.proto.Envelope display_viewport = 3;
+    optional int32 google_maps_zoom_level = 4;
+    optional string adspam_essential_cookie = 5;
+    optional bool is_client_test = 6;
+    optional bytes navigation_cache_token = 7;
+}
+
+message UserSessionData {
+    optional int64 user_id = 1;
+    optional bool is_staff = 2;
+    optional bool is_test_user = 3;
+    optional bool is_prober_user = 4;
+    optional bool is_automation = 5;
+    optional string session_id = 6;
+    optional com.waze.proto.rtcommon.UserRouting route = 7 [deprecated = true];
+    optional linqmap.geocoding.proto.Geometry route_geometry = 8;
+    optional string route_destination_id = 9;
+    optional int64 route_eta = 10;
+    optional string locale = 11;
+    optional string country_id = 12;
+    optional linqmap.proto.rt.ClientInfo client_info = 13;
+    optional string ip_address = 14;
+}
+
+message GetPinAdsResponse {
+    repeated PinAd pin_ad = 1;
+    optional PinAdParameters pin_ad_parameters = 2;
+    optional bool keep_ad_cache = 3;
+    optional bool is_invisible = 7;
+    
+    optional EmptyAdsReason empty_ads_reason = 4;
+    enum EmptyAdsReason {
+        REASON_UNSPECIFIED = 0;
+        NO_ADS_AVAILABLE = 1;
+        NO_NEW_ADS_FETCHED = 2;
+        FEATURE_DISABLED = 3;
+        ROUTE_TOO_SHORT = 4;
+        FREQUENCY_CAPPING = 5;
+        ROUTE_NOT_MATCHED = 6;
+        ROUTE_NOT_AVAILABLE = 7;
+        ROUTE_COMPLETED = 8;
+    }
+    
+    optional linqmap.proto.Status status = 5;
+    optional bool is_test = 6;
+}
+
+message PinAd {
+    optional string impression_id = 1;
+    optional string place_id = 2;
+    optional string business_name = 3;
+    optional linqmap.proto.Coordinate pin_position = 4;
+    optional float business_rating = 5;
+    
+    optional OpenStatus open_status = 6;
+    enum OpenStatus {
+        STATUS_UNSPECIFIED = 0;
+        OPEN = 1;
+        OPENS_SOON = 2;
+        CLOSED = 3;
+        CLOSES_SOON = 4;
+    }
+    
+    optional string pin_icon_url = 7;
+    optional string about_this_ad_url = 8;
+    optional int32 ad_position = 9;
+    optional AdBanner ad_banner = 10;
+    optional AdTracking ad_tracking = 11;
+    optional int64 customer_id = 12;
+}
+
+message PinAdParameters {
+    optional int32 google_maps_zoom_level = 1;
+    optional google.protobuf.Duration ad_view_delay = 2;
+    optional bytes navigation_cache_token = 3;
+    optional string adspam_essential_cookie = 4;
+}
+
+message AdBanner {
+    optional string headline = 1;
+    optional string body = 2;
+    optional string call_to_action = 3;
+    optional string thumbnail_url = 4;
+    optional string click_url = 5;
+    optional string visible_url = 6;
+}
+
+message AdTracking {
+    optional string ad_viewed_url = 1;
+    optional string ad_clicked_url = 2;
+    optional string add_stop_url = 3;
+}

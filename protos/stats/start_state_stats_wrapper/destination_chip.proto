@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DestinationChip {
+    ChipTrigger chip_trigger = 1;
+    enum ChipTrigger {
+        CHIP_TRIGGER_UNSPECIFIED = 0;
+        SET_HOME_CTA = 1;
+        SET_WORK_CTA = 2;
+        NEW_FAVORITE_CTA = 3;
+        STICKY = 4;
+        MORE = 5;
+    }
+    
+    DestinationType destination_type = 2;
+    enum DestinationType {
+        DESTINATION_TYPE_UNSPECIFIED = 0;
+        HOME = 1;
+        WORK = 2;
+        FAVORITE = 3;
+    }
+    
+    LatLng destination_coordinates = 4;
+    string venue_id = 5;
+    
+    oneof _chip_index {
+        int64 chip_index = 3;
+    }
+}

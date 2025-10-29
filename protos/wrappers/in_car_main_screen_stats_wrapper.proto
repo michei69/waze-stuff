@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/in_car_main_screen_stats_wrapper/in_car_main_screen_button_clicked_stat.proto";
+import "stats/in_car_main_screen_stats_wrapper/in_car_main_screen_buttons_changed_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InCarMainScreenStatsWrapper {
+    oneof stat {
+        InCarMainScreenButtonClickedStat in_car_main_screen_button_clicked = 1;
+        InCarMainScreenButtonsChangedStat in_car_main_screen_buttons_changed = 2;
+    }
+}

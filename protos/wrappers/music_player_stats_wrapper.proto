@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/music_player_stats_wrapper/audiokit_partner_icon_clicked_stat.proto";
+import "stats/music_player_stats_wrapper/audiokit_player_clicked_stat.proto";
+import "stats/music_player_stats_wrapper/music_settings_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MusicPlayerStatsWrapper {
+    oneof stat {
+        AudiokitPlayerClickedStat audiokit_player_clicked = 1;
+        MusicSettingsStat music_settings = 2;
+        AudiokitPartnerIconClickedStat audiokit_partner_icon_clicked = 3;
+    }
+}

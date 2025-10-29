@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SaveDestinationPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        SET_FAVORITE = 1;
+        SET_HOME = 2;
+        SET_WORK = 3;
+        CANCEL = 4;
+    }
+    
+    oneof _set_home_available {
+        bool set_home_available = 2;
+    }
+    
+    oneof _set_work_available {
+        bool set_work_available = 3;
+    }
+}

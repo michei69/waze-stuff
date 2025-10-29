@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewClosureMessageShownStat {
+    ImpactType impact_type = 1;
+    enum ImpactType {
+        IMPACT_TYPE_UNSPECIFIED = 0;
+        UNREACHABLE_DESTINATION_LONG = 1;
+        UNAVAILABLE_PREFERRED_ROUTE = 2;
+        UNAVAILABLE_NATURAL_ROUTE = 3;
+        LONGER_DRIVE_TIME = 4;
+        UNREACHABLE_DESTINATION_SHORT = 5;
+    }
+    
+    ImpactInfoType impact_info_type = 2;
+    enum ImpactInfoType {
+        IMPACT_INFO_TYPE_UNSPECIFIED = 0;
+        MTE = 1;
+        STREET = 2;
+        DEFAULT = 3;
+    }
+}

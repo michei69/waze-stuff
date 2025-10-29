@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message JamCrossTimeRemovedStat {
+    oneof _estimated_arrival_timestamp_unix_seconds {
+        int64 estimated_arrival_timestamp_unix_seconds = 1;
+    }
+}

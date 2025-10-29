@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/deeplink_stats_wrapper/sdk_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message LaunchedFromAppStat {
+    string app_package = 1;
+    
+    Type type = 2 [deprecated = true];
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        FIREBASE = 1;
+        WAZE_UNIVERSAL_LINK = 2;
+        NON_WAZE_UNIVERSAL_LINK = 3;
+        EXPLICIT_INTENT = 4;
+        IMPLICIT_INTENT = 5;
+        DEEP_LINK = 6;
+    }
+    
+    string url = 3;
+    string deeplink_action = 4 [deprecated = true];
+    SdkType sdk_type = 5;
+}

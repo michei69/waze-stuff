@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/voices_stats_wrapper/sound_played_stat.proto";
+import "stats/voices_stats_wrapper/tts_cache_size_stat.proto";
+import "stats/voices_stats_wrapper/tts_download_request_stat.proto";
+import "stats/voices_stats_wrapper/tts_fetch_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message VoicesStatsWrapper {
+    oneof stat {
+        TtsCacheSizeStat tts_cache_size = 1;
+        TtsDownloadRequestStat tts_download_request = 2;
+        TtsFetchStat tts_fetch = 3;
+        SoundPlayedStat sound_played = 4;
+    }
+}

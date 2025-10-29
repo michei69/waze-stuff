@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message VoiceDirectionsSettingsClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CUSTOM_VOICE_DOWNLOAD = 1;
+        CUSTOM_VOICE_EDIT = 2;
+        CUSTOM_VOICE_INFO = 3;
+        CUSTOM_VOICE_SHARE = 4;
+        RECORD_NEW_VOICE = 5;
+        SET_VOICE = 6;
+    }
+    
+    string voice_id = 3;
+    
+    oneof _custom {
+        bool custom = 2;
+    }
+}

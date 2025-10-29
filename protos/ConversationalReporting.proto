@@ -1,0 +1,64 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap;
+
+import "AoMCommon.proto";
+import "AlertsOnMap.proto";
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+import "proto/waze/type/Timestamp.proto";
+import "Types.proto";
+
+option objc_class_prefix = "WAOM";
+option java_package = "com.waze.proto.alertsonmap";
+
+message ConversationalReportingMessage {
+    optional string author = 1;
+    optional string content = 2;
+}
+
+message ConversationalReportingRequestWrapper {
+    optional ConversationalReportingRequest request = 1;
+    optional UserCommonInfo user_info = 2;
+}
+
+message ConversationalReportingRequest {
+    optional ConversationalReportingMessage message = 1;
+    repeated ConversationalReportingMessage previous_messages = 2;
+    optional rtcommon.MatchedGPSPosition position = 3;
+    optional int32 azymuth = 4;
+    optional string conversation_id = 5;
+    optional .waze.type.Timestamp report_time = 6;
+    optional bool is_offline_delayed_report = 7;
+}
+
+message ConversationalReportingResponseWrapper {
+    optional ConversationalReportingResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message ConversationalReportingResponse {
+    oneof response {
+        linqmap.proto.Status error = 1;
+        FollowUpMessageResponse followup_message = 2;
+        AlertReportedResponse reported_alert = 3;
+        AlertChosenResponse chosen_alert = 4;
+    }
+    
+    message FollowUpMessageResponse {
+        optional ConversationalReportingMessage message = 1;
+        optional string conversation_id = 2;
+    }
+    
+    message AlertReportedResponse {
+        optional AddUserReportedAlertResponse reported_alert_response = 1;
+    }
+    
+    message AlertChosenResponse {
+        optional ReportedAlertDetails alert_to_report = 1;
+    }
+}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MyWazeItemClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ACCOUNT = 1;
+        CLOSE = 2;
+        CONTRIBUTION_FEED = 3;
+        HOME_WORK = 4;
+        ACCOUNT_BOX = 5;
+        MOOD = 6;
+        REGISTER_TOOLTIP = 7;
+        SETTINGS = 8;
+        STORES = 9;
+    }
+    
+    Status status = 2;
+    enum Status {
+        STATUS_UNSPECIFIED = 0;
+        REGULAR = 1;
+        WITH_BADGE = 2;
+    }
+}

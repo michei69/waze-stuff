@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message CopilotMarketplaceMood {
+    int32 id = 1;
+    string name = 2;
+    bool is_ads = 3;
+    bool is_hidden = 4;
+}

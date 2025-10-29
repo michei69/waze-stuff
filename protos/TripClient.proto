@@ -1,0 +1,57 @@
+syntax = "proto2";
+
+package linqmap.proto.trip.client;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPTC";
+option java_package = "linqmap.proto.trip.client";
+
+message UpdatePreferredTravelTimeRequest {
+    optional int64 user_id = 1;
+    optional int64 src_poi_id = 2;
+    optional int64 dest_poi_id = 3;
+    optional TimePreferences time_preferences = 4;
+    optional string request_id = 5;
+}
+
+message UpdatePreferredTravelTimeResponse {
+    optional Status status = 1;
+    optional string request_id = 2;
+}
+
+message TimePreference {
+    optional DayOfWeek day_of_week = 1;
+    enum DayOfWeek {
+        ALL_WEEK = 0;
+        MONDAY = 1;
+        TUESDAY = 2;
+        WEDNESDAY = 3;
+        THURSDAY = 4;
+        FRIDAY = 5;
+        SATURDAY = 6;
+        SUNDAY = 7;
+        ALL_WORK_DAYS = 10;
+    }
+    
+    optional int32 hour = 2;
+    optional int32 minute = 3;
+    
+    optional Type type = 4;
+    enum Type {
+        ARRIVE_AT = 1;
+        LEAVE_BY = 2;
+    }
+    
+    optional Source source = 5;
+    enum Source {
+        DEFAULT_PREFERENCE = 1;
+        USER_PREFERENCE = 2;
+        OLD_TRIP_SERVER_PREDICTION = 3;
+        PREDICTION_ALGORITHM = 4;
+    }
+}
+
+message TimePreferences {
+    repeated TimePreference time_preference = 1;
+}

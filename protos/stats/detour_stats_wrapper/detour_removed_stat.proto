@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/detour_stats_wrapper/detour.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DetourRemovedStat {
+    Detour detour = 1;
+    
+    RemoveType remove_type = 3 [deprecated = true];
+    enum RemoveType {
+        REMOVE_TYPE_UNSPECIFIED = 0;
+        INVALID = 1;
+    }
+    
+    oneof _already_shown {
+        bool already_shown = 2;
+    }
+}

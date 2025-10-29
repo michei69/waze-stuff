@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/insight_component_changed_stat.proto";
+import "stats/insight_component_stats_wrapper/insight_component_changed_state_stat.proto";
+import "stats/insight_component_stats_wrapper/insight_component_clicked_stat.proto";
+import "stats/insight_component_stats_wrapper/insight_component_engaged_stat.proto";
+import "stats/insight_component_stats_wrapper/insight_component_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentStatsWrapper {
+    oneof stat {
+        InsightComponentShownStat insight_component_shown = 1;
+        InsightComponentClickedStat insight_component_clicked = 2 [deprecated = true];
+        InsightComponentChangedStateStat insight_component_changed_state = 3 [deprecated = true];
+        InsightComponentChangedStat insight_component_changed = 4;
+        InsightComponentEngagedStat insight_component_engaged = 5;
+    }
+}

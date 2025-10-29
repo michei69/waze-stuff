@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message SegmentInsightInfo {
+    PositionRelativeToSegment position_relative_to_segment = 1;
+    enum PositionRelativeToSegment {
+        APPROACHING = 0;
+        AT_START = 1;
+        WITHIN = 2;
+    }
+    
+    int32 remaining_distance_meters = 3;
+    
+    Type type = 4;
+    enum Type {
+        TRAFFIC = 0;
+    }
+    
+    oneof _remaining_duration_seconds {
+        int32 remaining_duration_seconds = 2;
+    }
+}
+
+message SegmentInsightUpdate {
+    oneof _info {
+        SegmentInsightInfo info = 1;
+    }
+}

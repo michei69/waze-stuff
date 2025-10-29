@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TimelineTrafficIncidentsInfo {
+    TrafficIncidentLevel traffic_incident_level = 1;
+    enum TrafficIncidentLevel {
+        TRAFFIC_INCIDENT_LEVEL_UNSPECIFIED = 0;
+        LIGHT = 1;
+        MODERATE = 2;
+        HEAVY = 3;
+        STANDSTILL = 4;
+        CLOSEDROAD = 5;
+    }
+    
+    oneof _timeline_relative_traffic_start_position {
+        float timeline_relative_traffic_start_position = 2;
+    }
+    
+    oneof _timeline_relative_traffic_end_position {
+        float timeline_relative_traffic_end_position = 3;
+    }
+}

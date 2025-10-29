@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WazeAsksInfo {
+    string ugc_context_id = 1;
+    
+    WazeAsksQuestionType waze_asks_question_type = 2;
+    enum WazeAsksQuestionType {
+        QUESTION_TYPE_UNSPECIFIED = 0;
+        ENRICH_ALERT = 1;
+    }
+    
+    QuestionTitleType question_title_type = 4;
+    enum QuestionTitleType {
+        QUESTION_TITLE_TYPE_UNSPECIFIED = 0;
+        ENRICH_ALERT_WHAT_DO_YOU_SEE = 1;
+        ENRICH_CONSTRUCTION_ALERT_ARE_LANES_BLOCKED = 2;
+    }
+    
+    repeated UgcTypeInfo.UgcSubtype suggested_ugc_subtypes = 6;
+    
+    repeated WazeAsksAnswer suggested_answers = 7;
+    message WazeAsksAnswer {
+        oneof answer {
+            UgcTypeInfo.UgcSubtype ugc_subype = 1;
+            ValidationAnswerType validation = 2;
+        }
+    }
+    
+    oneof _alert_id {
+        int64 alert_id = 3;
+    }
+    
+    oneof _alert_type {
+        AlerterInfo.AlerterType alert_type = 5;
+    }
+    
+    enum ValidationAnswerType {
+        VALIDATION_ANSWER_UNSPECIFIED = 0;
+        VALIDATION_THUMBS_DOWN = 1;
+    }
+}

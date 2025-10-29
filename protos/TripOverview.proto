@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package linqmap.proto.tripOverview;
+
+option objc_class_prefix = "LPTO";
+option java_package = "linqmap.proto.tripOverview";
+
+message EndTripOverviewRequest {
+    optional int32 route_id = 1;
+}
+
+message EndTripOverviewResponse {
+    
+}

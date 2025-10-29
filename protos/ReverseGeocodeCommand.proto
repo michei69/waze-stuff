@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+import "Venues.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message ReverseGeocodeRequest {
+    optional Coordinate position = 1;
+    optional int32 radius_meters = 2;
+}
+
+message ReverseGeocodeResponse {
+    optional venue.Venue venue = 1;
+}

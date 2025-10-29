@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/closure_options_screen_shown_stat.proto";
+import "stats/reporting_stats_wrapper/closure_segment_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_fte_access_mic_completed_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_fte_access_mic_requested_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_fte_hint_shown_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_fte_popup_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_fte_popup_shown_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_fte_tooltip_shown_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_intent_ended_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_intent_triggered_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_message_received_stat.proto";
+import "stats/reporting_stats_wrapper/conversational_reporting_message_sent_stat.proto";
+import "stats/reporting_stats_wrapper/gaming_points_animation_shown_stat.proto";
+import "stats/reporting_stats_wrapper/gaming_points_animation_sound_played_stat.proto";
+import "stats/reporting_stats_wrapper/gaming_thanks_animation_shown_stat.proto";
+import "stats/reporting_stats_wrapper/gas_prices_screen_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/report_button_animation_shown_stat.proto";
+import "stats/reporting_stats_wrapper/report_button_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/report_menu_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/report_menu_shown_stat.proto";
+import "stats/reporting_stats_wrapper/report_pin_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/send_report_screen_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/siri_post_reporting_education_shown_stat.proto";
+import "stats/reporting_stats_wrapper/siri_report_intent_ending_stat.proto";
+import "stats/reporting_stats_wrapper/siri_report_intent_triggered_stat.proto";
+import "stats/reporting_stats_wrapper/siri_requesting_report_type_stat.proto";
+import "stats/reporting_stats_wrapper/siri_sending_report_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_button_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_button_long_pressed_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_button_state_changed_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_feedback_shown_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_menu_action_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_menu_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_menu_closed_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_menu_closure_report_shown_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_menu_shown_stat.proto";
+import "stats/reporting_stats_wrapper/ugc_report_error_stat.proto";
+import "stats/reporting_stats_wrapper/waze_asks_clicked_stat.proto";
+import "stats/reporting_stats_wrapper/waze_asks_dismissed_stat.proto";
+import "stats/reporting_stats_wrapper/waze_asks_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ReportingStatsWrapper {
+    oneof stat {
+        GasPricesScreenClickedStat gas_price_screen_clicked = 1 [deprecated = true];
+        ClosureOptionsScreenShownStat closure_options_screen_shown = 2;
+        ClosureSegmentClickedStat closure_segment_clicked = 3;
+        GamingPointsAnimationShownStat gaming_points_animation_shown = 4;
+        GamingPointsAnimationSoundPlayedStat gaming_points_animation_sound_played = 5;
+        GamingThanksAnimationShownStat gaming_thanks_animation_shown = 6;
+        ReportMenuShownStat report_menu_shown = 7;
+        ReportPinClickedStat report_pin_clicked = 8;
+        SendReportScreenClickedStat send_report_screen_clicked = 9;
+        UgcButtonClickedStat ugc_button_clicked = 10;
+        ReportButtonClickedStat report_button_clicked = 11;
+        UgcMenuShownStat ugc_menu_shown = 12;
+        UgcReportErrorStat ugc_report_error = 13;
+        UgcMenuClickedStat ugc_menu_clicked = 14;
+        UgcMenuClosedStat ugc_menu_closed = 15;
+        UgcFeedbackShownStat ugc_feedback_shown = 16;
+        ReportMenuClickedStat report_menu_clicked = 17;
+        UgcMenuActionStat ugc_menu_action = 18;
+        GasPricesScreenClickedStat gas_prices_screen_clicked = 19;
+        ReportButtonAnimationShownStat report_button_animation_shown = 20;
+        SiriReportIntentTriggeredStat siri_report_intent_triggered = 21;
+        SiriRequestingReportTypeStat siri_requesting_report_type = 22;
+        SiriSendingReportStat siri_sending_report = 23;
+        SiriReportIntentEndingStat siri_report_intent_ending = 24;
+        SiriPostReportingEducationShownStat siri_post_reporting_education_shown = 25;
+        UgcMenuClosureReportShownStat ugc_menu_closure_report_shown = 26;
+        WazeAsksShownStat waze_asks_shown = 27;
+        WazeAsksDismissedStat waze_asks_dismissed = 28;
+        WazeAsksClickedStat waze_asks_clicked = 29;
+        ConversationalReportingIntentEndedStat conversational_reporting_intent_ended = 30;
+        ConversationalReportingMessageSentStat conversational_reporting_message_sent = 31;
+        ConversationalReportingIntentTriggeredStat conversational_reporting_intent_triggered = 32;
+        ConversationalReportingMessageReceivedStat conversational_reporting_message_received = 33;
+        ConversationalReportingFteAccessMicRequestedStat conversational_reporting_fte_access_mic_requested = 34;
+        ConversationalReportingFteAccessMicCompletedStat conversational_reporting_fte_access_mic_completed = 35;
+        ConversationalReportingFtePopupClickedStat conversational_reporting_fte_popup_clicked = 36;
+        ConversationalReportingFtePopupShownStat conversational_reporting_fte_popup_shown = 37;
+        ConversationalReportingFteTooltipShownStat conversational_reporting_fte_tooltip_shown = 38;
+        ConversationalReportingFteHintShownStat conversational_reporting_fte_hint_shown = 39;
+        UgcButtonStateChangedStat ugc_button_state_changed = 40;
+        UgcButtonLongPressedStat ugc_button_long_pressed = 41;
+    }
+}

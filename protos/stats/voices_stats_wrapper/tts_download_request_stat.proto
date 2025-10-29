@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TtsDownloadRequestStat {
+    string parsed_text = 1;
+    string voice_id = 2;
+    
+    TtsDownloadRequestResult download_request_result = 3;
+    enum TtsDownloadRequestResult {
+        TTS_DOWNLOAD_REQUEST_RESULT_UNSPECIFIED = 0;
+        SUCCESS = 1;
+        VOICES_SERVER_ERROR = 2;
+        DOWNLOAD_ERROR = 3;
+    }
+    
+    string error_description = 4;
+    string url = 5;
+}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+import "stats/surfaced_insights_wrapper/surfaced_location_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SurfacedPinClickedStat {
+    SurfacedLocationInfo surfaced_location_info = 1;
+    LatLng user_coordinates = 2;
+}

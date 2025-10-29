@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/regulation_flags.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_outer_classname = "Nd4cScreenClickedStatOuterClass";
+option java_package = "stats.events";
+
+message Nd4cScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        AGREE = 1;
+        CANCEL = 2;
+        URL_CLICKED = 3;
+    }
+    
+    RegulationFlags regulation_flags = 2;
+}

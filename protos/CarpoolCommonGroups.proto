@@ -1,0 +1,214 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool.common.groups;
+
+import "PIIManagement.proto";
+import "CarpoolCommon.proto";
+
+option objc_class_prefix = "";
+option java_package = "linqmap.proto.carpool.common.groups";
+
+message PartnerDetails {
+    optional string phone_number = 1;
+    optional string email = 2;
+    optional string logo_url = 3;
+    
+    optional VerificationMethod verification_method = 4;
+    enum VerificationMethod {
+        UNSPECIFIED = 0;
+        EMAIL_DOMAIN = 1;
+        PHONE_NUMBER = 2;
+        PUBLIC = 3;
+    }
+}
+
+message GroupDescription {
+    optional int64 set_time_millis = 1;
+    optional string name = 2;
+    optional GroupIconType icon_type = 3;
+    optional GroupIconPreset icon_preset = 4;
+    optional string custom_icon_url = 5 [deprecated = true];
+    optional string sponsor_name = 6;
+    optional string sponsor_custom_tos_url = 7;
+    optional PartnerDetails partner_details = 8;
+    repeated LatLngPoint polygon = 9;
+    optional string wkt_string_polygon = 10;
+    repeated LatLngPoint extended_polygon = 11;
+    optional string extended_wkt_string_polygon = 12;
+}
+
+message ShortGroupDescription {
+    optional string group_id = 1;
+    optional string name = 2;
+}
+
+message GroupDetailSelection {
+    optional bool with_caller = 1;
+    repeated GroupRole with_group_role = 2;
+    optional bool with_quick_stats = 3;
+    optional bool with_suggested_groups = 4;
+    optional bool with_group_size = 5;
+}
+
+message GroupUpdate {
+    optional string group_id = 1;
+    optional string name = 2;
+    optional GroupType type = 3;
+    optional GroupIconType icon_type = 4;
+    optional GroupIconPreset icon_preset = 5;
+    optional string custom_icon_url = 7 [deprecated = true];
+    
+    repeated MembershipUpdate membership_update = 6;
+    message MembershipUpdate {
+        optional int64 user_id = 1;
+        
+        optional MembershipAction action = 2;
+        enum MembershipAction {
+            NO_CHANGE = 0;
+            SET_AS_MEMBER = 1;
+            SET_AS_OWNER = 2;
+            REMOVE = 3;
+            BAN = 4;
+            UNBAN = 5;
+            UNSET_AS_OWNER = 6;
+        }
+        
+        optional bool user_gave_consent = 3;
+        optional bool compatible_client_version_for_consent_based_groups = 4 [deprecated = true];
+    }
+    
+    optional string sponsor_name = 8;
+    optional string sponsor_custom_tos_url = 9;
+    
+    repeated DomainUpdate domainUpdate = 10;
+    message DomainUpdate {
+        optional string domain = 1;
+        optional Toggle toggle = 2;
+    }
+    
+    optional bool check_domain = 11;
+    optional bool non_discoverable = 12;
+    optional PartnerDetails partner_details = 13;
+    repeated LatLngPoint polygon = 14;
+    optional bool suspended_group = 15;
+    optional bool partner_group_supported = 16;
+    repeated LatLngPoint extended_polygon = 17;
+}
+
+message GroupUpdateResult {
+    optional string group_id = 1;
+    
+    optional GroupUpdateStatus status = 2;
+    enum GroupUpdateStatus {
+        OK = 0;
+        PERMISSION_DENIED_FOR_CALLER = 1;
+        UNSUPPORTED_GROUP_TYPE = 2;
+        INVALID_GROUP_NAME = 3;
+        GROUP_NOT_FOUND = 4;
+        RESTRICTED_OPERATION = 5;
+        COWORKER_GROUP_ALREADY_EXISTS = 6;
+        COWORKER_GROUP_BLACKLISTED = 7;
+        ADD_MEMBER_UNAUTHORIZED_PHONE_NUMBER = 8;
+        ADD_MEMBER_USER_HAS_NO_PHONE_NUMBER = 9;
+        ADD_MEMBER_WORK_EMAIL_MISSING = 10;
+        ADD_MEMBER_EMAIL_UNVERIFIED = 11;
+        ADD_MEMBER_DOMAIN_MISSING = 12;
+        ADD_MEMBER_DOMAIN_MISMATCH = 13;
+    }
+    
+    repeated MembershipUpdateResult membership_result = 3;
+    message MembershipUpdateResult {
+        optional int64 user_id = 1;
+        
+        optional MembershipUpdateStatus status = 2;
+        enum MembershipUpdateStatus {
+            OK = 0;
+            PERMISSION_DENIED_FOR_CALLER = 1;
+            USER_NOT_FOUND = 2;
+            CONSENT_MISSING = 3;
+        }
+        
+        optional GroupUpdate.MembershipUpdate.MembershipAction action = 3;
+    }
+}
+
+message GroupStats {
+    optional int32 group_size = 1;
+    optional int32 rides_total = 2;
+}
+
+message Group {
+    optional string id = 1;
+    optional GroupType type = 2;
+    
+    optional Status status = 3;
+    message Status {
+        optional GroupState state = 1;
+        optional int64 set_time_millis = 2;
+        optional int64 trigger_user_id = 3;
+        optional bool delete_requested = 4;
+    }
+    
+    repeated Status previous_status = 4;
+    optional int64 creation_time_millis = 5;
+    optional GroupDescription description = 6;
+    repeated GroupDescription previous_description = 7;
+    repeated string domain = 8;
+    optional bool check_domain = 9;
+    optional bool non_discoverable = 10;
+}
+
+message GroupMembershipUpdatedEvent {
+    optional string group_id = 1;
+    optional int64 user_id = 2;
+    optional GroupUpdate.MembershipUpdate.MembershipAction membership_action = 3;
+    optional int64 event_time_millis = 4;
+}
+
+enum GroupType {
+    GROUP_TYPE_UNKNOWN = 0;
+    GROUP_TYPE_INVITE_BASED = 1;
+    GROUP_TYPE_INVITE_WITH_CONSENT_BASED = 2;
+    GROUP_TYPE_PARTNER = 3;
+}
+
+enum GroupState {
+    GROUP_STATE_UNKNOWN = 0;
+    GROUP_STATE_ACTIVE = 1;
+    GROUP_STATE_SUSPENDED = 2;
+}
+
+enum GroupIconType {
+    ICON_TYPE_UNKNOWN = 0;
+    ICON_TYPE_PRESET = 1;
+    ICON_TYPE_CUSTOM = 2 [deprecated = true];
+}
+
+enum GroupIconPreset {
+    ICON_PRESET_UNKNOWN = 0;
+    ICON_PRESET_COMMUNITY = 1;
+    ICON_PRESET_DOG = 2;
+    ICON_PRESET_HOME = 3;
+    ICON_PRESET_WORK = 4;
+    ICON_PRESET_ICE_CREAM = 5;
+    ICON_PRESET_PIZZA = 6;
+    ICON_PRESET_SPORTS = 7;
+    ICON_PRESET_STUDENT = 8;
+    ICON_PRESET_TRAIN = 9;
+    ICON_PRESET_COWORKER = 10;
+}
+
+enum GroupRole {
+    GROUP_ROLE_UNKNOWN = 0;
+    GROUP_ROLE_OWNER = 1;
+    GROUP_ROLE_MEMBER = 2;
+    GROUP_ROLE_BANNED = 3;
+    GROUP_ROLE_VIEWER = 4;
+}
+
+enum GroupDeleteType {
+    UNKNOWN_GROUP_DELETE_TYPE = 0;
+    SUSPEND_GROUP = 1;
+    HARD_DELETE_GROUP = 2;
+    OPEN_DELETE_GROUP_REQUEST = 3;
+}

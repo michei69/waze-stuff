@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum GoogleAssistantSource {
+    GOOGLE_ASSISTANT_SOURCE_UNSPECIFIED = 0;
+    HOTWORD = 1;
+    MIC_INVOCATION = 2;
+    ON_MAP_MIC = 3;
+    SEARCH_EMPTY_STATE_MIC = 4;
+    START_STATE_MIC = 5;
+}

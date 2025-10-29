@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/main_menu_stats_wrapper/promotional_chip_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PromotionalChipClickedStat {
+    PromotionalChipAction action = 1;
+    enum PromotionalChipAction {
+        PROMOTIONAL_CHIP_ACTION_UNSPECIFIED = 0;
+        CTA = 1;
+        CLOSE = 2;
+    }
+    
+    PromotionalChipInfo promotional_chip_info = 2;
+    string deeplink_url = 3;
+}

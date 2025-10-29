@@ -1,0 +1,751 @@
+syntax = "proto2";
+
+package linqmap.proto.socialmedia;
+
+import "logging.proto";
+import "PIIManagement.proto";
+import "RealtimeNg.proto";
+import "Types.proto";
+
+option objc_class_prefix = "LPSM";
+option java_package = "linqmap.proto.socialmedia";
+
+message CommunityUserInfo {
+    optional string name = 1;
+    optional string username = 2;
+    optional string user_id = 3;
+}
+
+message UploadCommunityFriendsRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional CommunityFriends friends = 3;
+    optional string account_id = 4;
+}
+
+message UploadCommunityFriendsResponse {
+    optional bool status = 1;
+    optional int64 timestamp = 2;
+}
+
+message IsConnectedRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional bool validate_token = 3;
+}
+
+message IsConnectedResponse {
+    optional Status status = 1;
+    enum Status {
+        CONNECTED = 1;
+        NOT_CONNECTED = 2;
+        EXPIRED = 3;
+    }
+}
+
+message UploadCalendarMeetingsRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    repeated MeetingInfo meeting = 3;
+    optional string account_id = 4;
+    optional bool user_significant_location_monitoring_enabled = 5;
+    optional bool user_calendar_sync_enabled = 6;
+}
+
+message UploadCalendarMeetingsRequestSessionInfo {
+    optional int64 user_id = 2;
+    optional bool is_out_of_session = 3;
+    
+    reserved 1;
+}
+
+message UploadCalendarMeetingsRequestWrapper {
+    optional UploadCalendarMeetingsRequest request = 1;
+    optional UploadCalendarMeetingsRequestSessionInfo sessionInfo = 2;
+}
+
+message UploadCalendarMeetingsResponse {
+    optional bool status = 1;
+    optional int64 timestamp = 2;
+}
+
+message AuthenticationRequest {
+    optional AuthenticationType type = 1;
+    optional CommunityUserInfo community = 2;
+    optional string token = 3;
+    optional PhoneAuthentication phone = 4;
+    optional PinAuthentication pin = 5;
+    optional CommunityFriendsAuthentication friends = 6;
+    optional DeviceType device = 7;
+    optional int64 user_id = 8;
+    optional ClientName client_name = 9;
+    optional bool client_supports_pincode_length = 10;
+}
+
+message VerifiedAccountInfo {
+    optional int32 mood = 1;
+    optional string user_name = 2;
+    optional int32 last_access_secs = 3;
+    optional int32 points = 5;
+    optional int64 user_id = 6;
+    
+    reserved 4;
+    
+    reserved "rank";
+}
+
+message PhoneAuthentication {
+    optional string phone = 1;
+    
+    optional Method method = 2;
+    enum Method {
+        UNKNOWN = 0;
+        TEXT = 1;
+        VOICE = 2;
+    }
+    
+    optional string locale = 3;
+    optional string country_code = 4;
+    optional string token = 5;
+}
+
+message PinAuthentication {
+    optional string pin = 1;
+    optional string sender = 2;
+    optional string token = 3;
+    optional bool hijack_existing_user = 4;
+}
+
+message CommunityFriendsAuthentication {
+    optional CommunityFriends friends = 1;
+    optional string account_id = 2;
+}
+
+message CommunityFriends {
+    repeated string user_id = 1;
+}
+
+message InviteFriendInfo {
+    optional CommunityUserInfo community = 1;
+    optional string phone = 2;
+}
+
+message InviteFriendsRequest {
+    optional int64 user_id = 1;
+    optional string full_name = 2;
+    repeated InviteFriendInfo friend = 3;
+    optional string first_name = 4;
+    optional string last_name = 5;
+    optional string user_name = 6;
+    
+    optional Context context = 7;
+    enum Context {
+        UNKNOWN = 0;
+        NONE = 1;
+        ADD_FRIEND = 2;
+        SHARE_LOCATION = 3;
+        SHARE_DRIVE = 4;
+    }
+    
+    optional StringMap context_params = 8;
+    optional string event_id = 9;
+}
+
+message LocationInfo {
+    optional string name = 1;
+    optional string street = 2;
+    optional string city = 3;
+    optional string state = 4;
+    optional string country = 5;
+    optional string zip = 6;
+    optional double latitude = 7;
+    optional double longitude = 8;
+    optional string type = 9;
+    optional string venue_id = 10;
+    optional string address = 11;
+    optional string house_number = 12;
+    optional string routing_context = 13;
+}
+
+message MeetingInfo {
+    optional string event_id = 1;
+    optional string name = 2;
+    optional int64 start_time = 3;
+    optional int64 end_time = 4;
+    optional bool date_only = 5;
+    optional LocationInfo location = 6;
+    optional LocationInfo calculated_location = 7;
+    optional string community = 8;
+    optional string owner_name = 9;
+    optional string owner_community_id = 10;
+    optional string owner_first_name = 11;
+    optional string owner_last_name = 12;
+    optional string owner_user_name = 13;
+    
+    optional Type type = 14;
+    enum Type {
+        UNKNOWN = 0;
+        FACEBOOK = 1 [deprecated = true];
+        SHARE_LOCATION = 2 [deprecated = true];
+        CARPOOL_PICKUP = 5 [deprecated = true];
+        CARPOOL_DROPOFF = 6 [deprecated = true];
+        SHARE_DRIVE = 3;
+        CALENDAR = 4;
+        FUTURE_DRIVE = 7;
+        SHARE_DRIVE_EXPIRED = 8;
+    }
+    
+    optional string recurring_event_id = 15;
+    optional bool is_recurring = 16;
+    optional StringMap attributes = 17;
+    optional PartnerInfo partner_info = 18;
+    optional LocationInfo src_location = 19;
+    optional string rsvp_status = 20;
+    optional int64 user_poi_id = 21;
+}
+
+message PartnerInfo {
+    optional string partner_id = 1;
+    optional string token = 2;
+}
+
+message CreateMeetingRequest {
+    optional MeetingInfo meeting = 1;
+    optional ParticipantInfo owner = 2;
+    optional bool driving_there = 3;
+}
+
+message UpdateMeetingRequest {
+    optional int64 user_id = 1;
+    optional MeetingInfo meeting = 2;
+}
+
+message RemoveMeetingRequest {
+    optional int64 user_id = 1;
+    optional string event_id = 2;
+}
+
+message RemoveMeetingRequestWrapper {
+    optional RemoveMeetingRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message RemoveMeetingResponseWrapper {
+    optional Status status = 1;
+}
+
+message VerifyMeetingRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional string event_id = 3;
+    optional LocationInfo location = 4;
+    optional bool saveResolvedAddress = 5 [default = true];
+}
+
+message VerifyMeetingLocationRequestWrapper {
+    optional VerifyMeetingLocationRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message VerifyMeetingLocationRequest {
+    optional string event_id = 1;
+    optional LocationInfo location = 2;
+    optional bool save_resolved_address = 3 [default = true];
+}
+
+message VerifyMeetingLocationResponseWrapper {
+    
+}
+
+message RejectMeetingRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional string event_id = 3;
+    optional bool byName = 4;
+    optional bool byLocation = 5;
+    optional bool allOccurrences = 6;
+}
+
+message ParticipantInfo {
+    optional WazerId wazer_id = 1;
+    optional int32 permissions = 2;
+    optional string phone = 3;
+}
+
+message AddProfileImageRequest {
+    optional int64 user_id = 1;
+    optional string image_id = 2;
+    optional string image_url = 3;
+    optional string community = 4;
+    optional bool is_default = 5;
+    optional Permission permission = 6;
+    optional bool discard_blocked_image = 7;
+}
+
+message AddProfileImageRequestWrapper {
+    optional AddProfileImageRequest request = 1;
+    optional AddProfileImageRequestSessionInfo session_info = 2;
+}
+
+message AddProfileImageRequestSessionInfo {
+    optional int64 user_id = 1;
+}
+
+message AddProfileImageResponseWrapper {
+    optional Status status = 1;
+    repeated Executor executors = 2;
+}
+
+message Executor {
+    optional bool recalc_my_profile = 1;
+}
+
+message RemoveProfileImageRequest {
+    optional int64 user_id = 1;
+    optional string image_id = 2 [deprecated = true];
+}
+
+message ProfileImage {
+    optional string image_id = 1;
+    optional bool is_default = 2;
+    optional Permission permission = 3;
+    optional string public_image_id = 4;
+    optional int64 ts = 5;
+    optional string public_image_url = 6;
+    
+    optional FacialTaggingStatus facial_tagging_status = 7 [deprecated = true];
+    enum FacialTaggingStatus {
+        UNKNOWN = 0;
+        BLOCKED = 1;
+        RECOMMEND_UPDATE = 2;
+        VALID = 3;
+        ERROR = 4;
+        BLOCKED_LOW_RESOLUTION = 5;
+    }
+    
+    optional FaceAnalysisData face_analysis_data = 8 [deprecated = true];
+    optional string importerd_from = 9;
+}
+
+message FaceAnalysisData {
+    option deprecated = true;
+    optional int32 number_of_faces = 1;
+    optional float detection_confidence = 2;
+    optional int32 image_dimension = 3;
+    optional int32 face_dimension = 4;
+    
+    optional Likelihood adult_likelihood = 5;
+    enum Likelihood {
+        UNKNOWN = 0;
+        VERY_UNLIKELY = 1;
+        UNLIKELY = 2;
+        POSSIBLE = 3;
+        LIKELY = 4;
+        VERY_LIKELY = 5;
+    }
+    
+    optional Likelihood violence_likelihood = 6;
+    optional Likelihood racy_likelihood = 7;
+}
+
+message GetProfileImagesRequest {
+    optional int64 user_id = 1;
+}
+
+message GetProfileImagesResponse {
+    repeated ProfileImage image = 1;
+}
+
+message HasPendingRequestsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetUserIdsByCommunityUserIdsRequest {
+    optional string community = 1;
+    repeated string community_user_id = 2;
+    optional bool force = 3;
+    optional ClientName client_name = 4;
+}
+
+message GetUserIdsByCommunityUserIdsResponse {
+    repeated int64 user_id = 1;
+}
+
+message ResetMeetingHistoryRequest {
+    optional int64 user_id = 1;
+}
+
+message GetExtendedSocialInfoRequest {
+    repeated int64 user_id = 1;
+    repeated string community = 2;
+    optional ClientName client_name = 3;
+}
+
+message GetExtendedSocialInfoResponse {
+    repeated ExtendedSocialInfo social_info = 1;
+}
+
+message ExtendedSocialInfo {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional int32 friends_number = 3;
+    optional City current_city = 4;
+    optional City hometown_city = 5;
+    repeated School school = 6;
+    repeated Like like = 7;
+    optional Gender gender = 8;
+    optional Employer current_employer = 9;
+    repeated Employer previous_employer = 10;
+}
+
+message City {
+    optional string name = 1;
+    optional string id = 2;
+}
+
+message Like {
+    optional string name = 1;
+    optional string id = 2;
+}
+
+message Employer {
+    optional string name = 1;
+    optional string id = 2;
+}
+
+message School {
+    optional string name = 1;
+    optional string graduation_year = 2;
+    optional string id = 3;
+}
+
+message SendMessageRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional ClientName client_name = 3;
+    optional string title = 4;
+    optional string message = 5;
+    
+    oneof proto_params {
+        RideOfferParams ride_offer_params = 6;
+    }
+}
+
+message RideOfferParams {
+    optional string ride_id = 1;
+}
+
+message GetExtendedUserInfoRequest {
+    optional int64 user_id = 1;
+    repeated string community = 2;
+    optional ClientName client_name = 3;
+    optional bool wait_for_first_friends_update = 4 [default = false];
+    optional int32 friends_of_friends_limit = 5;
+    optional int32 protocol = 6 [default = 2];
+    optional bool return_communities = 7 [default = true];
+    
+    optional RequestContext request_context = 9 [deprecated = true];
+    enum RequestContext {
+        WAZE = 1;
+        CARPOOL = 2;
+    }
+    
+    reserved 8;
+    
+    reserved "return_friends";
+}
+
+message GetExtendedUserInfoResponse {
+    repeated UserInfo communities = 1;
+    optional SocialMediaReturnCodes code = 3;
+    optional int64 profile_image_last_update = 4;
+    repeated MeetingInfo meetings = 5;
+    optional string profile_image_url = 6;
+    optional ImageTaggingResponse.FacialTaggingStatus facial_tagging_status = 7 [deprecated = true];
+    
+    reserved 2;
+    
+    reserved "friends";
+}
+
+message LikeInfo {
+    optional string name = 1;
+    optional int64 created_time = 2;
+    optional int64 number_of_likes = 3;
+}
+
+message UserInfo {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional string community_id = 3;
+    optional string community_name = 4;
+    optional string email = 5;
+    optional string gender = 6;
+    optional string location = 7;
+    optional string community_username = 8;
+    repeated AccessToken access_token = 9;
+    optional int64 friends_last_update = 10;
+    optional string first_name = 11;
+    optional string last_name = 12;
+    repeated string account_id = 13;
+    optional int64 birthdate = 14;
+    optional int64 profile_image_last_update = 15;
+    optional string profile_url = 16;
+    optional string job_title = 17;
+    optional string hometown = 18;
+    repeated LikeInfo like = 19;
+    optional string profile_image_url = 20;
+    optional int64 friends_count = 21;
+    optional bool testUser = 22;
+    optional bool isStaff = 23;
+    optional int64 time = 24;
+    optional bool uid_enabled = 25;
+    optional string token = 26;
+}
+
+message AccessToken {
+    optional ClientName client_name = 1;
+    optional string token = 2;
+    
+    optional Status status = 3;
+    enum Status {
+        OK = 0;
+        EXPIRED = 1;
+        NEEDS_REFRESH = 2;
+    }
+}
+
+message FriendCommunityUserInfo {
+    optional string community = 1;
+    optional string community_id = 2;
+    optional string community_name = 3;
+    optional string community_username = 4;
+}
+
+message ImageTaggingRequest {
+    option deprecated = true;
+    optional int64 user_id = 1;
+}
+
+message ImageTaggingResponse {
+    option deprecated = true;
+    
+    optional FacialTaggingStatus facialTaggingStatus = 1;
+    enum FacialTaggingStatus {
+        UNKNOWN = 0;
+        BLOCKED = 1;
+        RECOMMEND_UPDATE = 2;
+        VALID = 3;
+        ERROR = 4;
+        BLOCKED_LOW_RESOLUTION = 5;
+    }
+}
+
+message DeleteUserDataRequest {
+    optional int64 user_id = 1;
+}
+
+message SetTokenRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional string access_token = 3;
+    optional int64 expiration_date = 4;
+    optional bool update_token_only = 5;
+    optional ClientName client_name = 6;
+}
+
+message SetTokenResponse {
+    optional Status status = 1;
+    enum Status {
+        SUCCESS = 0;
+        INTERNAL_ERROR = 1;
+        CONNECTED_TO_ANOTHER_COMMUNITY_USER_ID = 2;
+        USER_DID_NOT_AUTHORIZE_APP = 3;
+        TOKEN_EXPIRED = 4;
+        COMMUNITY_INFO_MISSING = 5;
+        COMMUNITY_INFO_MISMATCH = 6;
+    }
+    
+    optional string additional_info = 3;
+}
+
+message UpdateCommunityPermissionRequest {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional ClientName client_name = 3;
+}
+
+message UpdateCommunityPermissionResponse {
+    optional bool status = 1;
+}
+
+message GetProfileImageUrlRequest {
+    optional int64 user_id = 1;
+}
+
+message GetProfileImageUrlResponse {
+    optional string profile_image_url = 1;
+}
+
+message GetProfileImageLastUpdateRequest {
+    optional int64 user_id = 1;
+}
+
+message GetProfileImageLastUpdateResponse {
+    optional int64 profile_image_last_update = 1;
+}
+
+message GetExtendedMeetingInfoRequest {
+    optional int64 user_id = 1;
+    optional string event_id = 2;
+    optional int32 protocol = 3 [default = 1];
+}
+
+message GetExtendedMeetingInfoResponse {
+    optional MeetingInfo meeting = 1;
+    repeated ParticipantInfo participants = 2;
+    optional SocialMediaReturnCodes code = 3;
+}
+
+message DisconnectUserRequest {
+    optional int64 user_id = 1;
+    repeated string community = 2;
+}
+
+message DisconnectUserResponse {
+    optional SocialMediaReturnCodes status = 1;
+    optional string error_message = 2;
+}
+
+message ConnectUserRequest {
+    optional int64 user_id = 1;
+    optional string access_token = 2;
+    optional string token_secret = 3;
+    optional string community = 4;
+    optional bool force = 5;
+    optional ClientName client_name = 6;
+    optional AccessTokenType access_token_type = 7;
+    optional bool uid_enabled = 8;
+    optional DeviceType device_type = 9;
+}
+
+message ConnectUserResponse {
+    optional UserInfo user_info = 1;
+    optional SocialMediaReturnCodes status = 2;
+    optional string error_message = 3;
+}
+
+message GetUserFromTokenRequest {
+    optional string community = 1;
+    optional string token = 2;
+    optional ClientName client_name = 3;
+    optional bool force = 4;
+    optional AccessTokenType access_token_type = 5;
+    optional DeviceType device_type = 9;
+}
+
+message GetUserFromTokenResponse {
+    optional UserInfo user_info = 1;
+    optional SocialMediaReturnCodes status = 2;
+    optional string error_message = 3;
+}
+
+message GetUserInfoRequest {
+    optional int64 user_id = 1;
+    repeated string community = 2;
+    optional ClientName client_name = 3;
+}
+
+message GetUserInfoResponse {
+    repeated UserInfo user_info = 1;
+    optional SocialMediaReturnCodes status = 2;
+    optional string error_message = 3;
+}
+
+message GenderChangedEvent {
+    optional int64 event_millis = 1;
+    optional int64 user_id = 2;
+    optional string gender = 3;
+}
+
+message GetMeetingsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetMeetingsResponse {
+    repeated MeetingInfo meetings = 1;
+}
+
+message GetCommunityInfoFromEmailRequest {
+    optional string email = 1;
+}
+
+message GetCommunityInfoFromEmailResponse {
+    repeated CommunityInfoSummary communities_info = 1;
+}
+
+message CommunityInfoSummary {
+    optional int64 user_id = 1;
+    optional string community = 2;
+    optional string community_username = 3;
+    optional string community_email = 4;
+    optional bool uid_enabled = 5;
+}
+
+message DrivingToMeetingRequest {
+    optional int64 user_id = 1;
+    optional string event_id = 2;
+}
+
+enum AuthenticationType {
+    UNKNOWN = 0;
+    PHONE = 1;
+    PIN = 2;
+    FRIENDS = 3;
+}
+
+enum Permission {
+    PUBLIC = 1;
+    FRIENDS_ONLY = 2;
+    CARPOOL_ONLY = 3 [deprecated = true];
+}
+
+enum AccessTokenType {
+    UNDEF = 0;
+    AS_IS = 1;
+    CODE = 2;
+}
+
+enum ClientName {
+    WAZE = 1;
+    CARPOOL = 2 [deprecated = true];
+    ADS = 3;
+    RIDER = 4 [deprecated = true];
+    WEB = 5;
+}
+
+enum Community {
+    GOOGLE = 1;
+    FACEBOOK = 2;
+    CONTACTS = 3;
+    TWITTER = 4;
+    FOURSQAURE = 5;
+    EMAIL = 6;
+}
+
+enum Gender {
+    GENDER_MALE = 1;
+    GENDER_FEMALE = 2;
+    GENDER_OTHER = 3;
+}
+
+enum SocialMediaReturnCodes {
+    OK = 0;
+    FAILURE = 1;
+    COMMUNITY_ID_CONNECTED_TO_ANOTHER_USER = 2;
+    USER_DID_NOT_AUTHORIZE_APP = 4;
+    TOKEN_EXPIRED = 5;
+    QUOTA_EXCEEDED = 6;
+    OK_BUT_USER_NOT_FOUND = 7;
+    TEMPORARY_FAILURE = 8;
+}

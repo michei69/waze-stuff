@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ResourcesConsumptionStat {
+    oneof _battery_heat_measurement {
+        sint64 battery_heat_measurement = 1;
+    }
+    
+    oneof _battery_percentage {
+        sint64 battery_percentage = 2;
+    }
+    
+    oneof _charger_connected {
+        bool charger_connected = 7;
+    }
+    
+    reserved 3, 4, 5, 6;
+}

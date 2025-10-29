@@ -1,0 +1,204 @@
+syntax = "proto2";
+
+package linqmap.geocoding.proto;
+
+option objc_class_prefix = "LGP";
+option java_package = "linqmap.geocoding.proto";
+
+message TimeFrame {
+    optional DateTime start_date = 1;
+    message DateTime {
+        optional int32 year = 1;
+        optional int32 month = 2;
+        optional int32 day_of_month = 3;
+        optional TimeOfDay time_of_day = 4;
+        optional int64 epoch_time = 5;
+    }
+    
+    optional DateTime end_date = 2;
+    optional string time_zone = 3;
+    
+    repeated Weekday weekday = 4;
+    enum Weekday {
+        MONDAY = 1;
+        TUESDAY = 2;
+        WEDNESDAY = 3;
+        THURSDAY = 4;
+        FRIDAY = 5;
+        SATURDAY = 6;
+        SUNDAY = 7;
+        HOLIDAY = 8;
+    }
+    
+    optional TimeOfDay from_time = 5;
+    message TimeOfDay {
+        optional int32 hour_of_day = 1;
+        optional int32 minute = 2;
+    }
+    
+    optional TimeOfDay to_time = 6;
+    repeated int32 day_of_month = 7;
+    optional bool repeat_yearly = 8;
+}
+
+message DriveProfile {
+    repeated VehicleType vehicle_type = 1;
+    enum VehicleType {
+        TRUCK = 0;
+        PUBLIC_TRANSPORTATION = 256;
+        TAXI = 272;
+        BUS = 288;
+        RV = 512;
+        TOWING_VEHICLE = 768;
+        MOTORCYCLE = 1024;
+        PRIVATE = 1280;
+        HAZARDOUS_MATERIALS = 1536;
+        CAV = 1792;
+        EV = 1808;
+        HYBRID = 1824;
+        CLEAN_FUEL = 1840;
+    }
+    
+    optional int32 passengers = 2;
+    optional bool paid_pass_device = 3 [deprecated = true];
+    optional string license_plate_number = 4;
+    repeated string subscription = 5;
+    repeated string allowed_area = 6;
+}
+
+message Restriction {
+    repeated string tag = 1;
+    repeated TimeFrame time_frame = 2;
+    
+    optional RestrictionType default_restriction_type = 3;
+    enum RestrictionType {
+        FREE = 0;
+        BLOCKED = 1;
+        TOLL = 2;
+        PENALTY = 3;
+        ENTER_ONLY = 4;
+        DANGEROUS_AREA = 5;
+        DIFFICULT = 6;
+        PRIVATE = 7;
+    }
+    
+    repeated DriveProfileRestriction drive_profile_restriction = 4;
+    message DriveProfileRestriction {
+        optional RestrictionType restriction_type = 1;
+        optional DriveProfile drive_profile = 2;
+    }
+    
+    optional bool enabled = 5 [default = true];
+    optional string description = 6;
+    
+    optional DangerLevel danger_level = 7;
+    enum DangerLevel {
+        NOT_DANGEROUS = 0;
+        DANGEROUS = 1;
+        ALERT_ONLY_AT_ROUTE = 2;
+        SILENTLY_DANGEROUS = 3;
+    }
+    
+    optional int32 difficulty_level = 8;
+    optional SegmentRestriction segment_restriction = 9;
+    optional JunctionRestriction junction_restriction = 10 [deprecated = true];
+    optional ParkingRestriction default_parking_restriction = 11 [deprecated = true];
+    
+    repeated DriveProfileParkingRestriction drive_profile_parking_restriction = 12 [deprecated = true];
+    message DriveProfileParkingRestriction {
+        optional ParkingRestriction parking_restriction = 1;
+        optional DriveProfile drive_profile = 2;
+    }
+    
+    optional AreaRestriction area_restriction = 13;
+    message AreaRestriction {
+        optional bool always_show_as_alternative = 1;
+        optional bool always_maybe = 2;
+        repeated RestrictionParameter relies_on = 3;
+        optional string warning_text = 4;
+        repeated string area = 5;
+        optional string id = 6;
+        optional bool dont_count_toll_start_as_toll = 7;
+    }
+    
+    optional PickupRestriction default_pickup_restriction = 14;
+    
+    repeated DriveProfilePickupRestriction drive_profile_pickup_restriction = 15;
+    message DriveProfilePickupRestriction {
+        optional PickupRestriction pickup_restriction = 1;
+        optional DriveProfile drive_profile = 2;
+    }
+}
+
+message PickupRestriction {
+    optional bool allowed = 1;
+}
+
+message ParkingRestriction {
+    optional bool allowed = 1;
+}
+
+message SegmentRestriction {
+    optional Relevance relevance = 1;
+    enum Relevance {
+        ONE_WAY = 1;
+        TWO_WAY = 2;
+        TURN = 3;
+    }
+    
+    optional Location location = 2 [default = WHOLE_SEGMENT];
+    enum Location {
+        WHOLE_SEGMENT = 1;
+        LEFT_LANE = 2;
+        MIDDLE_LANE = 3;
+        RIGHT_LANE = 4;
+    }
+    
+    optional SegmentDirection from_segment_direction = 3;
+    enum SegmentDirection {
+        UNKNOWN = 0;
+        AB = 1;
+        BA = 2;
+    }
+    
+    optional int64 to_segment_id = 4;
+    optional SegmentDirection to_segment_direction = 5 [default = UNKNOWN];
+    
+    optional LaneType lane_type = 6;
+    enum LaneType {
+        HOV = 1;
+        HOT = 2;
+        EXPRESS = 3;
+        BUS = 4;
+        FAST = 5;
+    }
+}
+
+message JunctionRestriction {
+    optional int64 junction_id = 1;
+}
+
+message Restrictions {
+    repeated Restriction restriction = 1;
+}
+
+enum RestrictionParameter {
+    Subscription = 1;
+    MinPassengers = 2;
+    VehicleType = 3;
+    LicensePlate = 4;
+}
+
+enum RestrictionResult {
+    OPEN = 10;
+    CAN_PASS = 20;
+    MAYBE = 30;
+    AVOID = 40;
+    DANGER = 50;
+    CLOSED = 60;
+    TOLL = 70;
+}
+
+enum RestrictionOption {
+    AVOID_TOLLS = 1;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WalkingModeInfo {
+    oneof _parking_start_timestamp_ms {
+        int64 parking_start_timestamp_ms = 1;
+    }
+    
+    oneof _distance_to_car_meters {
+        int64 distance_to_car_meters = 2;
+    }
+    
+    oneof _time_to_car_seconds {
+        sint64 time_to_car_seconds = 3;
+    }
+    
+    oneof _full_functionality_mode {
+        bool full_functionality_mode = 4;
+    }
+}

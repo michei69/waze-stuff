@@ -1,0 +1,546 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "google/protobuf/wrappers.proto";
+import "Position.proto";
+import "DistanceUnit.proto";
+import "AlerterNativeManagerJniObjects.proto";
+import "GenericPlace.proto";
+import "Navigation.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message WaypointPosition {
+    oneof _position {
+        IntPosition position = 1;
+    }
+}
+
+message PolylineGeometry {
+    repeated IntPosition position = 1;
+}
+
+message Instruction {
+    enum Type {
+        NAV_INSTR_NONE = 0;
+        TURN_LEFT = 1;
+        TURN_RIGHT = 2;
+        KEEP_LEFT = 3;
+        KEEP_RIGHT = 4;
+        CONTINUE_STRAIGHT = 5;
+        ROUNDABOUT_ENTER = 6;
+        ROUNDABOUT_EXIT = 7;
+        ROUNDABOUT_LEFT = 8;
+        ROUNDABOUT_EXIT_LEFT = 9;
+        ROUNDABOUT_STRAIGHT = 10;
+        ROUNDABOUT_EXIT_STRAIGHT = 11;
+        ROUNDABOUT_RIGHT = 12;
+        ROUNDABOUT_EXIT_RIGHT = 13;
+        ROUNDABOUT_U = 14;
+        ROUNDABOUT_EXIT_U = 15;
+        APPROACHING_DESTINATION = 16;
+        EXIT_LEFT = 17;
+        EXIT_RIGHT = 18;
+        WAYPOINT_DELAY = 19;
+        U_TURN = 20;
+        LAST_DIRECTION = 21;
+        SLIGHT_LEFT = 22;
+        SHARP_LEFT = 23;
+        SLIGHT_RIGHT = 24;
+        SHARP_RIGHT = 25;
+        ENTER_HOV_LANE = 26;
+        PREPARE_TURN_LEFT = 27;
+        PREPARE_TURN_RIGHT = 28;
+        PREPARE_EXIT_LEFT = 29;
+        PREPARE_EXIT_RIGHT = 30;
+        APPROACHING_STOP_POINT = 31;
+    }
+}
+
+message NavigationItem {
+    string label = 1;
+    string distance = 2;
+    string address = 3;
+    string icon = 4;
+    Instruction.Type instruction = 5;
+    int32 instructionExit = 6;
+    int32 lat = 7;
+    int32 lon = 8;
+    int32 rotation = 9;
+    bool hov = 10;
+    int32 navSegmentIdx = 11;
+    int32 instructionSegmentIdx = 12;
+    
+    oneof _roadSign {
+        NavigationRoadSign roadSign = 13;
+    }
+}
+
+message NavigationItemList {
+    repeated NavigationItem navigationItem = 1;
+}
+
+message NavigationLaneAngle {
+    int32 angle = 1;
+    bool isSelected = 2;
+}
+
+message NavigationLane {
+    int32 index = 1;
+    repeated NavigationLaneAngle angle = 2;
+}
+
+message NavigationLaneList {
+    repeated NavigationLane navigationLane = 1;
+}
+
+message NavigationExitSign {
+    int32 type = 1;
+    string text = 2;
+    string resource_name = 3;
+}
+
+message NavigationRoadShield {
+    int32 type = 1;
+    string text = 2;
+    string direction = 3;
+    string resource_name = 4;
+}
+
+message NavigationRoadSign {
+    repeated NavigationExitSign exit_sign = 1;
+    repeated NavigationRoadShield road_shield = 2;
+    string primary_markup = 3;
+    string secondary_markup = 4;
+    string text_representation = 5;
+}
+
+message CurrentStreetNameUpdate {
+    string street_name = 1;
+    bool show_hov = 2;
+    int32 segment_idx = 3;
+    
+    oneof _road_sign {
+        NavigationRoadSign road_sign = 4;
+    }
+}
+
+message NextStreetNameUpdate {
+    string street_name = 1;
+    bool display_arrow_before_text = 2;
+    int32 segment_idx = 3;
+    
+    oneof _road_sign {
+        NavigationRoadSign road_sign = 4;
+    }
+}
+
+message DistanceUpdate {
+    string value_string = 1;
+    string unit_string = 2;
+    double value = 3;
+    DistanceUnit unit = 4;
+    int32 raw_meters = 5;
+}
+
+message TollPriceInformation {
+    oneof _toll_price {
+        double toll_price = 1;
+    }
+    
+    oneof _toll_currency_code {
+        string toll_currency_code = 2;
+    }
+    
+    oneof _popup_id {
+        int32 popup_id = 3;
+    }
+    
+    oneof _action_url {
+        string action_url = 4;
+    }
+    
+    oneof _pass_based_missing_pass_name {
+        string pass_based_missing_pass_name = 5;
+    }
+    
+    oneof _pass_based_price_change_to_price {
+        double pass_based_price_change_to_price = 6;
+    }
+    
+    oneof _pass_based_user_pass_name {
+        string pass_based_user_pass_name = 7;
+    }
+    
+    oneof _toll_road_name {
+        string toll_road_name = 8;
+    }
+    
+    oneof _time_based_price_change_to_price {
+        double time_based_price_change_to_price = 9;
+    }
+    
+    oneof _time_based_price_change_at_seconds {
+        double time_based_price_change_at_seconds = 10;
+    }
+}
+
+message BeaconInformation {
+    oneof _has_beacons {
+        bool has_beacons = 1;
+    }
+}
+
+message TrafficJamSection {
+    oneof _level {
+        Severity level = 1;
+    }
+    
+    oneof _length_meters {
+        int32 length_meters = 2;
+    }
+    
+    oneof _alert_type {
+        AlerterType alert_type = 3;
+    }
+    
+    oneof _alert_sub_type {
+        int32 alert_sub_type = 4;
+    }
+    
+    enum Severity {
+        SeverityLight = 0;
+        SeverityModerate = 1;
+        SeverityHeavy = 2;
+        SeverityStandStill = 3;
+        SeverityClosedRoad = 5;
+    }
+}
+
+message TrafficZoneUpdate {
+    repeated TrafficJamSection jams = 3;
+    
+    oneof _percent_in_traffic {
+        int32 percent_in_traffic = 1;
+    }
+    
+    oneof _total_time_sec {
+        int32 total_time_sec = 2;
+    }
+}
+
+message AverageSpeedCameraZoneUpdate {
+    oneof _percent {
+        int32 percent = 1;
+    }
+    
+    oneof _left_distance {
+        int32 left_distance = 2;
+    }
+    
+    oneof _recommended_speed {
+        int32 recommended_speed = 3;
+    }
+}
+
+message NavigationRoute {
+    int64 destId = 1;
+    int64 totalLengthMeters = 2;
+    int64 totalTimeSeconds = 3;
+    int64 altId = 4;
+    string via = 5;
+    string routeUUID = 6;
+    int32 carbonEmissionsGrams = 7;
+    PolylineGeometry geometry = 8;
+    repeated RouteWaypoint waypoints = 9;
+    repeated EventOnRoute events = 10;
+    repeated RouteAttribute attributes = 11;
+    repeated string requiredPermits = 12;
+}
+
+message RouteWaypoint {
+    int32 id = 1;
+    google.protobuf.Int32Value distanceToWaypointMeters = 2;
+    google.protobuf.Int32Value secondsToWaypoint = 3;
+    IntPosition coordinate = 4;
+}
+
+message EventOnRoute {
+    AlertType alertType = 2;
+    enum AlertType {
+        CHIT_CHAT = 0;
+        POLICE = 1;
+        ACCIDENT = 2;
+        JAM = 3;
+        TRAFFIC_INFO = 4;
+        HAZARD = 5;
+        MISC = 6;
+        CONSTRUCTION = 7;
+        PARKING = 8;
+        DYNAMIC = 9;
+        CAMERA = 10;
+        PARKED = 11;
+        ROAD_CLOSED = 12;
+        UNKNOWN = 13;
+        SYSTEM_ROAD_CLOSED = 14;
+        SOS = 15;
+    }
+    
+    AlertSubType alertSubType = 3;
+    enum AlertSubType {
+        NO_SUBTYPE = 0;
+        POLICE_VISIBLE = 1;
+        POLICE_HIDING = 2;
+        ACCIDENT_MINOR = 3;
+        ACCIDENT_MAJOR = 4;
+        JAM_MODERATE_TRAFFIC = 5;
+        JAM_HEAVY_TRAFFIC = 6;
+        JAM_STAND_STILL_TRAFFIC = 7;
+        JAM_LIGHT_TRAFFIC = 8;
+        HAZARD_ON_ROAD = 9;
+        HAZARD_ON_SHOULDER = 10;
+        HAZARD_WEATHER = 11;
+        HAZARD_ON_ROAD_OBJECT = 12;
+        HAZARD_ON_ROAD_POT_HOLE = 13;
+        HAZARD_ON_ROAD_ROAD_KILL = 14;
+        HAZARD_ON_SHOULDER_CAR_STOPPED = 15;
+        HAZARD_ON_SHOULDER_ANIMALS = 16;
+        HAZARD_ON_SHOULDER_MISSING_SIGN = 17;
+        HAZARD_WEATHER_FOG = 18;
+        HAZARD_WEATHER_HAIL = 19;
+        HAZARD_WEATHER_HEAVY_RAIN = 20;
+        HAZARD_WEATHER_HEAVY_SNOW = 21;
+        HAZARD_WEATHER_FLOOD = 22;
+        HAZARD_WEATHER_MONSOON = 23;
+        HAZARD_WEATHER_TORNADO = 24;
+        HAZARD_WEATHER_HEAT_WAVE = 25;
+        HAZARD_WEATHER_HURRICANE = 26;
+        HAZARD_WEATHER_FREEZING_RAIN = 27;
+        HAZARD_ON_ROAD_LANE_CLOSED = 28;
+        HAZARD_ON_ROAD_OIL = 29;
+        HAZARD_ON_ROAD_ICE = 30;
+        HAZARD_ON_ROAD_CONSTRUCTION = 31;
+        HAZARD_ON_ROAD_CAR_STOPPED = 32;
+        HAZARD_ON_ROAD_TRAFFIC_LIGHT_FAULT = 33;
+        ROAD_CLOSED_HAZARD = 34;
+        ROAD_CLOSED_CONSTRUCTION = 35;
+        ROAD_CLOSED_EVENT = 36;
+        PARKED_ON = 37;
+        PARKED_OFF = 38;
+        SOS_FLAT_TIRE = 1601;
+        SOS_NO_FUEL = 1602;
+        SOS_MEDICAL_HELP = 1603;
+        SOS_MECHANICAL_PROBLEM = 1604;
+        SOS_OTHER = 1605;
+        SOS_BATTERY_ISSUE = 1606;
+    }
+    
+    IntPosition posStart = 6 [deprecated = true];
+    IntPosition posEnd = 7 [deprecated = true];
+    IntPosition location = 18;
+    PolylineGeometry geometry = 19;
+    
+    oneof _alertId {
+        int64 alertId = 1;
+    }
+    
+    oneof _roadInfoSeverity {
+        int32 roadInfoSeverity = 5;
+    }
+    
+    oneof _ratioOnRoadStart {
+        double ratioOnRoadStart = 8;
+    }
+    
+    oneof _ratioOnRoadEnd {
+        double ratioOnRoadEnd = 9;
+    }
+    
+    oneof _isMajorEvent {
+        bool isMajorEvent = 10;
+    }
+    
+    oneof _duration {
+        int32 duration = 11;
+    }
+    
+    oneof _jamId {
+        int64 jamId = 22;
+    }
+    
+    oneof _isPartialLaneClosure {
+        bool isPartialLaneClosure = 23;
+    }
+}
+
+message RouteAttribute {
+    oneof attribute {
+        Toll toll = 1;
+        RestrictedArea restrictedArea = 2;
+        DangerZone dangerZone = 3;
+        PublicTransportation publicTransportation = 4;
+        LicensePlateRestriction licensePlateRestriction = 5;
+        Ferry ferry = 6;
+        Unpaved unpaved = 7;
+        DangerousTurn dangerousTurn = 8;
+        SchoolArea schoolArea = 9;
+        BorderCrossing borderCrossing = 10;
+        Beacons beacons = 11;
+        Hov hov = 12;
+        PassNeeded passNeeded = 13;
+        BypassesRestricted bypassesRestricted = 14;
+        SteppedOnIT steppedOnIT = 15;
+        ETAFromML etaFromML = 16;
+        PrimaryForAvoiders primaryForAvoiders = 17;
+        Unnatural unnatural = 18;
+        TollForAvoiders tollForAvoiders = 19;
+        Blocked blocked = 20;
+    }
+    
+    message RestrictedArea {
+        oneof _areaName {
+            string areaName = 1;
+        }
+    }
+    
+    message DangerZone {
+        
+    }
+    
+    message PublicTransportation {
+        
+    }
+    
+    message LicensePlateRestriction {
+        oneof _areaName {
+            string areaName = 1;
+        }
+    }
+    
+    message Ferry {
+        
+    }
+    
+    message Unpaved {
+        
+    }
+    
+    message DangerousTurn {
+        
+    }
+    
+    message SchoolArea {
+        
+    }
+    
+    message BorderCrossing {
+        
+    }
+    
+    message Beacons {
+        
+    }
+    
+    message PassNeeded {
+        string pass = 1;
+    }
+    
+    message BypassesRestricted {
+        
+    }
+    
+    message SteppedOnIT {
+        
+    }
+    
+    message ETAFromML {
+        
+    }
+    
+    message PrimaryForAvoiders {
+        
+    }
+    
+    message Unnatural {
+        
+    }
+    
+    message TollForAvoiders {
+        
+    }
+    
+    message Blocked {
+        
+    }
+}
+
+message Hov {
+    int32 minPassengers = 1;
+    
+    oneof _hovLessVariantAltId {
+        int64 hovLessVariantAltId = 2;
+    }
+}
+
+message Toll {
+    oneof type {
+        FixedPrice fixedPrice = 1;
+        DynamicPrice dynamicPrice = 2;
+        NoPrice noPrice = 3;
+        MissingPass missingPass = 4;
+        PriceChangeAtTime priceChangedAtTime = 5;
+        PriceChangingByTime priceChangedByTime = 6;
+        WithPass withPass = 7;
+        Disabled disabled = 8;
+    }
+    
+    message FixedPrice {
+        oneof _tollPrice {
+            double tollPrice = 1;
+        }
+        
+        oneof _tollPriceCurrencyCode {
+            string tollPriceCurrencyCode = 2;
+        }
+    }
+    
+    message DynamicPrice {
+        bool priceShown = 1;
+    }
+    
+    message NoPrice {
+        
+    }
+    
+    message MissingPass {
+        string missingPassName = 1;
+        
+        PriceInfo priceInfo = 2;
+        message PriceInfo {
+            FixedPrice fixedPrice = 1;
+            double passPrice = 2;
+        }
+    }
+    
+    message PriceChangeAtTime {
+        FixedPrice fixedPrice = 1;
+        double timeBasedPrice = 2;
+        string roadName = 3;
+        int32 timeBasedPriceChangeAtSeconds = 4;
+    }
+    
+    message PriceChangingByTime {
+        string roadName = 1;
+    }
+    
+    message WithPass {
+        string name = 1;
+        FixedPrice fixedPrice = 2;
+    }
+    
+    message Disabled {
+        
+    }
+}

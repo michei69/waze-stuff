@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum AddressPreviewContext {
+    ADDRESS_PREVIEW_CONTEXT_UNSPECIFIED = 0;
+    LPP_PARKING_SUGGESTION = 1;
+    LPP_HOME = 2;
+    LPP_WORK = 3;
+    LPP_SET_HOME = 4;
+    LPP_SET_WORK = 5;
+    LPP_SEARCH_RESULT = 6;
+    LPP_LOCATION = 7;
+    LPP_FAVORITE = 8;
+    LPP_HISTORY = 9;
+    LPP_SHARED_LOCATION = 10;
+    LPP_PLANNED_DRIVE = 11;
+    LPP_CALENDAR_EVENT = 12;
+    LPP_VERIFY_CALENDAR = 13;
+    LPP_UNVERIFIED_CALENDAR_EVENT = 14;
+    LPP_EXTERNAL_POI = 15;
+    LPP_AD_BOTTOM_SHEET = 16;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_information.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAdBottomSheetDismissedStat {
+    GoogleAdInformation google_ad_information = 1;
+    
+    DismissMethod dismiss_method = 2;
+    enum DismissMethod {
+        DISMISS_UNSPECIFIED = 0;
+        SWIPE_DOWN_OR_TAP_ON_MAP = 1;
+        TAP_X_ICON = 2;
+        BACK_BUTTON = 3;
+    }
+}

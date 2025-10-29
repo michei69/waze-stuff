@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/search_stats_wrapper/search_category_group.proto";
+import "stats/search_stats_wrapper/search_filter.proto";
+import "stats/search_stats_wrapper/search_source.proto";
+import "stats/search_stats_wrapper/search_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchSuccessStat {
+    string categorical_search_name = 3;
+    SearchCategoryGroup categorical_group_search_name = 4;
+    SearchSource source = 6;
+    SearchType type = 7;
+    string search_id = 8;
+    repeated SearchFilter filter_fields = 10;
+    TriggeringPlatform triggering_platform = 11;
+    string query = 12;
+    
+    oneof _latency_ms {
+        int64 latency_ms = 1;
+    }
+    
+    oneof _results_count {
+        int64 results_count = 2;
+    }
+    
+    oneof _algo_transparency_link_shown {
+        bool algo_transparency_link_shown = 5;
+    }
+    
+    oneof _search_again {
+        bool search_again = 9;
+    }
+}

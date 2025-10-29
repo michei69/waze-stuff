@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/settings_stats_wrapper/account_and_login_settings_extra_info_stat.proto";
+import "stats/settings_stats_wrapper/current_voice_stat.proto";
+import "stats/settings_stats_wrapper/guidance_sound_mode_selected_stat.proto";
+import "stats/settings_stats_wrapper/quick_route_settings_clicked_stat.proto";
+import "stats/settings_stats_wrapper/quick_route_settings_closed_stat.proto";
+import "stats/settings_stats_wrapper/quick_route_settings_shown_stat.proto";
+import "stats/settings_stats_wrapper/settings_main_settings_stat.proto";
+import "stats/settings_stats_wrapper/settings_stat.proto";
+import "stats/settings_stats_wrapper/sound_alerts_only_selected_stat.proto";
+import "stats/settings_stats_wrapper/sound_mute_selected_stat.proto";
+import "stats/settings_stats_wrapper/sound_on_selected_stat.proto";
+import "stats/settings_stats_wrapper/sound_options_popup_clicked_stat.proto";
+import "stats/settings_stats_wrapper/sound_options_popup_shown_stat.proto";
+import "stats/settings_stats_wrapper/sound_settings_button_clicked_stat.proto";
+import "stats/settings_stats_wrapper/vehicle_type_selected_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SettingsStatsWrapper {
+    oneof stat {
+        SettingsMainSettingsStat settings_main_settings = 1 [deprecated = true];
+        CurrentVoiceStat current_voice = 2;
+        QuickRouteSettingsClickedStat quick_route_settings_clicked = 3;
+        QuickRouteSettingsClosedStat quick_route_settings_closed = 4;
+        QuickRouteSettingsShownStat quick_route_settings_shown = 5;
+        SoundAlertsOnlySelectedStat sound_alerts_only_selected = 6;
+        SoundOptionsPopupClickedStat sound_options_popup_clicked = 7;
+        SoundOptionsPopupShownStat sound_options_popup_shown = 8;
+        VehicleTypeSelectedStat vehicle_type_selected = 9;
+        SoundSettingsButtonClickedStat sound_settings_button_clicked = 10;
+        SoundMuteSelectedStat sound_mute_selected = 11;
+        SoundOnSelectedStat sound_on_selected = 12;
+        SettingsStat settings = 13;
+        AccountAndLoginSettingsExtraInfoStat account_and_login_settings_extra_info = 14;
+        GuidanceSoundModeSelectedStat guidance_sound_mode_selected = 15;
+    }
+}

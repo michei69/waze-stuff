@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package linqmap.routing.proto;
+
+option objc_class_prefix = "LRP";
+option java_package = "linqmap.routing.proto";
+
+message TollPriceVector {
+    optional string currency = 1;
+    repeated TollPriceEntry vector = 2;
+}
+
+message TollPriceEntry {
+    optional double amount = 1;
+    optional int32 seconds = 2;
+}

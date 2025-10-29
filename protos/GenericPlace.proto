@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.places;
+
+import "Place.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.places";
+
+message FavoritePlace {
+    int32 id = 1;
+    int64 access_time_sec = 2;
+    int64 waypoint_access_time_sec = 3;
+    int64 server_id = 4;
+    FavoritePlaceType type = 5;
+    int32 rank = 6;
+    int32 modified_time = 7;
+    string name = 8;
+}
+
+message RecentPlace {
+    int32 id = 1;
+    int64 access_time_sec = 2;
+    int64 waypoint_access_time_sec = 3;
+    RecentPlaceType type = 4;
+    string image_id = 5;
+    string name = 6;
+}
+
+message EventPlace {
+    int32 id = 1;
+    int32 count = 2;
+    string event_id = 3;
+    string name = 4;
+    int64 start_time = 5;
+    int64 end_time = 6;
+    bool all_day = 7;
+    bool validated = 8;
+    bool validate_only = 9;
+    EventPlaceType type = 10;
+    string ref_event_id = 11;
+    string image_url = 12;
+    bool recurring_calendar_event = 13;
+    Place origin_place = 14;
+}
+
+message GenericPlace {
+    Place wazeAddress = 1;
+    
+    oneof place {
+        FavoritePlace favoritePlace = 2;
+        RecentPlace recentPlace = 3;
+        EventPlace eventPlace = 4;
+    }
+}
+
+message GenericPlaces {
+    repeated GenericPlace genericPlaces = 1;
+}
+
+enum FavoritePlaceType {
+    FAVORITE_PLACE_TYPE_DEFAULT = 0;
+    FAVORITE_PLACE_TYPE_HOME = 1;
+    FAVORITE_PLACE_TYPE_WORK = 2;
+    FAVORITE_PLACE_TYPE_OTHER = 3;
+}
+
+enum RecentPlaceType {
+    RECENT_PLACE_TYPE_DEFAULT = 0;
+    RECENT_PLACE_TYPE_ADS = 1;
+}
+
+enum EventPlaceType {
+    EVENT_PLACE_TYPE_NONE = 0;
+    EVENT_PLACE_TYPE_WAZE = 1;
+    EVENT_PLACE_TYPE_CALENDAR = 2;
+    EVENT_PLACE_TYPE_FUTURE_DRIVE = 3;
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/gaming_reward_source.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GamingThanksAnimationShownStat {
+    GamingRewardSource source = 1;
+}

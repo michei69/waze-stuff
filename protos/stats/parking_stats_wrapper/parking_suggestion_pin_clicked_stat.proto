@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ParkingSuggestionPinClickedStat {
+    Context context = 1;
+    enum Context {
+        CONTEXT_UNSPECIFIED = 0;
+        MAP = 1;
+        MORE = 2;
+        NEARING = 3;
+        PREVIEW = 4;
+        NAV_LIST = 5;
+        PLANNED_DRIVE = 6;
+        CATEGORICAL = 7;
+        ADD_WAYPOINT = 8;
+        FAVORITES = 9;
+        NULL = 10;
+    }
+    
+    string venue_id = 7;
+    
+    oneof _ad {
+        bool ad = 2;
+    }
+    
+    oneof _best {
+        bool best = 3;
+    }
+    
+    oneof _popular {
+        bool popular = 4;
+    }
+    
+    oneof _sponsored {
+        bool sponsored = 5;
+    }
+    
+    oneof _price_shown {
+        bool price_shown = 6;
+    }
+}

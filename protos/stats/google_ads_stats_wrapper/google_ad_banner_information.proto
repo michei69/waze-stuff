@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAdBannerInformation {
+    oneof _headline {
+        string headline = 1;
+    }
+    
+    oneof _body {
+        string body = 2;
+    }
+    
+    oneof _call_to_action {
+        string call_to_action = 3;
+    }
+    
+    oneof _thumbnail_url {
+        string thumbnail_url = 4;
+    }
+    
+    oneof _click_url {
+        string click_url = 5;
+    }
+    
+    oneof _visible_url {
+        string visible_url = 6;
+    }
+}

@@ -1,0 +1,155 @@
+syntax = "proto2";
+
+package linqmap.proto.inbox;
+
+import "Types.proto";
+import "PIIManagement.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPI";
+option java_package = "linqmap.proto.inbox";
+
+message Message {
+    optional string id = 1001;
+    optional bool unread = 1002;
+    optional sint64 sent = 1003;
+    optional string title = 1004;
+    optional string message = 1005;
+    repeated KeyValue extra = 1006;
+    
+    optional MessageType messageType = 1007;
+    enum MessageType {
+        link = 0;
+        content = 1;
+        securedLink = 2;
+        data = 3;
+        text = 4;
+    }
+    
+    optional string preview = 1008;
+    optional int64 sender_id = 1009;
+    optional string thread_id = 1010;
+    optional bool visible = 1011;
+    repeated ExternalReference external_reference = 1012;
+    optional int64 user_id = 1013;
+    optional int64 expires_on = 1014;
+}
+
+message ExternalReference {
+    optional string source = 1;
+    optional string id = 2;
+}
+
+message KeyValue {
+    required string key = 2001;
+    required string value = 2002;
+}
+
+message MessageList {
+    required int32 unread = 3001;
+    repeated Message messages = 3002;
+    optional string next_message_id = 3003;
+    optional int32 badge = 3004;
+    optional string critical_message_id = 3005;
+}
+
+message GetMessagesRequest {
+    optional int64 user_id = 1;
+    optional int32 limit = 2;
+    optional string from = 3;
+    optional bool support_data = 4 [default = false];
+    optional string lang = 5;
+    optional StringMap user_properties = 6;
+    optional AppType app_type = 7;
+}
+
+message GetMessagesByThreadIdRequest {
+    optional int64 user_id = 1;
+    optional string thread_id = 2;
+    optional int32 limit = 3;
+    optional string from = 4;
+    optional bool support_data = 5 [default = false];
+    optional string lang = 6;
+    optional AppType app_type = 7;
+}
+
+message GetMessagesResponse {
+    optional MessageList messages = 1;
+}
+
+message SendMessageRequest {
+    optional int64 user_id = 1;
+    optional bool critical = 2;
+    optional int64 critical_expires_on = 3;
+    optional int64 sender_user_id = 4;
+    optional Message message = 5;
+    optional string thread_id = 6;
+    optional bool increase_badge = 7;
+    optional AppType app_type = 8;
+}
+
+message SendMessageResponse {
+    optional Status status = 1;
+    optional string message_id = 2;
+    optional string token = 3;
+    optional string thread_id = 4;
+}
+
+message GetMessageRequest {
+    optional int64 user_id = 1;
+    optional string message_id = 2;
+    optional bool support_data = 3 [default = false];
+}
+
+message GetMessageResponse {
+    optional Message message = 1;
+}
+
+message DeleteMessagesRequest {
+    optional int64 user_id = 1;
+    repeated string message_id = 2;
+    optional bool delete_all = 3;
+}
+
+message MarkMessagesReadRequest {
+    optional int64 user_id = 1;
+    repeated string message_id = 2;
+}
+
+message MarkMessagesUnreadRequest {
+    optional int64 user_id = 1;
+    repeated string message_id = 2;
+}
+
+message SetBadgeRequest {
+    optional int64 user_id = 1;
+    optional int32 badge = 2;
+    optional AppType app_type = 3;
+}
+
+message SetBadgeRequestWrapper {
+    optional SetBadgeRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message SetBadgeResponseWrapper {
+    optional Status status = 1;
+}
+
+message GetBadgeRequest {
+    optional int64 user_id = 1;
+    optional AppType app_type = 2;
+}
+
+message GetBadgeResponse {
+    optional int32 badge = 1;
+}
+
+message DeleteInboxRequest {
+    optional int64 user_id = 1;
+}
+
+message GetMessageByTokenRequest {
+    optional string token = 1;
+    optional bool mark_read = 2 [default = true];
+}

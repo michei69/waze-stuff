@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/common_wrapper/eta.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WazeStatWrapper {
+    option deprecated = true;
+    
+    oneof stat {
+        EtaClick eta_click = 2;
+    }
+    
+    reserved 1;
+}

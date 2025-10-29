@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+package google.waze.ridematchpayments;
+
+option objc_class_prefix = "GWRP";
+option java_package = "google.waze.ridematchpayments";
+
+message Control {
+    optional ControlType control_type = 1;
+    optional string external_id = 2;
+    optional string description = 3;
+}
+
+message ControlType {
+    oneof type {
+        ControlEnums.AdSenseControlType adsense_control_type = 1;
+        ControlEnums.AdsControlType ads_control_type = 2;
+        ControlEnums.IntegratorControlType integrator_control_type = 3;
+    }
+}
+
+message ControlEnums {
+    enum AdSenseControlType {
+        ADSENSE_CONTROL_UNKNOWN = 0;
+        ADSENSE_BILLING_ACCOUNT_DISBURSEMENT_HOLD = 3;
+        ADSENSE_BILLING_ACCOUNT_TERMINATION = 4;
+        ADSENSE_DISBURSEMENT_HOLD = 1 [deprecated = true];
+        ADSENSE_TERMINATION = 2 [deprecated = true];
+    }
+    
+    enum AdsControlType {
+        ADS_UNKNOWN = 0;
+        ADS_ACCOUNT_TAKEOVER = 1;
+        ADS_PAYMENT_FRAUD = 2;
+        ADS_BAD_DEBT = 3;
+        ADS_BILLING_CUSTOMER_SHUTDOWN = 4;
+    }
+    
+    enum IntegratorControlType {
+        UNKNOWN = 0;
+        WAZE_CARPOOL_SELLER_HOLD = 1;
+        WAZE_CARPOOL_BUYER_HOLD = 2;
+    }
+}

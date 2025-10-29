@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message HovInformation {
+    oneof _hov_minimum_passengers {
+        int64 hov_minimum_passengers = 1;
+    }
+    
+    oneof _hov_saving_minutes {
+        int64 hov_saving_minutes = 2;
+    }
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/location_preview_stats_wrapper/address_preview_clicked_stat.proto";
+import "stats/location_preview_stats_wrapper/address_preview_information_shown_stat.proto";
+import "stats/location_preview_stats_wrapper/address_preview_latency_stat.proto";
+import "stats/location_preview_stats_wrapper/address_preview_onsite_parking_shown_stat.proto";
+import "stats/location_preview_stats_wrapper/address_preview_shown_stat.proto";
+import "stats/location_preview_stats_wrapper/address_preview_suggested_parking_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message LocationPreviewStatsWrapper {
+    oneof stat {
+        AddressPreviewShownStat address_preview_shown = 1;
+        AddressPreviewLatencyStat address_preview_latency = 2;
+        AddressPreviewOnsiteParkingShownStat address_preview_onsite_parking_shown = 3;
+        AddressPreviewSuggestedParkingShownStat address_preview_suggested_parking_shown = 4;
+        AddressPreviewClickedStat address_preview_clicked = 5;
+        AddressPreviewInformationShownStat address_preview_information_shown = 6;
+    }
+}

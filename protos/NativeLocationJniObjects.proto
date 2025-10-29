@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.location;
+
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.location";
+
+message Vector3 {
+    oneof _x {
+        float x = 1;
+    }
+    
+    oneof _y {
+        float y = 2;
+    }
+    
+    oneof _z {
+        float z = 3;
+    }
+}
+
+message NativeLocationJNI {
+    oneof _gps_time_ms {
+        int64 gps_time_ms = 1;
+    }
+    
+    oneof _position {
+        IntPosition position = 2;
+    }
+    
+    oneof _altitude {
+        int32 altitude = 3;
+    }
+    
+    oneof _accuracy_meters {
+        double accuracy_meters = 4;
+    }
+    
+    oneof _speed_mm_sec {
+        int32 speed_mm_sec = 5;
+    }
+    
+    oneof _steering_degrees {
+        int32 steering_degrees = 6;
+    }
+    
+    oneof _speed_accuracy_mm_sec {
+        int32 speed_accuracy_mm_sec = 7;
+    }
+    
+    oneof _steering_accuracy_degrees {
+        int32 steering_accuracy_degrees = 8;
+    }
+    
+    oneof _accelerometer {
+        Vector3 accelerometer = 9;
+    }
+    
+    oneof _gyroscope {
+        Vector3 gyroscope = 10;
+    }
+    
+    oneof _compass {
+        Vector3 compass = 11;
+    }
+    
+    oneof _provider {
+        Provider provider = 12;
+    }
+    
+    enum Provider {
+        GPS = 0;
+        NETWORK = 1;
+    }
+}
+
+message Quaternion {
+    oneof _x {
+        float x = 1;
+    }
+    
+    oneof _y {
+        float y = 2;
+    }
+    
+    oneof _z {
+        float z = 3;
+    }
+    
+    oneof _w {
+        float w = 4;
+    }
+}
+
+message NativeRotationVectors {
+    oneof _timestamp_ms {
+        int64 timestamp_ms = 1;
+    }
+    
+    oneof _delta_tns {
+        int64 delta_tns = 2;
+    }
+    
+    oneof _rotation {
+        Quaternion rotation = 3;
+    }
+    
+    oneof _gravity {
+        Vector3 gravity = 4;
+    }
+    
+    oneof _magnetic_field {
+        Vector3 magnetic_field = 5;
+    }
+    
+    oneof _max_rate_of_turn {
+        float max_rate_of_turn = 6;
+    }
+    
+    oneof _max_acceleration {
+        float max_acceleration = 7;
+    }
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+import "waze/insightsserving/client/configurations/common_client_configurations.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "WeatherConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message WeatherDefaultConfiguration {
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 1;
+    }
+}
+
+message WeatherFogConfiguration {
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 1;
+    }
+}
+
+message WeatherHailConfiguration {
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 1;
+    }
+}
+
+message WeatherHeavyRainConfiguration {
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 1;
+    }
+}
+
+message WeatherFloodConfiguration {
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 1;
+    }
+}

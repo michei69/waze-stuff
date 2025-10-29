@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/zero_speed_stats_wrapper/product_takeover_can_be_shown_stat.proto";
+import "stats/zero_speed_stats_wrapper/product_takeover_clicked_stat.proto";
+import "stats/zero_speed_stats_wrapper/product_takeover_closed_stat.proto";
+import "stats/zero_speed_stats_wrapper/product_takeover_hidden_stat.proto";
+import "stats/zero_speed_stats_wrapper/product_takeover_requested_stat.proto";
+import "stats/zero_speed_stats_wrapper/product_takeover_shown_stat.proto";
+import "stats/zero_speed_stats_wrapper/product_takeovers_received_stat.proto";
+import "stats/zero_speed_stats_wrapper/zero_speed_ended_stat.proto";
+import "stats/zero_speed_stats_wrapper/zero_speed_start_drive_stat.proto";
+import "stats/zero_speed_stats_wrapper/zero_speed_started_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ZeroSpeedStatsWrapper {
+    oneof stat {
+        ProductTakeoverClickedStat product_takeover_clicked = 1;
+        ProductTakeoverShownStat product_takeover_shown = 2;
+        ZeroSpeedEndedStat zero_speed_ended = 3;
+        ZeroSpeedStartDriveStat zero_speed_start_drive = 4;
+        ZeroSpeedStartedStat zero_speed_started = 5;
+        ProductTakeoverHiddenStat product_takeover_hidden = 6;
+        ProductTakeoverClosedStat product_takeover_closed = 7;
+        ProductTakeoversReceivedStat product_takeovers_received = 8;
+        ProductTakeoverCanBeShownStat product_takeover_can_be_shown = 9;
+        ProductTakeoverRequestedStat product_takeover_requested = 10;
+    }
+}

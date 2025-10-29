@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/in_car_main_screen_stats_wrapper/in_car_main_screen_button.proto";
+import "stats/in_car_main_screen_stats_wrapper/in_car_main_screen_section.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InCarMainScreenButtonClickedStat {
+    InCarMainScreenButton clicked_button = 1;
+    InCarMainScreenSection button_section = 2;
+    
+    oneof _in_car_screen_mode {
+        InCarScreenMode in_car_screen_mode = 3;
+    }
+    
+    enum InCarScreenMode {
+        IN_CAR_SCREEN_MODE_UNSPECIFIED = 0;
+        IN_CAR_SCREEN_MODE_CARPLAY = 1;
+        IN_CAR_SCREEN_MODE_AA_MAIN_SCREEN = 2;
+        IN_CAR_SCREEN_MODE_AA_COOLWALK = 3;
+    }
+}

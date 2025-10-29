@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/insight_available_click_options.proto";
+import "stats/insight_component_stats_wrapper/insight_component_info.proto";
+import "stats/insight_component_stats_wrapper/insight_component_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentChangedStateStat {
+    InsightComponentState from_insight_state = 1;
+    InsightComponentState to_insight_state = 2;
+    InsightComponentInfo insight_component_info = 3;
+    
+    ChangeReason change_reason = 4;
+    enum ChangeReason {
+        CHANGE_REASON_UNSPECIFIED = 0;
+        REAL_TIME_INSIGHT_VALIDATION = 1;
+        ARRIVED_TO_INSIGHT_POINT = 2;
+        ENTER_SEGMENT = 3;
+        EXIT_SEGMENT = 4;
+        INSIGHT_COMPONENT_TERMINATED = 5;
+        INSIGHT_COMPONENT_CLICKED_BY_THE_USER = 6;
+        ONE_TO_MULTIPLE_INSIGHT_COMPONENTS = 7;
+        MULTIPLE_TO_ONE_INSIGHT_COMPONENT = 8;
+        USER_DRAGGED_MAP = 9;
+        USER_CLICKED_EMPTY_MAP = 10;
+        HIDDEN_BY_OTHER_UI_COMPONENT = 11;
+    }
+    
+    oneof _sound_enabled {
+        bool sound_enabled = 5;
+    }
+}

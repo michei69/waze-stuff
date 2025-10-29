@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "MeetingInfo.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GetMeetingResponse {
+    optional AddMeetingInfo meeting = 1;
+}

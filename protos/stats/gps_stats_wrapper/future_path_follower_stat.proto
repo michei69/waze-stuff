@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message FuturePathFollowerStat {
+    oneof _regular_count {
+        int64 regular_count = 1;
+    }
+    
+    oneof _no_future_path_count {
+        int64 no_future_path_count = 2;
+    }
+    
+    oneof _no_crawl_back_count {
+        int64 no_crawl_back_count = 3;
+    }
+    
+    oneof _avg_distance_meters {
+        double avg_distance_meters = 4;
+    }
+    
+    oneof _max_distance_meters {
+        double max_distance_meters = 5;
+    }
+    
+    oneof _first_in_session {
+        bool first_in_session = 6;
+    }
+    
+    oneof _navigation_in_period {
+        bool navigation_in_period = 7;
+    }
+}

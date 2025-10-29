@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum PinType {
+    PIN_TYPE_UNSPECIFIED = 0;
+    PIN_TYPE_CURRENT_LOCATION = 1;
+    PIN_TYPE_HOME = 2;
+    PIN_TYPE_WORK = 3;
+    PIN_TYPE_WAZER = 4;
+    PIN_TYPE_YOUR_PARKING = 5;
+    PIN_TYPE_PARKING = 6;
+    PIN_TYPE_VENUE = 7;
+    PIN_TYPE_DROPPED_PIN = 8;
+    PIN_TYPE_SEARCH_RESULT = 9;
+    PIN_TYPE_SHOW_ON_MAP = 10;
+    PIN_TYPE_SET_START_POINT = 11;
+    PIN_TYPE_ORIGINAL_DESTINATION = 12;
+    PIN_TYPE_OTHER = 13;
+}

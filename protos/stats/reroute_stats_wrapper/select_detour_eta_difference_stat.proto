@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SelectDetourEtaDifferenceStat {
+    sint64 detour_id = 3;
+    
+    oneof _delta_seconds {
+        sint64 delta_seconds = 1;
+    }
+    
+    oneof _prev_route_remaining_seconds {
+        int64 prev_route_remaining_seconds = 2;
+    }
+    
+    oneof _reassurance {
+        bool reassurance = 4;
+    }
+}

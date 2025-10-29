@@ -1,0 +1,86 @@
+syntax = "proto2";
+
+package google.waze.ridematchpayments;
+
+option objc_class_prefix = "GWRP";
+option java_package = "google.waze.ridematchpayments";
+
+message PaymentsPlaceEnums {
+    enum PaymentsPlaceName {
+        UNKNOWN_PAYMENTS_PLACE_NAME = 0;
+        EMBEDDED_LANDING_PAGE = 11;
+        EMBEDDED_SETTINGS = 12;
+        INVOICE_SUMMARY = 18;
+        PAYMENT_METHODS_EMBEDDED = 19;
+        TRANSACTIONS_TIMELINE = 35;
+        USER_MANAGEMENT = 32;
+        SALES_TAX = 39;
+        TAX_DATA = 30;
+    }
+}
+
+message Alert {
+    optional Severity severity = 1;
+    enum Severity {
+        UNKNOWN_SEVERITY = 0;
+        INFO = 1;
+        WARNING = 2;
+        SEVERE = 3;
+    }
+    
+    optional AlertRenderInfo alert_render_info = 2;
+    optional bytes action_token = 3 [deprecated = true];
+    optional FixAction fix_action = 9;
+    optional bytes help_token = 4 [deprecated = true];
+    optional HelpAction help_action = 10;
+    optional bytes dismissal_token = 5;
+    optional string dismissal_key = 12;
+    
+    optional AlertCategory alert_category = 6;
+    enum AlertCategory {
+        UNKNOWN_ALERT_CATEGORY = 0;
+        BAD_PRIMARY_INSTRUMENT = 2 [deprecated = true];
+        UNVERIFIED_CONTACT = 3;
+        TAX_NOTIFICATION = 4;
+        TERMS_AND_CONDITIONS = 5;
+        BILLING_ACCOUNT_CANCELLED = 6;
+        CURRENCY_NO_LONGER_SUPPORTED = 8;
+        MISSING_INSTRUMENT = 9;
+        BUYER_OVERDUE_PAYMENT = 11;
+        SELLER_INSTRUMENT_CHANGE_REQUIRED = 12;
+        SELLER_PAYMENT_ON_HOLD = 13;
+        SELLER_SELF_HOLD = 14;
+        SELLER_VERIFICATION = 15;
+        BAD_INSTRUMENT = 16;
+        COLLECTIONS_SUSPENSION = 17;
+        CUSTOMER_CONTROL = 18;
+        ANNOUNCEMENT = 19;
+        FUNDS_GUARANTEE = 20;
+    }
+    
+    optional string alert_key = 11;
+}
+
+message AlertRenderInfo {
+    oneof render {
+        LocalizedRenderDetails localized_render_details = 1;
+        bytes render_token = 2;
+    }
+}
+
+message LocalizedRenderDetails {
+    optional string single_line_message = 1;
+    optional string title = 2;
+    optional string description = 3;
+    optional string action_label = 4;
+}
+
+message FixAction {
+    optional string url = 1;
+    optional PaymentsPlaceEnums.PaymentsPlaceName place_name = 2;
+    optional bytes fix_flow_token = 3;
+}
+
+message HelpAction {
+    optional string url = 1;
+}

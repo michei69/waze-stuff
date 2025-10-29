@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum VenueOpeningStatus {
+    VENUE_OPENING_STATUS_UNSPECIFIED = 0;
+    VENUE_OPENING_SOON = 1;
+    VENUE_OPEN_NOW = 2;
+    VENUE_OPEN_24_HOURS = 3;
+    VENUE_CLOSED = 4;
+    VENUE_CLOSES_SOON = 5;
+    VENUE_TEMPORARILY_CLOSED = 6;
+    VENUE_PERMANENTLY_CLOSED = 7;
+    UNKNOWN = 8;
+}

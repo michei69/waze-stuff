@@ -1,0 +1,276 @@
+syntax = "proto2";
+
+package linqmap.proto.gaming.engine;
+
+option objc_class_prefix = "LPGE";
+option java_package = "linqmap.proto.gaming.engine";
+
+message GamingModel {
+    repeated ActionType action_type = 1;
+    repeated AchievementType achievement_type = 2;
+    repeated LevelType level_type = 3;
+    repeated CategoryType category_type = 6;
+    repeated SeriesType series_type = 7;
+    
+    reserved 4, 5;
+    
+    reserved "challenge_type", "reward_type";
+}
+
+message ActionType {
+    optional string id = 1;
+    optional TypeDefinition type_definition = 2;
+    optional Condition eligibility = 3;
+    optional Condition target = 4;
+    optional PointsReward points_reward = 5;
+    optional GamingElementStatus status = 7;
+    repeated StatusContext previous_status = 8;
+    optional Condition trigger_to_be_removed = 9 [deprecated = true];
+    optional Trigger trigger = 10;
+    optional bool eligible = 11 [default = true];
+}
+
+message AchievementType {
+    optional string id = 1;
+    optional TypeDefinition type_definition = 2;
+    optional Condition eligibility = 3;
+    optional Condition target = 4;
+    optional string series = 5;
+    optional int32 series_ordinal = 6;
+    optional bool hidden = 7;
+    optional PointsReward points_reward = 8;
+    optional GamingElementStatus status = 10;
+    repeated StatusContext previous_status = 11;
+    optional Condition trigger_to_be_removed = 12 [deprecated = true];
+    optional bool claimable = 13;
+    optional Trigger trigger = 14;
+    optional bool eligible = 15 [default = true];
+}
+
+message ChallengeType {
+    optional string id = 1;
+    optional TypeDefinition type_definition = 2;
+    optional Condition eligibility = 3;
+    optional Condition target = 4;
+    optional string series = 5;
+    optional int32 series_ordinal = 6;
+    optional bool hidden = 7;
+    optional PointsReward points_reward = 8;
+    optional GamingElementStatus status = 10;
+    repeated StatusContext previous_status = 11;
+    optional Condition trigger_to_be_removed = 12 [deprecated = true];
+    optional bool claimable = 13;
+    optional Trigger trigger = 14;
+    optional bool eligible = 15 [default = true];
+    
+    reserved 9;
+    
+    reserved "reward_type";
+}
+
+message LevelType {
+    optional string id = 1;
+    optional TypeDefinition type_definition = 2;
+    optional Condition eligibility = 3;
+    optional Condition target = 4;
+    optional int32 ordinal = 5;
+    optional GamingElementStatus status = 7;
+    repeated StatusContext previous_status = 8;
+    optional bool eligible = 9 [default = true];
+    
+    reserved 6;
+    
+    reserved "reward_type";
+}
+
+message StatusContext {
+    optional GamingElementStatus status = 1;
+    optional int64 status_time_millis = 2;
+}
+
+message TimePeriod {
+    optional int64 time_in_unit = 1;
+    optional TimeUnit time_unit = 2;
+}
+
+message Limit {
+    optional int64 times_per_time_period = 1;
+    optional TimePeriod time_period = 2;
+}
+
+message TimeFrame {
+    optional int64 from_epoch = 1;
+    optional int64 to_epoch = 2;
+}
+
+message Target {
+    optional int64 times = 1;
+    optional TimePeriod time_period = 2;
+    optional TimeFrame time_frame = 3;
+    optional bool daily_strike = 4;
+}
+
+message TargetRule {
+    optional string action_type_id = 1;
+    optional Target target = 2;
+    optional Limit limit = 3;
+}
+
+message PointsRule {
+    optional int64 target = 1;
+}
+
+message LevelRule {
+    optional string level_type_id = 1;
+}
+
+message FixedBooleanRule {
+    optional bool value = 1;
+}
+
+message TimeFrameRule {
+    optional int64 from_epoch = 1;
+    optional int64 to_epoch = 2;
+}
+
+message Property {
+    optional string key = 1;
+    optional int32 ttl = 5;
+    
+    oneof value {
+        bool boolean_value = 2;
+        string string_value = 3;
+        int32 int_value = 4;
+    }
+}
+
+message PropertyRule {
+    optional Property property = 1;
+}
+
+message Condition {
+    repeated Rule rule = 1;
+}
+
+message Rule {
+    oneof rule {
+        TargetRule target_rule = 1;
+        PointsRule points_rule = 2;
+        FixedBooleanRule fixed_boolean_rule = 4;
+        TimeFrameRule time_frame_rule = 5;
+        PropertyRule property_rule = 6;
+    }
+}
+
+message Trigger {
+    optional string action = 1;
+    optional Property property = 2;
+}
+
+message CategoryType {
+    optional string id = 1;
+    optional string name_key = 2;
+    optional string description_key = 3;
+    optional string image_url = 4;
+    optional int32 priority = 5;
+    optional bool hidden = 6;
+}
+
+message SeriesType {
+    optional string id = 1;
+    optional string name_key = 2;
+    optional string description_key = 3;
+    optional string image_url = 4;
+    optional int32 priority = 5;
+    optional SeriesHelpType series_help = 6;
+    optional bool hidden = 7;
+}
+
+message SeriesHelpType {
+    optional SeriesHelpSchemaType schema_type = 1;
+    
+    oneof schema {
+        SeriesStepsListType steps_list = 2;
+    }
+}
+
+message SeriesStepsListType {
+    optional string name_key = 1;
+    optional string description_key = 2;
+    optional string image_url = 3;
+    repeated SeriesStepsListStepType step = 4;
+}
+
+message SeriesStepsListStepType {
+    optional string name_key = 1;
+    optional string description_key = 2;
+    optional string image_url = 3;
+}
+
+message TypeDefinition {
+    optional string id = 1;
+    optional string name_key = 2;
+    optional string description_key = 3;
+    optional string image_url = 4;
+    optional string cta_key = 5;
+    optional string cta_deep_link = 6;
+    optional string category_id = 7;
+    optional int32 priority_in_category = 8;
+    optional bool disabled = 9;
+    optional bool is_public = 10;
+    optional string post_description_key = 11;
+    optional string post_cta_key = 12;
+    optional string post_cta_deep_link = 13;
+    optional string label_key = 14;
+    optional int32 priority = 15;
+    optional string icon_url = 16;
+}
+
+message Points {
+    optional int64 count = 1;
+}
+
+message Rank {
+    optional int64 rank = 1;
+}
+
+message PointsReward {
+    optional Points points = 1;
+    optional PointsFunction function = 2;
+}
+
+message PointsFunction {
+    optional string property_key = 1;
+    
+    oneof Function {
+        MultiplyFunction multiply = 2;
+    }
+}
+
+message MultiplyFunction {
+    optional double factor = 1;
+}
+
+enum GamingElementStatus {
+    UNKNOWN = 0;
+    ACTIVE = 1;
+    INACTIVE = 2;
+    DELETED = 3;
+    REPLACED = 4;
+}
+
+enum TimeUnit {
+    EVER = 0;
+    YEARS = 1;
+    MONTHS = 2;
+    WEEKS = 3;
+    DAYS = 4;
+    HOURS = 5;
+    MINUTES = 6;
+    SECONDS = 7;
+    MILLISECONDS = 8;
+}
+
+enum SeriesHelpSchemaType {
+    STEPS_LIST = 1;
+}

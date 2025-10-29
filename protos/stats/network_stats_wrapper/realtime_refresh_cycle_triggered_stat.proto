@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RealtimeRefreshCycleTriggeredStat {
+    Reason reason = 1;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        TIMER = 1;
+        JAMMED = 2;
+        NETWORK = 3;
+        FORCED = 4;
+        KICKED = 5;
+        LOGIN = 6;
+    }
+    
+    oneof _from_node_id {
+        sint64 from_node_id = 2;
+    }
+    
+    oneof _to_node_id {
+        sint64 to_node_id = 3;
+    }
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CustomVoiceInstructionsScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        SAVE_VOICE = 1;
+        RECORD_INSTRUCTION = 2;
+        PLAY_RECORDING = 3;
+        EDIT_VOICE_NAME = 4;
+        DELETE_RECORDING = 5;
+        SELECT_FALLBACK = 6;
+        DELETE_ALL_RECORDINGS = 7;
+        BACK = 8;
+        DELETE_VOICE = 9;
+    }
+    
+    string prompt_type = 2;
+}

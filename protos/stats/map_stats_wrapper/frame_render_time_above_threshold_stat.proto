@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message FrameRenderTimeAboveThresholdStat {
+    CanvasTag canvas_tag = 4;
+    enum CanvasTag {
+        CANVAS_TAG_UNSPECIFIED = 0;
+        MAIN_CANVAS = 1;
+    }
+    
+    oneof _threshold_ms {
+        int64 threshold_ms = 1;
+    }
+    
+    oneof _frames_above_threshold {
+        int64 frames_above_threshold = 2;
+    }
+    
+    oneof _total_frames {
+        int64 total_frames = 3;
+    }
+    
+    oneof _time_avg_ms {
+        double time_avg_ms = 5;
+    }
+    
+    oneof _time_min_ms {
+        double time_min_ms = 6;
+    }
+    
+    oneof _time_max_ms {
+        double time_max_ms = 7;
+    }
+    
+    oneof _measure_time_ms {
+        double measure_time_ms = 8;
+    }
+}

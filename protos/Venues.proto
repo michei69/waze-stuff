@@ -1,0 +1,1311 @@
+syntax = "proto2";
+
+package linqmap.proto.venue;
+
+import "Types.proto";
+import "PIIManagement.proto";
+import "RealtimeNg.proto";
+import "VenueAvailability.proto";
+import "proto/waze/type/Money.proto";
+import "proto/waze/type/WeeklySchedule.proto";
+import "proto/waze/type/Timestamp.proto";
+import "google/protobuf/duration.proto";
+
+option objc_class_prefix = "LPV";
+option java_package = "linqmap.proto.venue";
+
+message Venue {
+    optional string provider_id = 100;
+    optional string provider = 101;
+    optional VenueID internal_venue_id = 102;
+    repeated string categories = 103;
+    repeated string native_categories = 161;
+    optional string name = 104;
+    optional string english_name = 105;
+    optional string description = 106;
+    repeated string aliases = 107;
+    optional Coordinate location = 109;
+    repeated string services = 110;
+    repeated Coordinate polygon = 111;
+    optional string priceType = 112;
+    optional string house_number = 113;
+    optional string street = 114;
+    optional string city = 115;
+    optional string state = 116;
+    optional string country = 117;
+    optional string address = 118;
+    optional string zip = 119;
+    optional string address_details = 160;
+    optional string phone = 120;
+    optional string fax = 121;
+    optional string email = 122;
+    optional string twitter = 123;
+    optional string url = 124;
+    optional string brand = 125;
+    optional int64 cityId = 126;
+    optional int64 street_id = 127;
+    optional int64 segment_id = 128;
+    optional bool deleted = 129;
+    repeated ExternalProvider external_providers = 130;
+    optional double area = 131;
+    repeated OpenHours hours = 132;
+    repeated Image images = 133;
+    repeated Parking parking = 134;
+    repeated EntryExitPoint entry_exit_points = 135;
+    repeated string children = 136;
+    optional string parent = 137;
+    repeated ProductPricePair original_products = 138;
+    repeated ChangedProductPair changed_products = 139;
+    repeated ChangeCandidatesPair change_candidates = 140 [deprecated = true];
+    optional int64 creation_date = 141;
+    optional int64 created_by = 142;
+    optional int64 last_update_date = 143;
+    repeated int64 last_update_by = 144;
+    optional int32 lock_level = 145;
+    optional bool approved = 146;
+    optional bool residential = 147;
+    optional bool unlisted = 148;
+    optional string currency = 149;
+    repeated Product product = 150;
+    optional bool ad_locked = 151;
+    optional string venue_id = 152;
+    repeated string ad_keywords = 153;
+    optional string url_display_name = 154;
+    optional bool no_preview = 155;
+    optional int64 country_id = 156;
+    optional bool has_pending_update_requests_by_user = 157;
+    optional UserInfo created_by_info = 158;
+    optional UserInfo last_updated_by_info = 159;
+    optional bool has_more_data = 162 [default = false];
+    optional string formatted_name = 163;
+    optional ParkingLotAttributes parking_lot_attributes = 164;
+    optional string brand_id = 165;
+    optional bool is_null = 166;
+    optional EmergencyShelterAttributes emergency_shelter_attributes = 167;
+    optional bool entry_point_on_street = 168;
+    optional VenueID merged_to = 170;
+    repeated VenueID merged_from = 171;
+    optional EVChargingVenue ev_charging_venue = 173;
+    optional GooglePlaceAttributes googlePlaceAttributes = 174;
+    repeated BookingOffer booking_offers = 175;
+    optional string timezone = 176;
+    repeated SecondaryOpenHours secondary_hours = 177;
+    optional CrisisLocationAttributes crisis_location_attributes = 180;
+    optional TakeoverInfo takeover_info = 178;
+    optional string traffic_event_id = 181;
+    
+    reserved 169, 172;
+    
+    reserved "charging_station_attributes", "ev_charging_station_attributes";
+}
+
+message VenueID {
+    optional int32 t10 = 200;
+    optional int32 t1 = 201;
+    optional string id = 202;
+}
+
+message Product {
+    optional string id = 1;
+    optional int64 last_updated = 2;
+    optional string updated_by = 3;
+    optional float price = 4;
+    optional Experiment experiment = 5000;
+}
+
+message Experiment {
+    reserved 1;
+}
+
+message Coordinate {
+    required double x = 300;
+    required double y = 301;
+}
+
+message ExternalProvider {
+    optional string provider = 401;
+    optional string id = 402;
+    
+    optional MatchType type = 403;
+    enum MatchType {
+        MATCH_TYPE_UNKNOWN = 0;
+        PROVIDER = 1;
+        USER = 2;
+        AUTOMATIC = 3;
+        QUICKMATCH = 4;
+        QUICKMATCH_NO_GCID = 5;
+    }
+    
+    optional double score = 404;
+    optional int64 timestamp = 405;
+    optional int32 matcherVersion = 406;
+    optional bool disabled = 407;
+    optional UserInfo.UserChannel disabled_by_channel = 408;
+}
+
+message ProductPricePair {
+    required string key = 600;
+    required ProductPrice value = 601;
+}
+
+message ProductPrice {
+    optional double price = 610;
+    optional int64 updateTime = 611;
+    repeated StringBytesPair map = 612;
+}
+
+message StringBytesPair {
+    required string key = 2001;
+    required bytes value = 2002;
+}
+
+message ChangedProductPair {
+    required string key = 620;
+    required ChangedProduct value = 621;
+}
+
+message ChangedProduct {
+    optional double price = 630;
+    optional int64 updateTime = 631;
+    repeated StringBytesPair map = 632;
+    optional string userName = 634;
+    optional int64 userId = 635;
+}
+
+message ChangeCandidatesPair {
+    required string key = 640;
+    repeated ChangedProduct value = 641;
+}
+
+message EntryExitPoint {
+    required Coordinate point = 701;
+    optional string name = 702;
+    
+    required EntryExitPointType type = 703;
+    enum EntryExitPointType {
+        ENTRY = 0;
+        EXIT = 1;
+        BOTH = 2;
+    }
+    
+    optional bool primary = 704;
+    repeated OpenHours open_hours = 705;
+    repeated string limit_subscription = 706;
+}
+
+message OpenHours {
+    optional string from = 801;
+    optional string to = 802;
+    repeated int64 days = 803;
+}
+
+message SecondaryOpenHours {
+    optional SecondaryOpenHoursType type = 1;
+    enum SecondaryOpenHoursType {
+        SECONDARY_OPEN_HOURS_UNSPECIFIED = 0;
+        DRIVE_THROUGH = 1;
+        DELIVERY = 2;
+        TAKEOUT = 3;
+        PICKUP = 4;
+        ACCESS = 5;
+        SENIOR_HOURS = 6;
+    }
+    
+    repeated OpenHours open_hours = 2;
+}
+
+message Image {
+    optional string id = 901;
+    optional int64 date = 902;
+    optional Coordinate location = 903;
+    optional int64 creatorUserId = 904;
+    optional bool street = 905;
+    optional bool approved = 906;
+    optional bool promoted = 907;
+    optional int32 likes = 908 [deprecated = true];
+    optional bool liked = 909 [deprecated = true];
+    optional UserInfo created_by_info = 111;
+    optional int32 azimuth = 112;
+    optional bool by_me = 113;
+    
+    reserved 110;
+    
+    reserved "xxx";
+}
+
+message EmergencyShelterAttributes {
+    optional bool active = 901;
+}
+
+message NetworkList {
+    repeated string network = 1;
+}
+
+message ChargingStationAttributes {
+    option deprecated = true;
+    optional NetworkList networkList = 910;
+}
+
+message ParkingLotAttributes {
+    optional bool canExitWhileClosed = 950;
+    
+    optional ParkingType parkingType = 951;
+    enum ParkingType {
+        PUBLIC = 0;
+        RESERVATION_ONLY = 1;
+        EVENT_ONLY = 2;
+        VALET_ONLY = 3;
+        PERMIT_ONLY = 4;
+        MONTHLY_ONLY = 5;
+        PRIVATE = 6;
+        RESTRICTED = 7;
+    }
+    
+    optional int32 numberOfSpots = 952;
+    
+    optional EstimatedNumberOfSpots estimatedNumberOfSpots = 956;
+    enum EstimatedNumberOfSpots {
+        R_1_TO_10 = 0;
+        R_11_TO_30 = 1;
+        R_31_TO_60 = 2;
+        R_61_TO_100 = 3;
+        R_101_TO_300 = 4;
+        R_301_TO_600 = 5;
+        R_600_PLUS = 6;
+    }
+    
+    optional CostType costType = 953;
+    enum CostType {
+        FREE = 0;
+        LOW = 1;
+        MODERATE = 2;
+        EXPENSIVE = 3;
+        UNKNOWN = 4;
+    }
+    
+    optional PaymentTypeList paymentTypeList = 954;
+    message PaymentTypeList {
+        repeated PaymentType paymentType = 1;
+    }
+    
+    optional LotTypeList lotTypeList = 955;
+    message LotTypeList {
+        repeated LotType lotType = 1;
+    }
+    
+    optional bool hasTBR = 957;
+    
+    optional PublicParkingSubtype publicParkingSubtype = 958;
+    enum PublicParkingSubtype {
+        PUBLIC_AIRPORT_ONLY = 0;
+        PUBLIC_RESERVATION_ONLY = 1;
+        PUBLIC_EVENT_ONLY = 2;
+        PUBLIC_VALET_ONLY = 3;
+        PUBLIC_PERMIT_ONLY = 4;
+        PUBLIC_MONTHLY_ONLY = 5;
+    }
+    
+    optional string pricesData = 959;
+    repeated Availability generalAvailability = 960;
+    repeated Availability currentAvailability = 961;
+    
+    enum PaymentType {
+        CASH = 0;
+        CHECKS = 1;
+        CREDIT = 2;
+        DEBIT_CARD = 3;
+        PERMIT = 4;
+        MEMBERSHIP = 5;
+        PREPAID = 6;
+        PARKING_APP = 7;
+        DIGITAL_WALLET = 8;
+        SMS_CALL = 9;
+        ELECTRONIC_PASS = 10;
+    }
+    
+    enum LotType {
+        STREET_LEVEL = 0;
+        STREET_LEVEL_COVERED = 1;
+        MULTI_LEVEL = 2;
+        UNDERGROUND = 3;
+    }
+}
+
+message Parking {
+    optional string id = 1001;
+    optional double walkingDistance = 1002;
+}
+
+message Availability {
+    optional int32 day = 1;
+    optional int32 from_minutes = 2;
+    optional int32 to_minutes = 3;
+    optional int32 percentageAvailable = 4;
+}
+
+message BookingOffer {
+    optional ExternalProvider external_provider = 1;
+    
+    optional Type type = 2;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        PARKING = 1;
+    }
+    
+    optional string reservation_uri = 3;
+    
+    repeated Rate rates = 4;
+    message Rate {
+        optional .waze.type.Money standard_rate = 1;
+        optional .waze.type.Money discounted_rate = 2;
+        optional google.protobuf.Duration duration = 3;
+        optional .waze.type.WeeklySchedule.TimePeriod valid_time_period = 4;
+    }
+    
+    optional .waze.type.Timestamp update_time = 5;
+}
+
+message EVChargingAttributes {
+    repeated EVChargingPort chargingPorts = 1 [deprecated = true];
+    message EVChargingPort {
+        option deprecated = true;
+        optional EVChargingType evChargingType = 1;
+        optional int32 count = 2;
+    }
+    
+    repeated ChargingPortsAvailability chargingPortsAvailability = 2 [deprecated = true];
+    message ChargingPortsAvailability {
+        option deprecated = true;
+        optional EVChargingType evChargingType = 1;
+        optional int32 availableCount = 2;
+    }
+    
+    optional int64 availabilityLastUpdateTime = 3;
+    
+    repeated EVChargingStation charging_stations = 4;
+    message EVChargingStation {
+        optional string uid = 1;
+        optional string evse_id = 2;
+        repeated EVChargingConnector connector = 3;
+        optional bool available = 4;
+        optional com.waze.venueavailability.EVSEStatus availability_status = 6 [default = UNKNOWN];
+        
+        repeated PaymentMethod acceptable_payment_methods = 5 [deprecated = true];
+        enum PaymentMethod {
+            PAYMENT_METHOD_UNKNOWN = 0;
+            CREDIT = 1;
+            DEBIT = 2;
+            CONTACTLESS = 3;
+        }
+    }
+    
+    optional Source source = 5;
+    enum Source {
+        SOURCE_UNSPECIFIED = 0;
+        WME = 1;
+        GEO = 2;
+        ECO_MOVEMENT = 3;
+        SOURCE_OTHER = 101;
+    }
+    
+    optional string charging_station_group_id = 6;
+    optional string directions = 7;
+    optional string network = 8;
+    
+    optional CostType cost_type = 9;
+    enum CostType {
+        COST_TYPE_UNSPECIFIED = 0;
+        FREE = 1;
+        FEE = 2;
+    }
+    
+    optional bool editor_updated = 10;
+    
+    repeated PaymentMethod payment_methods = 11;
+    enum PaymentMethod {
+        PAYMENT_METHOD_UNKNOWN = 0;
+        CREDIT = 1;
+        DEBIT = 2;
+        APP = 3;
+        MEMBERSHIP_CARD = 4;
+        ONLINE_PAYMENT = 5;
+        PLUG_IN_AUTO_CHARGE = 6;
+        OTHER = 7;
+    }
+    
+    optional ChargersAccessType access_type = 12;
+    enum ChargersAccessType {
+        CHARGERS_ACCESS_TYPE_UNKNOWN = 0;
+        PUBLIC = 1;
+        RESTRICTED = 2;
+        PRIVATE = 3;
+    }
+    
+    message EVChargingConnector {
+        optional string id = 1;
+        optional EVChargingType connector_type = 2;
+        optional float max_power_kw = 3;
+    }
+    
+    enum EVChargingType {
+        UNKNOWN = 0;
+        TYPE1 = 1;
+        TYPE2 = 2;
+        CHADEMO = 3;
+        CCS_TYPE1 = 4;
+        CCS_TYPE2 = 5;
+        TESLA = 6;
+        GB_T = 7;
+        WALL_OUTLET = 8;
+    }
+}
+
+message EVChargingVenue {
+    repeated EVConnectorOverview ev_connector_overviews = 1;
+    message EVConnectorOverview {
+        optional EVConnector ev_connector = 1;
+        optional int32 count = 2;
+        optional float max_power_kw = 3;
+        optional int32 available_count = 4;
+    }
+    
+    optional string directions = 2;
+    repeated EVChargingAttributes.EVChargingStation.PaymentMethod payment_methods_deprecated = 3 [deprecated = true];
+    
+    repeated EVPaymentMethod payment_methods = 4;
+    message EVPaymentMethod {
+        optional string id = 1;
+        optional string display_string = 2;
+    }
+    
+    optional EVChargingAttributes.ChargersAccessType access_type = 5;
+    
+    message EVConnector {
+        optional string type_id = 1;
+    }
+}
+
+message GooglePlaceAttributes {
+    optional int32 price_level = 1;
+    optional string price_level_symbol = 6;
+    
+    optional Rating rating = 2;
+    message Rating {
+        optional double rating = 1;
+        optional int32 user_ratings_count = 2;
+    }
+    
+    optional BusinessStatus business_status = 3;
+    enum BusinessStatus {
+        BUSINESS_STATUS_UNSPECIFIED = 0;
+        OPERATIONAL = 1;
+        TEMPORARILY_CLOSED = 2;
+        PERMANENTLY_CLOSED = 3;
+    }
+    
+    repeated int32 exceptional_hour_days = 5;
+    
+    reserved 4;
+}
+
+message TakeoverInfo {
+    optional string takeover_label = 1;
+    optional string takeover_image = 2;
+}
+
+message UserInfo {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional int32 rank = 3;
+    optional int32 points = 4;
+    optional int32 mood = 5;
+    optional int32 approved_venues = 6;
+    
+    optional UserChannel channel = 7;
+    enum UserChannel {
+        UNKNOWN = 0;
+        EDITOR = 1;
+        CLIENT = 2;
+        ADS = 3;
+        SYSTEM = 4;
+    }
+    
+    optional bool is_staff = 8;
+    optional bool is_registered = 9;
+    optional string persistent_id = 10;
+    optional bool is_ad_operator = 11;
+    optional bool is_system_trusted = 12;
+    optional bool is_venue_manager = 13;
+}
+
+message FieldInfo {
+    optional int64 user_id = 1;
+    optional int64 ts = 2;
+    optional string provider = 3;
+    optional bool is_deleted = 4;
+}
+
+message VenueFieldString {
+    optional string value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldRepeatedString {
+    repeated string value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldLong {
+    optional int64 value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldInteger {
+    optional int32 value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldBool {
+    optional bool value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldCoordinate {
+    optional Coordinate value = 1;
+    optional FieldInfo info = 2;
+}
+
+message Geometry {
+    optional Type type = 1;
+    enum Type {
+        POINT = 0;
+        POLYGON = 1;
+    }
+    
+    repeated Coordinate coordinate = 2;
+}
+
+message VenueFieldGeometry {
+    optional Geometry value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldImage {
+    repeated Image value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldOpenHours {
+    repeated OpenHours value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldEntryExitPoint {
+    repeated EntryExitPoint value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldParkingLotAttributes {
+    optional ParkingLotAttributes value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldEVChargingStationAttributes {
+    optional EVChargingAttributes value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldEmergencyShelterAttributes {
+    optional EmergencyShelterAttributes value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldChargingStationAttributes {
+    optional ChargingStationAttributes value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldExternalProvider {
+    repeated ExternalProvider value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldParking {
+    repeated Parking value = 1;
+    optional FieldInfo info = 2;
+}
+
+message VenueFieldBookingOffers {
+    repeated BookingOffer value = 1;
+    optional FieldInfo info = 2;
+}
+
+message Venue3 {
+    optional string id = 100;
+    optional string provider = 101;
+    optional VenueID venue_id = 102;
+    optional VenueFieldRepeatedString categories = 103;
+    optional VenueFieldString name = 104;
+    optional VenueFieldString english_name = 105;
+    optional VenueFieldString description = 106;
+    optional VenueFieldRepeatedString aliases = 107;
+    optional VenueFieldCoordinate location = 109;
+    optional VenueFieldRepeatedString services = 110;
+    optional VenueFieldGeometry polygon = 111;
+    optional VenueFieldString price_type = 112;
+    optional VenueFieldString house_number = 113;
+    optional VenueFieldString street = 114;
+    optional VenueFieldString city = 115;
+    optional VenueFieldString state = 116;
+    optional VenueFieldString country = 117;
+    optional VenueFieldString address = 118;
+    optional VenueFieldString zip = 119;
+    optional VenueFieldString phone = 120;
+    optional VenueFieldString fax = 121;
+    optional VenueFieldString email = 122;
+    optional VenueFieldString twitter = 123;
+    optional VenueFieldString url = 124;
+    optional VenueFieldString brand = 125;
+    optional VenueFieldLong city_id = 126;
+    optional VenueFieldLong street_id = 127;
+    optional VenueFieldLong segment_id = 128;
+    optional bool deleted = 129;
+    repeated ExternalProvider external_providers = 130;
+    optional double area = 131;
+    optional VenueFieldOpenHours hours = 132;
+    repeated Image images = 133;
+    optional VenueFieldParking parking = 134;
+    optional VenueFieldEntryExitPoint entry_exit_points = 135;
+    optional VenueFieldRepeatedString children = 136;
+    optional VenueFieldString parent = 137;
+    repeated ProductPricePair original_products = 138;
+    repeated ChangedProductPair changed_products = 139;
+    repeated ChangeCandidatesPair change_candidates = 140 [deprecated = true];
+    optional int64 creation_date = 141;
+    optional int64 created_by = 142;
+    optional int64 lastUpdate_date = 143;
+    repeated int64 lastUpdate_by = 144;
+    optional VenueFieldInteger lock_level = 145;
+    optional VenueFieldBool approved = 146;
+    optional VenueFieldBool residential = 147;
+    optional VenueFieldBool unlisted = 148;
+    repeated VenueUserRequest pending_requests = 149;
+    optional VenueFieldBool ad_locked = 151;
+    optional VenueFieldRepeatedString ad_keywords = 152;
+    optional VenueFieldString url_display_name = 154;
+    optional VenueFieldBool no_preview = 155;
+    optional VenueFieldLong country_id = 156;
+    optional bool has_pending_update_requests_by_user = 157;
+    optional UserInfo created_by_info = 158;
+    optional UserInfo last_updated_by_info = 159;
+    optional bool has_more_data = 162;
+    optional VenueFieldParkingLotAttributes parking_lot_attributes = 163;
+    optional VenueFieldString brand_id = 164;
+    optional bool is_null = 165;
+    optional VenueFieldEmergencyShelterAttributes emergency_shelter_attributes = 166;
+    optional bool should_appear_in_auto_complete = 167;
+    optional bool entry_point_on_street = 168;
+    optional string provider_id = 169;
+    optional string ad_context = 170;
+    optional string ad_logo_id = 171;
+    optional VenueID merged_to = 173;
+    repeated VenueID merged_from = 174;
+    optional VenueFieldEVChargingStationAttributes ev_charging_station_attributes = 175;
+    optional VenueFieldBookingOffers booking_offers = 176;
+    optional VenueFieldString timezone = 177;
+    optional string currency = 178;
+    optional bool updated_images = 179;
+    optional VenueFieldCrisisLocationAttributes crisis_location_attributes = 180;
+    optional VenueFieldString traffic_event_id = 181;
+    
+    reserved 172;
+    
+    reserved "charging_station_attributes";
+}
+
+message VenueFieldCrisisLocationAttributes {
+    optional CrisisLocationAttributes value = 1;
+    optional FieldInfo info = 2;
+}
+
+message CrisisLocationAttributes {
+    optional bool active = 1;
+    optional int64 capacity = 2;
+}
+
+message VenueCreateRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional Venue venue = 4;
+    optional bool return_venue = 5;
+    optional bool override = 6 [deprecated = true];
+    optional int64 time = 7;
+    optional bytes uuid = 8;
+    optional VenueMatchHints hints = 9 [deprecated = true];
+    optional VenueForce force = 10;
+    optional Referrer referrer = 11;
+    optional Venue3 venue3 = 12;
+    optional VenueDataLayer data_layer = 13;
+    optional int32 protocol = 14 [default = 1];
+    optional bool skip_duplicate_check = 15;
+    optional bool avoid_throw_on_duplicate = 16;
+}
+
+message VenueForce {
+    optional bool force_house_number = 1;
+}
+
+message VenueMatchHints {
+    optional string search_venue_id = 1;
+}
+
+message VenueRefreshRequest {
+    optional string venue_id = 1;
+}
+
+message VenueRefreshResponse {
+    optional string venue_id = 1;
+}
+
+message VenueUserRequest {
+    optional VenueUpdateRequest Venue_update_request = 1;
+    optional VenueDeleteRequest Venue_delete_request = 2;
+    optional VenueFlagRequest Venue_flag_request = 3;
+    optional VenueDeleteImageRequest Venue_delete_image_request = 4;
+    optional VenueLikeImageRequest Venue_like_image_request = 5;
+    optional VenueUnlikeImageRequest Venue_unlike_image_request = 6;
+    optional VenuesMergeRequest Venues_merge_request = 7;
+}
+
+message VenueUpdateRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional Venue venue = 4;
+    optional bool return_venue = 5;
+    optional Venue3 venue3 = 6;
+    optional int64 time = 7;
+    optional bytes uuid = 8;
+    optional VenueMatchHints hints = 9 [deprecated = true];
+    optional Referrer referrer = 10;
+    optional bool return_pending_requests = 11;
+    optional VenueDataLayer data_layer = 12;
+    optional bool must_be_reviewed = 13;
+    optional bool ignore_existing_fields = 14;
+    
+    optional Semantics images_semantics = 15 [default = MERGE];
+    enum Semantics {
+        MERGE = 0;
+        DELETE = 1;
+        OVERRIDE = 2;
+    }
+}
+
+message VenuesMergeRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional Venue3 main_venue = 4;
+    repeated VenueID merged_venue_ids = 5;
+    optional bool return_venue = 6;
+}
+
+message Referrer {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN = 0;
+        QUESTION = 1;
+    }
+    
+    optional string id = 2;
+}
+
+message VenueDeleteRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional Venue venue = 4;
+    optional bool return_venue = 5;
+    optional Venue3 venue3 = 6;
+    optional int64 time = 7;
+    optional bytes uuid = 8;
+    optional bool return_pending_requests = 9;
+}
+
+message VenueReviewRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional string venue_id = 4;
+    optional string entity_id = 5;
+    
+    optional ReviewType review_type = 6;
+    enum ReviewType {
+        VENUE = 0;
+        REQUEST = 1;
+        IMAGE = 2;
+    }
+    
+    optional ReviewAction review_action = 7;
+    enum ReviewAction {
+        APPROVE = 0;
+        REJECT = 1;
+    }
+    
+    optional bool return_venue = 8;
+    optional int64 time = 9;
+    optional bytes uuid = 10;
+    optional bool return_pending_requests = 11;
+}
+
+message VenueDeleteImageRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional string venue_id = 4;
+    optional string image_id = 5;
+    optional int64 time = 6;
+    optional bytes uuid = 7;
+}
+
+message VenueLikeImageRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional string venue_id = 4;
+    optional string image_id = 5;
+    optional int64 time = 6;
+    optional bytes uuid = 7;
+}
+
+message VenueUnlikeImageRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional string venue_id = 4;
+    optional string image_id = 5;
+    optional int64 time = 6;
+    optional bytes uuid = 7;
+}
+
+message VenueFlagRequest {
+    optional UserInfo user_info = 1;
+    optional VenueID internal_venue_id = 2;
+    optional string entity_id = 3;
+    optional string comment = 4;
+    optional string session = 5;
+    
+    optional Type type = 6;
+    enum Type {
+        CLOSED = 1;
+        MOVED = 2;
+        RESIDENTIAL = 3;
+        DUPLICATE = 4;
+        INAPPROPRIATE = 5;
+        WRONG_DETAILS = 6;
+        LOW_QUALITY = 7;
+        UNRELATED = 8;
+        OTHER = 9;
+        DOES_NOT_MATCH_SEARCH = 10;
+    }
+    
+    optional SubjectType subject_type = 7;
+    enum SubjectType {
+        VENUE = 1;
+        IMAGE = 2;
+    }
+    
+    optional int64 time = 8;
+    optional bytes uuid = 9;
+    optional string venue_id = 10;
+    optional int64 version = 11 [deprecated = true];
+}
+
+message VenueUpdateProductPriceRequest {
+    optional UserInfo user_info = 1;
+    optional string session = 2;
+    optional string provider = 3;
+    optional string id = 4;
+    repeated ProductPricePair product_price = 5;
+    optional bool return_venue = 6;
+}
+
+message VenueChangeRequest {
+    optional int64 version = 1 [deprecated = true];
+    optional string session = 2;
+    optional Envelope env = 3;
+    optional string provider = 4;
+    optional int64 user_id = 5;
+    optional string user_name = 6;
+    optional int32 user_rank = 7;
+    optional int32 user_points = 8;
+    optional int32 user_mood = 9;
+    optional string id = 10;
+    
+    repeated ProductChange changes = 11;
+    message ProductChange {
+        optional ChangeType change_type = 1;
+        enum ChangeType {
+            CONFIRM = 0;
+            UPDATE = 1;
+            DELETE = 2;
+        }
+        
+        optional string category = 2;
+        optional string name = 3;
+        optional double price = 4;
+        optional bytes fields = 5;
+    }
+    
+    optional Coordinate user_location = 12;
+}
+
+message VenueChangeResponse {
+    optional int32 points_received = 1;
+    
+    optional Opcode opcode = 2;
+    enum Opcode {
+        NOT_ALLOWED = 0;
+        CONFIRMED = 1;
+        UPDATE_LOGGED = 2;
+        UPDATED = 3;
+    }
+    
+    optional Cause cause = 3;
+    enum Cause {
+        BABY_WAZER = 0;
+        INVALID_PRICE = 1;
+    }
+    
+    optional Coordinate venue_location = 4;
+}
+
+message VenueRevertRequest {
+    optional UserInfo user_info = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional string session = 3;
+    optional int64 time = 4;
+    optional bytes uuid = 5;
+    optional int32 protocol = 6;
+    optional string provider = 7;
+    optional string venue_id = 8;
+    optional int64 user_id = 9;
+}
+
+message VenueRemoveUsersRequest {
+    option deprecated = true;
+    repeated int64 user_ids = 1;
+    optional int64 replace_with_user_id = 2;
+    optional string replace_with_user_name = 3;
+}
+
+message VenueRemoveUsersResponse {
+    option deprecated = true;
+    repeated int64 replaced = 1;
+    repeated int64 errors = 2;
+    repeated string updated_venues = 3;
+}
+
+message VenueSearchRequest {
+    optional string session = 1;
+    optional Geometry geometry = 2;
+    repeated string category = 3;
+    optional string product_type = 4;
+    repeated string brands = 5;
+    repeated string providers = 6;
+    repeated string products = 7;
+    optional Geometry along_line = 8;
+    optional Coordinate near_by = 9;
+    
+    optional SortBy sort_by = 10 [default = DISTANCE];
+    enum SortBy {
+        DISTANCE = 0;
+        PRICE = 1;
+    }
+    
+    optional SortOrder sort_order = 11 [default = ASCENDING];
+    enum SortOrder {
+        ASCENDING = 0;
+        DESCENDING = 1;
+    }
+    
+    optional bool distribute = 12;
+    optional int64 max_age = 13 [default = -1];
+    optional int32 max_results = 14;
+    optional bool approved_only = 15 [default = true];
+    optional bool residential_too = 16;
+    optional bool unlisted_too = 17;
+    optional bool minimal_filtering = 18;
+    optional double minimal_area = 19;
+    optional int64 version = 20 [deprecated = true];
+    optional bool thumbs_only = 21;
+    optional UserInfo user_info = 22;
+    optional bool merge_user_updates = 23;
+    optional int32 protocol = 24 [default = 1];
+    repeated string excluded_categories = 25;
+    optional bool return_pending_requests = 26;
+    optional bool return_all_images = 27;
+    optional bool with_pending_requests_only = 28;
+    repeated Venue3 filter_by_attributes = 29;
+    optional bool fill_image_info = 30 [default = true];
+    optional bool fill_currency_info = 31 [default = true];
+    repeated string ev_connector_types = 32;
+    repeated string ev_networks = 33;
+    optional float ev_min_charge_power_kw = 34;
+    optional bool ev_public_stations = 35;
+    optional bool return_disabled_providers = 36;
+}
+
+message GetVenuesByProviderRequest {
+    optional string session = 1;
+    optional UserInfo user_info = 2;
+    optional string provider_name = 3;
+    optional string provider_id = 4;
+    optional bool return_disabled_providers = 5;
+    optional bool return_even_if_unlisted = 6;
+}
+
+message Venue3ListResponse {
+    optional Status status = 1;
+    repeated Venue3 venue3 = 2;
+}
+
+message VenueGetRequest {
+    optional string session = 1;
+    repeated string ids = 2;
+    optional int64 version = 3 [deprecated = true];
+    optional UserInfo user_info = 4;
+    optional bool merge_user_updates = 5;
+    optional bool return_all_data = 6;
+    optional bool return_even_if_deleted = 7;
+    optional int64 time = 8;
+    optional bytes uuid = 9;
+    optional int32 protocol = 10 [default = 1];
+    optional string provider = 11;
+    optional Envelope env = 12;
+    optional bool return_pending_requests = 13;
+    optional bool return_null_venues = 14;
+    optional bool return_all_images = 15;
+    optional bool approved_only = 16;
+    optional bool fill_image_info = 17 [default = true];
+    optional bool fill_currency_info = 18 [default = true];
+    optional bool return_disabled_providers = 19;
+    optional bool return_even_if_unlisted = 20;
+}
+
+message VenueGetByAddressRequest {
+    optional string session = 1;
+    optional int64 version = 2 [deprecated = true];
+    optional UserInfo user_info = 3;
+    optional int64 time = 4;
+    optional bytes uuid = 5;
+    optional int32 protocol = 6;
+    
+    repeated AddressInfo addresses = 7;
+    message AddressInfo {
+        optional int64 country_id = 1;
+        optional int64 city_id = 2;
+        optional int64 street_id = 3;
+        optional string house_number = 4;
+    }
+    
+    optional Envelope env = 8;
+    optional bool return_pending_requests = 9;
+    optional bool return_null_venues = 10;
+    optional bool return_all_images = 12;
+    optional bool merge_user_updates = 13;
+    optional bool approved_only = 14;
+    optional bool fill_image_info = 15 [default = true];
+    optional bool fill_currency_info = 16 [default = true];
+    optional bool return_disabled_providers = 17;
+    optional bool return_even_if_unlisted = 19;
+}
+
+message VenueGetPendingRequestsRequest {
+    optional string session = 1;
+    repeated string ids = 2;
+}
+
+message VenueGetVersionRequest {
+    option deprecated = true;
+    optional string session = 1;
+}
+
+message VenueGetVersionResponse {
+    option deprecated = true;
+    optional int64 version = 1;
+}
+
+message VenueList {
+    repeated Venue venue = 1;
+    repeated Venue3 venue3 = 2;
+}
+
+message VenueStatusResponse {
+    optional string id = 1;
+    optional int32 points_received = 2;
+    
+    optional Opcode opcode = 3;
+    enum Opcode {
+        NOT_ALLOWED = 1;
+        LOGGED = 2;
+        UPDATED = 3;
+        APPROVED = 4;
+        REJECTED = 5;
+        CREATED = 6;
+        DELETED = 7;
+        MOVED = 8;
+        CREATED_PENDING_APPROVAL = 9;
+        NOT_FOUND = 10;
+        ALREADY_APPROVED = 11;
+        NO_CHANGE = 12;
+        ERROR = 13;
+    }
+    
+    optional Cause cause = 4;
+    enum Cause {
+        BABY_WAZER = 1;
+        INVALID_CHANGE = 2;
+        INACCURATE_HOUSE_NUMBER = 3;
+        MISSING_CATEGORIES_FIELD = 4;
+        INVALID_CATEGORY = 5;
+        MISSING_LOCATION_OR_POLYGON = 6;
+        INTERNAL_ERROR = 7;
+        LOCATION_NOT_IN_COUNTRY = 8;
+        INVALID_URL = 9;
+        INVALID_ENTRY_EXIT_POINT = 10;
+        INVALID_OPEN_HOURS = 11;
+        INVALID_SERVICE = 12;
+        INVALID_IMAGE = 13;
+        INVALID_IMAGE_MISSING_CREATOR_ID = 14;
+        INVALID_IMAGE_MISSING_DATE = 15;
+        INVALID_IMAGE_MISSING_LOCATION = 16;
+        INVALID_PHONE = 17;
+        MISSING_HOUSE_NUMBER = 18;
+        INVALID_OPEN_HOURS_SAME_FROM_AND_TO = 19;
+        INVALID_OPEN_HOURS_OVERLAP = 20;
+        CANNOT_TURN_RESIDENTIAL_TO_NON_RESIDENTIAL = 21;
+        NON_POLYGON_VENUE_CANNOT_HAVE_ENTRY_EXIT_POINTS = 22;
+        CANNOT_TURN_PARKING_LOT_TO_NON_PARKING_LOT = 23;
+        CANNOT_TURN_NON_PARKING_LOT_TO_PARKING_LOT = 24;
+        INVALID_PARKING_LOT_GEOMETRY = 25;
+        PARKING_LOT_WITH_OTHER_CATEGORIES = 26;
+        MULTIPLE_PRIMARY_ENTRY_EXIT_POINTS = 27;
+        ENTRY_EXIT_POINTS_SAME_NAME = 28;
+        RESIDENTIAL_WITH_NON_POINT_GEOMETRY = 29;
+        CONCURRENT_VENUE_MODIFICATION = 30;
+        DUPLICATE_VENUE = 31;
+        CANNOT_CONVERT_PL_WITH_UNSUPPORTED_SERVICES = 32;
+        INVALID_LOCATION = 33;
+        INVALID_POLYGON = 34;
+    }
+    
+    optional Venue venue = 5;
+    optional string message = 6;
+    optional Venue3 venue3 = 7;
+    optional VenueUserRequest request = 8;
+}
+
+message VenueGetConfigurationRequest {
+    
+}
+
+message VenueGetConfigurationResponse {
+    optional VenueConfiguration configuration = 1;
+}
+
+message VenueConfiguration {
+    repeated Category category = 1;
+    repeated Service service = 2;
+    optional int64 last_update = 3;
+    repeated FieldPoints field_points = 4;
+    repeated Validator validator = 5;
+}
+
+message Validator {
+    optional string name = 1;
+    optional string expression = 2;
+}
+
+message Category {
+    optional string id = 1;
+    optional string name = 2;
+    optional string parent = 3;
+    optional StringMap attributes = 4;
+    repeated CountryConfig country_config = 5;
+    repeated Service service = 6;
+}
+
+message Service {
+    optional string id = 1;
+    optional string name = 2;
+}
+
+message FieldPoints {
+    optional string name = 1;
+    optional int32 points = 2;
+}
+
+message CountryConfig {
+    optional string country = 1;
+    repeated ProductConfig product_config = 2;
+    optional string price_unit = 3;
+    repeated string brand = 4;
+    optional bool client_enabled = 5 [default = true];
+}
+
+message ProductConfig {
+    optional string id = 1;
+    optional string name = 2;
+    optional string price_format = 3;
+    optional string type = 4;
+}
+
+message VenueGetCategoriesRequest {
+    
+}
+
+message VenueGetCategoriesResponse {
+    repeated string category = 1;
+}
+
+message PlaceId {
+    optional FeatureId feature_id = 1;
+}
+
+message FeatureId {
+    required fixed64 cell_id = 1;
+    required fixed64 fprint = 2;
+}
+
+message VenueGetBrandsDistributionRequest {
+    option deprecated = true;
+    optional Coordinate location = 1;
+    optional string category = 2;
+}
+
+message VenueGetBrandsDistributionResponse {
+    option deprecated = true;
+    optional StringIntegerMap map = 1;
+}
+
+message VenueExistsRequest {
+    optional UserInfo user_info = 1;
+    optional int64 time = 2;
+    optional Venue venue = 3;
+    optional VenueForce force = 4;
+    optional Venue3 venue3 = 5;
+}
+
+message VenueExistsResponse {
+    optional Status status = 1;
+    optional bool exists = 2;
+    optional string message = 3;
+    optional string existing_venue_id = 4;
+}
+
+enum VenueDataLayer {
+    BASE = 0;
+    COMMUNITY = 1;
+}

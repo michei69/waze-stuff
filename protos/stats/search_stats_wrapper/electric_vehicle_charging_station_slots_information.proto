@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ElectricVehicleChargingStationInformation {
+    oneof _electric_vehicle_slots_available {
+        int64 electric_vehicle_slots_available = 1;
+    }
+    
+    oneof _electric_vehicle_slots_capacity {
+        int64 electric_vehicle_slots_capacity = 2;
+    }
+}

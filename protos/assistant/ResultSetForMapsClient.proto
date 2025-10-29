@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package waze.assistant.verticals.geo;
+
+import "assistant/PlaceId.proto";
+
+message ResultSetForMapsClient {
+    repeated maps_api.PlaceId result = 1;
+}

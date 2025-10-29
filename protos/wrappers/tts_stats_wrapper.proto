@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/tts_stats_wrapper/custom_voice_instructions_created_stat.proto";
+import "stats/tts_stats_wrapper/custom_voice_instructions_screen_clicked_stat.proto";
+import "stats/tts_stats_wrapper/custom_voice_instructions_screen_shown_stat.proto";
+import "stats/tts_stats_wrapper/prompt_audio_played_stat.proto";
+import "stats/tts_stats_wrapper/share_custom_voice_drawer_clicked_stat.proto";
+import "stats/tts_stats_wrapper/share_custom_voice_drawer_shown_stat.proto";
+import "stats/tts_stats_wrapper/text_to_speech_played_stat.proto";
+import "stats/tts_stats_wrapper/tts_received_stat.proto";
+import "stats/tts_stats_wrapper/voice_directions_settings_clicked_stat.proto";
+import "stats/tts_stats_wrapper/voice_instructions_selected_type_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TtsStatsWrapper {
+    oneof stat {
+        PromptAudioPlayedStat prompt_audio_played = 1;
+        TextToSpeechPlayedStat text_to_speech_played = 2;
+        CustomVoiceInstructionsScreenClickedStat custom_voice_instructions_screen_clicked = 3;
+        CustomVoiceInstructionsScreenShownStat custom_voice_instructions_screen_shown = 4;
+        ShareCustomVoiceDrawerShownStat share_custom_voice_drawer_shown = 5;
+        CustomVoiceInstructionsCreatedStat custom_voice_instructions_created = 6;
+        VoiceInstructionsSelectedTypeStat voice_instructions_selected_type = 7;
+        ShareCustomVoiceDrawerClickedStat share_custom_voice_drawer_clicked = 8;
+        VoiceDirectionsSettingsClickedStat voice_directions_settings_clicked = 9;
+        TtsReceivedStat tts_received = 10;
+    }
+}

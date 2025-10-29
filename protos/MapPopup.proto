@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.map;
+
+import "Position.proto";
+import "VenueData.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.map";
+
+message MapPopupNativeInfo {
+    oneof popup_info {
+        DetailsPopupInfo details_popup_info = 1;
+        WazerPopupInfo wazer_popup_info = 2;
+    }
+    
+    message DetailsPopupInfo {
+        string msg = 2;
+        bool loader = 4;
+        WazeUiMapPopupType type = 5;
+        IntPosition coordinate = 6;
+        Style style = 13;
+        
+        oneof _title {
+            string title = 1;
+        }
+        
+        oneof _info {
+            string info = 3;
+        }
+        
+        oneof _poi_info_url {
+            string poi_info_url = 7;
+        }
+        
+        oneof _preview_icon {
+            string preview_icon = 8;
+        }
+        
+        oneof _venue {
+            VenueData venue = 9;
+        }
+        
+        oneof _venue_original {
+            VenueData venue_original = 10;
+        }
+        
+        oneof _walking_distance_meters {
+            int32 walking_distance_meters = 11;
+        }
+        
+        oneof _timeout_seconds {
+            int32 timeout_seconds = 12;
+        }
+    }
+    
+    message WazerPopupInfo {
+        int32 id = 1;
+        string name = 2;
+        string mood = 3;
+        string speed = 7;
+        bool allow_ping = 8;
+        int32 azimuth = 9;
+        IntPosition coordinate = 10;
+        
+        oneof _addon {
+            string addon = 4;
+        }
+        
+        oneof _points {
+            string points = 5;
+        }
+        
+        oneof _joined {
+            string joined = 6;
+        }
+    }
+    
+    enum WazeUiMapPopupType {
+        waze_ui_map_popup_type_none = 0;
+        waze_ui_map_popup_type_my_location = 1;
+        waze_ui_map_popup_type_segment = 2;
+        waze_ui_map_popup_type_show_on_map = 3;
+        waze_ui_map_popup_type_start_point = 4;
+        waze_ui_map_popup_type_home = 5;
+        waze_ui_map_popup_type_work = 6;
+        waze_ui_map_popup_type_parked = 7;
+        waze_ui_map_popup_type_can_park = 8;
+        waze_ui_map_popup_type_new_venue = 9;
+        waze_ui_map_popup_type_user = 10;
+        waze_ui_map_popup_type_search = 11;
+        waze_ui_map_popup_type_parking_orig_dest = 12;
+    }
+    
+    enum Style {
+        STYLE_UNKNOWN = 0;
+        STYLE_SMALL = 1;
+        STYLE_LARGE = 2;
+    }
+}

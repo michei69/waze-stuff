@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "CommonClientConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message GroupingConfiguration {
+    oneof _min_distance_meters {
+        int32 min_distance_meters = 1;
+    }
+    
+    oneof _min_seconds {
+        int32 min_seconds = 2;
+    }
+}
+
+message CappingConfiguration {
+    oneof _max_appearances_before_capping {
+        int32 max_appearances_before_capping = 1;
+    }
+    
+    oneof _capping_hours {
+        int32 capping_hours = 2;
+    }
+}
+
+message RoadTypeSpecificSegmentationConfiguration {
+    oneof _road_type {
+        RoadType road_type = 1;
+    }
+    
+    oneof _parameters_segmentation_configuration {
+        ParametersSegmentationConfiguration parameters_segmentation_configuration = 2;
+    }
+}
+
+message ParametersSegmentationConfiguration {
+    oneof _max_distance_between_two_insights {
+        int32 max_distance_between_two_insights = 1;
+    }
+    
+    oneof _max_distance_to_extend_segment_insight {
+        int32 max_distance_to_extend_segment_insight = 2;
+    }
+    
+    oneof _min_length_segment_insight {
+        int32 min_length_segment_insight = 3;
+    }
+}
+
+message SegmentationConfiguration {
+    repeated RoadTypeSpecificSegmentationConfiguration road_type_specific_segmentation_configuration = 2;
+    
+    oneof _default_segmentation_configuration {
+        ParametersSegmentationConfiguration default_segmentation_configuration = 1;
+    }
+}
+
+enum RoadType {
+    ROAD_TYPE_UNKNOWN = 0;
+    ROAD_TYPE_FREEWAY = 1;
+    ROAD_TYPE_PRIMARY = 2;
+    ROAD_TYPE_SECONDARY = 3;
+    ROAD_TYPE_RAMP = 4;
+    ROAD_TYPE_MAIN = 5;
+    ROAD_TYPE_EXIT = 6;
+    ROAD_TYPE_STREET = 7;
+    ROAD_TYPE_PEDESTRIAN = 8;
+    ROAD_TYPE_4X4 = 9;
+    ROAD_TYPE_TRAIL = 10;
+    ROAD_TYPE_WALKWAY = 11;
+    ROAD_TYPE_RAILROAD = 12;
+    ROAD_TYPE_RUNWAY = 13;
+    ROAD_TYPE_FERRY = 14;
+    ROAD_TYPE_PRIVATE = 15;
+    ROAD_TYPE_PARKING = 16;
+    ROAD_TYPE_DIRT = 17;
+    ROAD_TYPE_MINOR = 18;
+}

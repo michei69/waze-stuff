@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message OsPermissionsStat {
+    OsLocationPermission os_location_permission = 1;
+    enum OsLocationPermission {
+        OS_LOCATION_PERMISSION_UNSPECIFIED = 0;
+        ALWAYS_ON = 1;
+        WHEN_IN_USE = 2;
+        NEVER = 3;
+    }
+    
+    oneof _os_bluetooth_connectivity_permission_enabled {
+        bool os_bluetooth_connectivity_permission_enabled = 2;
+    }
+    
+    oneof _location_permission_copy_version {
+        int64 location_permission_copy_version = 3;
+    }
+}

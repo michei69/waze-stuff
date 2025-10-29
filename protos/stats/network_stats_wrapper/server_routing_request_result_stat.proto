@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/network_stats_wrapper/server_request_result_data.proto";
+import "stats/network_stats_wrapper/server_routing_request_result_use_case.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ServerRoutingRequestResultStat {
+    ServerRequestResultData generic_response_data = 1;
+    RoutingUseCase use_case = 2;
+    RoutingUseCase original_use_case = 8;
+    
+    oneof _routes_count {
+        int64 routes_count = 3;
+    }
+    
+    oneof _logged_in {
+        bool logged_in = 4;
+    }
+    
+    oneof _periodic_retries_count {
+        int64 periodic_retries_count = 5;
+    }
+    
+    oneof _network_retries_count {
+        int64 network_retries_count = 6;
+    }
+    
+    oneof _latency_including_retries_ms {
+        int64 latency_including_retries_ms = 7;
+    }
+}

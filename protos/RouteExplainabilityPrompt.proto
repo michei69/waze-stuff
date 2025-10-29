@@ -1,0 +1,173 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message RouteExplainabilityPrompt {
+    oneof use_cases {
+        REPNoUseCase no_use_case = 1;
+        REPPreferredNotSuggested preferred_not_suggested = 2;
+        REPTypicallyBestNotSuggested typically_best_not_suggested = 3;
+        REPUnexpectedETA unexpected_eta = 4;
+        REPFastestNotSuggested fastest_not_suggested = 5;
+        REPUnreachableDestination unreachable_destination = 6;
+        REPClosureImpact closure_impact = 7;
+        REPMteImpact mte_impact = 9;
+    }
+}
+
+message REPPreferredNotSuggested {
+    optional string name = 1 [default = "preferred_not_suggested"];
+    optional REPRoute current_route = 2;
+    optional REPRoute alternative_route = 3;
+}
+
+message REPTypicallyBestNotSuggested {
+    optional string name = 1 [default = "typically_best_not_suggested"];
+    optional REPRoute current_route = 2;
+    optional REPRoute alternative_route = 3;
+}
+
+message REPFastestNotSuggested {
+    optional string name = 1 [default = "fastest_not_suggested"];
+    optional REPRoute current_route = 2;
+    optional REPRoute alternative_route = 3;
+    repeated REPRouteNegativeFactor alternative_route_unique_negative_factors = 4;
+    repeated REPRoutePositiveFactor current_route_unique_positive_factors = 5;
+}
+
+message REPUnreachableDestination {
+    optional string name = 1 [default = "unreachable_destination"];
+    optional REPClosureInfo dominant_closure = 2;
+    optional int32 typical_time_to_destination_minutes = 3;
+    optional int32 distance_to_destination_meters = 4;
+}
+
+message REPClosureImpact {
+    optional string name = 1 [default = "closure_impact"];
+    optional REPClosureInfo dominant_closure = 2;
+    
+    optional ImpactType blocked_route_impact_type = 3;
+    enum ImpactType {
+        IMPACT_TYPE_UNSPECIFIED = 0;
+        PREFERRED_NOT_OFFERED = 1;
+        NATURAL_NOT_OFFERED = 2;
+        TYPICALLY_BEST_NOT_OFFERED = 3;
+    }
+}
+
+message REPClosureInfo {
+    optional bool is_planned = 1;
+    optional int64 planned_start_time_epoch_msec = 2;
+    optional int64 planned_end_time_epoch_msec = 3;
+    optional string name = 4;
+}
+
+message REPMteImpact {
+    optional string name = 1 [default = "major_traffic_event_impact"];
+    
+    optional ImpactType impact_type = 2;
+    enum ImpactType {
+        IMPACT_TYPE_UNSPECIFIED = 0;
+        SLOWER_ROUTE = 1;
+        LONGER_ROUTE = 2;
+        THEORETICAL = 3;
+    }
+    
+    optional ImpactLevel impact_level = 3;
+    enum ImpactLevel {
+        IMPACT_LEVEL_UNSPECIFIED = 0;
+        NONE = 1;
+        LOW = 2;
+        MEDIUM = 3;
+        HIGH = 4;
+    }
+    
+    optional ImpactInteraction impact_interaction = 4;
+    enum ImpactInteraction {
+        IMPACT_INTERACTION_UNSPECIFIED = 0;
+        DESTINATION_IN_AREA = 1;
+        ORIGIN_IN_AREA = 2;
+        CROSSES_AREA = 3;
+        AVOIDS_AREA = 4;
+    }
+    
+    optional string mte_name = 5;
+    optional string category = 6;
+    optional string affected_route_name = 7;
+    optional int64 mte_start_time_epoch_msec = 8;
+    optional int64 mte_end_time_epoch_msec = 9;
+    optional string city_name = 10;
+}
+
+message REPUnexpectedETA {
+    optional string name = 1 [default = "unexpected_eta"];
+    optional REPRoute current_route = 2;
+}
+
+message REPNoUseCase {
+    optional string name = 1 [default = "no_use_case"];
+}
+
+message REPEventOnRoute {
+    optional EventName name = 1;
+    enum EventName {
+        UNSPECIFIED = 0;
+        TRAFFIC = 1;
+        HEAVY_TRAFFIC = 2;
+        CRASH = 3;
+        CONSTRUCTION = 4;
+        BLOCKED_LANE = 5;
+        BROKEN_TRAFFIC_LIGHT = 6;
+        JAM = 7;
+        POTHOLE = 8;
+        POLICE = 9;
+        HAZARD = 10;
+    }
+    
+    optional string street = 2;
+}
+
+message REPRoute {
+    optional string going_via = 1;
+    optional bool is_usual_route_of_user = 2;
+    optional int32 eta_minutes = 3;
+    optional int32 typical_eta_minutes = 4;
+    
+    optional ETALabel eta_now_vs_typical_eta = 5;
+    enum ETALabel {
+        UNSPECIFIED = 0;
+        SLOWER = 1;
+        SIMILAR = 2;
+        FASTER = 3;
+    }
+    
+    optional int32 eta_diff_from_current_route = 6;
+    optional int32 eta_now_vs_typical_eta_diff_minutes = 7;
+    optional REPEventOnRoute event_on_route = 8;
+    optional int32 toll_price = 9;
+    repeated string restricted_areas = 10;
+    repeated string danger_areas = 11;
+}
+
+enum REPRouteNegativeFactor {
+    UNSPECIFIED_NEGATIVE_FACTOR = 0;
+    TOLL = 1;
+    FERRY = 2;
+    UNPAVED = 3;
+    DIFFICULT_TURN = 4;
+    INTERNATIONAL = 5;
+    RESTRICTED_ZONE = 6;
+    DANGER_ZONE = 7;
+    LENGTH = 8;
+    PRICE = 9;
+    UNSAFE = 10;
+}
+
+enum REPRoutePositiveFactor {
+    UNSPECIFIED_POSITIVE_FACTOR = 0;
+    PREFERRED_ROUTE = 1;
+    FAMILIAR_ROUTE = 2;
+}

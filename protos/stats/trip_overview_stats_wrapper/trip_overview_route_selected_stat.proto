@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewRouteSelectedStat {
+    SelectionMethod selection_method = 1;
+    enum SelectionMethod {
+        SELECTION_METHOD_UNSPECIFIED = 0;
+        DEFAULT_SELECTION = 1;
+        USER_CLICK = 2;
+    }
+    
+    string route_uuid = 3;
+    
+    repeated InCarContentElementType in_car_content_element_types = 4;
+    enum InCarContentElementType {
+        IN_CAR_CONTENT_ELEMENT_TYPE_UNSPECIFIED = 0;
+        RISK_AREA = 1;
+        CARBON_EMISSION = 2;
+        TOLL = 3;
+        USUAL_ROUTE = 4;
+        TRAFFIC_STATUS = 5;
+        BADGES = 6;
+        REPORTS = 7;
+        VIA = 8;
+    }
+    
+    oneof _route_alt_id {
+        int64 route_alt_id = 2;
+    }
+}

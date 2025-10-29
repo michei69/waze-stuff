@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message DriveTo {
+    enum DangerZoneType {
+        NORMAL = 0;
+        TILE_DID_NOT_LOAD = -2;
+        NOT_DANGER_ZONE = -1;
+        ISRAEL = 1;
+        OTHER = 2;
+    }
+    
+    enum DangerZoneStatType {
+        NAVIGATE_TO_DANGEROUS_AREA_POPUP_CLICKED = 0;
+        FAVORITE_IN_DANGER_ZONE = 1;
+    }
+}
+
+message DangerZoneEod {
+    bool show_danger_zone_eod = 1;
+    
+    oneof _eod_to_destination_distance {
+        int64 eod_to_destination_distance = 2;
+    }
+}
+
+message RoutingRequestParams {
+    oneof _origin {
+        IntPosition origin = 1;
+    }
+    
+    oneof _destination {
+        IntPosition destination = 2;
+    }
+}
+
+message RoutingRequestParamsResult {
+    oneof _origin_danger_zone_type {
+        DriveTo.DangerZoneType origin_danger_zone_type = 1;
+    }
+    
+    oneof _destination_danger_zone_type {
+        DriveTo.DangerZoneType destination_danger_zone_type = 2;
+    }
+    
+    oneof _temp_vehicle_type {
+        string temp_vehicle_type = 3;
+    }
+    
+    oneof _temp_avoid_trails {
+        string temp_avoid_trails = 4;
+    }
+    
+    oneof _temp_avoid_toll_roads {
+        bool temp_avoid_toll_roads = 5;
+    }
+    
+    oneof _temp_avoid_ferries {
+        bool temp_avoid_ferries = 6;
+    }
+    
+    oneof _temp_avoid_primaries {
+        bool temp_avoid_primaries = 7;
+    }
+}
+
+message RoutingHeadingData {
+    oneof _has_stable_heading {
+        bool has_stable_heading = 1;
+    }
+}

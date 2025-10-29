@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum LocationProvider {
+    LOCATION_PROVIDER_UNSPECIFIED = 0;
+    LOCATION_PROVIDER_GPS = 1;
+    LOCATION_PROVIDER_NETWORK = 2;
+    LOCATION_PROVIDER_BEACON = 3;
+}

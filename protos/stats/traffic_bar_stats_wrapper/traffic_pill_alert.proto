@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TrafficPillAlert {
+    TrafficType traffic_type = 1;
+    enum TrafficType {
+        TRAFFIC_TYPE_UNSPECIFIED = 0;
+        CHITCHAT = 1;
+        ACCIDENT = 2;
+        HAZARD = 3;
+        CLOSURE = 4;
+    }
+    
+    TrafficSeverity traffic_severity = 2;
+    enum TrafficSeverity {
+        TRAFFIC_SEVERITY_UNSPECIFIED = 0;
+        STANDSTILL = 1;
+        HEAVY = 2;
+        MODERATE = 3;
+        LIGHT = 4;
+        CLOSED_ROAD = 5;
+    }
+}

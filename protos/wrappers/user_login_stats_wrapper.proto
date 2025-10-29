@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/unauthenticated_stats/qr_code_login_shown_stat.proto";
+import "stats/user_login_stats_wrapper/in_car_login_confirmation_screen_shown_stat.proto";
+import "stats/user_login_stats_wrapper/in_car_login_screen_clicked_stat.proto";
+import "stats/user_login_stats_wrapper/in_car_login_screen_shown_stat.proto";
+import "stats/user_login_stats_wrapper/login_complete_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UserLoginStatsWrapper {
+    oneof stat {
+        InCarLoginScreenClickedStat in_car_login_screen_clicked = 1;
+        InCarLoginScreenShownStat in_car_login_screen_shown = 2;
+        QrCodeLoginShownStat qr_code_login_shown = 3 [deprecated = true];
+        InCarLoginConfirmationScreenShownStat in_car_login_confirmation_screen_shown = 4;
+        LoginCompleteStat login_complete = 5;
+    }
+}

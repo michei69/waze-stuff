@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlerterLocationResolvedStat {
+    AlerterInfo alerter_info = 1;
+    
+    LocationResolveMethod location_resolve_method = 2;
+    enum LocationResolveMethod {
+        LOCATION_RESOLVE_METHOD_UNSPECIFIED = 0;
+        CACHE = 1;
+        LOCATION_AND_AZYMUTH = 2;
+        SEGMENT_DATA = 3;
+        FAILURE_CALCULATING = 4;
+    }
+    
+    oneof _supposed_to_be_on_route {
+        bool supposed_to_be_on_route = 3;
+    }
+    
+    oneof _on_route {
+        bool on_route = 4;
+    }
+    
+    oneof _segment_data_enabled {
+        bool segment_data_enabled = 5;
+    }
+    
+    oneof _bearing_available {
+        bool bearing_available = 6;
+    }
+}

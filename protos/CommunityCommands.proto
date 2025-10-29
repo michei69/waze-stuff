@@ -1,0 +1,125 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message InitialNotificationsPreferences {
+    optional bool was_consent_checkbox_shown = 1;
+    optional bool consent_checkbox_value = 2;
+}
+
+message Connect {
+    optional string community = 1;
+    optional string token = 2;
+    optional string secret = 3;
+    optional bool force = 4;
+    optional string first_name = 5;
+    optional string last_name = 6;
+    optional bool merge_if_found_another_user = 7;
+    optional InitialNotificationsPreferences initial_notifications_preferences = 8;
+    optional bool uid_enabled = 9;
+    optional AccessTokenType accessTokenType = 10;
+    optional bool use_device_type_for_google_oauth = 11;
+}
+
+message RegisterConnect {
+    optional string community = 1;
+    optional string token = 2;
+    optional string secret = 3;
+    
+    optional Mode mode = 4;
+    enum Mode {
+        UNKNOWN = 0;
+        RETURN_WAZE_ACCOUNT = 1;
+        RETURN_NEW_WAZE_ACCOUNT = 2;
+    }
+    
+    optional string first_name = 5;
+    optional string last_name = 6;
+    optional string password = 7;
+    optional InitialNotificationsPreferences initial_notifications_preferences = 8;
+    optional bool uid_enabled = 9;
+    optional AccessTokenType accessTokenType = 10;
+    optional bool use_device_type_for_google_oauth = 11;
+}
+
+message SwitchAccount {
+    optional string community = 1;
+    optional string token = 2;
+    optional InitialNotificationsPreferences initial_notifications_preferences = 3;
+    optional AccessTokenType accessTokenType = 4;
+    optional bool use_device_type_for_google_oauth = 5;
+}
+
+message Disconnect {
+    optional string community = 1;
+}
+
+message RegisterConnectSuccessful {
+    optional string userName = 1;
+    optional string password = 2;
+    optional bool guest = 3;
+    optional bool internalUserName = 4;
+    optional string nickname = 5;
+    optional string name = 6;
+    optional string email = 7;
+    optional string pictureId = 8;
+    optional bool isNew = 9;
+    optional string token = 10;
+    optional int64 userId = 12;
+}
+
+message SwitchAccountResult {
+    optional Code code = 1;
+    enum Code {
+        SUCCESS = 1;
+        INVALID_TOKEN = 2;
+        FAILED_INVALID_COMMUNITY_FOR_RIDER = 3;
+        NO_USER_FOUND_BY_TOKEN = 4;
+    }
+    
+    optional string userName = 2;
+    optional string password = 3;
+    optional bool internalUserName = 4;
+    optional string token = 5;
+}
+
+message ConnectRes {
+    optional int32 code = 1;
+    optional string nickname = 2;
+    optional string name = 3;
+    optional string email = 4;
+    optional string pictureId = 5;
+    optional string username = 6;
+    optional int64 lastAccessSeconds = 7;
+    optional int64 rank = 8 [deprecated = true];
+    optional int64 points = 9;
+    
+    optional Code code_value = 10;
+    enum Code {
+        CONNECTED = 1;
+        FAILED_ANOTHER_USER = 2;
+        INVALID_TOKEN = 3;
+        UNAUTHORIZED = 4;
+        ERROR = 5;
+        FAILED_ANOTHER_CARPOOL = 6;
+        FAILED_INVALID_COMMUNITY_FOR_RIDER = 7;
+        UNKNOWN = 100;
+    }
+    
+    optional AnotherUserAction another_user_action = 11;
+    enum AnotherUserAction {
+        SHOULD_SWITCH = 1;
+        SHOULD_LET_USER_DECIDE = 2;
+    }
+}
+
+enum AccessTokenType {
+    UNDEF = 0;
+    AS_IS = 1;
+    CODE = 2;
+}

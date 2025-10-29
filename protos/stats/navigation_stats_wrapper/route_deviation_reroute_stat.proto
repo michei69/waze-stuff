@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/navigation_stats_wrapper/navigation_segment.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RouteDeviationRerouteStat {
+    ActiveSnapper active_snapper = 1;
+    enum ActiveSnapper {
+        ACTIVE_SNAPPER_UNSPECIFIED = 0;
+        MATCHER = 1;
+        ROAD_SNAPPER = 2;
+    }
+    
+    repeated NavigationSegment previous_segments = 9;
+    
+    oneof _current_accuracy_meters {
+        int64 current_accuracy_meters = 2;
+    }
+    
+    oneof _distance_from_new_segment_meters {
+        int64 distance_from_new_segment_meters = 3;
+    }
+    
+    oneof _distance_from_route_meters {
+        int64 distance_from_route_meters = 4;
+    }
+    
+    oneof _expected_angle_degrees {
+        int64 expected_angle_degrees = 5;
+    }
+    
+    oneof _new_angle_degrees {
+        int64 new_angle_degrees = 6;
+    }
+    
+    oneof _previous_angle_degrees {
+        int64 previous_angle_degrees = 7;
+    }
+    
+    oneof _time_on_route_ms {
+        int64 time_on_route_ms = 8;
+    }
+}

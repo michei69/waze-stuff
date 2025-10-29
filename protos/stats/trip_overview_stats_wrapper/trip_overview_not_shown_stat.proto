@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewNotShownStat {
+    Source source = 3;
+    enum Source {
+        SOURCE_UNSPECIFIED = 0;
+        AAOS_ADDRESS_PREVIEW = 1;
+        AAOS_SEARCH = 2;
+        ADD_HOME_WORK = 3;
+        ADS_0SPEED = 4;
+        ADS_PIN_POPUP = 5;
+        AUTOCOMPLETE_PERSONAL_PLACE = 6;
+        CAR_PLAY = 7;
+        DEEP_LINK = 8;
+        FAVORITES = 9;
+        HISTORY = 10;
+        LEFT_MENU = 11;
+        LEFT_MENU_OPTIONS_ROUTES = 12;
+        PIN_ON_MAP = 13;
+        PLACE_PREVIEW = 14;
+        PLANNED_DRIVE = 15;
+        SEARCH_EMPTY_STATE = 16;
+        SEARCH_ZERO_STATE = 17;
+        START_STATE = 18;
+        VOICE_ACTIVATION = 19;
+        TRANSPORT_SDK = 20;
+        ADS_ARROW = 21;
+        SUGGESTION_CARD = 22;
+    }
+    
+    oneof _error_description {
+        string error_description = 1;
+    }
+    
+    oneof _error_code {
+        int64 error_code = 2;
+    }
+    
+    oneof _connected_to_network {
+        bool connected_to_network = 4;
+    }
+    
+    oneof _entry_point_enabled {
+        bool entry_point_enabled = 5;
+    }
+    
+    oneof _logged_in {
+        bool logged_in = 6;
+    }
+}

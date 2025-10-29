@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message NavigationSegment {
+    oneof _tile_id {
+        int32 tile_id = 1;
+    }
+    
+    oneof _line_id {
+        int32 line_id = 2;
+    }
+    
+    oneof _is_reversed {
+        bool is_reversed = 3;
+    }
+    
+    oneof _from_node {
+        int32 from_node = 4;
+    }
+    
+    oneof _to_node {
+        int32 to_node = 5;
+    }
+    
+    oneof _from_coordinate {
+        IntPosition from_coordinate = 6;
+    }
+    
+    oneof _to_coordinate {
+        IntPosition to_coordinate = 7;
+    }
+}

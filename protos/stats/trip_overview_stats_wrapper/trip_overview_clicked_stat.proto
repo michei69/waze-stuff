@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/trip_overview_stats_wrapper/source.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewClickedStat {
+    Source source = 1;
+    
+    ActionSource action_source = 2;
+    enum ActionSource {
+        ACTION_SOURCE_UNSPECIFIED = 0;
+        CARD = 1;
+        MAP = 2;
+        SCREEN_HEADER = 3;
+    }
+    
+    ActionSubSource action_sub_source = 3;
+    enum ActionSubSource {
+        ACTION_SUB_SOURCE_UNSPECIFIED = 0;
+        ROUTE_CARD = 1;
+        MAP_ETA_LABEL = 2;
+        MAP_ROUTE = 3;
+        TOGGLE_HOV_OFF = 4;
+        TOGGLE_HOV_ON = 5;
+    }
+    
+    TimerBehavior timer_behavior = 4;
+    enum TimerBehavior {
+        TIMER_BEHAVIOR_UNSPECIFIED = 0;
+        GPS_WITH_FALLBACK_ROAMING = 1;
+        OFF = 2;
+        ROAMING = 3;
+    }
+    
+    Action action = 15;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BACK = 1;
+        CANCEL_TIMER = 2;
+        TOLL_INFO = 3;
+        DRAWER_SWIPE_DOWN_FULLY = 4;
+        DRAWER_SWIPE_UP_FULLY = 5;
+        GO = 6;
+        GO_TIMEOUT = 7;
+        GO_TIMER = 8;
+        PLAN_DRIVE = 9;
+        ROUTE_SETTINGS = 10;
+        SELECT_ROUTE = 11;
+        SHOW_CURRENT = 12;
+        CLICKED_ON_CLOSURE = 13;
+        TOGGLE_PANE_VIEW = 14;
+        TOGGLE_LIST_VIEW = 15;
+        AUTOMATIC_NAVIGATION_IN_CAR = 16;
+    }
+    
+    TriggeringPlatform triggering_platform = 17;
+    
+    oneof _portrait {
+        bool portrait = 5;
+    }
+    
+    oneof _is_now {
+        bool is_now = 6;
+    }
+    
+    oneof _hov {
+        bool hov = 7;
+    }
+    
+    oneof _timer_active {
+        bool timer_active = 8;
+    }
+    
+    oneof _card_index {
+        int64 card_index = 9;
+    }
+    
+    oneof _selected_alt_id {
+        int64 selected_alt_id = 10;
+    }
+    
+    oneof _selected_route_id {
+        int64 selected_route_id = 11;
+    }
+    
+    oneof _timer_duration_seconds {
+        int64 timer_duration_seconds = 12;
+    }
+    
+    oneof _time_from_timer_activated_to_click_seconds {
+        int64 time_from_timer_activated_to_click_seconds = 13;
+    }
+    
+    oneof _time_from_screen_shown_to_timer_activated_seconds {
+        int64 time_from_screen_shown_to_timer_activated_seconds = 14;
+    }
+    
+    oneof _seconds_to_auto_navigation_in_car {
+        int64 seconds_to_auto_navigation_in_car = 16;
+    }
+}

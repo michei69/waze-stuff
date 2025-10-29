@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package linqmap.proto.usersprofile;
+
+option objc_class_prefix = "LPUP";
+option java_package = "linqmap.proto.usersprofile";
+
+message UserSuspensionHistory {
+    repeated SuspensionRecord records = 1;
+    message SuspensionRecord {
+        optional int64 time = 1;
+        optional SuspensionStatus status = 2;
+        optional string details = 3;
+        optional string source = 4;
+        optional string support_case_id = 5;
+    }
+}
+
+enum SuspensionStatus {
+    ENTRY_UNSPECIFIED = 0;
+    UNSUSPENDED = 1;
+    SANCTIONS_MATCH = 2;
+    SANCTIONS_ERROR = 7;
+    BLOCKED_PHOTO = 12;
+    ABUSE_SIGNAL_VIOLATION = 15;
+    OPS_FRAUD = 3;
+    OPS_FRAUD_AUTO = 16;
+    OPS_INAPPROPRIATE_BEHAVIOR = 4;
+    OPS_TOS_VIOLATION = 5;
+    OPS_ACCOUNT_TAKEOVER = 6;
+    OPS_OPT_OUT = 9;
+    OPS_SANCTIONS_MATCH = 8;
+    OPS_NO_SHOW = 10;
+    PAYMENT_RESTRICTION = 11;
+    OPS_BLOCKED_PHOTO = 13;
+    CHAIN_SUSPENSION = 14;
+}

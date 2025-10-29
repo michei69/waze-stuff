@@ -1,0 +1,743 @@
+syntax = "proto2";
+
+package linqmap.proto.usersprofile;
+
+import "Doc.proto";
+import "SocialMedia.proto";
+import "Types.proto";
+import "logging.proto";
+import "UsersProfileSuspensions.proto";
+import "CommunityCommands.proto";
+import "ClientInfoCommand.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPUP";
+option java_package = "linqmap.proto.usersprofile";
+
+message DeleteCarpoolUserRequest {
+    optional int64 user_id = 1;
+    optional string reason = 2;
+}
+
+message SuggestUserNameRequest {
+    optional string user_name = 1;
+    optional string first_name = 2;
+    optional string last_name = 3;
+    optional string rt_cookie = 4;
+}
+
+message SuggestUserNameResponse {
+    optional string suggestion = 1;
+    optional int32 result_code = 2;
+}
+
+message SuggestUserNameRequestWrapper {
+    optional SuggestUserNameRequest request = 1;
+    optional SuggestUserNameSessionData session_data = 3;
+}
+
+message SuggestUserNameSessionData {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+    optional string username = 3;
+}
+
+message SuggestUserNameResponseWrapper {
+    optional SuggestUserNameResponse response = 1;
+}
+
+message ResolveCommunityUserRequest {
+    optional socialmedia.Community community = 1;
+    optional string token = 2;
+    optional socialmedia.ClientName client_name = 3;
+    optional int64 request_id = 4;
+    optional AccessTokenType accessTokenType = 5;
+    optional DeviceType device_type = 6;
+}
+
+message ResolveCommunityUserResponse {
+    optional Status status = 1;
+    
+    optional LookupResult result = 2;
+    enum LookupResult {
+        FOUND_CONNECTED_USER = 0;
+        FOUND_USER_WITH_SAME_VERIFIED_EMAIL_ADDRESS = 1;
+        FOUND_USER_WITH_SAME_EMAIL_ADDRESS = 2;
+        NOT_FOUND = 3;
+    }
+    
+    optional int64 user_id = 3;
+    optional string community_id = 4;
+    optional string community_first_name = 5;
+    optional string community_last_name = 6;
+    optional string email = 7;
+    
+    repeated AccessToken access_tokens = 8;
+    message AccessToken {
+        optional socialmedia.ClientName client_name = 1;
+        optional string token = 2;
+    }
+    
+    optional string location = 9;
+    optional string gender = 10;
+    optional string community = 11;
+    optional string token = 12;
+    optional bool uid_enabled = 13;
+}
+
+message CreateCommunityUserRequest {
+    optional socialmedia.Community community = 1;
+    optional string token = 2;
+    optional socialmedia.ClientName client_name = 3;
+    optional bool force = 4;
+    optional int64 request_id = 5;
+    optional string password = 6;
+    optional string first_name = 7;
+    optional string last_name = 8;
+    optional string installation_id = 9;
+    optional AccessTokenType accessTokenType = 10;
+    optional DeviceType device_type = 11;
+}
+
+message CreateCommunityUserResponse {
+    optional Status status = 1;
+    optional int64 user_id = 2;
+}
+
+message ConnectCommunityUserRequest {
+    optional socialmedia.Community community = 1;
+    optional string token = 2;
+    optional socialmedia.ClientName client_name = 3;
+    optional int64 user_id = 4;
+    optional bool force = 5;
+    optional int64 request_id = 6;
+    optional string installation_id = 7;
+    optional AccessTokenType accessTokenType = 8;
+    optional int64 deletion_candidate_user_id = 9;
+    optional DeviceType device_type = 10;
+}
+
+message ConnectCommunityUserResponse {
+    optional Status status = 1;
+}
+
+message DisconnectCommunityUserRequest {
+    optional socialmedia.Community community = 1;
+    optional int64 user_id = 2;
+    optional int64 request_id = 3;
+}
+
+message DisconnectCommunityUserResponse {
+    optional Status status = 1;
+}
+
+message CheckVerifyEmailStatusRequest {
+    optional string verification_token = 6;
+}
+
+message CheckVerifyEmailStatusResponse {
+    optional VerifyEmailStatus status = 1;
+    enum VerifyEmailStatus {
+        INVALID = 0;
+        PENDING = 1;
+        SUCCESS = 2;
+        PIN_REQUIRED = 3;
+        PIN_EXPIRED = 4;
+    }
+}
+
+message VerifyEmailRequest {
+    optional int64 user_id = 1;
+    optional string locale = 2;
+    optional string email = 3;
+    optional EmailType email_type = 4;
+    optional bool use_custom_verification_email = 5;
+    optional string channel = 6;
+    optional string payload = 7;
+    optional AppType app_type = 8;
+    optional bool track_email_link = 9;
+    optional bool require_pin_code = 10;
+    optional bool use_new_error_scheme = 11;
+}
+
+message VerifyEmailResponse {
+    optional Status status = 1;
+    
+    optional VerifyFailureType failure_type = 2;
+    enum VerifyFailureType {
+        INVALID_LOCALE = 0;
+        INVALID_EMAIL = 1;
+        EMAIL_EXISTS = 2;
+        MISSING_EMAIL = 3;
+        EXCEEDED_RATE_LIMIT = 4;
+        INTERNAL_ERROR = 5;
+    }
+    
+    optional string verification_url = 3;
+    optional string uuid = 4;
+    optional int64 user_id = 5;
+    optional string verification_token = 6;
+    optional bool extra_verification_required = 7;
+    optional int32 pin_code_num_of_digits = 8;
+}
+
+message CheckUserEmailStatusRequest {
+    optional string username = 1;
+    optional string email = 2;
+}
+
+message CheckUserEmailStatusResponse {
+    optional CheckUserEmailStatus verified_email_status = 1;
+    enum CheckUserEmailStatus {
+        INVALID_USER = 1;
+        INVALID_EMAIL = 2;
+        NO_SUCH_EMAIL = 6;
+        NO_SUCH_VERIFIED_EMAIL = 3;
+        FOUND_VERIFIED_EMAIL = 4;
+        INTERNAL_ERROR = 5;
+    }
+    
+    optional int64 email_verified_on_sec = 2;
+    optional int64 account_created_on_sec = 3;
+}
+
+message GetPinCodeRequest {
+    optional string email_token = 1;
+    optional string rate_limit = 2;
+}
+
+message GetPinCodeResponse {
+    optional string pin_code = 1;
+    
+    optional GetPinCodeStatus status = 2;
+    enum GetPinCodeStatus {
+        SUCCESS = 0;
+        INVALID_TOKEN = 1;
+        INTERNAL_ERROR = 2;
+    }
+}
+
+message CheckEmailStatusRequest {
+    optional string email = 1;
+    optional string rate_limit = 2;
+}
+
+message CheckEmailStatusResponse {
+    optional CheckEmailStatus status = 1;
+    enum CheckEmailStatus {
+        EMAIL_ALREADY_VERIFIED = 1;
+        EMAIL_NOT_VERIFIED = 2;
+        INTERNAL_ERROR = 3;
+        DELETED = 4;
+    }
+}
+
+message CompleteVerifyEmailRequest {
+    optional string verification_token = 1;
+    optional string email_token = 2;
+    optional string pin_code = 3;
+    optional bool use_new_error_scheme = 4;
+}
+
+message CompleteVerifyEmailResponse {
+    optional Status status = 1;
+    
+    optional CompleteVerifyFailureType failure_type = 2;
+    enum CompleteVerifyFailureType {
+        INVALID_TOKEN = 0;
+        EMAIL_ALREADY_VERIFIED = 1;
+        EXCEEDED_RATE_LIMIT = 2;
+        WRONG_PIN_CODE = 3;
+        INTERNAL_ERROR = 4;
+        TOKEN_ALREADY_CONFIRMED = 5;
+        UNAUTHORIZED_USER = 6;
+        INVALID_UUID = 7;
+        PIN_CODE_EXPIRED = 8;
+    }
+    
+    optional int64 user_id = 3;
+    optional string email = 4;
+    optional EmailType email_type = 5;
+    optional string uuid = 6;
+    optional string registration_token = 7;
+}
+
+message AddSuspensionRecordRequest {
+    repeated SuspensionDomain domain = 1;
+    optional SuspensionDataKind kind = 2;
+    optional string value = 3;
+    optional string reason = 4;
+}
+
+message AddSuspensionRecordResponse {
+    optional Status status = 1;
+    enum Status {
+        SUCCESS = 1;
+        ERROR = 2;
+    }
+    
+    optional string description = 2;
+}
+
+message UpdateUserSuspensionRequest {
+    optional int64 user_id = 1;
+    optional SuspensionStatus status = 2;
+    optional string details = 3;
+    optional string source = 4;
+    optional string support_case_id = 5;
+}
+
+message GetUserSuspensionStatusRequest {
+    optional int64 user_id = 1;
+}
+
+message UserSuspensionStatusResponse {
+    optional bool is_suspended = 1;
+    optional SuspensionStatus current_status = 2;
+    optional UserSuspensionHistory history = 3;
+}
+
+message GetUserSuspensionStateRequest {
+    option deprecated = true;
+    
+    repeated SuspensionKey key = 1;
+    message SuspensionKey {
+        optional SuspensionDataKind kind = 1;
+        optional string value = 2;
+    }
+}
+
+message GetUserSuspensionStateResponse {
+    option deprecated = true;
+    
+    repeated SuspensionState state = 1;
+    message SuspensionState {
+        optional SuspensionDataKind kind = 1;
+        optional int64 created_on = 2;
+        optional int64 suspended_on = 3;
+        optional string reason = 4;
+    }
+}
+
+message UserSuspensionTombstoneRequest {
+    optional int64 user_id = 1;
+    repeated GetUserSuspensionStateRequest.SuspensionKey key = 2;
+    optional bool resuspend = 4;
+}
+
+message UserSuspensionTombstoneResponse {
+    repeated SuspensionState suspension_state = 1;
+    message SuspensionState {
+        optional SuspensionDataKind kind = 1;
+        optional SuspensionDomain domain = 2;
+    }
+}
+
+message DeleteUserRequest {
+    optional int64 user_id = 1;
+    optional string reason = 2;
+    
+    optional ReasonClass reason_class = 3;
+    enum ReasonClass {
+        REGULAR_DELETE = 0;
+        DUPLICATE_DELETE_BY_SYSTEM = 1;
+        DUPLICATE_DELETE_BY_USER = 2;
+        U16 = 3;
+    }
+    
+    optional socialmedia.ClientName client_name = 4;
+    optional int64 duplicated_user_id = 5;
+    optional string installation_id = 6;
+}
+
+message DeleteUserResponse {
+    
+}
+
+message UserProfileFields {
+    optional string user_name = 1;
+    optional string password = 2;
+    optional string email = 3;
+    optional string first_name = 4;
+    optional string last_name = 5;
+    optional bool receive_emails = 6;
+    optional int64 referrer = 7 [default = -1];
+    optional string organization = 8;
+    optional string partner_user_id = 9;
+    optional bool is_ads_user = 10;
+    optional int64 birthdate_seconds = 11;
+    optional bool is_age_confirmed = 12;
+}
+
+message CreateUserRequest {
+    optional UserProfileFields fields = 1;
+}
+
+message CreateUserResponse {
+    optional Status status = 1;
+    optional UserProfileFailureType failure_type = 2;
+    optional int64 user_id = 3;
+}
+
+message UpdateUserRequest {
+    optional int64 user_id = 1;
+    optional UserProfileFields fields = 2;
+}
+
+message UpdateUserFieldsRequest {
+    optional UpdateUserRequest request = 1;
+}
+
+message UpdateUserFieldsResponse {
+    optional Status status = 1;
+    optional UserProfileFailureType failure_type = 2;
+}
+
+message UpdateUserResponse {
+    optional Status status = 1;
+    optional UserProfileFailureType failure_type = 2;
+}
+
+message RequestVerificationEvent {
+    optional int64 user_id = 1;
+    optional string uuid = 2;
+    optional string email = 3;
+    optional string email_type = 4;
+    optional string channel = 5;
+    optional string locale = 6;
+    optional int32 error_code = 7;
+}
+
+message CompleteVerificationEvent {
+    optional string uuid = 1;
+    optional int32 error_code = 2;
+}
+
+message RegisterAccountWithEmailRequest {
+    optional string registration_token = 1;
+    optional string password = 2;
+    optional string first_name = 3;
+    optional string last_name = 4;
+    optional bool is_connect = 5;
+}
+
+message RegisterAccountWithEmailResponse {
+    optional int64 user_id = 1;
+    optional bool is_old = 2;
+    
+    optional RegisterStatus status = 3;
+    enum RegisterStatus {
+        INVALID = 1;
+        ERROR = 2;
+        SUCCESS = 3;
+    }
+    
+    optional string password = 4;
+    optional string username = 5;
+    optional string email = 6;
+    optional string first_name = 7;
+    optional string last_name = 8;
+    optional bool anonymous = 9;
+}
+
+message LocateVerifiedAccountRequest {
+    optional string registration_token = 1;
+}
+
+message LocateVerifiedAccountResponse {
+    optional LocateVerifiedStatus status = 1;
+    enum LocateVerifiedStatus {
+        INVALID = 1;
+        ERROR = 2;
+        SUCCESS = 3;
+    }
+    
+    optional string email = 2;
+    optional int64 user_id = 3;
+}
+
+message RemovePrimaryEmailRequest {
+    optional int64 user_id = 1;
+}
+
+message RemovePrimaryEmailResponse {
+    optional RemoveEmailStatus status = 1;
+    enum RemoveEmailStatus {
+        ERROR = 1;
+        SUCCESS = 2;
+    }
+}
+
+message ConnectAccountWithEmailRequest {
+    optional string registration_token = 1;
+}
+
+message ConnectAccountWithEmailResponse {
+    optional int64 user_id = 1;
+    optional bool is_old = 2;
+    
+    optional ConnectStatus status = 3;
+    enum ConnectStatus {
+        INVALID = 1;
+        ERROR = 2;
+        SUCCESS = 3;
+    }
+}
+
+message SetInitialNotificationsPreferencesRequest {
+    optional int64 user_id = 1;
+    optional string country_code = 3;
+    optional rt.InitialNotificationsPreferences initial_notifications_preferences = 2;
+}
+
+message GetUserIdRequest {
+    optional string username = 1;
+}
+
+message GetUserIdResponse {
+    optional int64 user_id = 1;
+    
+    optional Status status = 2;
+    enum Status {
+        SUCCESS = 0;
+        USER_NOT_FOUND = 1;
+        ACCOUNT_DELETED = 2;
+        INTERNAL_ERROR = 3;
+        INVALID_INPUT = 4;
+    }
+}
+
+message ResponseStatus {
+    optional Code code = 1;
+    enum Code {
+        SUCCESS = 1;
+        ERROR = 2;
+    }
+    
+    optional int32 error_code = 2;
+    optional string error_message = 3;
+}
+
+message Address {
+    optional Coordinate location = 1;
+}
+
+message WebCreateUserEvent {
+    optional int64 user_id = 1;
+    optional Address from_address = 2;
+    optional Address to_address = 3;
+    optional ResponseStatus status = 4;
+    optional rt.ClientInfo client_info = 5;
+    optional string device = 6;
+}
+
+message WebSetHomeWorkEvent {
+    optional int64 user_id = 1;
+    optional Address from_address = 2;
+    optional Address to_address = 3;
+    optional ResponseStatus status = 4;
+    optional rt.ClientInfo client_info = 5;
+}
+
+message WebConnectUserEvent {
+    optional int64 requested_user_id = 1;
+    optional int64 user_id = 2;
+    optional string community = 3;
+    optional bool is_existing_user = 4;
+    optional ResponseStatus status = 5;
+    optional rt.ClientInfo client_info = 6;
+    optional string source = 7;
+}
+
+message WebUpdateProfileImageEvent {
+    optional int64 user_id = 1;
+    optional ResponseStatus status = 2;
+    optional rt.ClientInfo client_info = 3;
+}
+
+message WebSendPhoneVerificationEvent {
+    optional int64 user_id = 1;
+    optional string phone_hash = 2;
+    optional ResponseStatus status = 3;
+    optional rt.ClientInfo client_info = 4;
+}
+
+message WebVerifyPhoneEvent {
+    optional int64 user_id = 1;
+    optional string verification_code = 2;
+    optional ResponseStatus status = 3;
+    optional rt.ClientInfo client_info = 4;
+}
+
+message SuspendPersistRecord {
+    optional SuspensionDomain domain = 1;
+    optional SuspensionDataKind kind = 2;
+    optional string value = 3;
+    optional int64 created_on = 4;
+    optional int64 suspended_on = 5;
+    optional int64 updated_on = 6;
+    optional int64 user_id = 7;
+    optional string reason = 8;
+    optional string user_history = 9;
+}
+
+message GetSuspendedHistoryRequest {
+    optional int64 user_id = 1;
+    optional SuspensionDataKind kind = 2;
+    optional string value = 3;
+    optional SuspensionDomain domain = 4;
+}
+
+message GetSuspendedHistoryResponse {
+    optional ResponseStatus status = 1;
+    repeated SuspendPersistRecord results = 2;
+}
+
+message DeleteSuspendedHistoryForKeyRequest {
+    optional SuspensionDomain domain = 1;
+    optional SuspensionDataKind kind = 2;
+    optional string value = 3;
+}
+
+message DeleteSuspendedHistoryForUserRequest {
+    optional int64 user_id = 1;
+}
+
+message DeleteSuspendedHistoryResponse {
+    optional ResponseStatus status = 1;
+    optional int32 rows = 2;
+}
+
+message GetEmailVerificationPrivateInfoRequest {
+    optional string secret = 1;
+    optional string verification_token = 2;
+}
+
+message GetEmailVerificationPrivateInfoResponse {
+    optional Status status = 1;
+    enum Status {
+        SUCCESS = 1;
+        ERROR_BAD_SECRET = 2;
+        ERROR_NO_SUCH_TOKEN = 3;
+        ERROR_INTERNAL_FAILURE = 4;
+    }
+    
+    optional string email_token = 2;
+    optional string pin_code = 3;
+}
+
+message CreateTestUserRequest {
+    optional int32 number_of_users = 1;
+    optional bool mark_as_carpool_test_users = 4;
+    optional string user_name = 2;
+    optional string password = 3;
+}
+
+message CreateTestUserResponse {
+    repeated UserInfo users = 1;
+    message UserInfo {
+        optional Status status = 1;
+        optional string user_name = 2;
+        optional string password = 3;
+        optional string debug_info = 4;
+        optional int64 user_id = 5;
+    }
+    
+    enum Status {
+        SUCCESS = 1;
+        ERROR_CREATE = 2;
+        ERROR_UPDATE = 3;
+    }
+}
+
+message InitiateRecoverAccountRequest {
+    optional int64 user_id = 1;
+    optional string email = 2;
+}
+
+message InitiateRecoverAccountResponse {
+    optional Status status = 1;
+}
+
+message ListUserNamesHistoryRequest {
+    optional int64 user_id = 1;
+}
+
+message ListUserNamesHistoryResponse {
+    repeated UserNameChange names_changes = 1;
+    message UserNameChange {
+        optional Date date = 1;
+        optional string old_user_name = 2;
+        optional string new_user_name = 3;
+        optional bool changed_by_user = 4;
+    }
+}
+
+message ListUserIdsFromUserNameHistoryRequest {
+    optional string username = 1;
+}
+
+message ListUserIdsFromUserNameHistoryResponse {
+    repeated int64 user_ids = 1;
+}
+
+message ResolveEmailTokenRequest {
+    optional string email_token = 1;
+}
+
+message ResolveEmailTokenResponse {
+    optional int64 user_id = 1;
+}
+
+enum AccessTokenType {
+    AS_IS = 1;
+    CODE = 2;
+}
+
+enum UserProfileErrorCode {
+    OK = 0;
+    TIMEOUT = 1;
+    FAILURE = 2;
+    COMMUNITY_ID_CONNECTED_TO_ANOTHER_USER = 3;
+    USER_DID_NOT_AUTHORIZE_APP = 5;
+    TOKEN_EXPIRED = 6;
+    QUOTA_EXCEEDED = 7;
+    TEMPORARY_FAILURE = 8;
+    UNEXPECTED_FAILURE = 9;
+    ACCOUNT_SUSPENDED = 10;
+    FOUND_ANOTHER_USER_AND_NO_FORCE = 11;
+    STORAGE_UPDATE_FAILURE = 12;
+    INTERNAL_FAILURE = 13;
+    RT_FAILURE = 14;
+}
+
+enum EmailType {
+    EMAIL_TYPE_UNKNOWN = 0;
+    MAIN = 1;
+    WORK = 2;
+}
+
+enum SuspensionDataKind {
+    EMAIL = 0;
+    PHONE = 1;
+    MEGABLOX = 2;
+    GOOGLE_ID = 3;
+    FACEBOOK_ID = 4;
+    WORK_EMAIL = 5;
+}
+
+enum SuspensionDomain {
+    CARPOOL = 1;
+    EDITOR = 2;
+    CLIENT_REPORTS = 3;
+}
+
+enum UserProfileFailureType {
+    INVALID_USER_NAME = 0;
+    FORBIDDEN_USER_NAME = 1;
+    USER_NAME_ALREADY_EXISTS = 2;
+    INVALID_PASSWORD = 3;
+    INVALID_EMAIL = 4;
+    EMAIL_ALREADY_EXISTS = 5;
+    EXCEEDED_RENAME_LIMIT = 6;
+}

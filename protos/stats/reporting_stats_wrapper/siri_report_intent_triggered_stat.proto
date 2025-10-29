@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SiriReportIntentTriggeredStat {
+    string ugc_context_id = 1;
+    
+    oneof phrase_info {
+        NonParameterizedPhraseInfo non_parameterized_phrase_info = 2;
+        ParameterizedPhraseInfo parameterized_phrase_info = 3;
+    }
+    
+    message NonParameterizedPhraseInfo {
+        string preposition = 1;
+    }
+    
+    message ParameterizedPhraseInfo {
+        string report_type_phrase = 1;
+        UgcTypeInfo.UgcType report_type = 2;
+    }
+}

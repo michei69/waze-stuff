@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum DrawerState {
+    DRAWER_STATE_UNSPECIFIED = 0;
+    DRAWER_PARTIALLY_OPEN = 1;
+    DRAWER_COLLAPSED = 2;
+    DRAWER_FULLY_OPEN = 3;
+    DRAWER_REMOVED = 4;
+}

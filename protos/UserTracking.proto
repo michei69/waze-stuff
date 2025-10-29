@@ -1,0 +1,73 @@
+syntax = "proto2";
+
+package com.waze.usertracking;
+
+import "RealtimeNg.proto";
+import "Types.proto";
+import "ClientInfoCommand.proto";
+import "ReportAdsSettingsCommand.proto";
+
+option objc_class_prefix = "WUT";
+option java_package = "com.waze.usertracking";
+
+message NotifyReferrerReceivedRequest {
+    optional string referrer_info = 1;
+}
+
+message NotifyReferrerReceivedRequestWrapper {
+    optional NotifyReferrerReceivedRequest request = 1;
+    optional NotifyReferrerReceivedSessionInfo session_info = 2;
+}
+
+message NotifyReferrerReceivedSessionInfo {
+    optional int64 user_id = 1;
+}
+
+message NotifyReferrerReceivedResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message NotifyReferrerReceivedResponseWrapper {
+    optional NotifyReferrerReceivedResponse response = 1;
+}
+
+message ReportAdsSettingsRequestWrapper {
+    optional linqmap.proto.rt.ReportAdsSettings request = 1;
+    optional ReportAdsSettingsSessionInfo session_info = 2;
+}
+
+message ReportAdsSettingsSessionInfo {
+    optional linqmap.proto.rt.ClientInfo client_info = 1;
+    optional int64 user_id = 2;
+}
+
+message ReportAdsSettingsResponseWrapper {
+    
+}
+
+message WrapupUserTrackingLogoutRequest {
+    optional WrapupUserTrackingLogoutRequestSessionInfo session_info = 1;
+}
+
+message WrapupUserTrackingLogoutRequestSessionInfo {
+    optional int64 user_id = 1;
+    optional double total_distance_meters = 2;
+    optional linqmap.proto.rt.ClientInfo client_info = 3;
+    optional bool is_silent_session = 4;
+}
+
+message WrapupUserTrackingLogoutResponse {
+    
+}
+
+message WrapupRouteCheckRequest {
+    optional WrapupRouteCheckRequestSessionInfo session_info = 1;
+}
+
+message WrapupRouteCheckRequestSessionInfo {
+    optional int64 user_id = 1;
+}
+
+message WrapupRouteCheckResponse {
+    
+}

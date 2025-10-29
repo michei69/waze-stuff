@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SegmentInfo {
+    oneof _from_node {
+        int64 from_node = 1;
+    }
+    
+    oneof _to_node {
+        int64 to_node = 2;
+    }
+    
+    oneof _forward {
+        bool forward = 3;
+    }
+    
+    oneof _segment_id {
+        int64 segment_id = 4;
+    }
+}

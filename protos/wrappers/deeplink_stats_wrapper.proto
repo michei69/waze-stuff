@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/deeplink_stats_wrapper/app_opened_via_deep_link_stat.proto";
+import "stats/deeplink_stats_wrapper/launched_from_app_stat.proto";
+import "stats/deeplink_stats_wrapper/sdk_connection_made_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DeeplinkStatsWrapper {
+    oneof stat {
+        LaunchedFromAppStat launched_from_app = 1;
+        AppOpenedViaDeepLinkStat app_opened_via_deep_link = 2;
+        SdkConnectionMadeStat sdk_connection_made = 3;
+    }
+}

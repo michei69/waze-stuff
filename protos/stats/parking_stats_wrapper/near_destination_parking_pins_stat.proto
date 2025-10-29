@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NearDestinationParkingPinsStat {
+    oneof _received_pins_count {
+        int64 received_pins_count = 1;
+    }
+    
+    oneof _presented_pins_count {
+        int64 presented_pins_count = 2;
+    }
+    
+    oneof _at_least_one_popular {
+        bool at_least_one_popular = 3;
+    }
+}

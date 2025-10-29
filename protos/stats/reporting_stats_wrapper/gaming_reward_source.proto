@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum GamingRewardSource {
+    GAMING_REWARD_SOURCE_UNSPECIFIED = 0;
+    REPORT = 1;
+    FEEDBACK = 2;
+}

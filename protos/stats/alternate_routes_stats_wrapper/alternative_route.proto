@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/eta_stats_wrapper/hov_information.proto";
+import "stats/reusable_types/alerter_info.proto";
+import "stats/reusable_types/route_insight_type.proto";
+import "stats/reusable_types/toll_information.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlternativeRoute {
+    repeated RouteInsightType insights = 1;
+    repeated AlerterInfo alerts = 2;
+    string alternative_route_uuid = 3;
+    TollInformation toll_information = 9;
+    HovInformation hov_information = 10;
+    
+    HovToggleState hov_toggle_state = 12;
+    enum HovToggleState {
+        HOV_TOGGLE_STATE_UNSPECIFIED = 0;
+        NO_HOV = 1;
+        HOV_ONLY = 2;
+        HOV_OFF = 3;
+        HOV_ON = 4;
+    }
+    
+    oneof _duration_seconds {
+        int64 duration_seconds = 4;
+    }
+    
+    oneof _distance_meters {
+        int64 distance_meters = 5;
+    }
+    
+    oneof _current {
+        bool current = 6;
+    }
+    
+    oneof _presented_duration_delta_seconds {
+        sint64 presented_duration_delta_seconds = 7;
+    }
+    
+    oneof _actual_duration_delta_seconds {
+        sint64 actual_duration_delta_seconds = 8;
+    }
+    
+    oneof _stop {
+        bool stop = 11;
+    }
+    
+    oneof _route_index_in_list {
+        int64 route_index_in_list = 13;
+    }
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_bottom_sheet_clicked_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_bottom_sheet_detour_shown_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_bottom_sheet_dismissed_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_bottom_sheet_shown_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_clicked_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_display_stopped_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_displayed_stat.proto";
+import "stats/google_ads_stats_wrapper/google_ad_impression_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAdsStatsWrapper {
+    oneof stat {
+        GoogleAdBottomSheetDetourShownStat google_ad_bottom_sheet_detour_shown = 1;
+        GoogleAdBottomSheetClickedStat google_ad_bottom_sheet_clicked = 2;
+        GoogleAdBottomSheetDismissedStat google_ad_bottom_sheet_dismissed = 3;
+        GoogleAdBottomSheetShownStat google_ad_bottom_sheet_shown = 4;
+        GoogleAdClickedStat google_ad_clicked = 5;
+        GoogleAdDisplayStoppedStat google_ad_display_stopped = 6;
+        GoogleAdDisplayedStat google_ad_displayed = 7;
+        GoogleAdImpressionStat google_ad_impression = 8;
+    }
+}

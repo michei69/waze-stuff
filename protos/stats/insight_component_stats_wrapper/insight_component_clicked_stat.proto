@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/insight_component_info.proto";
+import "stats/insight_component_stats_wrapper/insight_component_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentClickedStat {
+    InsightComponentState insight_component_state = 1;
+    InsightComponentInfo insight_component_info = 2;
+    
+    Action action = 3;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        THERE = 1;
+        NOT_THERE = 2;
+        ACCEPT_REROUTE = 3;
+        DECLINE_REROUTE = 4;
+        COLLAPSE = 5;
+        GENERAL_TAP = 6;
+    }
+    
+    ClickLocation click_location = 4;
+    enum ClickLocation {
+        CLICK_LOCATION_UNSPECIFIED = 0;
+        BEFORE_INSIGHT_LOCATION = 1;
+        AFTER_INSIGHT_LOCATION = 2;
+    }
+}

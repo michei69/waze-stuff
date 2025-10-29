@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GdprConsentResponse {
+    optional string preference_name = 1;
+    optional bool consent_state = 2;
+}

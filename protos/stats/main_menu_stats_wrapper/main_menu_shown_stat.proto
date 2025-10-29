@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MainMenuShownStat {
+    repeated ItemsWithBadges items_with_badges = 1;
+    enum ItemsWithBadges {
+        BADGE_UNSPECIFIED = 0;
+        INBOX = 1;
+        MARKETPLACE = 2;
+    }
+    
+    string mood_icon_asset_id = 3;
+    
+    oneof _portrait {
+        bool portrait = 2;
+    }
+}

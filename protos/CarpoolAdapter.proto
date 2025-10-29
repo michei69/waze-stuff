@@ -1,0 +1,808 @@
+syntax = "proto2";
+
+package linqmap.proto.carpooladapter;
+
+import "AddWazerCommand.proto";
+import "carpool_data.proto";
+import "Types.proto";
+import "CarpoolCommon.proto";
+import "CarpoolCommonGroups.proto";
+import "CarpoolClient.proto";
+import "logging.proto";
+import "RoutingAPI.proto";
+import "RoutingCommand.proto";
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+
+option objc_class_prefix = "LPCA";
+option java_package = "linqmap.proto.carpooladapter";
+
+message GetUserDataRequest {
+    optional int64 user_id = 1;
+}
+
+message GetUserDataResponse {
+    optional int64 user_id = 1;
+    optional string email = 2;
+    optional string phone = 3;
+    optional string locale = 4;
+    optional bool is_onboarded = 35;
+    optional bool partially_onboarded = 220;
+    optional bool was_onboarded_with_available_service = 45;
+    optional int64 onboarded_time = 46;
+    optional bool is_driver_onboarded = 5;
+    optional int64 driver_onboarding_time = 6;
+    optional int64 new_driver_onboarding_time = 48;
+    optional int64 new_rider_onboarding_time = 49;
+    optional google.carpool.User.Private.DriverOnboardingStatus driver_onboarding_status = 7;
+    optional bool is_rider_onboarded = 8;
+    optional bool is_driver = 9;
+    optional bool is_rider = 10;
+    optional google.carpool.User.Private.NotificationFrequency notification_frequency = 11;
+    optional int32 default_available_seats = 12;
+    optional google.carpool.UserGender gender = 13;
+    repeated int64 v1_migrated_recent_partners = 14;
+    repeated int64 v1_migrated_recent_drivers = 15;
+    repeated int64 manually_added_recentPartners = 16;
+    repeated int64 manually_added_recentDrivers = 17;
+    optional bool v1_migrated_coupons = 18;
+    optional bool v1_migrated_payout_account = 19;
+    optional bool v1_migrated_payout_balance = 20;
+    optional bool suspended = 21;
+    optional bool is_test_user = 22;
+    optional bool is_prober_user = 47;
+    repeated string migration_failures = 23;
+    optional string v1_migrated_sanctions_record_key = 24;
+    optional bool suspended_on_sanctions_error = 25;
+    optional string last_sanctions_check_name = 26;
+    optional int64 sanctions_check_error_time_sec = 36;
+    optional OpsFlags ops_flags = 27;
+    optional int64 v1_migrated_driver_first_ride_time_sec = 28;
+    optional int64 v1_migrated_rider_first_ride_time_sec = 29;
+    optional int64 driver_first_carpool_time_sec = 30;
+    optional int64 rider_first_carpool_time_sec = 31;
+    optional int64 migration_time = 32;
+    
+    optional MigrationMode migration_mode = 33;
+    enum MigrationMode {
+        UNDEFINED = 0;
+        ON_THE_FLY = 1;
+        EXPLICIT = 2;
+    }
+    
+    optional string migration_v1_user_id = 34;
+    optional string matching_domain = 37;
+    optional bool is_match_first = 38 [deprecated = true];
+    optional string onboarding_country_code = 39;
+    optional int64 latestAvailabilityChangeTimeMillis = 40;
+    optional bool latestAvailabilityCarpoolEnabled = 41;
+    optional carpool.common.ServiceAvailability.ServiceState latestAvailabilityServiceState = 42;
+    optional bool is_match_first_driver = 43 [deprecated = true];
+    optional bool is_match_first_rider = 44 [deprecated = true];
+    optional bool is_carpool = 200;
+    optional string first_name = 201;
+    optional string last_name = 202;
+    optional int64 rider_entry_date = 203;
+    optional int64 wazer_entry_date = 204;
+    optional string free_text = 205;
+    optional string work_email = 206;
+    optional google.carpool.User.SocialNetworks rider_social_networks = 208;
+    optional google.carpool.User.SocialNetworks driver_social_networks = 209;
+    optional int32 v1_migrated_completed_rides_driver = 210;
+    optional int32 v1_migrated_completed_rides_rider = 211;
+    optional int32 v1_migrated_total_meters_driver = 212;
+    optional int32 v1_migrated_total_meters_rider = 213;
+    optional LegacyRatingCount v1_migrated_rating_as_driver = 214;
+    optional LegacyRatingCount v1_migrated_rating_as_rider = 215;
+    optional LegacyEndorsementCount v1_migrated_endorsements = 216;
+    optional bool confirmed_credit_card = 217;
+    optional int64 driver_last_seen_millis = 218;
+    optional int64 rider_last_seen_millis = 219;
+    optional bool stealth = 400;
+    optional string pre_payments_first_name = 401;
+    optional string pre_payments_last_name = 402;
+    optional bool is_payments_name = 403;
+    optional bool fraud_suspect = 404;
+    optional bool staff = 405;
+}
+
+message ClearUserMigrationDataRequest {
+    optional int64 user_id = 1;
+    optional bool migration_only = 2;
+}
+
+message UpdateUserDataRequest {
+    optional int64 user_id = 1;
+    
+    repeated NameValue name_value = 2;
+    message NameValue {
+        optional FieldName name = 1;
+        
+        oneof value {
+            int64 int64_value = 2;
+            bool bool_value = 3;
+            string string_value = 4;
+            LegacyRatingCount legacy_rating_count_value = 5;
+            google.carpool.UserGender gender_value = 6;
+            EmailVerificationAuthority email_verification_authority_value = 7;
+            carpool.common.ServiceAvailability.ServiceState service_availability_state_value = 8;
+        }
+        
+        enum EmailVerificationAuthority {
+            NONE = 0;
+            WAZE = 1;
+            GOOGLE = 2;
+            FACEBOOK = 3;
+            CPBEv1 = 4;
+        }
+    }
+    
+    enum FieldName {
+        UNSPECIFIED = 0;
+        V1_MIGRATED_RIDES_DRIVER = 1;
+        V1_MIGRATED_RIDES_RIDER = 2;
+        CONFIRMED_CREDIT_CARD = 3;
+        V1_MIGRATED_RATING_DRIVER = 4;
+        V1_MIGRATED_RATING_RIDER = 5;
+        SUSPENDED_ON_SANCTIONS_ERROR = 6;
+        LAST_SANCTIONS_CHECK_NAME = 7;
+        IS_CARPOOL = 8;
+        DRIVER_ONBOARDING_TIME = 9;
+        NEW_DRIVER_ONBOARDING_TIME = 33;
+        NEW_RIDER_ONBOARDING_TIME = 34;
+        RIDER_ENTRY_DATE = 10;
+        WAZER_ENTRY_DATE = 11;
+        IS_TEST_USER = 12;
+        IS_PROBER_USER = 32;
+        STEALTH = 13;
+        EMAIL = 14;
+        WORK_EMAIL = 15;
+        ADD_RECENT_PARTNER_ID = 16;
+        ADD_RECENT_DRIVER_ID = 17;
+        USER_GENDER = 18;
+        IS_EMAIL_VERIFIED = 19;
+        EMAIL_VERIFICATION_AUTHORITY = 20;
+        PHONE = 21;
+        SANCTIONS_CHECK_ERROR_TIME_SEC = 22;
+        ONBOARDING_COUNTRY_CODE = 23;
+        PRE_PAYMENTS_FIRST_NAME = 24;
+        PRE_PAYMENTS_LAST_NAME = 25;
+        IS_PAYMENTS_NAME = 26;
+        LATEST_AVAILABILITY_CHANGE_TIME_MILLIS = 27;
+        LATEST_AVAILABILITY_CARPOOL_ENABLED = 28;
+        LATEST_AVAILABILITY_SERVICE_STATE = 29;
+        DRIVER_LAST_SEEN_MILLIS = 30;
+        RIDER_LAST_SEEN_MILLIS = 31;
+        FRAUD_SUSPECT = 35;
+        STAFF = 36;
+    }
+}
+
+message OpsFlags {
+    repeated OpsFlag tos_violations = 1;
+    message OpsFlag {
+        optional string free_text = 1;
+        optional int64 timestamp_millis = 2;
+        optional string case_id = 3;
+    }
+    
+    repeated OpsFlag inappropriate_behavior = 2;
+}
+
+message ReportOpsFlagRequest {
+    optional int64 user_id = 1;
+    optional OpsFlagReason reason = 2;
+    optional string free_text = 3;
+    optional string case_id = 4;
+}
+
+message GetOpsFlagsRequest {
+    optional int64 user_id = 1;
+}
+
+message ClearOpsFlagsRequest {
+    optional int64 user_id = 1;
+    repeated OpsFlagReason reasons_to_clear = 2;
+}
+
+message GetV1PayeeInfoRequest {
+    optional int64 user_id = 1;
+    optional string v1_user_id = 2;
+}
+
+message GetMyCarpoolInfoRequest {
+    optional int64 user_id = 1;
+    optional string client_version = 2;
+    optional AppType app_type = 3;
+    optional string time_zone = 4;
+    optional string country_code = 8;
+    optional Coordinate location = 5;
+    optional carpool.common.ClientDetails caller = 6;
+    
+    optional Flags flags = 7;
+    message Flags {
+        optional bool offboard_user_if_needed = 1;
+    }
+}
+
+message GetMyCarpoolInfoDebugRequest {
+    optional GetMyCarpoolInfoRequest get_my_carpool_info_request = 1;
+}
+
+message DebugOffboardUserRequest {
+    optional int64 user_id = 1;
+    optional bool keep_first_name = 2;
+}
+
+message UpdateMyCarpoolInfoRequest {
+    optional int64 user_id = 1;
+    optional MyCarpoolInfo info = 2;
+    optional carpool.common.ClientDetails caller = 3;
+    optional string timezone = 4;
+    optional string country_code = 5;
+}
+
+message DeleteMyCarpoolInfoRequest {
+    optional int64 user_id = 1;
+    optional MyCarpoolInfo info = 2;
+}
+
+message MyCarpoolInfo {
+    optional bool onboarded = 10;
+    optional bool onboarded_driver = 52;
+    optional bool onboarded_rider = 53;
+    optional bool partially_onboarded = 51;
+    optional bool enforce_offboarding_cool_down = 42;
+    
+    repeated OffboardingReason offboarding_reason = 45;
+    enum OffboardingReason {
+        UNKNOWN_OFFBOARDING_REASON = 0;
+        NOT_CONNECTED = 1;
+        NO_HOME_WORK = 2;
+        NO_COMMUTE = 3;
+        NO_FACEBOOK_PEMISSIONS = 4;
+        SUPPORT = 5;
+        OUT_OF_REGION = 6;
+        INVALID_EMAIL = 7;
+        INVALID_PHONE_NUMBER = 8;
+        MISSING_FIRST_AND_LAST_NAME = 9;
+        INVALID_PROFILE_PICTURE = 10;
+    }
+    
+    optional bool is_rider = 1;
+    optional bool is_driver = 2;
+    optional carpool.common.ServiceAvailability service_availability = 32;
+    repeated int64 blocked = 3;
+    repeated int64 blocked_timestamp = 18;
+    optional MyCarpoolHistory driver_history = 5;
+    optional MyCarpoolHistory rider_history = 6;
+    optional string work_email = 8;
+    optional bool work_email_verified = 9;
+    optional string work_name = 7;
+    repeated google.carpool.ExtendedInfo.EndorsementCount endoresement = 11;
+    
+    optional RefereeInfo referee_info = 33;
+    message RefereeInfo {
+        optional string referral_token = 1;
+    }
+    
+    repeated google.carpool.UserBonus bonus = 15;
+    repeated carpool.common.Coupon available_coupons = 16;
+    optional bool allow_others_to_match_my_gender = 17;
+    optional bool allow_others_to_view_my_last_seen = 21;
+    optional bool mark_offers_as_seen = 25;
+    optional string driver_payment_registration_id = 22;
+    optional string rider_payment_registration_id = 23;
+    optional string onboarding_country_code = 31;
+    optional bool driver_payment_account_approved = 27;
+    optional bool rider_payment_account_approved = 28;
+    optional carpool.common.PricingDetails total_monthly_earnings = 29;
+    optional string monthly_earnings_currency_code = 30;
+    optional carpool.common.PricingWithCurrency available_credits_value = 36;
+    optional string masked_credit_card = 26;
+    repeated carpool.common.groups.ShortGroupDescription member_in_group = 37;
+    optional int32 global_max_seats_available = 38;
+    optional carpool.common.RemindersFrequency rider_reminders_frequency = 43;
+    optional carpool.common.RemindersFrequency driver_reminders_frequency = 44;
+    optional bool is_out_of_region = 39;
+    optional bool is_name_valid = 40;
+    optional carpool.common.RidePreferences ride_preferences = 41;
+    repeated carpool.common.BonusProgram bonus_program = 46;
+    optional bool show_carpools_in_calendar = 47 [default = true];
+    optional bool is_fake_home_work = 48;
+    optional carpool.common.InstantBookingUserData instant_booking_user_data = 49;
+    optional int32 max_carpools_per_day = 50;
+    repeated int64 recent = 4 [deprecated = true];
+    
+    optional RequiredState require_driver_payment_details = 19 [deprecated = true];
+    enum RequiredState {
+        NOT_REQUIRED = 0;
+        OPTIONAL = 1;
+        REQUIRED = 2;
+    }
+    
+    optional RequiredState require_rider_payment_details = 20 [deprecated = true];
+    optional carpool.common.PaymentBalance payment_balance = 24 [deprecated = true];
+    optional RefereeInfo rider_referee_info = 34 [deprecated = true];
+    repeated carpool.common.Credit available_credits = 35 [deprecated = true];
+    
+    reserved 13, 14;
+}
+
+message MyCarpoolHistory {
+    optional int32 join_time_seconds = 1;
+    optional int32 last_seen_time_seconds = 5;
+    optional int32 rating_times_10 = 2;
+    optional int32 number_of_carpools = 3;
+    optional int32 number_of_carpool_kilometers = 4;
+}
+
+message GetOtherCarpoolInfoRequest {
+    optional int64 user_id = 1;
+    optional int64 other_user_id = 2;
+}
+
+message GetSharedItineraryInfoRequest {
+    optional string share_token = 1;
+}
+
+message GetSharedItineraryInfoResponse {
+    optional int64 user_id = 1;
+    optional carpool.common.CarpoolRole role = 2;
+    
+    optional carpool.common.Itinerary.Status itinerary_status = 3 [deprecated = true];
+    enum Status {
+        STATUS_UNKNOWN = 0;
+        PENDING = 1;
+        CARPOOL_AVAILABLE = 2;
+        CARPOOL_FULL = 3;
+        NO_LONGER_AVAILABLE = 4;
+    }
+    
+    optional string from_address = 4;
+    optional string to_address = 5;
+    optional string from_city = 6;
+    optional string to_city = 7;
+    optional int32 departure_window_start_sec = 8;
+    optional int32 departure_window_duration_sec = 9;
+    optional string itinerary_time_zone = 10;
+    optional string image_of_user_public_url = 11;
+    optional string image_for_web_url = 12;
+    optional string image_for_card_url = 13;
+    optional string image_for_compact_card_url = 14;
+    optional carpool.common.Location from = 15;
+    optional carpool.common.Location to = 16;
+    optional Status status = 17;
+    optional int32 carpool_pax_n = 19;
+    
+    optional SharedFrom shared_from = 20;
+    enum SharedFrom {
+        TIMESLOT = 0;
+        CARPOOL = 1;
+    }
+}
+
+message ItinerarySharedEvent {
+    optional carpool.common.Itinerary itinerary = 1;
+    optional int64 share_time_millis = 2;
+    optional string timeslot_id = 3;
+    optional string carpool_id = 4;
+    optional int64 sharing_user_id = 5;
+    optional string shared_itinerary_id = 6;
+    optional carpool.common.CarpoolRole sharing_role = 7;
+    
+    optional Status status = 8;
+    enum Status {
+        ERROR_CODE_UNSPECIFIED = 0;
+        OK = 1;
+        REQUEST_MISSING_USER_ID = 2;
+        ERROR_FETCHING_SHARED_ITINERARY = 3;
+        ITINERARY_NOT_FOUND = 4;
+        ITINERARY_NOT_MATCHING_USER_ID = 5;
+        ITINERARY_NOT_MATCHING_USER_ROLE = 6;
+        ITINERARY_STATUS_NOT_PENDING_OR_FULFILLED = 7;
+        SHARED_ITINERARY_IS_DISABLED = 8;
+        ERROR_GENERATING_REFERRAL_TOKEN_FOR_SHARING_USER = 9;
+        INVALID_SHARING_USER_ROLE_IN_CARPOOL = 10;
+        CARPOOL_HAS_INVALID_STATE_FOR_SHARING = 11;
+        CARPOOL_FULL = 12;
+        ERROR_FETCHING_FROM_TO_ADDRESS = 13;
+        ERROR_GETTING_SHORT_SHARE_URL = 14;
+        ITINERARY_TIME_PASSED = 15;
+        ERROR_FAKE_ITINERARY = 16;
+        TIMESLOT_TIME_PASSED = 17;
+        ERROR_TIMESLOT_NOT_FOUND = 18 [deprecated = true];
+        ERROR_MISSING_ROUTE = 19;
+        ERROR_FETCHING_FAKE_SHARED_ITINERARY = 20;
+    }
+    
+    optional string country_code = 9;
+}
+
+message SharedItineraryWasOpenedEvent {
+    optional int64 open_time_millies = 1;
+    optional int64 share_time_millis = 11;
+    optional int64 sharing_user_id = 2;
+    optional string shared_itinerary_id = 14 [deprecated = true];
+    optional carpool.common.Itinerary shared_itinerary = 3;
+    optional string carpool_id = 4;
+    optional bool referral_eligible = 5;
+    
+    optional FlowType flow_type = 12;
+    enum FlowType {
+        UNKNOWN = 0;
+        FULL = 1 [deprecated = true];
+        NO_MATCH = 2;
+        SHARED_AVAILABLE = 3;
+    }
+    
+    optional bool shadow = 13 [deprecated = true];
+    optional string offer_id = 6;
+    optional string opening_user_timeslot_id = 7;
+    optional carpool.common.CarpoolOpenSharedItineraryResponse.Status status = 8;
+    
+    optional ExtendedStatus extended_status = 9;
+    enum ExtendedStatus {
+        ERROR_CODE_UNSPECIFIED = 0;
+        OK = 1;
+        SHARED_ITINERARY_INVALID_STATUS = 2;
+        SHARED_ITINERARY_IS_DISABLED = 3;
+        SHARED_ITINERARY_TIME_PASSED = 4;
+        SHARED_ITINERARY_FULFILLED_AND_ROLE_IS_DRIVER = 5;
+        CALLER_ITINERARY_STATUS_FULFILLED = 6;
+        CALLER_USER_IS_THE_SHARING_USER = 7;
+        CARPOOL_FULL = 8;
+        SHARING_USER_HAS_NO_RIDE_OR_DRIVE_SCHEDULED = 9;
+        ERROR_TIMEOUT_FETCHING_CALLER_ITINERARIES = 10 [deprecated = true];
+        ERROR_CALLER_HAS_NO_CANDIDATE_TIMESLOT = 11 [deprecated = true];
+        ERROR_ENABLING_CALLER_ITINERARY = 12;
+        ERROR_NO_FORCED_SUGGESTION_CREATED = 13 [deprecated = true];
+        ERROR_FORCED_SUGGESTION_NOT_IN_TIMESLOT = 14 [deprecated = true];
+        ERROR_FETCHING_CALLER_ITINERARIES_IN_BUFFER = 15;
+        ERROR_EXHAUSTED_FETCHING_CALLER_ITINERARIES_IN_BUFFER = 16;
+        CALLER_SUSPENDED = 17;
+        CALLER_DELETED = 18;
+        CALLER_BLOCKED_SENDER = 19;
+        SENDER_SUSPENDED = 20;
+        SENDER_DELETED = 21;
+        SENDER_BLOCKED_CALLER = 22;
+        RIDER_SHARED_CARPOOL_WITH_RIDER = 23 [deprecated = true];
+        ERROR_CALLER_ITINERARIES_IN_BUFFER_AGENDA_MISMATCH = 24 [deprecated = true];
+        ERROR_UNRECOGNIZED_TOKEN = 25;
+        ERROR_FAKE_ITINERARY_TOKEN = 26;
+        ERROR_EXHAUSTED_FETCHING_SHARED_FAKE_ITINERARY = 27;
+        ERROR_SHARED_FAKE_ITINERARY_MISMATCH = 28;
+        ERROR_CALLER_ITINERARY_EXPIRED = 29;
+        ERROR_MANAGER_SKIPPED_CREATING_OFFER = 30;
+        ERROR_FAILED_CREATING_CALLER_ITINERARY = 31;
+    }
+    
+    optional carpool.common.CarpoolOpenSharedItineraryRequest request = 10;
+    optional carpool.common.Offer.Status offer_status = 15;
+    optional carpool.common.CarpoolPlan offer_plan = 16;
+}
+
+message CarpoolOpenSharedItineraryCustomEvent {
+    optional Request request = 1;
+    message Request {
+        optional carpool.common.ClientDetails caller = 1;
+        optional carpool.common.CarpoolRole role = 2;
+        optional string share_token = 3;
+        optional bool complete_onboarding = 4;
+        optional bool support_forced_offers = 5;
+        optional bool support_realtime_rides = 6;
+    }
+    
+    optional Response response = 2;
+    message Response {
+        optional carpool.common.CarpoolOpenSharedItineraryResponse.Status status = 3;
+        optional int64 sharing_user_id = 5;
+        
+        optional WrapperExtendedOffer forced_offer = 7;
+        message WrapperExtendedOffer {
+            optional carpool.common.Offer offer = 1;
+        }
+        
+        optional string timeslot_id = 8;
+        optional carpool.common.RideRequestDetails ride_request_details = 9;
+        optional string source_tag = 11;
+    }
+}
+
+message ItineraryWasSharedEvent {
+    
+}
+
+message UpdateGlobalViewingConstraintsResponse {
+    optional Status status = 1;
+}
+
+message CreateThirdPartyTokenRequest {
+    optional int64 user_id = 1;
+    optional string service_code = 2;
+    optional string state = 3;
+    optional string state_signature = 4;
+    optional AriLoggingParams ari_logging_params = 5;
+    optional string company_name = 6;
+    optional string subdomain = 7;
+}
+
+message CreateThirdPartyTokenResponse {
+    optional TokenInfo token = 1;
+    optional ThirdPartyIntegrationStatus status = 2;
+    optional string signature = 3;
+    optional string state = 4;
+}
+
+message CreateThirdPartyTokenEvent {
+    optional CreateThirdPartyTokenRequest request = 1;
+    optional CreateThirdPartyTokenResponse response = 2;
+}
+
+message ThirdPartyConnectionProperties {
+    optional string token = 1;
+    optional int64 issued_on = 2;
+    optional string subdomain = 3;
+    optional string company_name = 4;
+}
+
+message RemoveThirdPartyTokenRequest {
+    optional string token = 1;
+    optional string token_signature = 2;
+    optional bool skip_signature_verification = 3;
+    optional bool force = 4;
+    optional AriLoggingParams ari_logging_params = 5;
+}
+
+message RemoveThirdPartyTokenResponse {
+    optional string removed_token = 1;
+    optional string token_signature = 2;
+    optional ThirdPartyIntegrationStatus status = 3;
+}
+
+message RemoveThirdPartyTokenEvent {
+    optional RemoveThirdPartyTokenRequest request = 1;
+    optional RemoveThirdPartyTokenResponse response = 2;
+}
+
+message GetThirdPartyTokensForUsersRequest {
+    repeated int64 user_id = 1;
+}
+
+message GetThirdPartyTokensForUsersResponse {
+    repeated UserWithTokens usersWithTokens = 1;
+    message UserWithTokens {
+        optional int64 user_id = 1;
+        repeated TokenInfo tokens = 2;
+    }
+    
+    optional ThirdPartyIntegrationStatus status = 2;
+}
+
+message SignPayloadRequest {
+    optional string payload_hex = 1;
+    optional string requester_token = 2;
+}
+
+message SignPayloadResponse {
+    optional string signature = 1;
+    optional ThirdPartyIntegrationStatus status = 2;
+}
+
+message TokenInfo {
+    optional int64 user_id = 1;
+    optional string service_code = 2;
+    optional int64 issued_on = 3;
+    optional string token = 4;
+    optional string subdomain = 5;
+}
+
+message AriLoggingParams {
+    optional string consent_resource = 5;
+    optional string consent_version = 6;
+    optional string consent_locale = 7;
+}
+
+message GetUserOnboardingStatusRequest {
+    optional int64 user_id = 1;
+}
+
+message GetUserOnboardingStatusResponse {
+    optional bool onboarded = 1;
+}
+
+message UserConfigEvalDebugRequest {
+    optional int64 user_id = 1;
+}
+
+message UserConfigEvalDebugResponse {
+    repeated carpool.common.UserConfigEval user_config = 1;
+}
+
+message RejectOfferReasonEvent {
+    optional int64 user_id = 1;
+    optional carpool.common.CarpoolRole role = 2;
+    optional string offer_id = 3;
+    optional carpool.common.DeclineReasonParams params = 4;
+}
+
+message CancelCarpoolReasonEvent {
+    optional int64 user_id = 1;
+    optional carpool.common.CarpoolRole role = 2;
+    optional string carpool_id = 3;
+    optional carpool.common.DeclineReasonParams params = 4;
+}
+
+message UserOffboardedEvent {
+    optional int64 user_id = 1;
+    repeated MyCarpoolInfo.OffboardingReason offboarding_reasons = 2;
+    optional string client_version = 3;
+}
+
+message GetExtendedCarpoolsRequest {
+    optional carpool.common.ClientDetails caller = 1;
+    optional carpool.common.CarpoolRole role = 2;
+    repeated string carpool_id = 3;
+}
+
+message GetExtendedCarpoolsResponse {
+    repeated carpool.common.ExtendedCarpool extended_carpool = 1;
+}
+
+message TriggerRouteRtrDriverMatchingRequest {
+    optional carpool.common.ClientDetails caller = 3;
+    optional routing.proto.Request routing_request = 2;
+    optional bool is_trip_overview = 4;
+    optional int64 user_id = 1 [deprecated = true];
+}
+
+message TriggerRouteRtrDriverMatchingResponse {
+    optional string context_id = 1;
+    repeated int64 rider_ids = 2;
+}
+
+message GetRouteRtrSuggestionsRequest {
+    optional string context_id = 1;
+    optional carpool.common.ClientDetails caller = 4;
+    repeated carpool.common.Route routes = 3;
+    optional int64 user_id = 2 [deprecated = true];
+}
+
+message GetRouteRtrSuggestionsResponse {
+    optional rt.RoutingCarpoolSuggestions carpool_suggestions = 1;
+}
+
+message CreateRouteRtrSuggestionsRequest {
+    optional string context_id = 1;
+    optional carpool.common.ClientDetails caller = 4;
+    repeated carpool.common.Route routes = 3;
+}
+
+message CreateRouteRtrSuggestionsResponse {
+    repeated rt.RouteRtrSuggestion route_rtr_suggestions = 1;
+    repeated rt.AddWazer add_wazers = 2;
+    optional CreateRouteRtrSuggestionsStatus status = 3;
+}
+
+message DebugGetTripOverviewWazersRequest {
+    optional string context_id = 1;
+}
+
+message DebugGetTripOverviewWazersResponse {
+    optional string context_id = 1;
+    repeated rt.AddWazer rider_add_wazers = 2;
+    optional carpool.common.PartiallyOnboardedUserProto driver_partially_onboarded_user = 3;
+}
+
+message CarpoolDriverRealtimeStatusUpdateRequest {
+    optional carpool.common.ClientDetails caller = 1;
+    
+    optional SessionData session_data = 3;
+    message SessionData {
+        optional com.waze.proto.rtcommon.UserPosition position = 1;
+    }
+}
+
+message CarpoolDriverRealtimeStatusUpdateResponse {
+    optional bool driver_sent_offer = 2;
+}
+
+message DebugSendPdnPushForDriverRequest {
+    optional int64 driver_id = 1;
+    optional int64 rider_id = 2;
+    optional string time_zone = 3;
+    optional string country_id = 4;
+    optional string state_code = 5;
+    optional bool pdn_debug_skip_eligibility_check = 6;
+    optional bool should_trigger_rider_search = 7;
+    optional bool should_clear_user_predictions = 8;
+    optional bool send_push_via_drive_reminder = 9;
+}
+
+message DebugSendPdnPushForDriverResponse {
+    optional Status status = 1;
+    enum Status {
+        OK = 1;
+        CREATE_PREDICTION_FAILED = 2;
+        INDEXING_FAILED = 3;
+        RIDER_SEARCH_FAILED = 4;
+    }
+    
+    optional string rider_timeslot_id = 2;
+    optional string token = 3 [deprecated = true];
+}
+
+message GetAddWazersRequest {
+    optional int64 user_id = 1;
+    optional carpool.common.CarpoolRole role = 2;
+    repeated int64 other_user_ids = 3;
+}
+
+message GetAddWazersResponse {
+    repeated rt.AddWazer wazers = 1;
+}
+
+message GetDriverStartStateRequest {
+    optional string timeslot_id = 1;
+    optional int64 driver_id = 2;
+    repeated int64 rider_id = 3;
+    optional string offer_id = 4;
+    optional string carpool_id = 5;
+}
+
+message GetDriverStartStateResponse {
+    optional carpool.common.ExtendedOffer offer = 1;
+    optional carpool.common.ExtendedCarpool carpool = 2;
+    repeated rt.AddWazer wazers = 3;
+    optional carpool.common.Route route = 4;
+}
+
+message SendRtrStatusEventRequest {
+    optional int64 driver_id = 1;
+    optional int64 time_to_pickup_seconds = 3;
+    optional int32 distance_to_pickup_meters = 4;
+    optional int32 detour_time_seconds = 5;
+    optional Coordinate coordinate = 8;
+    optional com.waze.proto.rtcommon.SegmentDirectionID segment = 9;
+    optional carpool.common.Offer.Status offer_status = 10;
+    optional carpool.common.Carpool.CarpoolState.DriveState carpool_driver_state = 11;
+    optional carpool.common.Carpool.CarpoolState.RideState carpool_rider_state = 12;
+    
+    oneof active_id {
+        string offer_id = 6;
+        string carpool_id = 7;
+    }
+}
+
+message SendRtrStatusEventResponse {
+    
+}
+
+message LegacyRatingCount {
+    repeated google.carpool.ExtendedInfo.RatingCount rating_count = 1;
+}
+
+message LegacyEndorsementCount {
+    repeated google.carpool.ExtendedInfo.EndorsementCount endorsement_count = 1;
+}
+
+enum OpsFlagReason {
+    OPS_FLAG_REASON_UNSPECIFIED = 0;
+    TOS_VIOLATION = 1;
+    INAPPROPRIATE_BEHAVIOR = 2;
+}
+
+enum ThirdPartyIntegrationStatus {
+    OK = 0;
+    ERROR = 1;
+    ALREADY_EXISTS = 2;
+    SIGNATURE_ERROR = 3;
+    THIRD_PARTY_DELETE_FAILED = 4;
+    ARI_FAILED = 5;
+}
+
+enum CreateRouteRtrSuggestionsStatus {
+    UNSPECIFIED_CREATE_RTR_SUGGESTIONS_STATUS = 0;
+    DONE = 1;
+    NOT_DONE = 2;
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/ads_stats_wrapper/road_type.proto";
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UserLocationInformation {
+    RoadType road_type = 2;
+    LatLng user_coordinates = 4;
+    
+    oneof _accuracy_meters {
+        int64 accuracy_meters = 1;
+    }
+    
+    oneof _speed {
+        int64 speed = 3;
+    }
+}

@@ -1,0 +1,278 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "JniCommon.proto";
+import "MapPopup.proto";
+import "Place.proto";
+import "VenueData.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message NativeManagerDefinitions {
+    enum AlertTickerType {
+        BEEPBEEP = 0;
+        MESSAGE = 1;
+        SHARE_DRIVE = 2;
+        SHARE_LOCATION = 3;
+    }
+    
+    enum TooltipTypes {
+        SHARE = 0;
+        NEW_VIEWER = 1;
+        ETA_UPDATE_SENT = 2;
+        ARRIVAL_SENT = 3;
+        DRIVE_ENDED = 4;
+    }
+    
+    enum TimeOfDay {
+        MORNING = 0;
+        AFTERNOON = 1;
+        EVENING = 2;
+        NIGHT = 3;
+    }
+}
+
+message EtaLabelDefinitions {
+    enum PinAlignment {
+        TOP_RIGHT = 0;
+        BOTTOM_RIGHT = 1;
+        BOTTOM_LEFT = 2;
+        TOP_LEFT = 3;
+    }
+}
+
+message RawImageWithAlignment {
+    EtaLabelDefinitions.PinAlignment alignment = 1;
+    common.RawImage raw_image = 2;
+}
+
+message EtaLabelData {
+    string title = 1;
+    common.SkinState skin_state = 4;
+    uint32 title_color = 5;
+    uint32 background_color = 7;
+    int32 dpi = 8;
+    
+    oneof _sub_title {
+        string sub_title = 2;
+    }
+    
+    oneof _image {
+        string image = 3;
+    }
+    
+    oneof _subtitle_color {
+        uint32 subtitle_color = 6;
+    }
+    
+    oneof _image_type {
+        int32 image_type = 9;
+    }
+}
+
+message EtaLabelRequest {
+    int32 request_id = 1;
+    EtaLabelData label_data = 2;
+    repeated EtaLabelDefinitions.PinAlignment pin_alignments_to_generate = 3;
+}
+
+message EtaLabelResponse {
+    int32 request_id = 1;
+    repeated RawImageWithAlignment raw_images = 2;
+}
+
+message GetCurrencyStringRequest {
+    int32 request_id = 1;
+    common.Price price = 2;
+}
+
+message GetCurrencyStringResponse {
+    int32 request_id = 1;
+    string price = 2;
+}
+
+message WazeApplicationInfo {
+    int32 build_sdk_version = 1;
+    string device_name = 2;
+    string device_model = 3;
+    string device_manufacturer = 4;
+    string rom_info = 5;
+    string os_version = 6;
+    string user_path = 7;
+    string external_path = 8;
+    string web_user_agent = 9;
+    
+    AppType app_type = 11;
+    enum AppType {
+        WAZE_MOBILE = 0;
+        WAZE_AUTOMOTIVE = 1;
+    }
+    
+    string device_brand = 12;
+    bool is_test_build = 13;
+}
+
+message NetworkCommandTrace {
+    string name = 1;
+    uint32 queue_latency_ms = 2;
+    uint32 network_latency_ms = 3;
+    uint32 retry_count = 4;
+}
+
+message NotificationMessage {
+    Type type = 1;
+    enum Type {
+        GPS = 0;
+        NETWORK = 1;
+        CSV = 2;
+        DEBUG_INFO = 3;
+        PARKING_DETECTOR = 4;
+        NAVIGATE_TTS = 5;
+        PROMPTS = 6;
+        MAP_DOWNLOAD = 7;
+        REFRESH_MAP = 8;
+    }
+    
+    string message = 2;
+}
+
+message LoadAutoCompleteVenueRequest {
+    oneof _venue_id {
+        string venue_id = 1;
+    }
+    
+    oneof _venue_context {
+        string venue_context = 2;
+    }
+    
+    oneof _autocomplete_query {
+        string autocomplete_query = 3;
+    }
+    
+    oneof _autocomplete_response {
+        string autocomplete_response = 4;
+    }
+}
+
+message LoadAutoCompleteVenueResponse {
+    places.Place place = 1;
+}
+
+message CopilotMarketplaceCar {
+    int64 car_id = 1;
+    string car_name = 2;
+    bool is_ads = 3;
+    bool is_hidden = 4;
+    
+    oneof _car_3D_info {
+        Car3DInfo car_3D_info = 5;
+    }
+}
+
+message Car3DInfo {
+    float scale = 1;
+    bool has_taxi_texture = 2;
+    bool has_share_texture = 3;
+    bool has_normal_texture = 4;
+    LightingInfo lighting_info = 5;
+}
+
+message LightingInfo {
+    float ambient_intensity = 1;
+    float diffuse_intensity = 2;
+}
+
+message FirebaseEvent {
+    string name = 1;
+    
+    repeated Param params = 2;
+    message Param {
+        string name = 1;
+        string value = 2;
+    }
+}
+
+message VenueCategoryGroup {
+    string id = 1;
+    string label = 2;
+    string icon = 3;
+}
+
+message VenueCategoryGroups {
+    repeated VenueCategoryGroup groups = 1;
+}
+
+message QuestionProto {
+    repeated CallToAction ctas = 5;
+    message CallToAction {
+        uint32 bg_color = 5;
+        uint32 text_color = 6;
+        float width_ratio = 7;
+        
+        oneof _text {
+            string text = 1;
+        }
+        
+        oneof _url {
+            string url = 2;
+        }
+        
+        oneof _id {
+            string id = 3;
+        }
+        
+        oneof _icon {
+            string icon = 4;
+        }
+    }
+    
+    repeated Link links = 6;
+    message Link {
+        oneof _caption {
+            string caption = 1;
+        }
+        
+        oneof _url {
+            string url = 2;
+        }
+        
+        oneof _title {
+            string title = 3;
+        }
+    }
+    
+    int32 button_orientation = 7;
+    int32 display_time_sec = 9;
+    
+    EncTemplate enc_template = 10;
+    enum EncTemplate {
+        UNKNOWN = 0;
+        FULLSCREEN = 1;
+        MESSAGE_BOX = 2;
+    }
+    
+    bool always_show = 11;
+    bool dismissible = 12;
+    
+    oneof _question_id {
+        string question_id = 1;
+    }
+    
+    oneof _text {
+        string text = 2;
+    }
+    
+    oneof _subtitle {
+        string subtitle = 3;
+    }
+    
+    oneof _image_url {
+        string image_url = 4;
+    }
+    
+    oneof _key {
+        string key = 8;
+    }
+}

@@ -1,0 +1,489 @@
+syntax = "proto2";
+
+package com.waze.proto.userdrive.v2;
+
+import "logging.proto";
+import "Lanes.proto";
+import "Questions.proto";
+import "RoadSigns.proto";
+import "Types.proto";
+import "RoutingCommand.proto";
+import "RoutingAPIExternal.proto";
+import "RoutingResult.proto";
+import "AoMCommon.proto";
+import "RouteExplainabilityPrompt.proto";
+import "ServerString.proto";
+
+option objc_class_prefix = "UD2";
+option java_package = "com.waze.proto.userdrive.v2";
+
+message TripOverviewRequest {
+    optional int32 legacy_route_id = 1;
+    optional Origin origin = 2;
+    optional Destination destination = 3;
+    optional RoutingOptions routing_options = 4;
+    optional ClientVehicleData vehicle_data = 6;
+    optional TimePreferences time_preferences = 5;
+}
+
+message Origin {
+    optional Location snapped_location = 1;
+    optional linqmap.routing.proto.external.RoutingLocationInfo additional_location_info = 2;
+}
+
+message TimePreferences {
+    oneof time_oneof {
+        int64 departure_in_epoch_seconds = 1;
+        int64 arrival_in_epoch_seconds = 2;
+    }
+}
+
+message RoutingOptions {
+    optional bool avoid_primaries = 1;
+    optional bool avoid_trails = 2;
+    optional bool avoid_long_trails = 3;
+    optional bool allow_unknown_directions = 4;
+    optional bool avoid_toll_roads = 5;
+    optional bool avoid_danger_zones = 6;
+    optional bool avoid_ferries = 7;
+    optional bool origin_in_danger_zone = 8;
+    optional bool destination_in_danger_zone = 9;
+    optional bool use_peta = 10;
+    optional bool avoid_dangerous_turns = 12;
+    
+    reserved 11;
+}
+
+message ClientVehicleData {
+    optional VehicleType vehicle_type = 1;
+    enum VehicleType {
+        VEHICLE_TYPE_UNSPECIFIED = 0;
+        UNKNOWN = 1;
+        PRIVATE = 2;
+        TAXI = 3;
+        MOTORCYCLE = 4;
+    }
+    
+    optional linqmap.proto.rt.EVData ev_data = 2;
+    optional string license_plate_suffix = 3;
+    repeated string permit_ids = 4;
+}
+
+message TripOverviewCardContent {
+    optional linqmap.proto.rt.ServerString text = 1;
+}
+
+message TripOverviewInfoCard {
+    optional TripOverviewCardType type = 1;
+    optional TripOverviewCardContent content = 2;
+}
+
+message TripOverviewResponse {
+    repeated RouteGroup route_groups = 1;
+    optional linqmap.proto.rt.ClosuresImpactInfo closure_info = 2;
+    optional TripOverviewInfoCard information_card = 3;
+}
+
+message WaypointOnRoute {
+    optional int32 id = 1;
+    optional int32 distance_to_waypoint_in_seconds = 2;
+    optional int32 distance_to_waypoint_in_meters = 3;
+    optional int32 waypoint_index_in_points = 4;
+}
+
+message VisualRoute {
+    optional string uuid = 1;
+    optional int64 route_revision = 15;
+    optional string name = 2;
+    optional RouteCategories route_categories = 3;
+    optional RouteAttributes route_attributes = 4;
+    optional RouteRestrictions restriction = 5;
+    optional linqmap.proto.rt.RouteGeometry geometry = 6;
+    optional HovInfo hov_info = 7;
+    optional linqmap.proto.rt.TollPriceInfo toll_price = 8;
+    repeated VisualAlert alerts = 9;
+    repeated VisualTrafficJam traffic_jams = 10;
+    optional int64 total_seconds = 11;
+    optional int64 total_meters = 12;
+    optional int64 carbon_emissions_grams = 13;
+    optional linqmap.proto.rt.RouteLabel label = 14 [deprecated = true];
+    optional RouteLabel route_label = 16;
+    optional ExplainabilityHint explainability_hint = 17;
+    optional WaypointOnRoute waypoint = 18;
+}
+
+message ExplainabilityHint {
+    oneof hint {
+        linqmap.proto.rt.RouteExplainabilityPrompt prompt = 1;
+    }
+}
+
+message RouteLabel {
+    optional MapViewLabel map_view_label = 1;
+    optional ExtraInfoLabel extra_info_label = 2;
+}
+
+message ExtraInfoLabel {
+    optional string route_type_label = 1;
+    
+    optional TrafficStatus traffic_status = 2;
+    enum TrafficStatus {
+        TRAFFIC_STATUS_UNSPECIFIED = 0;
+        HEAVIER_TRAFFIC_THAN_USUAL = 1;
+        HEAVIER_TRAFFIC_ON_BEST_ROUTE = 2;
+        LIGHTER_TRAFFIC_THAN_USUAL = 3;
+        USUAL_TRAFFIC = 4;
+    }
+}
+
+message MapViewLabel {
+    optional string route_type_label = 1;
+}
+
+message HovInfo {
+    optional int32 min_passengers = 1;
+}
+
+message RouteGroup {
+    optional VisualRoute primary_route = 1;
+    optional VisualRoute alternative_with_hov = 2;
+}
+
+message RouteRestrictions {
+    repeated string required_permits = 1;
+    repeated RestrictedArea restricted_areas = 2;
+    optional bool invalid_for_private_vehicle = 3;
+    optional bool zone_restricted = 4;
+    optional bool license_plate_restricted = 5;
+}
+
+message RestrictedArea {
+    optional string name = 1;
+}
+
+message RouteCategories {
+    optional bool best = 1;
+    optional bool natural = 2;
+    optional bool preferred = 3;
+}
+
+message RouteAttributes {
+    optional bool includes_ferry_ride = 1;
+    optional bool crosses_international_border = 2;
+    optional bool crosses_danger_zone = 3;
+}
+
+message VisualAlert {
+    optional int64 alert_id = 1;
+    optional alertsonmap.SurfacedAlertDetails alert_details = 2;
+    optional linqmap.proto.Coordinate position = 3;
+    optional double relative_position_in_time = 4;
+    optional string street = 5;
+    optional string city = 6;
+    optional int32 num_reported = 7;
+}
+
+message VisualTrafficJam {
+    optional int64 jam_id = 1;
+    
+    optional Severity traffic_severity = 2;
+    enum Severity {
+        SEVERITY_UNSPECIFIED = 0;
+        LIGHT = 1;
+        MODERATE = 2;
+        HEAVY = 3;
+        STAND_STILL = 4;
+    }
+    
+    optional bytes encodedS2Points = 3;
+    optional double relative_start_position_in_time = 4;
+    optional double relative_end_position_in_time = 5;
+    optional string street = 6;
+    optional string city = 7;
+    optional int32 delay_seconds = 8;
+    optional int32 historic_delay_seconds = 9;
+    optional int32 total_time_seconds = 10;
+    optional int32 total_length_meters = 11;
+}
+
+message StartNavigationRequest {
+    optional string route_uuid = 1;
+    
+    reserved 1001;
+}
+
+message StartNavigationResponse {
+    optional FullRoute route = 2;
+    optional linqmap.proto.questions.Question question = 3;
+    repeated Detour detours = 4;
+    optional StartNavigationInfo start_navigation_info = 5;
+    
+    reserved 1;
+}
+
+message FullRoute {
+    optional VisualRoute visual_route = 1;
+    optional RouteNavigationInfo navigation_info = 2;
+    optional linqmap.proto.rt.LowerSpeedItinerary lower_speed_itinerary = 3;
+    optional EntryPoint destination_entry_point = 4;
+}
+
+message EntryPoint {
+    optional linqmap.proto.Coordinate position = 1;
+    optional string name = 2;
+}
+
+message RouteNavigationInfo {
+    repeated SegmentNavigationInfo segments = 1;
+}
+
+message ClientSegmentReference {
+    optional int32 client_tile_id = 1;
+    optional int32 client_tile_version = 2;
+    optional int32 client_line_id = 3;
+    optional int32 from_node = 4;
+}
+
+message SegmentNavigationInfo {
+    optional ClientSegmentReference reference = 1;
+    optional int32 length_meters = 2;
+    optional int32 crosstime_seconds = 3;
+    optional NavigationInstruction instruction = 4;
+}
+
+message NavigationInstruction {
+    optional linqmap.geocoding.proto.ClientLaneSet lane_set = 101;
+    optional linqmap.geocoding.proto.RoadSign road_sign = 102;
+    
+    oneof instruction {
+        TurnLeft turn_left = 1;
+        TurnRight turn_right = 2;
+        KeepLeft keep_left = 3;
+        KeepRight keep_right = 4;
+        ContinueStraight continue_straight = 5;
+        RoundaboutEnter roundabout_enter = 6;
+        RoundaboutExit roundabout_exit = 7;
+        RoundaboutLeft roundabout_left = 8;
+        RoundaboutExitLeft roundabout_exit_left = 9;
+        RoundaboutStraight roundabout_straight = 10;
+        RoundaboutExitStraight roundabout_exit_straight = 11;
+        RoundaboutRight roundabout_right = 12;
+        RoundaboutExitRight roundabout_exit_right = 13;
+        RoundaboutU roundabout_u = 14;
+        RoundaboutExitU roundabout_exit_u = 15;
+        ExitLeft exit_left = 16;
+        ExitRight exit_right = 17;
+        UTurn u_turn = 18;
+        EnterHovLane enter_hov_lane = 19;
+        ApproachingDestination approaching_destination = 20;
+        WaypointDelay waypoint_delay = 21;
+    }
+    
+    message TurnLeft {
+        
+    }
+    
+    message TurnRight {
+        
+    }
+    
+    message KeepLeft {
+        
+    }
+    
+    message KeepRight {
+        
+    }
+    
+    message ContinueStraight {
+        
+    }
+    
+    message RoundaboutEnter {
+        optional int32 roundabout_exit_number = 1;
+    }
+    
+    message RoundaboutExit {
+        optional int32 roundabout_exit_number = 1;
+    }
+    
+    message RoundaboutLeft {
+        
+    }
+    
+    message RoundaboutExitLeft {
+        
+    }
+    
+    message RoundaboutStraight {
+        
+    }
+    
+    message RoundaboutExitStraight {
+        
+    }
+    
+    message RoundaboutRight {
+        
+    }
+    
+    message RoundaboutExitRight {
+        
+    }
+    
+    message RoundaboutU {
+        
+    }
+    
+    message RoundaboutExitU {
+        
+    }
+    
+    message ExitLeft {
+        
+    }
+    
+    message ExitRight {
+        
+    }
+    
+    message UTurn {
+        
+    }
+    
+    message EnterHovLane {
+        optional LaneSide lane_side = 3;
+        optional LaneType lane_type = 4;
+    }
+    
+    message ApproachingDestination {
+        
+    }
+    
+    message WaypointDelay {
+        
+    }
+    
+    enum LaneSide {
+        LANE_SIDE_UNDEFINED = 0;
+        WHOLE_SEGMENT = 1;
+        LEFT_LANE = 2;
+        MIDDLE_LANE = 3;
+        RIGHT_LANE = 4;
+    }
+    
+    enum LaneType {
+        NAVIGATE_LANE_TYPE_UNDEFINED = 0;
+        HOV = 1;
+        HOT = 2;
+        EXPRESS = 3;
+        BUS = 4;
+        FAST = 5;
+    }
+}
+
+message Detour {
+    optional int64 id = 1;
+    repeated ClientSegmentReference segments = 2;
+    optional int64 detour_length_meters = 3;
+    optional int64 detour_time_seconds = 4;
+    optional int64 current_route_length_from_split_to_merge_meters = 5;
+    optional int64 current_route_time_from_split_to_merge_seconds = 6;
+    
+    optional DetourType type = 7;
+    enum DetourType {
+        DETOUR_TYPE_UNSPECIFIED = 0;
+        SMALL = 1;
+        EXIT_ENTRY = 2;
+        REASSURANCE = 3;
+    }
+    
+    optional int32 split_segment_index = 8;
+    optional alertsonmap.SurfacedAlertDetails alert_details = 9 [deprecated = true];
+    optional linqmap.proto.rt.DetourLabel label = 10;
+}
+
+message EstimateWaypointDetoursRequest {
+    optional string route_uuid = 1;
+    map<int32, Destination> waypoints = 2;
+    optional Location current_location = 3;
+}
+
+message EstimateWaypointDetoursResponse {
+    map<int32, DetourEstimation> detour_estimations = 1;
+}
+
+message DetourEstimation {
+    optional int32 diff_in_meters = 1;
+    optional int32 diff_in_seconds = 2;
+    optional int32 distance_to_waypoint_in_seconds = 3;
+    optional int32 distance_to_waypoint_in_meters = 4;
+}
+
+message Destination {
+    optional Location location = 1;
+    optional string venue_id = 2 [deprecated = true];
+    
+    optional VenueInfo venue_info = 6;
+    message VenueInfo {
+        optional string venue_id = 1;
+        optional string entry_point_name = 2;
+    }
+    
+    optional string street_name = 3;
+    optional string city_name = 4;
+    optional string routing_context = 5;
+}
+
+message Location {
+    optional linqmap.proto.Coordinate coordinate = 1;
+    optional int64 from_node = 2;
+    optional int64 to_node = 3;
+}
+
+message RoutingWaypoint {
+    optional int64 id = 1;
+    optional Destination waypoint = 2;
+}
+
+message RouteCalculationParams {
+    optional int32 legacy_route_id = 1;
+    optional Origin origin = 2;
+    optional Destination destination = 3;
+    optional RoutingWaypoint waypoint = 4;
+    optional RoutingOptions routing_options = 5;
+    optional ClientVehicleData vehicle_data = 6;
+}
+
+message ErrorResult {
+    optional string description = 3;
+    
+    oneof client_action {
+        Retry retry = 1;
+        DisplayErrorMessage display_error_message = 2;
+    }
+    
+    message Retry {
+        
+    }
+    
+    message DisplayErrorMessage {
+        optional string error_message = 1;
+    }
+}
+
+message StartNavigationInfo {
+    optional FullRoute route = 1;
+    repeated Detour detours = 2;
+    optional NextUpdateSchedule next_update_schedule = 3;
+}
+
+message NextUpdateSchedule {
+    optional int64 next_update_epoch_seconds = 1;
+}
+
+enum TripOverviewCardType {
+    CARD_TYPE_UNSPECIFIED = 0;
+    CARD_TYPE_CLOSURE = 1;
+    CARD_TYPE_MTE = 2;
+}

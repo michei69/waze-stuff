@@ -1,0 +1,313 @@
+syntax = "proto2";
+
+package google.waze.ridematchpayments;
+
+import "MegabloxAlert.proto";
+import "MegabloxControl.proto";
+
+option objc_class_prefix = "GWRP";
+option java_package = "google.waze.ridematchpayments";
+
+message UiToken {
+    optional string encoded_data = 1;
+    optional int64 expiry_time_millis = 2;
+}
+
+message UiTokens {
+    optional UiToken buy_flow_token = 1;
+    optional UiToken landing_page_token = 2;
+    optional UiToken payment_methods_token = 3;
+}
+
+message Amount {
+    optional int64 amount_in_micros = 1;
+    optional string currency_code = 2;
+}
+
+message GoogleParty {
+    
+}
+
+message UnregisteredDriverParty {
+    
+}
+
+message UserParty {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+}
+
+message PartyDetails {
+    oneof party {
+        GoogleParty google_party = 1;
+        UserParty user_party = 2;
+        UnregisteredDriverParty unregistered_driver_party = 3;
+    }
+}
+
+message CarpoolInvoiceLine {
+    optional UserParty invoice_user_party = 1;
+    optional string line_id = 2;
+    optional string revenue_line_id = 3;
+    optional PartyDetails other_user_party = 4;
+    optional Amount amount = 5;
+    optional int64 transaction_time_millis = 6;
+    optional MovementCode movement_code = 7;
+    optional string description = 8;
+    optional string funds_guarantee_id = 9;
+    optional string original_line_id = 10;
+    optional int32 line_item_display_rank = 11;
+}
+
+message MoneyMovement {
+    optional PartyDetails sender_details = 1;
+    optional PartyDetails receiver_details = 2;
+    optional string description = 3;
+    optional Amount amount = 4;
+    optional string funds_guarantee_id = 5;
+    optional MovementCode movement_code = 6;
+}
+
+message UiHints {
+    optional string contact_phone_number = 2;
+    optional string contact_email = 3;
+}
+
+message CustomizationParameters {
+    optional string primary_action_submit_button_text = 1;
+    optional string flow_title = 2;
+    optional string localized_terms_of_service_description = 3;
+    optional string localized_terms_of_service_text = 4;
+    optional string terms_of_service_link = 6;
+    optional string localized_title = 5;
+}
+
+message GenerateFixFlowTokenRequest {
+    optional string funds_guarantee_id = 1;
+    optional UserRole user_role = 2;
+    optional string obfuscated_gaia_id = 3;
+}
+
+message GenerateUiTokensRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+    optional string obfuscated_gaia_id = 3;
+    optional string timezone = 4;
+    optional string currency_code = 5;
+    optional string region_code = 8;
+    optional UiHints ui_hints = 6;
+    optional CustomizationParameters customization_parameters = 7;
+}
+
+message CancelAccountRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+}
+
+message PostPaymentRequest {
+    repeated MoneyMovement movements = 1;
+    optional string transaction_id = 2;
+    optional string original_transaction_id = 3;
+}
+
+message SendInvoiceLinesRequest {
+    repeated CarpoolInvoiceLine invoice_lines = 1;
+    optional bool dry_run = 2;
+}
+
+message SendInvoiceLinesResponse {
+    optional int32 error_code = 1;
+    optional int32 api_error_reason = 2;
+}
+
+message SecureFundsRequest {
+    optional string user_id = 1;
+    optional string funds_guarantee_id = 2;
+    optional Amount amount = 3;
+    optional string description = 4;
+}
+
+message SecureFundsResponse {
+    optional FundsGuaranteeStatus status = 1;
+    optional DeclineReason decline_reason = 2;
+    optional string decline_reason_user_message = 3;
+    optional int64 latest_sequence_number = 4;
+}
+
+message AuthorizeFundsRequest {
+    optional string user_id = 1;
+    optional string funds_guarantee_id = 2;
+    optional Amount amount = 3;
+    optional string description = 4;
+}
+
+message ReleaseFundsRequest {
+    optional string user_id = 1;
+    optional string funds_guarantee_id = 2;
+}
+
+message GetReceiptContentRequest {
+    optional string user_id = 1;
+    optional string funds_guarantee_id = 2;
+}
+
+message ReceiptContent {
+    optional string instrument_description = 1;
+}
+
+message GetScoreCardRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+}
+
+message CurrentBalance {
+    optional string balance_amount = 1;
+    
+    optional BalanceState balance_state = 2;
+    enum BalanceState {
+        BALANCE_STATE_UNKNOWN = 0;
+        BALANCE_STATE_DEBIT = 1;
+        BALANCE_STATE_ZERO = 2;
+        BALANCE_STATE_CREDIT = 3;
+    }
+}
+
+message LastPayment {
+    optional string payment_amount = 1;
+    optional int64 payment_time_millis = 2;
+    
+    optional PaymentDirection payment_direction = 3;
+    enum PaymentDirection {
+        PAYMENT_DIRECTION_UNKNOWN = 0;
+        PAYMENT_DIRECTION_WITHDRAW = 1;
+        PAYMENT_DIRECTION_DEPOSIT = 2;
+    }
+}
+
+message MinimumAmountDue {
+    optional string due_amount = 1;
+}
+
+message Instrument {
+    optional int64 instrument_id = 4;
+    optional string description = 1;
+    optional string logo_url = 2;
+    optional bytes fixit_token = 3;
+}
+
+message ScoreCard {
+    optional int64 billing_customer_number = 2;
+    optional int64 billing_account_number = 3;
+    optional CurrentBalance current_balance = 4;
+    optional LastPayment last_payment = 5;
+    optional MinimumAmountDue minimum_amount_due = 6;
+    optional Instrument primary_instrument = 7;
+}
+
+message GetAlertsRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+}
+
+message Alerts {
+    repeated Alert alerts = 1;
+}
+
+message GetControlsRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+}
+
+message AddControlsRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+    repeated Control controls = 3;
+}
+
+message RemoveControlsRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+    repeated ControlType control_types = 3;
+}
+
+message Controls {
+    repeated Control controls = 1;
+}
+
+message GetPaymentsAbuseSignalRequest {
+    optional string user_id = 1;
+    optional UserRole user_role = 2;
+}
+
+message AbuseSignal {
+    optional int64 count = 1;
+    repeated PaymentsProfile payments_profile = 2;
+}
+
+message GetEmptyRequest {
+    
+}
+
+message PaymentsProfile {
+    optional int64 payments_profile_id = 6;
+    
+    repeated Instrument instrument = 1;
+    message Instrument {
+        repeated InstrumentRelatedPaymentsProfile instrument_related_payments_profile = 14;
+        message InstrumentRelatedPaymentsProfile {
+            optional RelatedPaymentsProfile related_payments_profile = 1;
+            message RelatedPaymentsProfile {
+                optional int64 external_customer_id = 1;
+            }
+        }
+        
+        optional InstrumentReferenceStatus instrument_reference_status = 2;
+        enum InstrumentReferenceStatus {
+            STATUS_UNKNOWN = 0;
+            STATUS_OK = 1;
+            STATUS_MATCHING_CUSTOMER_NUMBER_EXCEEDS_LIMIT = 2;
+            STATUS_NOT_PRECISE = 3;
+        }
+    }
+}
+
+enum UserRole {
+    USER_ROLE_UNKNOWN = 0;
+    USER_ROLE_RIDER = 1;
+    USER_ROLE_DRIVER = 2;
+}
+
+enum MovementCode {
+    MOVEMENT_CODE_UNKNOWN = 0;
+    MOVEMENT_CODE_BUYER_TO_GOOGLE_PAYMENT = 1;
+    MOVEMENT_CODE_BUYER_TO_THIRD_PARTY_PAYMENT = 2;
+    MOVEMENT_CODE_GOOGLE_TO_BUYER_ONE_SIDED_REFUND = 3;
+    MOVEMENT_CODE_GOOGLE_TO_BUYER_PROMOTION = 4;
+    MOVEMENT_CODE_THIRD_PARTY_TO_GOOGLE_TRANSACTION_FEE = 5;
+    MOVEMENT_CODE_GOOGLE_TO_THIRD_PARTY_EXPENSE = 6;
+    MOVEMENT_CODE_SHARED_ACCOUNT_TO_THIRD_PARTY_EXPENSE = 7;
+}
+
+enum FundsGuaranteeStatus {
+    UNKNOWN = 0;
+    DENIED = 1;
+    APPROVED = 2;
+    PENDING = 3;
+    CANCELLED = 4;
+    CHARGED = 5;
+    ADDED = 6;
+    WAITING_FOR_CLIENT_RETRY = 7;
+    EXPIRED = 8;
+    DISBURSED = 9;
+    CLOSED = 10;
+}
+
+enum DeclineReason {
+    DECLINE_REASON_UNKNOWN = 0;
+    PAYMENTS_DECLINED = 1;
+    PAYMENTS_DECLINED_FIXABLE = 4;
+    ISSUER_DECLINED = 2;
+    PAYMENTS_DECLINED_PROMO_CODE_POLICY_VIOLATION = 3;
+    EXPIRED_BEFORE_USER_ACTION = 5;
+    EXCEEDED_SYSTEM_RETRY_LIMITS = 6;
+}

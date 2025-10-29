@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool.common;
+
+import "CarpoolCommon.proto";
+import "AddWazerCommand.proto";
+import "CarpoolClient.proto";
+
+option objc_class_prefix = "LPCC";
+option java_package = "linqmap.proto.carpool.common";
+
+message CarpoolGetInitialWeeklyViewRequest {
+    optional ClientDetails caller = 1;
+    optional CarpoolRole role = 2;
+    
+    optional Options options = 3;
+    message Options {
+        optional bool include_scheduled_carpools = 1;
+        optional bool include_cancelled_carpools = 4;
+        optional bool include_completed_carpools = 5;
+        optional bool include_in_progress_carpools = 6;
+        optional bool include_unpaid_carpools = 2;
+        optional bool include_other_wazers = 3;
+    }
+    
+    optional CarpoolSupportedFeatures supported_features = 4;
+}
+
+message CarpoolGetInitialWeeklyViewResponse {
+    repeated Timeslot timeslots = 1;
+    repeated rt.AddWazer wazers = 2;
+}

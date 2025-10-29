@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.questions;
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "AnswersProto";
+option java_package = "com.waze.insightsserving.proto.questions";
+
+message AnswerBasicInfo {
+    oneof _answer_id {
+        string answer_id = 1;
+    }
+    
+    oneof _points_award {
+        int32 points_award = 2;
+    }
+}
+
+message InsightAnswer {
+    oneof _answer_basic_info {
+        AnswerBasicInfo answer_basic_info = 1;
+    }
+    
+    oneof _type {
+        InsightAnswerType type = 2;
+    }
+    
+    enum InsightAnswerType {
+        INSIGHT_ANSWER_TYPE_UNSPECIFIED = 0;
+        HAZARD_CONSTRUCTION = 1;
+        HAZARD_VEHICLE_STOPPED = 2;
+        HAZARD_POTHOLE = 3;
+        BLOCKED_LANE_RIGHT = 4;
+        BLOCKED_LANE_LEFT = 5;
+        BLOCKED_LANE_CENTER = 6;
+    }
+}
+
+message ValidationAnswer {
+    oneof _answer_details {
+        AnswerBasicInfo answer_details = 1;
+    }
+    
+    oneof _type {
+        ValidationAnswerType type = 2;
+    }
+    
+    enum ValidationAnswerType {
+        VALIDATION_UNSPECIFIED = 0;
+        VALIDATION_THUMBS_DOWN = 1;
+    }
+}

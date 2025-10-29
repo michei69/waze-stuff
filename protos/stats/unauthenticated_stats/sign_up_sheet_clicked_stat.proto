@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/regulation_flags.proto";
+import "stats/uid_stats_wrapper/onboarding_context.proto";
+import "stats/uid_stats_wrapper/onboarding_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SignUpSheetClickedStat {
+    RegulationFlags regulation_flags = 1;
+    OnboardingContext context = 2;
+    OnboardingType type = 3;
+    
+    Action action = 4;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BACK = 1;
+        CLOSE = 2;
+        CONTINUE_AS_GUEST = 3;
+        EMAIL = 4;
+        GOOGLE = 5;
+    }
+}

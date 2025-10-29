@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CrashProneAlerterShownForBeCappingStat {
+    AlerterInfo alerter_info = 1;
+    
+    oneof _timeout_seconds {
+        int64 timeout_seconds = 2;
+    }
+    
+    oneof _distance_to_alert_meters {
+        int64 distance_to_alert_meters = 3;
+    }
+    
+    oneof _guardian_length_meters {
+        int64 guardian_length_meters = 4;
+    }
+    
+    oneof _new_alerter_component {
+        bool new_alerter_component = 5;
+    }
+    
+    oneof _silent {
+        bool silent = 6;
+    }
+    
+    oneof _sound_enabled {
+        bool sound_enabled = 7;
+    }
+    
+    oneof _speed_limit_kph {
+        int64 speed_limit_kph = 8;
+    }
+}

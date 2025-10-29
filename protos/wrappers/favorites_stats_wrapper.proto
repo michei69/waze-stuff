@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/favorites_stats_wrapper/save_destination_popup_clicked_stat.proto";
+import "stats/favorites_stats_wrapper/save_destination_popup_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message FavoritesStatsWrapper {
+    oneof stat {
+        SaveDestinationPopupShownStat save_destination_popup_shown = 1;
+        SaveDestinationPopupClickedStat save_destination_popup_clicked = 2;
+    }
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TtsCacheSizeStat {
+    oneof _cache_total_size_kb {
+        int64 cache_total_size_kb = 1;
+    }
+    
+    oneof _cache_items_count {
+        int64 cache_items_count = 2;
+    }
+}

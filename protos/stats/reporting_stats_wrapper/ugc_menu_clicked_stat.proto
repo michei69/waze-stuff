@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/ugc_info.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcMenuClickedStat {
+    UgcInfo ugc_info = 1;
+    UgcTypeInfo ugc_type_info = 2;
+    
+    Action action = 3;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CANCEL = 1;
+        LATER = 2;
+        REPORT = 3;
+        SELECT = 4;
+        CLOSE = 5;
+        CLOSE_SIRI_EDUCATION_CARD = 6;
+        START_REPORTING_CONVERSATION = 7;
+    }
+    
+    oneof _quick_closure_flow {
+        bool quick_closure_flow = 4;
+    }
+    
+    oneof _lock_screen_mode {
+        bool lock_screen_mode = 5;
+    }
+}

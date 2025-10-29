@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/insight_available_click_options.proto";
+import "stats/insight_component_stats_wrapper/insight_component_info.proto";
+import "stats/insight_component_stats_wrapper/insight_component_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentShownStat {
+    InsightComponentState insight_component_state = 1;
+    InsightComponentInfo insight_component_info = 2;
+    repeated InsightAvailableClickOptions available_click_options = 3;
+    
+    oneof _sound_enabled {
+        bool sound_enabled = 4;
+    }
+    
+    oneof _silent {
+        bool silent = 5;
+    }
+}

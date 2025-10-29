@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WaitForServerSuggestionStartedStat {
+    oneof _fresh_location_available {
+        bool fresh_location_available = 1;
+    }
+    
+    oneof _location_timestamp_ms {
+        int64 location_timestamp_ms = 2;
+    }
+    
+    oneof _network_available {
+        bool network_available = 3;
+    }
+    
+    oneof _logged_in {
+        bool logged_in = 4;
+    }
+}

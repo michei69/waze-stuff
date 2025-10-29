@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/permissions_stats_wrapper/bluetooth_access_request_trigger.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BluetoothPermissionRequestPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CONTINUE = 1;
+        CLOSE = 2;
+        BACK = 3;
+        TAP_OUTSIDE = 4;
+    }
+    
+    BlutoothAccessRequestTrigger request_trigger = 3;
+    
+    oneof _dont_show_again {
+        bool dont_show_again = 2;
+    }
+}

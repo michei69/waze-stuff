@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package linqmap.proto;
+
+import "google/protobuf/descriptor.proto";
+
+option objc_class_prefix = "LPR";
+option java_package = "linqmap.proto";
+
+message Param {
+    optional string name = 1;
+    optional string type = 2;
+    optional string description = 3;
+    optional Documentation documentation = 4;
+    optional bool repeated = 5;
+}
+
+message Returns {
+    optional string type = 1;
+    optional string description = 2;
+}
+
+message Documentation {
+    optional string name = 1;
+    optional string description = 2;
+    repeated Param param = 3;
+    optional Returns returns = 4;
+    optional string usage = 5;
+}
+
+extend google.protobuf.FieldOptions {
+    optional string param = 99002;
+}
+
+extend google.protobuf.MessageOptions {
+    optional string documentation = 99003;
+    optional string returns = 99004;
+}

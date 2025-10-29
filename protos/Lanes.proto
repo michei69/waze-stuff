@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+package linqmap.geocoding.proto;
+
+option objc_class_prefix = "LGP";
+
+message LaneRange {
+    optional int32 from_lane_index = 1;
+    optional int32 to_lane_index = 2;
+}
+
+message LaneGuidance {
+    optional LaneRange lanes_range = 1;
+    optional int32 angle = 2;
+    optional int32 angle_override = 3;
+    optional bool enable_display = 4;
+    optional bool enable_voice = 5;
+    optional InstructionStrategy instruction_strategy = 6;
+}
+
+message LaneDefinition {
+    repeated TurnLanes turn = 1;
+}
+
+message TurnLanes {
+    optional LaneGuidance lane_guidance = 1;
+    optional bool from_segment_dir = 2;
+    optional int64 to_segment_id = 3;
+    optional bool to_segment_dir = 4;
+}
+
+message ClientLaneSet {
+    repeated ClientLane client_lane = 1;
+    optional bool enable_voice_for_instruction = 2;
+}
+
+message ClientLane {
+    optional int32 lane_index = 1;
+    repeated AngleObject angle_object = 2;
+}
+
+message AngleObject {
+    optional int32 angle = 1;
+    optional bool selected = 2;
+}
+
+enum InstructionStrategy {
+    INSTRUCTION_STRATEGY_UNSPECIFIED = 0;
+    INSTRUCTION_STRATEGY_PULL = 1;
+    INSTRUCTION_STRATEGY_PUSH = 2;
+}

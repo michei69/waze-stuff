@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum RoutesScreenView {
+    ROUTES_SCREEN_VIEW_UNSPECIFIED = 0;
+    ROUTES_SCREEN_VIEW_LIST = 1;
+    ROUTES_SCREEN_VIEW_MAP = 2;
+}

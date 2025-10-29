@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/conversational_reporting_mode.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ConversationalReportingIntentTriggeredStat {
+    string ugc_context_id = 1;
+    string conversation_id = 2;
+    ConversationalReportingMode mode = 3;
+}

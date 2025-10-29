@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_information.proto";
+import "stats/google_ads_stats_wrapper/google_ad_information_extended.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAdDisplayedStat {
+    GoogleAdInformation google_ad_information = 1;
+    GoogleAdInformationExtended google_ad_information_extended = 2;
+}

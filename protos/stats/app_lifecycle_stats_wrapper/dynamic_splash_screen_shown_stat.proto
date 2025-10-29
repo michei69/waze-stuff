@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DynamicSplashScreenShownStat {
+    Frequency frequency = 1;
+    enum Frequency {
+        FREQUENCY_UNSPECIFIED = 0;
+        EVERY_COLD_START = 1;
+        DAILY = 2;
+    }
+}

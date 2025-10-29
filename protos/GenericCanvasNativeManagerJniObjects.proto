@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Position.proto";
+import "Map.proto";
+import public "Advertisement.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message GenerateMapObjectsPositionRequest {
+    repeated map.Polyline polylines = 1;
+    repeated IntPosition coordinates_to_be_far_from = 2;
+}
+
+message GenerateMapObjectsPositionResult {
+    map<int64, RouteEtaLabelPositionAndAlignment> result = 1;
+}
+
+message RouteEtaLabelPositionAndAlignment {
+    int64 polyline_id = 1;
+    IntPosition position = 2;
+    map.Marker.Alignment alignment = 3;
+}
+
+message DisplayRects {
+    repeated DisplayRect display_rects = 1;
+}
+
+message DisplayRect {
+    string tag = 1;
+    int32 top_left_x = 2;
+    int32 top_left_y = 3;
+    int32 bottom_right_x = 4;
+    int32 bottom_right_y = 5;
+}
+
+message MapMovementChanged {
+    MapMovementState new_state = 1;
+    enum MapMovementState {
+        IDLE_AFTER_TOUCH = 0;
+        FOLLOWING_TOUCH = 1;
+        SETTLING_AFTER_TOUCH = 2;
+        ANIMATING_MOVEMENT = 3;
+        ANIMATING_MOVEMENT_TO_TARGET = 4;
+        FOCUSED_ON_TARGET = 5;
+    }
+}

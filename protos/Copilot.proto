@@ -1,0 +1,321 @@
+syntax = "proto2";
+
+package com.waze.copilot;
+
+import "Types.proto";
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "WCP";
+option java_package = "com.waze.copilot";
+
+message SetMoodRequestWrapper {
+    optional SetMoodRequest request = 1;
+    optional SimpleUserInfo user_info = 2;
+}
+
+message SetMoodRequest {
+    optional int32 mood = 1;
+}
+
+message SetMoodResponse {
+    optional OpenMoodSelection open_mood_selection = 1;
+    optional UpdateUserSession update_session = 2;
+}
+
+message OpenMoodSelection {
+    
+}
+
+message UpdateUserSession {
+    optional int32 mood = 1;
+}
+
+message SimpleUserInfo {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+}
+
+message UserInfo {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+    optional string user_locale = 3;
+    optional bool is_staff = 4;
+    optional int64 user_flags = 5;
+    optional linqmap.proto.rt.ClientInfo client_info = 6;
+    optional proto.rtcommon.CountryEntry country_entry = 7;
+}
+
+message GetCopilotMarketplaceGalleryRequest {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+    optional string locale = 3;
+    optional linqmap.proto.Coordinate location = 4;
+}
+
+message GetCopilotMarketplaceGalleryResponse {
+    repeated CopilotMarketplaceGalleryCategory categories = 1;
+}
+
+message CopilotMarketplaceGalleryCategory {
+    optional string title = 1;
+    repeated CampaignGalleryCard cards = 2;
+}
+
+message CampaignGalleryCard {
+    oneof card {
+        FeaturedCampaignGalleryCard featured_card = 1;
+        ThemeCampaignGalleryCard theme_card = 2;
+        CarCampaignGalleryCard car_card = 3;
+    }
+}
+
+message FeaturedCampaignGalleryCard {
+    optional int64 campaign_id = 1;
+    optional string title = 2;
+    optional string subtitle = 3;
+    optional string image_url = 4;
+}
+
+message ThemeCampaignGalleryCard {
+    optional int64 campaign_id = 1;
+    optional string title = 2;
+    optional string subtitle = 3;
+    optional string image_url = 4;
+}
+
+message CarCampaignGalleryCard {
+    optional int64 campaign_id = 1;
+    optional string title = 2;
+    optional string image_url = 3;
+}
+
+message GetCopilotThemeCampaignSetupRequest {
+    optional int64 campaign_id = 1;
+    optional int64 user_id = 2;
+    optional string session_id = 3;
+    optional string locale = 4;
+    optional linqmap.proto.Coordinate location = 5;
+}
+
+message GetCopilotCarCampaignSetupRequest {
+    optional int64 campaign_id = 1;
+    optional int64 user_id = 2;
+    optional string session_id = 3;
+    optional string locale = 4;
+    optional linqmap.proto.Coordinate location = 5;
+}
+
+message GetCopilotThemeCampaignSetupResponse {
+    optional CopilotThemeCampaign campaign = 1;
+    optional GetStatus status = 2;
+}
+
+message GetCopilotCarCampaignSetupResponse {
+    optional CopilotCarCampaign campaign = 1;
+    optional GetStatus status = 2;
+}
+
+message CopilotThemeCampaign {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional string title = 3;
+    optional string subtitle = 4;
+    optional string description = 5;
+    optional string main_image_url = 6;
+    optional string logo_image_url = 7;
+    
+    repeated Character characters = 8;
+    message Character {
+        optional int64 character_id = 1;
+        optional string character_name = 2;
+        optional string icon_url = 3;
+        
+        repeated VoicePreview voices = 4;
+        message VoicePreview {
+            optional string voice_id = 1;
+            optional string title = 2;
+            optional string icon_url = 3;
+            optional string sample_asset_url = 4;
+        }
+        
+        repeated CarPreview cars = 5;
+        message CarPreview {
+            optional int64 car_id = 1;
+            optional string car_name = 2;
+            optional string title = 3;
+            optional string icon_url = 4;
+        }
+        
+        repeated MoodPreview moods = 6;
+        message MoodPreview {
+            optional int64 mood_id = 1;
+            optional string mood_name = 2;
+            optional string title = 3;
+            optional string icon_url = 4;
+        }
+    }
+    
+    optional string share_title = 9;
+    optional string share_body = 10;
+}
+
+message CopilotCarCampaign {
+    optional int64 id = 1;
+    optional string name = 2;
+    optional string title = 3;
+    optional string subtitle = 4;
+    optional string main_image_url = 5;
+    optional string logo_image_url = 6;
+    
+    repeated CarPreview cars = 7;
+    message CarPreview {
+        optional int64 car_id = 1;
+        optional string car_name = 2;
+        optional string title = 3;
+        optional string icon_url = 4;
+    }
+    
+    optional string share_title = 8;
+    optional string share_body = 9;
+}
+
+message GetMarketplaceNewContentAvailabilityRequestWrapper {
+    optional GetMarketplaceNewContentAvailabilityRequest request = 1;
+    optional UserInfo user_info = 2;
+}
+
+message GetMarketplaceNewContentAvailabilityRequest {
+    
+}
+
+message GetMarketplaceNewContentAvailabilityResponse {
+    optional int64 new_content_count = 1;
+    optional int64 most_recently_modified_timestamp_sec = 2;
+}
+
+message GetCopilotAssetsRequestWrapper {
+    optional GetCopilotAssetsRequest request = 1;
+    optional UserInfo user_info = 2;
+}
+
+message GetCopilotAssetsRequest {
+    repeated AssetInfo asset_info = 1;
+    message AssetInfo {
+        oneof id {
+            int32 mood_id = 1;
+            string mood_name = 2;
+            int64 car_id = 3;
+            string car_name = 4;
+            string voice_id = 5;
+        }
+    }
+}
+
+message GetCopilotAssetsResponse {
+    repeated CopilotAsset assets = 1;
+    message CopilotAsset {
+        optional GetStatus status = 1;
+        optional bool is_fallback = 5 [default = false];
+        
+        oneof asset {
+            MoodAsset mood = 2;
+            VoiceAsset voice = 3;
+            CarAsset car = 4;
+        }
+    }
+}
+
+message AssetDownloadable {
+    optional int64 last_changed_timestamp_sec = 1;
+    optional string assets_zip_file_url = 2;
+}
+
+message AssetPreview {
+    optional string preview_image_url = 1;
+    optional string preview_audio_url = 2;
+}
+
+message MoodAsset {
+    optional int32 id = 1;
+    optional string name = 2;
+    optional AssetDownloadable downloadable = 3;
+    optional AssetPreview preview = 4;
+    optional bool is_hidden = 5;
+    optional bool is_ads = 6;
+}
+
+message VoiceAsset {
+    optional string id = 1;
+    optional string name = 2;
+    optional string lang = 3;
+    optional string locale = 4;
+    optional AssetDownloadable downloadable = 5;
+    optional AssetPreview preview = 6;
+    optional VoiceType voice_type = 7;
+    optional string description = 8;
+    optional int32 version = 9;
+}
+
+message CarAsset {
+    optional int64 car_id = 1;
+    optional string car_name = 2;
+    optional Car3DInfo car_3d_info = 3;
+    optional AssetDownloadable downloadable = 4;
+    optional AssetPreview preview = 5;
+    optional bool is_ads = 6 [deprecated = true];
+}
+
+message Car3DInfo {
+    optional bool has_normal_texture = 1;
+    optional bool has_taxi_texture = 2;
+    optional bool has_share_texture = 3;
+    optional float scale = 4 [default = 1];
+    optional Car3DLighting lighting = 5;
+}
+
+message Car3DLighting {
+    optional float ambient_intensity = 1 [default = 1];
+    optional float diffuse_intensity = 2;
+}
+
+message GetSettingsCopilotCarsRequestWrapper {
+    optional GetSettingsCopilotCarsRequest request = 1;
+    optional UserInfo user_info = 2;
+}
+
+message GetSettingsCopilotCarsRequest {
+    
+}
+
+message GetSettingsCopilotCarsResponse {
+    repeated CarAsset car_assets = 1;
+}
+
+message GetSettingsCopilotVoicesRequestWrapper {
+    optional GetSettingsCopilotVoicesRequest request = 1;
+    optional UserInfo user_info = 2;
+}
+
+message GetSettingsCopilotVoicesRequest {
+    
+}
+
+message GetSettingsCopilotVoicesResponse {
+    repeated VoiceAsset voice_assets = 1;
+}
+
+enum GetStatus {
+    STATUS_UNSPECIFIED = 0;
+    SUCCESS = 1;
+    SERVER_ERROR = 2;
+    UNAVAILABLE = 3;
+    NOT_FOUND = 4;
+}
+
+enum VoiceType {
+    VOICE_TYPE_UNSPECIFIED = 0;
+    TTS = 1;
+    PRE_RECORDED_PROMPT = 2;
+}

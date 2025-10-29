@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message CarRenderingInfo {
+    string car_name = 1;
+    bool is_from_server = 2;
+    string model_file_name = 3;
+    string normal_texture_file_path = 4;
+    float scale = 7;
+    LightingRenderingInfo lighting_info = 8;
+    
+    oneof _taxi_texture_file_path {
+        string taxi_texture_file_path = 5;
+    }
+    
+    oneof _share_texture_file_path {
+        string share_texture_file_path = 6;
+    }
+}
+
+message LightingRenderingInfo {
+    float ambient_intensity = 1;
+    float diffuse_intensity = 2;
+}
+
+message AnalyticsSource {
+    AssetChangeSource source = 1;
+    enum AssetChangeSource {
+        UNDEFINED = 0;
+        SYSTEM = 1;
+        PREVIOUS = 2;
+        DEFAULT_RANDOM = 3;
+        SETTINGS = 4;
+        DEEPLINK = 5;
+        COPILOT = 6;
+        COPILOT_MARKETPLACE = 7;
+    }
+}

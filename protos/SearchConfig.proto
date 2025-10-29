@@ -1,0 +1,108 @@
+syntax = "proto2";
+
+package linqmap.proto.search_config;
+
+import "RealtimeNg.proto";
+import "Types.proto";
+import "Venues.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "LPSC";
+option java_package = "linqmap.proto.search_config";
+
+message SearchConfigRequestWrapper {
+    optional SearchConfigRequest request = 1;
+    optional SearchConfigSessionData search_config_session_data = 2;
+}
+
+message SearchConfigRequest {
+    optional string prev_checksum = 1;
+    optional StringMap user_config = 2;
+    optional string user_country_code = 3;
+    optional string username = 4;
+    optional Coordinate user_location = 5;
+    optional bool crisis_response_user_in_cr_area = 6;
+}
+
+message SearchConfigResponse {
+    optional string source = 1001;
+    optional string checksum = 1013;
+    repeated Provider localProvider = 1002;
+    repeated Category category = 1003;
+    repeated CategoryGroup category_group = 1016;
+    optional string regularUrlParams = 1004;
+    optional string routeUrlParams = 1005;
+    optional string regularName = 1007;
+    optional string routeName = 1008;
+    optional string updateName = 1009;
+    optional string autocompleteUrlParams = 1011;
+    repeated venue.Service service = 1012;
+    repeated venue.FieldPoints field_point = 1014;
+    repeated venue.Validator validator = 1015;
+}
+
+message Category {
+    optional string id = 2001;
+    optional string name = 2002;
+    repeated Provider provider = 2003;
+    repeated Product product = 2005;
+    optional int64 maxDistanceMeters = 2006;
+    optional string regularUrlParams = 2007;
+    optional string routeUrlParams = 2008;
+    optional string updateUrlParams = 2009;
+    optional string priceFormat = 2011;
+    repeated string brand = 2012;
+    repeated CannedSearch cannedSearch = 2013;
+    optional string regularName = 2014;
+    optional string routeName = 2015;
+    optional string updateName = 2016;
+    optional string parent_category_id = 2017;
+    repeated string endOfDriveProviderId = 1016;
+    optional bool hasImage = 2018;
+}
+
+message CategoryGroup {
+    optional string id = 1;
+    optional string name = 2;
+    repeated string category_id = 3;
+    optional string regular_url_params = 4;
+    optional string route_url_params = 5;
+}
+
+message Provider {
+    optional string id = 3001;
+    optional string name = 3002;
+    optional bool notAllowedOnMap = 3003;
+    optional bool chinaShiftCoord = 3004;
+    optional bool disableIconOnMap = 3005;
+    optional bool disableIconOnList = 3006;
+    optional bool disableSpecialsOnMap = 3007;
+    optional bool disableSpecialsOnList = 3008;
+    optional bool productsUpdateable = 3009;
+}
+
+message Filter {
+    optional string id = 4001;
+    optional string name = 4002;
+}
+
+message Product {
+    optional string id = 5001;
+    optional string name = 5002;
+    optional string priceFormat = 5003;
+    optional string type = 5004;
+}
+
+message CannedSearch {
+    optional string name = 6001;
+    optional string urlParams = 6002;
+}
+
+message SearchConfigSessionData {
+    repeated StringEntry external_config = 1;
+    optional string username = 2;
+    optional rt.ClientInfo client_info = 3;
+    optional string country_code = 4;
+    optional string real_country_code = 5;
+    optional string initial_country_code = 6;
+}

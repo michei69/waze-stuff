@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+import "CarpoolCommon.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GetUsersMessagesListRequest {
+    
+}
+
+message GetUsersMessagesListResponse {
+    optional Status status = 1;
+    repeated UserMessagesData userMessagesData = 2;
+}
+
+message UserMessagesData {
+    optional int64 user_id = 1;
+    optional int32 unread_count = 2;
+    
+    oneof last_message {
+        SystemMessage system_message = 3;
+    }
+    
+    reserved 4;
+    
+    reserved "inbox_message";
+}
+
+message SystemMessage {
+    optional string snipplet = 1;
+    optional int64 time = 2;
+    optional carpool.common.Carpool.CarpoolState.DriveState state = 3;
+}

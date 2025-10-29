@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/user_profile_stats_wrapper/current_map_car_icon_stat.proto";
+import "stats/user_profile_stats_wrapper/map_car_changed_stat.proto";
+import "stats/user_profile_stats_wrapper/my_waze_item_clicked_stat.proto";
+import "stats/user_profile_stats_wrapper/my_waze_shown_stat.proto";
+import "stats/user_profile_stats_wrapper/set_commute_menu_shown_stat.proto";
+import "stats/user_profile_stats_wrapper/user_mood_changed_stat.proto";
+import "stats/user_profile_stats_wrapper/voice_changed_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UserProfileStatsWrapper {
+    oneof stat {
+        MapCarChangedStat map_car_changed = 1;
+        VoiceChangedStat voice_changed = 2;
+        UserMoodChangedStat user_mood_changed = 3;
+        MyWazeShownStat my_waze_shown = 4;
+        CurrentMapCarIconStat current_map_car_icon = 5;
+        MyWazeItemClickedStat my_waze_item_clicked = 6;
+        SetCommuteMenuShownStat set_commute_menu_shown = 7;
+    }
+}

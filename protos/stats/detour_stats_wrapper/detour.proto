@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message Detour {
+    string alternative_route_uuid = 3;
+    
+    oneof _alert_type {
+        sint64 alert_type = 1;
+    }
+    
+    oneof _alert_subtype {
+        int64 alert_subtype = 2;
+    }
+    
+    oneof _detour_id {
+        sint64 detour_id = 4;
+    }
+    
+    oneof _reassurance {
+        bool reassurance = 5;
+    }
+    
+    oneof _difference_minutes {
+        sint64 difference_minutes = 6;
+    }
+    
+    oneof _similar_eta_by_be {
+        bool similar_eta_by_be = 7;
+    }
+    
+    oneof _preferred {
+        bool preferred = 8;
+    }
+    
+    oneof _roadshield {
+        bool roadshield = 9;
+    }
+}

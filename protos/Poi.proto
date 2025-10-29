@@ -1,0 +1,400 @@
+syntax = "proto2";
+
+package linqmap.proto.poi;
+
+import "RealtimeNg.proto";
+import "Search.proto";
+import "Types.proto";
+import "TakeoverCommands.proto";
+import "Venues.proto";
+import "RTCommonTypes.proto";
+import "ClientInfoCommand.proto";
+import "logging.proto";
+import "Users.proto";
+import "proto/waze/type/WeeklySchedule.proto";
+import "proto/waze/type/Timestamp.proto";
+
+option objc_class_prefix = "LPPO";
+option java_package = "linqmap.proto.poi";
+
+message GetAdTypesRequest {
+    
+}
+
+message GetAdTypesResponse {
+    optional Status status = 1;
+    
+    repeated AdType ad_types = 2;
+    message AdType {
+        optional int64 id = 1;
+        optional string name = 2;
+        optional int64 service_id = 3;
+        optional int64 provider_id = 4;
+        optional string small_icon = 5;
+        optional string big_icon = 6;
+        optional string on_click_dialog = 7;
+        optional int32 on_click_dialog_size = 8;
+        optional int32 max_zoom_level_small = 9;
+        optional int32 max_zoom_level_big = 10;
+        optional int32 priority = 11;
+        optional string small_promotion_icon = 12;
+        optional string big_promotion_icon = 13;
+        optional bool navigable = 14 [default = true];
+        optional string logo = 15;
+        optional string on_display_urls = 16;
+        optional string on_view_urls = 17;
+        optional string on_click_urls = 18;
+    }
+    
+    optional int64 poi_world_snapshot_time = 3;
+}
+
+message GetAdsRequest {
+    optional int64 user_id = 1;
+    
+    optional UserInfo user_info = 2;
+    message UserInfo {
+        optional string user_name = 1;
+        optional bool is_staff = 2;
+        optional int64 long_flags = 3;
+        optional int64 entry_date = 4;
+        optional int32 rank = 5 [deprecated = true];
+        optional string ip_address = 6;
+        optional string user_agent = 7 [deprecated = true];
+        optional int64 birth_date = 8;
+    }
+    
+    repeated Coordinate inner_geom = 4;
+    optional int32 max_pins = 5 [deprecated = true];
+    optional int32 max_inner_points = 6 [deprecated = true];
+    optional int32 needed_promotions = 7;
+    optional Coordinate center = 8;
+    optional Coordinate position = 9;
+    optional string application_type = 10 [deprecated = true];
+    
+    optional JamLevel jam_level = 11;
+    enum JamLevel {
+        complete_standstill = 1;
+        heavy_traffic = 2;
+        moderate_traffic = 3;
+        light_traffic = 4;
+        road_open = 5;
+        unknown = 6;
+    }
+    
+    optional bytes events = 12;
+    
+    optional UserFeatures user_features = 13;
+    message UserFeatures {
+        optional bool carpool_opt_in = 1;
+        optional bool spotify_enabled = 2;
+        optional bool spotify_connected = 3;
+        optional AppType app_type = 4 [deprecated = true];
+    }
+    
+    optional AdChannel ad_channel = 14 [default = all];
+    enum AdChannel {
+        all = 1;
+        takeover_only = 2;
+        exclude_takeover = 3;
+    }
+    
+    optional string country_code = 15;
+    optional int32 on_route_segment_index = 16;
+    optional double scale = 17;
+    optional bool should_get_intent_ads = 18 [default = false];
+    optional string session_id = 19;
+    optional rt.ClientInfo client_info = 20;
+    optional int32 country_id = 21;
+    optional string state_abbr = 22;
+    optional string time_zone = 23;
+}
+
+message GetTakeoverRequest {
+    optional GetAdsRequest request = 1;
+}
+
+message LoginRequest {
+    optional GetAdsRequest request = 1;
+}
+
+message WrapUpExternalPoisResponse {
+    optional Status status = 1;
+    
+    optional PinDrawOrder pin_draw_order = 5;
+    message PinDrawOrder {
+        repeated int64 client_pin_ids = 1;
+    }
+    
+    optional RTSessionUpdates session_updates = 7;
+    message RTSessionUpdates {
+        optional int64 last_wrap_up_external_poi_millis = 1;
+        repeated ExternalPoiTakeover takeovers = 2;
+        optional int64 max_client_pin_id = 3;
+        repeated int64 pin_type_ids = 4;
+        repeated ClientPin client_pins = 5;
+    }
+    
+    reserved 6;
+    
+    message AddedPin {
+        optional int32 client_pin_id = 1;
+        optional GetAdsResponse.Ad pin = 2;
+        optional int32 is_promotioned = 3;
+    }
+    
+    message RemovedPin {
+        optional int32 client_pin_id = 1;
+    }
+    
+    message AddedPinType {
+        optional GetAdTypesResponse.AdType pin_type = 1;
+    }
+    
+    message ExternalPoiTakeover {
+        optional int64 client_pin_id = 1;
+        optional int64 location_id = 2;
+        optional int64 offer_id = 3;
+        optional bool is_fake = 4;
+    }
+}
+
+message ClientPin {
+    optional int64 location_id = 1;
+    optional int64 offer_id = 2;
+    optional int64 id = 3;
+}
+
+message GetAdsResponse {
+    optional Status status = 1;
+    
+    repeated Ad ads = 2;
+    message Ad {
+        optional int64 id = 1;
+        optional int64 type_id = 2;
+        optional int64 service_id = 3;
+        optional int64 provider_id = 4;
+        optional int64 promotion_id = 5;
+        optional int64 promotion_radius = 6;
+        optional int64 creation_time = 7;
+        optional int64 update_time = 8;
+        optional string resources = 9;
+        optional double x = 10;
+        optional double y = 11;
+        optional int32 show_near_by = 12;
+        optional bool show_on_map = 13 [default = true];
+        optional int32 take_over_height = 14;
+        optional int32 click_pop_height = 15;
+        optional string extended_price = 16;
+        optional string venue_id = 17;
+        optional string context = 18;
+        optional bool fake = 19 [default = false, deprecated = true];
+        optional string frame = 20;
+        optional string badge = 21;
+        optional string logo_type = 22;
+        optional int32 priority = 23;
+        optional string brand_id = 24;
+        optional string on_display_urls = 25 [deprecated = true];
+        optional string on_view_urls = 26 [deprecated = true];
+        optional string on_click_urls = 27 [deprecated = true];
+        optional bool track_store_visits = 28;
+        repeated string view_urls = 29;
+        repeated string click_urls = 30;
+        optional InventoryType inventory_type = 31;
+    }
+    
+    optional bytes returned_events = 3;
+    
+    reserved 4;
+}
+
+message SearchVenuesRequest {
+    optional search.SearchRequest search_request = 1;
+}
+
+message SearchVenuesResponse {
+    optional Status status = 1;
+    repeated venue.Venue venues_deprecated = 2;
+    repeated search.SearchResult search_results = 3;
+}
+
+message GetVenueRequest {
+    optional search.GetRequest get_request = 1;
+}
+
+message GetVenueResponse {
+    optional Status status = 1;
+    optional venue.Venue venue_deprecated = 2;
+    optional search.SearchResult search_result = 3;
+}
+
+message WrapUpExternalPoiLogoutRequest {
+    optional RTNGLogoutRequest request = 1;
+}
+
+message RTNGLogoutRequest {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+    optional com.waze.proto.rtcommon.UserPosition real_position = 3;
+    repeated bytes user_events_and_stats = 4;
+    optional int64 login_time = 5;
+}
+
+message LogoutRequest {
+    optional int64 user_id = 1;
+    optional Coordinate center = 2 [deprecated = true];
+    optional Coordinate position = 3;
+    optional bytes events = 4;
+    optional string session_id = 5;
+    optional int64 login_time = 6;
+}
+
+message LogoutResponse {
+    optional Status status = 1;
+    optional bytes returned_events = 2;
+}
+
+message AdsRequestData {
+    optional User user = 1;
+    message User {
+        optional int64 user_id = 1;
+        optional string user_name = 2;
+        optional bool is_staff = 3;
+        repeated users.UserFlags user_flags = 4;
+        optional int32 rank = 5 [deprecated = true];
+        optional int64 join_date = 6;
+        optional int64 birth_date = 7;
+    }
+    
+    optional GeographicalData geographical_data = 2;
+    message GeographicalData {
+        optional com.waze.proto.rtcommon.UserPosition real_position = 1;
+        optional com.waze.proto.rtcommon.ClientDisplay client_display = 2;
+        optional string country_code = 3;
+        optional int32 jam_level = 4;
+        optional int32 country_id = 5;
+        optional string state_abbr = 6;
+        optional string time_zone = 7;
+    }
+    
+    optional SessionData session_data = 3;
+    message SessionData {
+        optional string session_id = 1;
+        optional rt.ClientInfo client_info = 2;
+        optional string ip_address = 4;
+        
+        optional WazeFeatures waze_features = 5;
+        message WazeFeatures {
+            optional bool carpool_opt_in = 1 [deprecated = true];
+        }
+        
+        reserved 3;
+        
+        reserved "selected_route";
+    }
+}
+
+message Ad {
+    optional string name = 5 [deprecated = true];
+    optional CampaignData campaign_data = 1;
+    optional LocationData location_data = 2;
+    optional VenueData venue_data = 3;
+    optional OfferData offer_data = 4;
+    optional ProviderData provider_data = 6;
+}
+
+message CampaignData {
+    optional int64 id = 1;
+    optional int64 provider_id = 2;
+}
+
+message LocationData {
+    optional int64 id = 1;
+    optional string title = 2;
+    optional string address = 3;
+    optional Coordinate coordinate = 4;
+    optional string locality = 5;
+    optional string phone = 6;
+    optional .waze.type.WeeklySchedule open_hours = 7;
+}
+
+message VenueData {
+    optional string context = 1;
+    optional string id = 2;
+}
+
+message OfferData {
+    optional int64 id = 1;
+    optional string name = 2 [deprecated = true];
+    optional string logo_id = 3;
+    optional string advertiser_display_name = 4;
+    optional string brand_display_name = 5;
+    optional bool navigable = 6;
+    optional string legal_info = 7;
+    optional string uri = 8;
+    optional string video_id = 9;
+    optional string voice_display_name = 10;
+    
+    optional ReminderType reminder_type = 11;
+    enum ReminderType {
+        REMINDER_TYPE_UNSPECIFIED = 0;
+        ARRIVAL = 1;
+        ELAPSED_TIME = 2;
+        EXPIRATION = 3;
+        PROXIMITY = 4;
+        SCHEDULED_TIME = 5;
+    }
+    
+    optional InboxData inbox_data = 12;
+    message InboxData {
+        optional string title = 1;
+        optional string body = 2;
+        optional string button_text = 3;
+    }
+    
+    optional CouponData coupon_data = 13;
+    message CouponData {
+        optional string image_id = 1;
+        optional string number = 2;
+        optional .waze.type.Timestamp expire_time = 3;
+    }
+    
+    optional Type type = 14;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        DRIVE_THERE = 1;
+        SAVE_OFFER = 2;
+        DOWNLOAD_APP = 3;
+        URI = 4;
+        CALL = 5;
+        CHANGE_VOICE = 6;
+        FAVORITE_BRAND = 7;
+        SAVE_LOCATION = 8;
+        REMIND_ME = 9;
+        SAVE_VIDEO = 10;
+        BRANDING = 11;
+        EXPERIENCE = 12;
+        CUSTOM = 13;
+    }
+    
+    optional DownloadAppData download_app_data = 15;
+    message DownloadAppData {
+        optional string app_store_id = 1;
+        optional string play_store_id = 2;
+    }
+    
+    optional string experience_settings = 16;
+    optional string custom_settings = 17;
+}
+
+message ProviderData {
+    optional int64 id = 1;
+    optional bool guest = 2;
+}
+
+enum InventoryType {
+    UNKNOWN = 0;
+    REGULAR = 1;
+    CONTROL_GROUP = 2;
+    INVISIBLE = 3;
+}

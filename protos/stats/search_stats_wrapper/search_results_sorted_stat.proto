@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/search_stats_wrapper/search_category_group.proto";
+import "stats/search_stats_wrapper/search_sort_field.proto";
+import "stats/search_stats_wrapper/search_source.proto";
+import "stats/search_stats_wrapper/search_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchResultsSortedStat {
+    SearchType search_type = 1;
+    SearchSource source = 2;
+    SearchSortField sort_field = 3;
+    string categorical_search_name = 4;
+    SearchCategoryGroup categorical_group_search_name = 5;
+    string search_id = 6;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RouteInstrumentationStartedStat {
+    int64 segment_count = 3;
+    
+    oneof _waypoint {
+        bool waypoint = 1;
+    }
+    
+    oneof _instrumentation_service_enabled {
+        bool instrumentation_service_enabled = 2;
+    }
+}

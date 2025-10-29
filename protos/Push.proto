@@ -1,0 +1,469 @@
+syntax = "proto2";
+
+package linqmap.proto.push;
+
+import "Types.proto";
+import "Questions.proto";
+import "Inbox.proto";
+import "CarpoolCommon.proto";
+import "Events.proto";
+import "PointAddress.proto";
+import "Preferences.proto";
+import "RealtimeNg.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "LPPU";
+option java_package = "linqmap.proto.push";
+
+message RidewithParams {
+    optional string time_Zone_id = 2;
+    optional string pickup_address = 3;
+    optional int32 num_wazers = 4;
+    optional int32 detour_minutes = 5;
+    optional string name = 6;
+    
+    optional Destination destination = 9;
+    message Destination {
+        optional DestinationType type = 1;
+        enum DestinationType {
+            HOME = 0;
+            WORK = 1;
+            OTHER = 2;
+        }
+        
+        optional string other_destination = 2;
+        optional carpool.PointAddress other_destination_address = 3;
+    }
+    
+    repeated string rider_names = 11;
+    optional int32 walking_time_minutes = 12;
+    optional int32 rider_payment_minor_units = 13;
+    optional string lyft_coupon_code = 15;
+    optional int64 departure_time = 16;
+    optional int32 drive_time_minutes = 17;
+    optional int32 available_coupons = 18;
+    optional string ride_id = 19;
+    optional int64 pickup_time = 20;
+    optional string country_abbr = 21;
+    optional int32 driver_fee_minor_units = 22;
+    optional string photo_url = 23;
+    optional int32 eta_minutes = 24;
+    optional string car_color = 25;
+    optional string car_make = 26;
+    optional string commands_for_driver_app = 27;
+    optional string retry_ride_id = 28;
+    optional int32 number_of_matches = 29;
+    optional int32 coupon_value_minor_units = 30;
+    optional int32 num_days_to_claim_coupon = 31;
+    optional string currency_code = 32;
+    optional bool free_ride = 33;
+    
+    optional ApplicationType application_type = 34;
+    enum ApplicationType {
+        WAZE = 0;
+        RIDER = 1;
+        All = 2;
+    }
+    
+    optional int32 carpool_balance_minor_units = 35;
+    optional int64 window_start_time = 36;
+    optional int32 window_duration = 37;
+    optional string message = 38;
+    optional string work_place = 39;
+    optional string past_work_place = 40;
+    optional int32 mutual_friends = 41;
+    optional string currency_unit = 42;
+    optional int32 driver_sum = 43;
+    optional int32 rider_sum = 44;
+    optional int32 monthly_driver_sum = 45;
+    optional int32 total_driver_balance = 46;
+    optional int32 multipax_sum_addition = 47;
+    optional int32 num_carpool_before = 48;
+    optional int32 time_saved_hov = 49;
+    optional int32 pending_riders = 50;
+    optional int32 pending_drivers = 51;
+    optional string walk_time_unit = 52;
+    optional int32 num_riders = 53;
+    optional int64 drive_time = 54;
+    optional string drive_time_unit = 55;
+    optional int64 time_to_pickup = 56;
+    optional int64 arrival_time = 57;
+    optional string car_model = 58;
+    optional string license_plate = 59;
+    optional string ops_coupon_code = 60;
+    optional int32 bonus_sum = 61;
+    optional bool promo = 62;
+    optional int32 pending_riders_on_route = 63;
+    optional int32 pending_drivers_on_route = 64;
+    optional string bank_account = 65;
+    optional string credit_card = 66;
+    optional string driver_photo_url = 67;
+    optional string rider_photo_url = 68;
+    optional string driver_name = 69;
+    optional string rider_name = 70;
+    optional string driver_itinerary_id = 71;
+    optional string rider_itinerary_id = 72;
+    optional string offer_id = 73;
+    optional string carpool_id = 74;
+    optional inbox.Message inbox_message = 75;
+    optional int64 walking_duration_millis = 76;
+    optional string driver_timeslot_id = 77;
+    optional string rider_timeslot_id = 78;
+    optional int64 rider_id = 79;
+    optional int32 weekly_rides_num = 80;
+    optional carpool.PointAddress pickup_point_address = 81;
+    optional Coordinate current_location = 82;
+    repeated carpool.common.DriveMatchLocationInfo via_points = 83;
+    optional string driver_proxy_phone_number = 84;
+    optional bool show_carpools_in_calendar = 85;
+    optional int64 calendar_pickup_time = 86;
+    optional string calendar_pickup_address = 87;
+    optional double calendar_drive_time = 88;
+    repeated string calendar_rider_names = 89;
+    optional carpool.PointAddress calendar_pickup_point_address = 90;
+    optional string rtr_context = 91;
+    
+    reserved 1;
+}
+
+message ReportThankedByBroadcasterParams {
+    optional string station_name = 1;
+    optional int64 mentioned_on_date = 2;
+    
+    optional StationType station_type = 3;
+    enum StationType {
+        UNKNOWN = 0;
+        TV = 1;
+        RADIO = 2;
+    }
+    
+    optional Coordinate report_location = 4;
+    optional string report_type = 5;
+    optional string report_sub_type = 6;
+    optional string report_address = 7;
+    optional string station_icon = 8;
+}
+
+message MessageReadPushParams {
+    optional string message_id = 1;
+    repeated inbox.ExternalReference external_reference = 2;
+}
+
+message MessageReadParams {
+    optional MessageReadPushParams push_params = 1;
+}
+
+message ActionsCategory {
+    optional string category = 1;
+    repeated questions.AnswerOption action = 2;
+}
+
+message UserHistoryRecord {
+    optional int64 ts = 1;
+    optional string date_time = 2;
+    optional string state = 3;
+    optional string reason = 4;
+    optional string additional_data = 5;
+    optional string hostname = 6;
+    optional string title = 7;
+    optional string message = 8;
+}
+
+message UserHistoryChannel {
+    optional string channel = 1;
+    optional string originator = 2;
+    repeated UserHistoryRecord record = 3;
+}
+
+message UserHistory {
+    optional string request_id = 1;
+    repeated UserHistoryChannel channel = 2;
+}
+
+message TypedMap {
+    repeated TypedMapEntry entry = 1;
+    message TypedMapEntry {
+        optional string key = 1;
+        
+        oneof type {
+            string string = 2;
+            string json = 3;
+            int32 int = 4;
+            int64 long = 5;
+            bool bool = 6;
+            bytes bytes = 7;
+            float float = 8;
+            double double = 9;
+        }
+    }
+}
+
+message SendEventRequest {
+    optional int64 user_id = 1;
+    
+    optional Type type = 2;
+    enum Type {
+        WAKE_UP = 1;
+        CONNECT_TO_SERVER = 9;
+        PRIVATE_MESSAGE = 11;
+        GROWN_UP = 13;
+        NEW_COUPON = 21;
+        NO_TOKEN = 22;
+        DRY_RUN = 25;
+        SHARE_DRIVE_ALMOST_THERE = 27;
+        SHARE_DRIVE_SCHEDULE_CHANGE = 28;
+        GENERIC_MESSAGE = 31;
+        SHARE_LOCATION = 40;
+        USER_VENUE_APPROVED = 44;
+        USER_BECOMES_TRUSTED = 45;
+        FLAG_RESPONSE = 47;
+        EXECUTE_CLIENT_COMMAND = 56;
+        CALENDAR_SYNC_INTRO = 61;
+        MAJOR_TRAFFIC_EVENT_TRIGGER = 72;
+        MAJOR_TRAFFIC_EVENT = 73;
+        REPORT_THANKED_BY_BROADCASTER = 75;
+        MISSING_VENUE_INFO = 76;
+        REPORT_THANKED_PERIODIC = 97;
+        REPORT_THANKED_PERIODIC_TRIGGER = 98;
+        FLOW_BASED = 100;
+        CONFIGURATION_BASED = 101;
+        MESSAGE_READ = 102;
+        UNINSTALL_DETECTION = 105;
+        TIME_TO_LEAVE = 137;
+        TIME_TO_LEAVE_EARLY_NOTICE = 138;
+        INDIVIDUAL_REPORT_SUMMARY = 141;
+    }
+    
+    optional int64 scheduled_to = 4;
+    optional bool synchronousDelivery = 5;
+    optional int64 scheduledDelayMillis = 6;
+    optional string installation_id = 7;
+    
+    optional PushParams push_params = 9;
+    message PushParams {
+        optional string group_id = 1;
+        optional string notification_key = 2;
+    }
+    
+    oneof event_params {
+        StringMap params = 3 [deprecated = true];
+        TypedMap typed_params = 8;
+    }
+    
+    oneof proto_params {
+        RidewithParams ridewith_params = 168;
+        ReportThankedByBroadcasterParams report_thanked_by_broadcaster_params = 1075;
+        MessageReadParams message_read_params = 1102;
+    }
+}
+
+message SendEventResponse {
+    optional string id = 1;
+    
+    optional Status status = 2;
+    enum Status {
+        SENT = 1;
+        SCHEDULED = 2;
+        ERROR = 3;
+        RESTRICTED = 4;
+        FILTERED = 5;
+        NO_TOKENS = 6;
+    }
+    
+    optional string reason = 3;
+    repeated TokenAndMessageId token_and_message_id = 4;
+}
+
+message TokenAndMessageId {
+    optional string token = 1;
+    
+    oneof message_id {
+        string apns_id = 2;
+        string firebase_message_id = 5;
+    }
+}
+
+message RemovePushNotificationsRequest {
+    optional int64 user_id = 1;
+    repeated string notification_keys = 2;
+}
+
+message RemovePushNotificationsResponse {
+    repeated DeviceToken removed_notifications_devices = 1;
+    optional Status status = 2;
+}
+
+message CancelScheduledEventRequest {
+    optional string id = 1;
+}
+
+message CancelScheduledEventResponse {
+    optional Status status = 1;
+    enum Status {
+        OK = 1;
+        NOT_FOUND = 2;
+        ERROR = 3;
+    }
+}
+
+message GetActionsCategoriesRequest {
+    optional int64 user_id = 1;
+}
+
+message GetActionsCategoriesResponse {
+    repeated ActionsCategory actions_category = 1;
+}
+
+message GetActionsCategoriesRequestWrapper {
+    optional GetActionsCategoriesRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message GetActionsCategoriesResponseWrapper {
+    optional GetActionsCategoriesResponse response = 1;
+}
+
+message GetUserHistoryRequest {
+    optional int64 user_id = 1;
+    optional string request_id = 2;
+    optional int64 from_timestamp = 3;
+    optional string state = 4;
+    repeated string originator = 5;
+}
+
+message GetUserHistoryResponse {
+    repeated UserHistory user_history = 1;
+}
+
+message TestConfigRequest {
+    optional int64 user_id = 1;
+    optional string config = 2;
+}
+
+message TestConfigResponse {
+    optional string response = 1;
+}
+
+message GetPushNotificationsCapabilityRequest {
+    optional int64 user_id = 1;
+}
+
+message GetPushNotificationsCapabilityResponse {
+    optional bool push_enabled = 1;
+    optional Status status = 2;
+}
+
+message PushConstructionInstructions {
+    optional PushMessage os_push = 1;
+    optional PushMessage in_app_push = 2;
+}
+
+message PushMessage {
+    optional string sound = 1;
+    optional int32 badge = 2;
+    optional questions.Question question = 3;
+    optional Condition condition = 4;
+}
+
+message Condition {
+    optional RadiusCondition radius = 1;
+}
+
+message RadiusCondition {
+    optional Coordinate center = 1;
+    optional double radius = 2;
+}
+
+message DeviceToken {
+    optional string token = 1;
+    optional DeviceType device = 2;
+    optional string installation_id = 3;
+    optional preferences.TokenCapabilities capabilities = 4;
+    optional string client_version = 5;
+    optional string os_version = 6;
+    optional AppType app_type = 7;
+    optional bool sandbox = 8;
+    optional string manufacturer = 9;
+    optional string model = 10;
+    optional int64 timestamp = 11;
+}
+
+message AddDeviceTokenRequestWrapper {
+    optional preferences.AddDeviceTokenRequest request = 1;
+    optional DeviceTokenSessionParams session_params = 2;
+}
+
+message RemoveDeviceTokenRequestWrapper {
+    optional preferences.RemoveDeviceTokenRequest request = 1;
+    optional DeviceTokenSessionParams session_params = 2;
+}
+
+message DeviceTokenSessionParams {
+    optional int64 user_id = 1;
+    optional rt.ClientInfo client_info = 2;
+}
+
+message GetDeviceTokensRequest {
+    optional int64 user_id = 1;
+}
+
+message GetDeviceTokensResponse {
+    repeated DeviceToken device_token = 1;
+}
+
+message PushDisplayedRequestWrapper {
+    optional PushDisplayedRequest request = 1;
+    optional PushDisplayedSessionParams session_params = 2;
+}
+
+message PushDisplayedRequest {
+    optional string originator = 1;
+}
+
+message PushDisplayedSessionParams {
+    optional int64 user_id = 1;
+}
+
+message PushDisplayedResponseWrapper {
+    optional PushDisplayedResponse response = 1;
+}
+
+message PushDisplayedResponse {
+    optional Status status = 1;
+}
+
+message SendFeedbackUpdateRequest {
+    optional string originator = 4;
+    optional string request_id = 5;
+    
+    oneof feedback_event {
+        FeedbackEventReceived feedback_received = 1;
+        FeedbackEventDismissed feedback_dismissed = 2;
+        FeedbackEventClicked feedback_clicked = 3;
+    }
+    
+    message FeedbackEventReceived {
+        
+    }
+    
+    message FeedbackEventDismissed {
+        
+    }
+    
+    message FeedbackEventClicked {
+        optional string button_id = 1;
+    }
+}
+
+message SendFeedbackUpdateRequestWrapper {
+    optional SendFeedbackUpdateRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message SendFeedbackUpdateResponse {
+    optional Status status = 1;
+}
+
+message SendFeedbackUpdateResponseWrapper {
+    optional SendFeedbackUpdateResponse response = 1;
+}

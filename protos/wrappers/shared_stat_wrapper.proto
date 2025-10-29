@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/common_wrapper/app_state.proto";
+import "stats/common_wrapper/login.proto";
+import "stats/common_wrapper/monitoring_stats.proto";
+import "stats/common_wrapper/networking_stats.proto";
+import "stats/common_wrapper/push.proto";
+import "stats/common_wrapper/welcome_screen.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SharedStatWrapper {
+    option deprecated = true;
+    
+    oneof stat {
+        AppCrashed app_crashed = 1;
+        ServerRequestResult server_request_result = 2;
+        AppRunningMode app_running_mode = 3;
+        PushMessageLaunched push_message_launched = 4;
+        NetworkState network_state = 5;
+        Login login = 6;
+        WelcomeScreenShown welcome_screen_shown = 7;
+    }
+}

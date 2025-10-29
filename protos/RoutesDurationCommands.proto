@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "RoutingAPIExternal.proto";
+import "RoutingCommand.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message RoutesDurationRequest {
+    repeated RouteDurationRequest route_duration_requests = 1;
+    message RouteDurationRequest {
+        optional string identifier = 1;
+        optional GraphLocation source = 2;
+        optional Destination destination = 3;
+        optional bool calculate_realtime_route = 4;
+        
+        repeated TimeConstraint future_route_constraints = 5;
+        message TimeConstraint {
+            oneof constraint {
+                int64 departure_epoch_seconds = 1;
+                int64 arrival_epoch_seconds = 2;
+            }
+        }
+    }
+    
+    optional string vehicle_type = 2;
+    optional string license_plate_suffix = 3;
+    repeated string permits = 4;
+    repeated routing.proto.external.RoutingOptionFieldEntry routing_options = 5;
+    optional EVData evData = 6;
+}
+
+message RoutesDurationResponse {
+    repeated RouteDuration route_durations = 1;
+    message RouteDuration {
+        optional string identifier = 1;
+        
+        optional RealtimeRouteResponse realtime_route_response = 2;
+        message RealtimeRouteResponse {
+            optional TrafficState traffic_state = 1;
+            optional int64 duration_seconds = 2;
+        }
+        
+        repeated FutureRouteResponse future_route_responses = 3;
+        message FutureRouteResponse {
+            optional TrafficState traffic_state = 1;
+            
+            optional RouteTimeSpan time_span = 2;
+            message RouteTimeSpan {
+                optional int64 departure_epoch_seconds = 1;
+                optional int64 arrival_epoch_seconds = 2;
+            }
+        }
+        
+        optional Status status = 4;
+        enum Status {
+            STATUS_UNSPECIFIED = 0;
+            OK = 1;
+            ERROR = 2;
+            TIMED_OUT = 3;
+        }
+        
+        optional string error_description = 5;
+        
+        enum TrafficState {
+            TRAFFIC_STATE_UNSPECIFIED = 0;
+            REGULAR = 1;
+            LIGHTER_THAN_USUAL = 2;
+            HEAVIER_THAN_USUAL = 3;
+        }
+    }
+}

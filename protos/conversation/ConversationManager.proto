@@ -1,0 +1,127 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap.conversation;
+
+import "AlertsOnMap.proto";
+import "conversation/reporting/ConversationalReportingDetails.proto";
+import "google/protobuf/timestamp.proto";
+import "RealtimeNg.proto";
+import "Types.proto";
+
+option objc_class_prefix = "CWPAC";
+option java_package = "com.waze.proto.alertsonmap.conversation";
+
+message InitiateConversationRequest {
+    optional ConversationalMessage message = 1;
+    optional google.protobuf.Timestamp conversation_initiation_time = 2;
+    optional string conversation_id = 4;
+    optional string language_code = 5;
+    optional ConversationGender gender = 6 [default = GENDER_MALE];
+    
+    oneof details {
+        reporting.ConversationalReportRequestDetails conversation_report_details = 3;
+    }
+}
+
+message SendConversationalMessageRequest {
+    optional ConversationalMessage message = 1;
+    optional string conversation_id = 2;
+    optional string language_code = 5;
+    optional ConversationGender gender = 6 [default = GENDER_MALE];
+}
+
+message ConversationalMessage {
+    optional Role role = 1;
+    
+    oneof content {
+        string text_message = 2;
+    }
+}
+
+message InitiateConversationRequestWrapper {
+    optional InitiateConversationRequest request = 1;
+    optional ConversationalRequestConfigs config = 2;
+    optional UserCommonInfo user_info = 3;
+}
+
+message SendConversationalMessageRequestWrapper {
+    optional SendConversationalMessageRequest request = 1;
+    optional ConversationalSessionData session = 2;
+    optional ConversationalRequestConfigs config = 3;
+}
+
+message ConversationalRequestConfigs {
+    optional bool allow_conversational_reporting = 1;
+    optional string conversation_reporting_prompt_name = 2;
+    optional int32 conversational_reporting_max_messages_from_user = 3;
+    optional string conversational_reporting_model = 4;
+}
+
+message ConversationalSessionData {
+    optional string conversation_id = 1;
+    optional google.protobuf.Timestamp conversation_initiation_time = 2;
+    repeated ConversationalMessage previous_messages = 3;
+    optional reporting.ConversationalReportSessionDetails conversation_report_details = 4;
+    optional UserCommonInfo user_info = 5;
+}
+
+message ConversationalSessionDetailsUpdate {
+    optional string conversation_id = 1;
+    optional google.protobuf.Timestamp conversation_initiation_time = 2;
+    repeated ConversationalMessage previous_messages = 3;
+    optional reporting.ConversationalReportSessionDetailsUpdate conversation_report_details_update = 4;
+    repeated int32 delete_field = 100;
+}
+
+message ConversationalResponse {
+    optional linqmap.proto.Status status = 1;
+    optional string conversation_id = 2;
+    
+    oneof response {
+        FollowUpResponse followup_response = 4;
+        FulfillmentDetails fulfillment_details = 5;
+        CancelDetails cancel_details = 6;
+    }
+}
+
+message ConversationalResponseWrapper {
+    optional ConversationalResponse response = 1;
+    optional ConversationalSessionDetailsUpdate session_details_update = 3;
+    optional UserAlertSessionResponse user_alert_session_response = 4;
+    
+    reserved 5;
+    
+    reserved "serialized_events";
+}
+
+message FollowUpResponse {
+    optional ConversationalMessage message = 1;
+}
+
+message FulfillmentDetails {
+    oneof fulfillment_details {
+        reporting.AlertReportedDetails alert_reported_details = 1;
+    }
+}
+
+message CancelDetails {
+    optional CancelConversationReason cancel_conversation_reason = 1;
+}
+
+enum ConversationGender {
+    GENDER_UNSPECIFIED = 0;
+    GENDER_MALE = 1;
+    GENDER_FEMALE = 2;
+}
+
+enum Role {
+    UNKNOWN_ROLE = 0;
+    USER = 1;
+    MODEL = 2;
+}
+
+enum CancelConversationReason {
+    UNKNOWN_CANCEL_CONVERSATION_REASON = 0;
+    MAX_LIMIT_MESSAGES = 1;
+    USER_CANCEL = 2;
+}

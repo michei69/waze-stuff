@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message ProviderPosition {
+    IntPosition position = 1;
+    int32 speed = 2;
+    int32 steering = 3;
+    int32 accuracy = 4;
+    
+    LocProvider provider = 5;
+    enum LocProvider {
+        UNKNOWN = 0;
+        GPS = 1;
+        ANY = 2;
+        NETWORK = 3;
+        CSV = 4;
+        BEACON = 5;
+    }
+    
+    MatchedPositionProto matcher_info = 6;
+    int64 last_update_time_epoch_seconds = 7;
+}
+
+message MatchedPositionProto {
+    IntPosition position = 1;
+    double accuracy_meters = 2;
+    int64 from_node_db_id = 3;
+    int64 to_node_db_id = 4;
+    
+    oneof _street_name {
+        string street_name = 5;
+    }
+}

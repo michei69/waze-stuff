@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DictationScreenFinishedStat {
+    Status status = 1;
+    enum Status {
+        STATUS_UNSPECIFIED = 0;
+        NETWORK_ERROR = 1;
+        NO_MATCH_ERROR = 2;
+        NO_PERMISSIONS = 3;
+        SPEECH_TIMEOUT_ERROR = 4;
+        UNSPECIFIED_ERROR = 5;
+        SUCCESS = 6;
+    }
+}

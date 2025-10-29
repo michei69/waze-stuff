@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BoundingBox {
+    oneof _right_coordinate_pixels {
+        int64 right_coordinate_pixels = 1;
+    }
+    
+    oneof _left_coordinate_pixels {
+        int64 left_coordinate_pixels = 2;
+    }
+    
+    oneof _top_coordinate_pixels {
+        int64 top_coordinate_pixels = 3;
+    }
+    
+    oneof _bottom_coordinate_pixels {
+        int64 bottom_coordinate_pixels = 4;
+    }
+}

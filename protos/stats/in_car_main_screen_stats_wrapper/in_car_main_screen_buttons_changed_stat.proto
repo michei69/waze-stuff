@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/in_car_main_screen_stats_wrapper/in_car_main_screen_button.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InCarMainScreenButtonsChangedStat {
+    repeated InCarMainScreenButton map_buttons = 1;
+    repeated InCarMainScreenButton top_bar_buttons = 2;
+}

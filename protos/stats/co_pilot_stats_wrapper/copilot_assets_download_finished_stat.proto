@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CopilotAssetsDownloadFinishedStat {
+    FailureReason failure_reason = 3;
+    enum FailureReason {
+        FAILURE_REASON_UNSPECIFIED = 0;
+        DOWNLOAD_ERROR = 1;
+        SELECTION_ERROR = 2;
+    }
+    
+    oneof _campaign_id {
+        int64 campaign_id = 1;
+    }
+    
+    oneof _success {
+        bool success = 2;
+    }
+    
+    oneof _car_downloaded {
+        bool car_downloaded = 4;
+    }
+    
+    oneof _mood_downloaded {
+        bool mood_downloaded = 5;
+    }
+    
+    oneof _voice_downloaded {
+        bool voice_downloaded = 6;
+    }
+}

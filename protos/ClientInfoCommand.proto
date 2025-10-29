@@ -1,0 +1,71 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message ClientInfo {
+    optional int32 protocol = 1;
+    optional string device = 2 [deprecated = true];
+    optional string client_version = 3;
+    optional Coordinate last_position = 4;
+    optional string manufactorer = 5;
+    optional string model = 6;
+    optional string name = 7;
+    optional int32 width = 8 [default = -1];
+    optional int32 height = 9 [default = -1];
+    optional string application_type = 10 [deprecated = true];
+    optional string os_version = 11;
+    optional int32 applicatin_mode_bitmap = 12 [deprecated = true];
+    optional StringMap client_ab_tests = 13;
+    optional bool return_text = 14;
+    optional bool simulated = 15;
+    optional string locale = 16;
+    optional string installation_id = 17;
+    optional DeviceType device_type = 18;
+    optional AppType app_type = 19;
+    
+    repeated ClientApi client_api = 20;
+    message ClientApi {
+        optional ClientApiType type = 1;
+        optional string package_name = 2;
+    }
+    
+    optional Environment environment = 21;
+    enum Environment {
+        STAGING = 1;
+        AUTOPUSH = 2;
+        PRODUCTION = 3;
+    }
+    
+    optional StringMap debug_options = 22;
+    optional string user_agent = 23;
+    repeated Display display = 24;
+    optional string os_language_id = 25;
+    optional string session_uuid = 26;
+    optional bool is_jailbroken = 27;
+    optional int64 current_time_millis = 28;
+    optional string device_brand = 29;
+    optional bool is_24_hour_format = 30;
+    optional AppFlavor app_flavor = 31;
+}
+
+message Display {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN = 1;
+        BUILT_IN = 2;
+        CARPLAY = 3;
+        ANDROID_AUTO = 4;
+        SMART_DEVICE_LINK = 5;
+        WEB_LINK = 6;
+        PIONEER = 7;
+        WEB = 8;
+    }
+    
+    optional int32 width = 2;
+    optional int32 height = 3;
+}

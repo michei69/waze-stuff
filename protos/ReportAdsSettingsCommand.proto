@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message ReportAdsSettings {
+    optional string advertising_id = 1;
+    optional bool opted_out_of_tracking = 2;
+    
+    reserved 3, 4;
+    
+    reserved "permission", "from_recent_consent_prompt";
+    
+    enum Permission {
+        UNSET = 0;
+        OPT_IN = 1;
+        OPT_OUT = 2;
+        SYSTEM_WIDE_OPT_OUT = 3;
+    }
+}
+
+message SetAdAttributionDetails {
+    optional string details = 1;
+    optional string error_msg = 2;
+}
+
+message SetAdAttributionToken {
+    optional string token = 1;
+    optional string error_msg = 2;
+}

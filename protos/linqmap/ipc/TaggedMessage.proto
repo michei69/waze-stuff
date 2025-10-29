@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+package linqmap.ipc;
+
+import "google/protobuf/descriptor.proto";
+
+option objc_class_prefix = "LIPC";
+option java_package = "linqmap.ipc";
+
+message TaggedFieldOptions {
+    optional TagType type = 1;
+    optional ArrayTagStrategy array = 2 [default = ALL];
+    repeated ValuePattern pattern = 3;
+    optional string simple_pattern = 4;
+    optional bool debug = 5 [default = false];
+    repeated string feature = 6;
+    repeated int64 bucket = 7;
+}
+
+message TaggedMessageOptions {
+    repeated VirtualTaggedField virtual_tagged_field = 1;
+}
+
+message VirtualTaggedField {
+    optional string class_name = 1;
+    optional string method_name = 2;
+    optional string name = 3;
+    optional TaggedFieldOptions options = 4;
+}
+
+message ValuePattern {
+    optional string pattern = 1;
+    optional string value = 2;
+}
+
+enum TagType {
+    Value = 1;
+    Name = 2;
+    Merge = 3;
+    Pattern = 4;
+}
+
+enum ArrayTagStrategy {
+    First = 1;
+    AppendIndex = 2;
+    ALL = 3;
+}
+
+extend google.protobuf.FieldOptions {
+    optional TaggedFieldOptions p2p_tag = 51304;
+}
+
+extend google.protobuf.MessageOptions {
+    optional TaggedMessageOptions p2p_virtual_tag = 51305;
+}

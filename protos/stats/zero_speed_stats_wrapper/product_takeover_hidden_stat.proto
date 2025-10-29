@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/zero_speed_stats_wrapper/product_takeover_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ProductTakeoverHiddenStat {
+    ProductTakeoverInfo product_takeover_info = 1;
+    
+    oneof _shown_duration_ms {
+        int64 shown_duration_ms = 2;
+    }
+}

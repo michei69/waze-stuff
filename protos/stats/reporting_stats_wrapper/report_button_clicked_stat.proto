@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ReportButtonClickedStat {
+    Type type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        NORMAL = 1;
+        QUICK_HAZARD = 2;
+        QUICK_JAM = 3;
+        QUICK_POLICE = 4;
+    }
+}

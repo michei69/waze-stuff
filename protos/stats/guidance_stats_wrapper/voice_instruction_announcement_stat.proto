@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message Instruction {
+    string turn_instruction = 1;
+    string lane_instruction = 2;
+    string street_name = 3;
+    
+    oneof _lane_location {
+        string lane_location = 4;
+    }
+    
+    oneof _lane_type {
+        string lane_type = 5;
+    }
+    
+    oneof _road_type {
+        string road_type = 6;
+    }
+    
+    oneof _exit_number {
+        int32 exit_number = 7;
+    }
+}
+
+message AndThenInstruction {
+    Instruction next_instruction = 1;
+    int32 next_group_cross_time_seconds = 2;
+    int32 next_group_distance_meters = 3;
+}
+
+message AnnouncementParams {
+    oneof _include_street_name {
+        bool include_street_name = 1;
+    }
+    
+    oneof _include_lane_instruction {
+        bool include_lane_instruction = 2;
+    }
+    
+    oneof _include_and_then {
+        bool include_and_then = 3;
+    }
+    
+    oneof _include_distance {
+        bool include_distance = 4;
+    }
+    
+    oneof _include_and_then_street_name {
+        bool include_and_then_street_name = 5;
+    }
+    
+    oneof _include_and_then_lane_instruction {
+        bool include_and_then_lane_instruction = 6;
+    }
+}
+
+message AnnouncementDistance {
+    string distance_unit = 1;
+    
+    oneof _distance_to_announce {
+        int32 distance_to_announce = 2;
+    }
+}
+
+message VoiceInstructionAnnouncementStat {
+    string alternative_route_uuid = 1;
+    Instruction instruction = 3;
+    AndThenInstruction and_then_instruction = 4;
+    string voice_instructions_mode = 5;
+    AnnouncementDistance announcement_distance = 6;
+    string announcement_type = 7;
+    AnnouncementParams announcement_params = 11;
+    string distance_phrase = 12;
+    string instruction_phrase = 13;
+    string and_then_phrase = 14;
+    
+    oneof _route_segment_id {
+        int32 route_segment_id = 2;
+    }
+    
+    oneof _group_cross_time_seconds {
+        int32 group_cross_time_seconds = 8;
+    }
+    
+    oneof _group_length_meters {
+        int32 group_length_meters = 9;
+    }
+    
+    oneof _current_speed_kmh {
+        int32 current_speed_kmh = 10;
+    }
+    
+    oneof _instruction_segment_index {
+        int64 instruction_segment_index = 15;
+    }
+    
+    oneof _announcement_distance_meters_actual {
+        int64 announcement_distance_meters_actual = 16;
+    }
+}

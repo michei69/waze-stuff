@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum Source {
+    SOURCE_UNSPECIFIED = 0;
+    AUTOCOMPLETE_PERSONAL_PLACE = 1;
+    DEEP_LINK = 2;
+    FAVORITE = 3;
+    HISTORY = 4;
+    LEFT_MENU = 5;
+    PIN_ON_MAP = 7;
+    PLACE_PREVIEW = 8;
+    PLANNED_DRIVE = 9;
+    SEARCH_EMPTY_STATE = 10;
+    START_STATE = 11;
+    VOICE_ACTIVATION = 12;
+    SUGGESTION_CARD = 13;
+}

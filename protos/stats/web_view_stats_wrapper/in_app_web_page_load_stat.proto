@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InAppWebPageLoadStat {
+    string page_url = 1;
+    string web_view_host = 3;
+    string web_view_usage = 4;
+    
+    oneof _url_count {
+        int64 url_count = 2;
+    }
+}

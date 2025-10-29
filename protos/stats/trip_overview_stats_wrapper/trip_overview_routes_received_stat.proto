@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/trip_overview_stats_wrapper/trip_overview_route.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewRoutesReceivedStat {
+    repeated TripOverviewRoute trip_overview_routes = 1;
+    repeated int64 closures_segment_ids = 4;
+    
+    oneof _affected_by_closures {
+        bool affected_by_closures = 2;
+    }
+    
+    oneof _number_of_closures_pins {
+        int64 number_of_closures_pins = 3;
+    }
+}

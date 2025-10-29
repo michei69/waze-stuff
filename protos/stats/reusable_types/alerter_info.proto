@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/segment_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlerterInfo {
+    AlerterType alerter_type = 4;
+    enum AlerterType {
+        ALERTER_TYPE_UNSPECIFIED = 0;
+        BAD_WEATHER = 1;
+        CAMERA = 2;
+        CRASH = 3;
+        ECO_REGULATION = 4;
+        GTW_REROUTE_SUGGESTION = 5;
+        GUARDIAN = 6;
+        HAZARD = 7;
+        JAM = 8;
+        LANE_CLOSED = 9;
+        MAP_CHAT = 10;
+        MISC = 11;
+        POLICE = 12;
+        ROAD_CLOSED = 13;
+        SOS = 14;
+        SYSTEM_ROAD_CLOSED = 15;
+        TRAFFIC_INFO = 16;
+        SPEED_LIMIT_DECREASE = 17;
+        PERSONAL_SAFETY = 18;
+        TURN_CLOSURE = 19;
+        SCHOOL_ZONE = 20;
+    }
+    
+    AlerterSubtype alerter_subtype = 5;
+    enum AlerterSubtype {
+        ALERTER_SUBTYPE_UNSPECIFIED = 0;
+        BAD_WEATHER_DEFAULT = 1;
+        BAD_WEATHER_FLOOD = 2;
+        BAD_WEATHER_FOG = 3;
+        BAD_WEATHER_FREEZING_RAIN = 4;
+        BAD_WEATHER_HAIL = 5;
+        BAD_WEATHER_HEAT_WAVE = 6;
+        BAD_WEATHER_HEAVY_RAIN = 7;
+        BAD_WEATHER_HEAVY_SNOW = 8;
+        BAD_WEATHER_HURRICANE = 9;
+        BAD_WEATHER_ICY_ROAD = 10;
+        BAD_WEATHER_MONSOON = 11;
+        BAD_WEATHER_SLIPPERY_ROAD = 12;
+        BAD_WEATHER_TORNADO = 13;
+        BAD_WEATHER_UNPLOWED_ROAD = 14;
+        BLOCKED_LANE_DEFAULT = 15;
+        BLOCKED_LANE_CENTER = 16;
+        BLOCKED_LANE_LEFT = 17;
+        BLOCKED_LANE_RIGHT = 18;
+        CRASH_DEFAULT = 19;
+        CRASH_MAJOR = 20;
+        CRASH_MINOR = 21;
+        CRASH_PILE_UP = 22;
+        GUARDIAN_LONG = 23;
+        GUARDIAN_SHORT = 24;
+        HAZARD_DEFAULT = 25;
+        HAZARD_ANIMALS = 26;
+        HAZARD_BROKEN_TRAFFIC_LIGHT = 27;
+        HAZARD_CONSTRUCTION = 28;
+        HAZARD_MISSING_SIGN = 29;
+        HAZARD_OBJECT_ON_ROAD = 30;
+        HAZARD_OIL = 31;
+        HAZARD_ON_ROAD = 32;
+        HAZARD_POTHOLE = 33;
+        HAZARD_ROAD_KILL = 34;
+        HAZARD_SHOULDER = 35;
+        HAZARD_SHOULDER_VEHICLE_STOPPED = 36;
+        HAZARD_VEHICLE_STOPPED = 37;
+        HAZARD_WEATHER = 38;
+        MISC_HEADLIGHTS_REMINDER = 39;
+        POLICE_DEFAULT = 40;
+        POLICE_HIDDEN = 41;
+        POLICE_VISIBLE = 42;
+        POLICE_MOBILE_CAMERA = 80;
+        ROAD_CLOSED_DEFAULT = 43;
+        ROAD_CLOSED_CONSTRUCTION = 44;
+        ROAD_CLOSED_EVENT = 45;
+        ROAD_CLOSED_HAZARD = 46;
+        SOS_BATTERY_ISSUE = 47;
+        SOS_FLAT_TIRE = 48;
+        SOS_MECHANICAL_PROBLEM = 49;
+        SOS_MEDICAL_HELP = 50;
+        SOS_NO_FUEL = 51;
+        SOS_OTHER = 52;
+        TRAFFIC_DEFAULT = 53;
+        TRAFFIC_HEAVY = 54;
+        TRAFFIC_LIGHT = 55;
+        TRAFFIC_MODERATE = 56;
+        TRAFFIC_STANDSTILL = 57;
+        SPEED_LIMIT_DECREASE_DEFAULT = 58;
+        PERSONAL_SAFETY_DEFAULT = 59;
+        CAMERA_DUMMY_DEFAULT = 60;
+        CAMERA_HOV_LANE = 61;
+        CAMERA_BUS_LANE = 62;
+        CAMERA_CARPOOL_LANE = 63;
+        CAMERA_RAILROAD = 64;
+        CAMERA_RED_LIGHT = 65;
+        CAMERA_LOW_EMISSION_ZONE = 66;
+        CAMERA_ULTRA_LOW_EMISSION_ZONE = 67;
+        CAMERA_CITY_HISTORICAL_CENTER = 68;
+        CAMERA_CLEAN_AIR_ZONE = 69;
+        CAMERA_NATIONAL_PARK = 70;
+        CAMERA_CONGESTION_CHARGE_ZONE = 71;
+        CAMERA_LIMITED_TRAFFIC_ZONE = 72;
+        CAMERA_PHONE_ENFORCEMENT = 73;
+        CAMERA_SEATBELT_ENFORCEMENT = 74;
+        CAMERA_DISTANCE_BETWEEN_VEHICLES_ENFORCEMENT = 75;
+        CAMERA_STOP_SIGN_ENFORCEMENT = 76;
+        CAMERA_ROAD_SAFETY_ENFORCEMENT_NOISE_ENFORCEMENT = 77;
+        CAMERA_SPEED_DEFAULT = 78;
+        SCHOOL_ZONE_DEFAULT = 79;
+    }
+    
+    oneof _alert_id {
+        int64 alert_id = 1;
+    }
+    
+    oneof _type {
+        int64 type = 2;
+    }
+    
+    oneof _subtype {
+        int64 subtype = 3;
+    }
+    
+    oneof _segment_info {
+        SegmentInfo segment_info = 6;
+    }
+}

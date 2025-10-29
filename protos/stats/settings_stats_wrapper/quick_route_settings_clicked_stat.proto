@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/settings_stats_wrapper/quick_route_settings_context.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message QuickRouteSettingsClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        VIEW_ALL_NAVIGATION_SETTINGS = 1;
+    }
+    
+    QuickRouteSettingsContext context = 2;
+}

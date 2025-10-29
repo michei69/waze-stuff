@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+package linqmap.proto.replay;
+
+option java_package = "linqmap.proto.replay";
+
+message IosLocationEvent {
+    oneof event {
+        IosLocationUpdateEvent ios_location_update = 1;
+        IosLocationHeadingUpdateEvent ios_location_heading_update = 2;
+        IosLocationAuthorizationEvent ios_location_authorization = 3;
+        IosLocationUpdateFailureEvent ios_location_update_failure = 4;
+    }
+}
+
+message IosLocationUpdateEvent {
+    repeated IosLocation locations = 1;
+    message IosLocation {
+        optional double latitude = 1;
+        optional double longitude = 2;
+        optional double altitude = 3;
+        optional double ellipsoidal_altitude = 4;
+        optional double horizontal_accuracy = 5;
+        optional double vertical_accuracy = 6;
+        optional double course = 7;
+        optional double course_accuracy = 8;
+        optional double speed = 9;
+        optional double speed_accuracy = 10;
+        optional double timestamp = 11;
+        optional bool produced_by_accessory = 13;
+    }
+}
+
+message IosLocationHeadingUpdateEvent {
+    optional double magnetic_heading = 1;
+    optional double true_heading = 2;
+    optional double heading_accuracy = 3;
+    optional double timestamp = 4;
+}
+
+message IosLocationAuthorizationEvent {
+    optional Permission permission = 1;
+    enum Permission {
+        NotDetermined = 0;
+        Restricted = 1;
+        Denied = 2;
+        AuthorizedAlways = 3;
+        AuthorizedWhenInUse = 4;
+    }
+    
+    optional Accuracy accuracy = 2;
+    enum Accuracy {
+        Full = 1;
+        Reduced = 2;
+    }
+}
+
+message IosLocationUpdateFailureEvent {
+    optional int64 error_code = 1;
+    optional string error_description = 2;
+    optional string error_domain = 3;
+}

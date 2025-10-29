@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_banner_information.proto";
+import "stats/google_ads_stats_wrapper/google_ad_information.proto";
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/reusable_types/venue_opening_status.proto";
+import "stats/search_stats_wrapper/electric_vehicle_charging_station_slots_information.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AddressPreviewInformationShownStat {
+    string venue_id = 1;
+    VenueOpeningStatus venue_opening_information = 2;
+    ElectricVehicleChargingStationInformation electric_vehicle_charging_station_information = 5;
+    TriggeringPlatform triggering_platform = 14;
+    
+    oneof _venue_rating_information {
+        float venue_rating_information = 3;
+    }
+    
+    oneof _venue_price_information {
+        int64 venue_price_information = 4;
+    }
+    
+    oneof _parking {
+        bool parking = 6;
+    }
+    
+    oneof _residential {
+        bool residential = 7;
+    }
+    
+    oneof _book_parking_shown {
+        bool book_parking_shown = 8;
+    }
+    
+    oneof _parking_prices_shown {
+        bool parking_prices_shown = 9;
+    }
+    
+    oneof _is_ad {
+        bool is_ad = 10;
+    }
+    
+    oneof _ad_business_name {
+        string ad_business_name = 11;
+    }
+    
+    oneof _google_ad_information {
+        GoogleAdInformation google_ad_information = 12;
+    }
+    
+    oneof _ad_banner_information {
+        GoogleAdBannerInformation ad_banner_information = 13;
+    }
+}

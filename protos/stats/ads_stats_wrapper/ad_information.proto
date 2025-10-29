@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AdInformation {
+    string serving_channel = 1;
+    string ad_context = 2;
+    string venue_context = 3;
+    string venue_id = 4;
+}

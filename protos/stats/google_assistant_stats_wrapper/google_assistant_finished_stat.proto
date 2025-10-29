@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_assistant_stats_wrapper/google_assistant_source.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAssistantFinishedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ALTERNATE_ROUTES = 1;
+        ETA_QUERY = 2;
+        NAVIGATE = 3;
+        RECENTER = 4;
+        REPORT_CRASH = 5 [deprecated = true];
+        REPORT_HAZARD = 6 [deprecated = true];
+        REPORT_POLICE = 7 [deprecated = true];
+        REPORT_TRAFFIC = 8 [deprecated = true];
+        ROUTE_OVERVIEW = 9;
+        ROUTE_PREFERENCE_HIGHWAYS = 10;
+        ROUTE_PREFERENCE_TOLLS = 11;
+        SEARCH = 12;
+        SET_HOME = 13;
+        SET_WORK = 14;
+        SHOW_DIRECTIONS = 15;
+        STOP_NAVIGATION = 16;
+        VOICE_DIRECTIONS = 17;
+        SEND_REPORT = 18;
+    }
+    
+    ActionSubtype action_subtype = 2;
+    enum ActionSubtype {
+        ACTION_SUBTYPE_UNSPECIFIED = 0;
+        BROKEN_TRAFFIC_LIGHT = 1 [deprecated = true];
+        DEFAULT = 2 [deprecated = true];
+        HEAVY = 3 [deprecated = true];
+        HOME = 4;
+        LOCATION = 5;
+        MAJOR = 6 [deprecated = true];
+        MINOR = 7 [deprecated = true];
+        MODERATE = 8 [deprecated = true];
+        OFF = 9;
+        ON = 10;
+        ON_ROAD = 11 [deprecated = true];
+        ON_ROAD_CAR_STOPPED = 12 [deprecated = true];
+        ON_ROAD_CONSTRUCTION = 13 [deprecated = true];
+        ON_ROAD_ICE = 14 [deprecated = true];
+        ON_ROAD_OBJECT = 15 [deprecated = true];
+        ON_ROAD_POT_HOLE = 16 [deprecated = true];
+        ON_ROAD_ROAD_KILL = 17 [deprecated = true];
+        ON_SHOULDER = 18 [deprecated = true];
+        ON_SHOULDER_ANIMALS = 19 [deprecated = true];
+        ON_SHOULDER_CAR_STOPPED = 20 [deprecated = true];
+        STANDSTILL = 21 [deprecated = true];
+        WEATHER_FLOOD = 22 [deprecated = true];
+        WEATHER_FOG = 23 [deprecated = true];
+        WEATHER_HEAVY_RAIN = 24 [deprecated = true];
+        WORK = 25;
+    }
+    
+    Direction direction = 3;
+    enum Direction {
+        DIRECTION_UNSPECIFIED = 0;
+        SAME_SIDE = 1;
+        OTHER_SIDE = 2;
+    }
+    
+    string source = 5 [deprecated = true];
+    GoogleAssistantSource source_type = 6;
+    string android_invocation_code = 7;
+    UgcTypeInfo.UgcType ga_report_type = 8;
+    UgcTypeInfo.UgcSubtype ga_report_subtype = 9;
+    
+    oneof _successful {
+        bool successful = 4;
+    }
+}

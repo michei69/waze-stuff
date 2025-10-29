@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/guidance_stats_wrapper/explainability_handling_ended_stat.proto";
+import "stats/guidance_stats_wrapper/explainability_request_sent_stat.proto";
+import "stats/guidance_stats_wrapper/explainability_response_received_stat.proto";
+import "stats/guidance_stats_wrapper/guidance_source_changed_stat.proto";
+import "stats/guidance_stats_wrapper/voice_announcement_played_stat.proto";
+import "stats/guidance_stats_wrapper/voice_instruction_announcement_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GuidanceStatsWrapper {
+    oneof stat {
+        VoiceInstructionAnnouncementStat voice_instruction_announcement = 1;
+        ExplainabilityHandlingEndedStat explainability_handling_ended = 2;
+        ExplainabilityRequestSentStat explainability_request_sent = 3;
+        ExplainabilityResponseReceivedStat explainability_response_received = 4;
+        VoiceAnnouncementPlayedStat voice_announcement_played = 5;
+        GuidanceSourceChangedStat guidance_source_changed = 6;
+    }
+}

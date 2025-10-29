@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Doc.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message PendingRequest {
+    optional string request_id = 1;
+    optional int64 expected_processing_time_ms = 2;
+}
+
+message CompletePendingRequest {
+    optional string request_id = 1;
+}

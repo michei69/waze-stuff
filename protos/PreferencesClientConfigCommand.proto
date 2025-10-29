@@ -1,0 +1,270 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "VoicePrompts.proto";
+import "ProfileCommands.proto";
+import "AoMCommon.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message PreferencesClientConfig {
+    optional TransportationSDK transportation = 1;
+    optional SpeedLimits limits = 2;
+    optional MapCars map_cars = 3;
+    optional voice.VoicePromptsConfig voice_prompts = 4;
+    optional VoiceSearchLanguages voice_search_langs = 5;
+    optional HOVPermitConfigs hov_permit_configs = 6;
+    optional Moods moods = 7;
+    optional SettingsBundleCampaigns settings_bundle_campaigns = 8;
+    optional WebUrlWhiteList web_url_white_list = 9;
+    optional AvailableReportCategories report_categories = 10;
+    optional AvailableReportCategories in_car_report_categories = 11;
+    optional AvailableReportCategories voice_report_categories = 12;
+}
+
+message TransportationSDK {
+    repeated TransportationSDKPartner partner = 1;
+    optional string image_base_url = 2;
+}
+
+message TransportationSDKPartner {
+    repeated string ios_pkg_name = 2;
+    repeated string android_pkg_name = 3;
+    
+    optional SharingMode sharing_mode = 4 [deprecated = true];
+    enum SharingMode {
+        UNKNOWN = 0;
+        NONE = 1;
+        DATA = 2;
+    }
+    
+    optional uint32 enabled_features = 7;
+    optional string display_name = 1;
+    optional string itunes_id = 5;
+    optional string ios_url_scheme = 8;
+    optional string ios_url_scheme_supporting_audio_kit = 10;
+    optional bool back_button_disabled = 6;
+    optional string installation_url = 9;
+    
+    enum EnabledFeature {
+        DATA_TURNS_AND_ETA = 1;
+        DATA_DESTINATION = 2;
+        DATA_ROUTE = 4;
+        FEATURE_CHANGE_CAR = 32768;
+        FEATURE_CHANGE_VOICE = 131072;
+        FEATURE_CHANGE_VEHICLE_TYLE = 262144;
+        FEATURE_RETURN_REQUEST = 524288;
+        FEATURE_BACK_BUTTON = 1048576;
+        FEATURE_AUDIO = 2097152;
+        IS_AUDIO_INTERNAL_TESTING = 268435456;
+        IS_GRADUAL_ROLLOUT = 536870912;
+        IS_TEST_APP = 1073741824;
+    }
+}
+
+message SpeedLimits {
+    repeated SpeedLimit limit = 1;
+}
+
+message SpeedLimit {
+    optional int32 road_type = 1;
+    repeated int32 speed_limit = 2;
+}
+
+message MapCars {
+    optional int64 modified_time = 1;
+    repeated MapCar map_cars = 2;
+}
+
+message MapCar {
+    optional string car_id = 1;
+    optional bool is_ads = 2;
+    optional MapCar3DInfo map_car_3d_info = 3;
+}
+
+message MapCar3DInfo {
+    optional bool has_normal_texture = 1;
+    optional bool has_taxi_texture = 2;
+    optional bool has_share_texture = 3;
+    optional float scale = 4 [default = 1];
+    optional MapCar3DLighting lighting = 5;
+}
+
+message MapCar3DLighting {
+    optional float ambient_intensity = 1 [default = 1];
+    optional float diffuse_intensity = 2;
+}
+
+message Moods {
+    repeated Mood moods = 1;
+}
+
+message Mood {
+    optional int32 mood_id = 1;
+    optional string mood_name = 2;
+    optional bool is_hidden = 3;
+    optional bool is_ads = 4;
+}
+
+message VoiceSearchLanguages {
+    repeated VoiceSearchLanguage language = 1;
+}
+
+message VoiceSearchLanguage {
+    optional string key = 1;
+    optional string name = 2;
+}
+
+message HOVPermitConfig {
+    optional string id = 1;
+    optional string name = 2;
+    optional bool can_expire = 3;
+    repeated CorrelatedPermit correlatedPermitIds = 4;
+}
+
+message CorrelatedPermit {
+    optional string permitId = 1;
+}
+
+message HOVPermitConfigs {
+    repeated HOVPermitConfig config = 1;
+}
+
+message CachedData {
+    optional MyProfile profile = 1;
+}
+
+message SettingsBundleCampaigns {
+    repeated SettingsBundleCampaign campaigns = 1;
+}
+
+message SettingsBundleCampaign {
+    optional string campaign_id = 1;
+    optional int32 campaign_priority = 2;
+    optional string sheet_icon = 3;
+    optional string sheet_title = 4;
+    optional string sheet_subtitle = 5;
+    optional string banner_icon = 6;
+    optional string banner_title = 7;
+    optional string banner_action = 8;
+    repeated string car_ids = 9;
+    optional string car_bg_color = 10;
+    repeated string mood_ids = 11;
+    optional string mood_bg_color = 12;
+    repeated string prompt_ids = 13;
+    repeated string language_ids = 14;
+    optional bool show_banner = 15;
+    repeated string prompt_icons = 16;
+    optional string prompt_bg_color = 17;
+    repeated string language_icons = 18;
+    optional string language_bg_color = 19;
+}
+
+message WebUrlWhiteList {
+    repeated WebUrlPermission web_urls = 1;
+}
+
+message WebUrlPermission {
+    optional string url_with_host_pattern = 1;
+    
+    repeated Permission permissions = 2;
+    enum Permission {
+        UNKNOWN = 0;
+        INTERNAL_PAGE = 1;
+        JAVASCRIPT_ENABLED = 2;
+        FILE_UPLOADING_ENABLED = 4;
+        FEEDBACK_API_ENABLED = 8;
+        ADVIL_API_ENABLED = 16;
+        REQUIRE_RT_SESSION_INFO = 32;
+    }
+    
+    optional string description = 3;
+}
+
+message TrafficReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_Traffic item_subtype = 1;
+    optional bool show_other_side = 2;
+}
+
+message PoliceReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_Police item_subtype = 1;
+    optional bool show_other_side = 2;
+}
+
+message CrashReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_Crash item_subtype = 1;
+    optional bool show_other_side = 2;
+}
+
+message HazardReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_HazardOnRoad item_subtype = 1;
+    optional bool show_other_side = 2;
+}
+
+message WeatherReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_Weather item_subtype = 1;
+    optional bool show_other_side = 2;
+}
+
+message BlockedLaneReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_BlockedLane item_subtype = 1;
+    optional bool show_other_side = 2;
+}
+
+message MapIssueReportCategory {
+    repeated Report_MapIssue item_subtype = 1;
+}
+
+message DebugReportCategory {
+    
+}
+
+message ClosureReportCategory {
+    
+}
+
+message PersonalSafetyReportCategory {
+    repeated com.waze.proto.alertsonmap.Alert_PersonalSafety item_subtype = 1;
+}
+
+message ReportCategoryInfo {
+    oneof report_category {
+        BlockedLaneReportCategory blocked_lane_report_category = 1;
+        WeatherReportCategory weather_report_category = 2;
+        HazardReportCategory hazard_report_category = 3;
+        CrashReportCategory crash_report_category = 4;
+        PoliceReportCategory police_report_category = 5;
+        TrafficReportCategory traffic_report_category = 6;
+        ReportCategory legacy_report_category = 7;
+        DebugReportCategory debug_report_category = 8;
+        MapIssueReportCategory map_issue_report_category = 9;
+        ClosureReportCategory closure_report_category = 10;
+        PersonalSafetyReportCategory personal_safety_report_category = 11;
+    }
+}
+
+message AvailableReportCategories {
+    repeated ReportCategoryInfo report_categories = 1;
+}
+
+enum ReportCategory {
+    REPORT_CATEGORY_UNSPECIFIED = 0;
+    MAP_ISSUES = 1;
+    ROADSIDE_HELP = 2;
+    GAS = 3;
+    CLOSURE = 4;
+    MAP_CHAT = 5;
+    ADD_PLACE = 6;
+}
+
+enum Report_MapIssue {
+    MAP_ISSUE_UNSPECIFIED = 0;
+    MAP_ISSUE_GENERAL_MAP_PROBLEM = 1;
+    MAP_ISSUE_INCORRECT_TURN = 2;
+    MAP_ISSUE_INCORRECT_ADDRESS = 3;
+    MAP_ISSUE_INCORRECT_ROUTE = 4;
+    MAP_ISSUE_MISSING_ROUNDABOUT = 5;
+    MAP_ISSUE_MISSING_ROAD = 6;
+}

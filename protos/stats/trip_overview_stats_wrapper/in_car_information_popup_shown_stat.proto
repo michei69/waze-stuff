@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InCarInformationPopupShownStat {
+    repeated PopupInformationElements popup_information_elements = 1;
+    enum PopupInformationElements {
+        POPUP_INFORMATION_ELEMENTS_UNSPECIFIED = 0;
+        TOLL_INFORMATION_SHOWN = 1;
+        CARBON_EMISSION_INFORMATION_SHOWN = 2;
+    }
+}

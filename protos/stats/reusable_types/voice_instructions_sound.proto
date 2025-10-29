@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum VoiceInstructionsSound {
+    VOICE_INSTRUCTIONS_SOUND_UNSPECIFIED = 0;
+    SOUND_ON = 1;
+    SOUND_OFF = 2;
+    ALERTS_ONLY = 3;
+}

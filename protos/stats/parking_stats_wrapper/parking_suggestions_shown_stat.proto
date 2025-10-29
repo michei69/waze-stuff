@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ParkingSuggestionsShownStat {
+    oneof _num_results {
+        int64 num_results = 1;
+    }
+    
+    oneof _ad_shown_at_top {
+        bool ad_shown_at_top = 2;
+    }
+    
+    oneof _popular_shown_at_top {
+        bool popular_shown_at_top = 3;
+    }
+}

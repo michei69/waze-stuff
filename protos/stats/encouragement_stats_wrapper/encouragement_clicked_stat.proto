@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/encouragement_stats_wrapper/encouragement_info.proto";
+import "stats/reusable_types/ucomm_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EncouragementClickedStat {
+    UcommInfo ucomm_info = 1;
+    
+    Type type = 2 [deprecated = true];
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        ETA_CARD = 1;
+        ETA_POPUP = 2;
+    }
+    
+    Action action = 3;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        PRIMARY = 1;
+        SECONDARY = 2;
+        CARD = 3;
+        PRIMARY_LINK = 4;
+        SECONDARY_LINK = 5;
+        BACK = 6;
+        TAP_BACKGROUND = 7;
+        X = 8;
+    }
+    
+    string image_name = 4 [deprecated = true];
+    EncouragementInfo encouragement_info = 6;
+    
+    oneof _opt_out {
+        bool opt_out = 5;
+    }
+}

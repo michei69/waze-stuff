@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package linqmap.proto.map_data;
+
+message Interval {
+    oneof _start_from_origin_meters {
+        int32 start_from_origin_meters = 1;
+    }
+    
+    oneof _end_from_origin_meters {
+        int32 end_from_origin_meters = 2;
+    }
+}
+
+message LaneInfo {
+    oneof _num_lanes {
+        int32 num_lanes = 1;
+    }
+    
+    oneof _width_per_lane_centimeters {
+        int32 width_per_lane_centimeters = 2;
+    }
+    
+    oneof _interval {
+        Interval interval = 3;
+    }
+}
+
+message Direction {
+    repeated LaneInfo lane_infos = 1;
+}

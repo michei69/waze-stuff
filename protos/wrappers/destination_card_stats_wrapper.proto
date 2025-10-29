@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/destination_card_stats_wrapper/destination_card_clicked_stat.proto";
+import "stats/destination_card_stats_wrapper/destination_card_menu_clicked_stat.proto";
+import "stats/destination_card_stats_wrapper/destination_card_menu_shown_stat.proto";
+import "stats/destination_card_stats_wrapper/destination_cards_loaded_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DestinationCardStatsWrapper {
+    oneof stat {
+        DestinationCardClickedStat destination_card_clicked = 1;
+        DestinationCardsLoadedStat destination_cards_loaded = 2;
+        DestinationCardMenuShownStat destination_card_menu_shown = 3;
+        DestinationCardMenuClickedStat destination_card_menu_clicked = 4;
+    }
+}

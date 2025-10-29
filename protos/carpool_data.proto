@@ -1,0 +1,1550 @@
+syntax = "proto2";
+
+package google.carpool;
+
+import "carpool_experiments.proto";
+import "logging.proto";
+import "Questions.proto";
+import "UsersProfileSuspensions.proto";
+
+option objc_class_prefix = "CPP";
+option java_package = "com.google.ridematch.proto";
+
+message User {
+    optional string obfuscated_id = 1;
+    optional string name = 3;
+    optional string given_name = 4;
+    optional string family_name = 5;
+    optional string photo_url = 6;
+    optional string waze_picture_id = 28;
+    optional CarInfo car_info = 8;
+    optional int64 join_time_utc_seconds = 10;
+    optional int64 waze_join_time_utc_seconds = 29;
+    optional int32 completed_rides_pax = 11;
+    optional int32 completed_rides_driver = 16;
+    optional int32 completed_rides_pax_migrated = 38;
+    optional int32 completed_rides_driver_migrated = 39;
+    repeated UserBonus bonus = 37;
+    
+    optional ReferralsProgram referrals_program = 40;
+    message ReferralsProgram {
+        optional bool can_user_refer = 1;
+        optional string driver_referral_code = 2;
+        optional string driver_referral_token = 7;
+        optional string rider_referral_code = 3;
+        optional string rider_referral_token = 8;
+        optional string currency_code = 4;
+        optional int32 rider_referrer_discount_amount_minors = 5;
+        optional int32 driver_referrer_bonus_amount_minors = 6;
+        optional int32 driver_referee_bonus_amount_minors = 9;
+        optional int32 rider_referrer_n_coupons = 10;
+        optional int32 rider_referee_n_coupons = 11;
+        optional int32 rider_referrer_credit_amount_minors = 12;
+        optional int32 rider_referee_credit_amount_minors = 13;
+    }
+    
+    optional float star_rating_as_driver = 33;
+    optional float star_rating_as_pax = 34;
+    optional UserRoleInfo driver_info = 35;
+    optional UserRoleInfo rider_info = 36;
+    optional int64 last_seen_time_utc_seconds = 13;
+    optional string display_email = 15;
+    optional bool is_email_verified = 21;
+    optional string organization = 19;
+    optional bool confirmed_credit_card = 20;
+    optional bool bank_account_updated = 26;
+    optional string free_text = 31;
+    
+    optional Private private = 9;
+    message Private {
+        optional bool is_driver = 1;
+        optional bool is_passenger = 2;
+        optional bool is_pax_onboarded = 71;
+        optional bool is_driver_onboarded = 25;
+        optional int64 passenger_onboarding_time = 70;
+        optional int64 driver_onboarding_time = 58;
+        optional bool onboarded = 94;
+        optional int64 onboarded_time = 95;
+        optional string onboarding_country_code = 100;
+        
+        optional DriverOnboardingStatus driver_onboarding_status = 31;
+        enum DriverOnboardingStatus {
+            UNKNOWN = 0;
+            GOOGLE_CONNECTED = 1;
+            PHASE_ONE = 2;
+            PHASE_TWO = 3;
+            PHASE_THREE = 4;
+            ALL_DONE = 5;
+            JOINED_EMPTY_USER = 10;
+            JOINED_HOME_WORK_UPDATED = 11;
+        }
+        
+        optional bool mark_offers_as_seen = 96;
+        optional bool allow_others_to_view_my_last_seen = 99;
+        optional string matching_domain = 97;
+        optional bool is_match_first = 98;
+        optional bool is_match_first_driver = 102;
+        optional bool is_match_first_rider = 103;
+        optional int64 match_first_driver_last_update_millis = 104;
+        optional int64 match_first_rider_last_update_millis = 105;
+        repeated string blocked_user = 9;
+        repeated string blocked_user_id = 11;
+        optional int32 balance = 5;
+        optional int32 total_paid = 23;
+        repeated string recent_driver_id = 57;
+        repeated Location home = 6;
+        repeated Location work = 7;
+        repeated UserCommuteTimes pax_commute_times = 52;
+        optional string phone = 8;
+        repeated string historic_phones = 107;
+        optional bool unsubscribed = 10;
+        optional bool whitelisted_as_pax = 12;
+        optional string email = 13;
+        optional string work_email = 14;
+        optional string photo_media_id = 17;
+        optional string car_photo_media_id = 18;
+        
+        optional AbuseStatus photo_abuse_status = 26;
+        enum AbuseStatus {
+            PENDING = 0;
+            OK = 1;
+            FLAGGED = 2;
+            MISMATCH = 3;
+            BROKEN = 4;
+            PROCESSING = 5;
+        }
+        
+        optional AbuseStatus car_photo_abuse_status = 27;
+        optional int64 photo_update_timestamp_seconds = 50;
+        optional int64 car_photo_update_timestamp_seconds = 51;
+        optional string locale = 19;
+        optional string language_tag = 86;
+        repeated string recent_partner_id = 24;
+        optional UserExperiments experiments = 61;
+        
+        optional UserScope user_scope = 62;
+        enum UserScope {
+            PUBLIC = 0;
+            GOOGLER = 1;
+            TESTER = 2;
+            TVC = 3;
+            DEVELOPER = 4;
+            RIDER_BETA = 5;
+            STAFF = 6;
+        }
+        
+        optional bool is_prober = 106;
+        optional bool suspended = 89;
+        optional bool suspended_on_sanctions_error = 90;
+        optional string last_sanctions_check_name = 91;
+        optional int64 sanctions_check_error_time_sec = 101;
+        optional linqmap.proto.usersprofile.SuspensionStatus suspension_status = 92;
+        optional linqmap.proto.usersprofile.UserSuspensionHistory suspension_history = 93;
+        
+        optional IsWillingToWalk is_willing_to_walk = 65;
+        enum IsWillingToWalk {
+            IS_WLLING_TO_WALK_UNSPECIFIED = 0;
+            WILL_WALK = 1;
+            WILL_NOT_WALK = 2;
+        }
+        
+        optional string masked_bank_account = 28;
+        optional int64 coupon_expiration_time = 29;
+        optional int32 available_coupons = 30;
+        
+        optional DiscountCouponInfo discount_coupon_info = 87;
+        message DiscountCouponInfo {
+            optional int64 coupon_expiration_time = 1;
+            optional int32 coupon_discount_minors = 2;
+            optional string currency = 3;
+        }
+        
+        optional PaxPromo pax_promo = 63;
+        optional bool is_multipax_as_driver_disabled = 80;
+        optional int32 default_available_seats = 81;
+        
+        optional NotificationFrequency notification_frequency = 82;
+        enum NotificationFrequency {
+            FREQUENCY_UNSPECIFIED = 0;
+            FREQUENCY_LOW = 1;
+            FREQUENCY_HIGH = 2;
+        }
+        
+        optional int64 notification_silenced_until_utc_seconds = 83;
+        
+        optional DriverUnpingable driver_unpingable = 32;
+        message DriverUnpingable {
+            optional bool no_driver_app_gcm_registration = 1;
+            optional bool app_versions_too_low = 2;
+        }
+        
+        optional bool ride_offers_disabled = 34;
+        
+        optional DriverActiveness driver_activeness = 77;
+        enum DriverActiveness {
+            NORMAL = 0;
+            ZOMBIE = 1;
+        }
+        
+        optional float unlock_progress = 33;
+        optional Location inferred_home = 15;
+        optional Location inferred_work = 16;
+        optional int64 inferred_updated_from_indexer_timestamp_ms = 37;
+        optional int64 inferred_updated_from_user_timestamp_ms = 38;
+        optional bool prompt_user_update_home_work = 56;
+        
+        repeated HomeWorkError driver_home_work_error = 59;
+        enum HomeWorkError {
+            HomeWork_OK = 0;
+            HOME_MISSING = 1;
+            WORK_MISSING = 2;
+            HOME_CONFLICTING = 3;
+            WORK_CONFLICTING = 4;
+        }
+        
+        repeated UserCommuteTimes driver_default_strict_commute_times = 42;
+        
+        optional OtherHomeWork user_other_home_work = 43;
+        message OtherHomeWork {
+            optional Location user_specified_home = 1;
+            optional Location user_specified_work = 2;
+            optional Location google_now_home = 3;
+            optional Location google_now_work = 4;
+            optional Location waze_home = 5;
+            optional Location waze_work = 6;
+            optional float waze_home_confidence = 7;
+            optional float waze_work_confidence = 8;
+            optional int64 user_specified_update_timestamp_ms = 9;
+            optional int64 google_now_specified_update_timestamp_ms = 10;
+            optional int64 waze_specified_update_timestamp_ms = 11;
+        }
+        
+        optional bool avoid_tolls = 64;
+        optional bool avoid_danger_areas = 69;
+        optional string waze_id = 66;
+        optional string google_id = 72;
+        optional string facebook_id = 73;
+        optional bool is_pre_user = 75;
+        
+        optional WazeEnvironment waze_environment = 68;
+        enum WazeEnvironment {
+            IL = 1;
+            US = 2;
+            ROW = 3;
+        }
+        
+        repeated AuthType rider_auth_types_used = 76;
+        enum AuthType {
+            GOOGLE = 0;
+            FACEBOOK = 1;
+        }
+        
+        optional UserGender user_gender = 78;
+        optional int64 potential_driver_update_timestamp_seconds = 88;
+        
+        optional PromptPaymentAction prompt_payment_action = 49 [deprecated = true];
+        enum PromptPaymentAction {
+            PROMPT_PAYMENT_ACTION_UNSPECIFIED = 0;
+            PROMPT_ADD_PAYMENT_ACCOUNT = 1;
+            PROMPT_MIGRATE_PAYMENT_ACCOUNT = 2;
+            PROMPT_FIX_PAYMENT_ACCOUNT = 3;
+        }
+        
+        repeated string pax_that_thanked_me = 20 [deprecated = true];
+        repeated string drivers_that_thanked_me = 21 [deprecated = true];
+        repeated string gcm_id = 4 [deprecated = true];
+        repeated string preferred_driver = 3 [deprecated = true];
+        repeated string preferred_driver_id = 22 [deprecated = true];
+        repeated UserCommuteTimes tuneup_answers = 55 [deprecated = true];
+        optional Location current_home = 84 [deprecated = true];
+        optional Location current_work = 85 [deprecated = true];
+        optional bool is_super_driver = 60 [deprecated = true];
+        
+        optional AutoRequestSettings auto_request_settings = 53 [deprecated = true];
+        message AutoRequestSettings {
+            optional bool enabled = 1;
+            optional int64 timestamp = 2;
+            optional int32 pax_offer = 3;
+            optional string country_code = 4;
+        }
+        
+        repeated AutoRequestSettings auto_request_history = 54 [deprecated = true];
+        optional bool is_multipax_as_pax_disabled = 79 [deprecated = true];
+        
+        optional SubscriptionData subscription_data = 67 [deprecated = true];
+        message SubscriptionData {
+            optional string email = 1;
+            optional string home_zip = 2;
+            optional string work_zip = 3;
+        }
+        
+        optional bool opt_out_pre_user = 74 [deprecated = true];
+        optional OtherHomeWork indexer_other_home_work = 44 [deprecated = true];
+        optional bool home_work_out_of_sync = 45 [deprecated = true];
+        optional int64 home_work_out_of_sync_timestamp_ms = 46 [deprecated = true];
+        optional bool commute_times_out_of_sync = 47 [deprecated = true];
+        optional int64 commute_times_out_of_sync_timestamp_ms = 48 [deprecated = true];
+        repeated UserCommuteTimes driver_strict_commute_times = 39 [deprecated = true];
+        optional int64 driver_strict_commutetimes_updated_timestamp_ms = 40 [deprecated = true];
+        optional int64 commutetimes_processed_timestamp_ms = 41 [deprecated = true];
+    }
+    
+    optional SocialNetworks rider_social_networks = 30;
+    message SocialNetworks {
+        optional SocialNetwork facebook = 1;
+        message SocialNetwork {
+            optional string id = 1;
+            optional string name = 2;
+            optional string photo_url = 3;
+            optional string profile_url = 4;
+            optional string job_title = 5;
+            optional int32 number_of_friends = 6;
+            optional string first_name = 7;
+            optional string last_name = 8;
+            optional bool is_sms_connected = 9;
+        }
+        
+        optional SocialNetwork linked_in = 2;
+    }
+    
+    optional SocialNetworks driver_social_networks = 32;
+    
+    optional AdditionalWazeData additional_waze_data = 999;
+    message AdditionalWazeData {
+        optional int64 join_date_sec = 1;
+    }
+    
+    optional string onboarding_campaign = 41;
+    optional string email = 2 [deprecated = true];
+    optional string phone = 7 [deprecated = true];
+    
+    optional Reputation driver_reputation = 24 [deprecated = true];
+    message Reputation {
+        optional double debt = 1 [deprecated = true];
+        optional int64 last_update_timestamp = 2 [deprecated = true];
+        optional int64 last_deflate_timestamp = 3 [deprecated = true];
+    }
+    
+    optional Reputation pax_reputation = 25 [deprecated = true];
+    
+    repeated CoRiderStats co_rider_stats = 27 [deprecated = true];
+    message CoRiderStats {
+        optional string co_rider_obfusicated_id = 1 [deprecated = true];
+        optional int32 user_as_driver_cnt = 2 [deprecated = true];
+        optional int32 user_as_pax_cnt = 3 [deprecated = true];
+        optional int64 most_recent_as_driver_ts = 4 [deprecated = true];
+        optional int64 most_recent_as_pax_ts = 5 [deprecated = true];
+    }
+    
+    optional float old_rating = 12 [deprecated = true];
+    repeated UserCommuteTimes tuneup_answers = 55 [deprecated = true];
+    optional int32 thanks_from_pax = 17 [deprecated = true];
+    optional int32 num_pax_that_thanked_me = 22 [deprecated = true];
+    optional int32 thanks_from_drivers = 18 [deprecated = true];
+    optional int32 num_drivers_that_thanked_me = 23 [deprecated = true];
+}
+
+message UserAndExtendedInfo {
+    optional User user = 1;
+    optional ExtendedInfo extended_info = 2;
+}
+
+message ExtendedInfo {
+    repeated EndorsementCount endorsement_count = 1;
+    message EndorsementCount {
+        optional Endorsement endorsement = 1;
+        optional int32 count = 2;
+    }
+    
+    optional bool carpooled_together = 2 [deprecated = true];
+    
+    repeated RatingCount rating_as_pax = 3;
+    message RatingCount {
+        optional int32 star_rating = 1;
+        optional int32 count = 2;
+    }
+    
+    repeated RatingCount rating_as_driver = 4;
+    optional int64 first_ride_as_pax_time_sec = 5;
+    optional int64 first_ride_as_driver_time_sec = 6;
+}
+
+message UserRoleInfo {
+    optional int32 capabilities = 1;
+    optional int32 total_carpooled_meters = 2;
+    optional bool same_gender_enabled = 3;
+}
+
+message UserGender {
+    repeated GenderAndSource gender_and_source = 1;
+    message GenderAndSource {
+        optional Gender gender = 1;
+        optional Source source = 2;
+        optional int64 timestamp = 3;
+    }
+    
+    optional Gender gender = 2;
+    enum Gender {
+        GENDER_UNSPECIFIED = 0;
+        GENDER_FEMALE = 1;
+        GENDER_MALE = 2;
+        GENDER_OTHER = 3;
+    }
+    
+    optional GenderStatus gender_status = 3;
+    enum GenderStatus {
+        GENDER_STATUS_UNSPECIFIED = 0;
+        GENDER_STATUS_OK = 1;
+        GENDER_STATUS_SUPPORT_CONFLICT = 2;
+        GENDER_STATUS_SUPPORT_CHANGE = 3;
+        GENDER_STATUS_SUPPORT_OTHER_GENDER = 4;
+        GENDER_STATUS_NO_GENDER = 5;
+    }
+    
+    repeated GenderAndSource gender_and_source_history = 4;
+    
+    enum Source {
+        SOURCE_UNSPECIFIED = 0;
+        SOURCE_GOOGLE = 1;
+        SOURCE_FACEBOOK = 2;
+    }
+}
+
+message UserCommuteTimes {
+    repeated int32 day_of_week = 1;
+    
+    optional DrivingDirection driving_direction = 2;
+    enum DrivingDirection {
+        DRIVING_DIRECTION_UNSPECIFIED = 0;
+        HOME_WORK = 1;
+        WORK_HOME = 2;
+    }
+    
+    optional bool will_commute = 3;
+    
+    optional CommuteWindow commute_window = 4;
+    message CommuteWindow {
+        optional int32 window_start_sec = 1;
+        optional int32 window_end_sec = 2;
+    }
+    
+    optional int32 tuneup_commute_sec = 5;
+    optional bool for_commute = 6;
+    optional int64 update_time_ms = 7;
+}
+
+message InferredCommuteInfo {
+    optional bool has_home_to_work_histogram = 1;
+    optional bool has_work_to_home_histogram = 2;
+    optional int64 most_recent_entry_ms = 3;
+}
+
+message UserModelIndexerValue {
+    optional User user = 1;
+    optional InferredCommuteInfo inferred_commute_info = 2;
+}
+
+message InternalUserStats {
+    optional string obfuscated_id = 1;
+    
+    repeated CoRider co_rider_stats = 2;
+    message CoRider {
+        optional string co_rider_obfuscated_id = 1;
+        optional int32 user_as_driver_cnt = 2;
+        optional int32 user_as_pax_cnt = 3;
+        optional int64 most_recent_as_driver_ts = 4;
+        optional int64 most_recent_as_pax_ts = 5;
+    }
+    
+    optional DriverActivity driver_activity_stats = 3;
+    message DriverActivity {
+        repeated int64 pinged_time_sec = 1;
+        repeated int64 confirmed_time_sec = 2;
+    }
+    
+    optional Reputation driver_reputation = 4;
+    message Reputation {
+        optional double debt = 1;
+        optional int64 last_update_timestamp = 2;
+        optional int64 last_deflate_timestamp = 3;
+    }
+    
+    optional Reputation pax_reputation = 5;
+    optional double pax_reputation_repay = 6;
+    optional double driver_reputation_repay = 7;
+    
+    optional AbuseProcessing abuse_processing = 8;
+    message AbuseProcessing {
+        optional int64 photo_processing_timestamp = 1;
+        optional int64 car_photo_processing_timestamp = 2;
+    }
+}
+
+message PushMapping {
+    repeated GCMRegistration gcm_registration = 1;
+    message GCMRegistration {
+        optional string registration_id = 1;
+        optional string duplicate_id = 2;
+        optional AppType app_type = 3;
+        optional DeviceType device_type = 4;
+        optional string version = 5;
+    }
+    
+    enum AppType {
+        VIEW_UNKNOWN = 0;
+        VIEW_WAZE = 2;
+        VIEW_WAZE_RIDEWITH = 3;
+        VIEW_RIDEWITH = 1 [deprecated = true];
+    }
+    
+    enum DeviceType {
+        DEVICE_TYPE_UNSPECIFIED = 0;
+        DEVICE_TYPE_ANDROID = 1;
+        DEVICE_TYPE_IOS = 2;
+    }
+}
+
+message GenericConfirmation {
+    oneof confirmation_type {
+        EmailConfirmation email = 1;
+    }
+    
+    message EmailConfirmation {
+        optional string obfuscated_user_id = 1;
+        optional string email = 2;
+    }
+}
+
+message DispatchAnalyticsState {
+    optional Entry entry = 1;
+    enum Entry {
+        ENTRY_UNSPECIFIED = 0;
+        SEEN = 1;
+        RECEIVED = 2 [deprecated = true];
+    }
+    
+    optional int64 time = 2;
+}
+
+message UserTuneup {
+    optional Question question = 1;
+    message Question {
+        optional TuneupQuestionType question_type = 1;
+        enum TuneupQuestionType {
+            NONE = 0;
+            COMMUTE_AT_TIME = 1;
+            COMMUTE_AT_WINDOW = 2;
+            COLLECT_REJECTED_REASON = 3;
+        }
+    }
+    
+    optional Answer answer = 2;
+    message Answer {
+        optional UserCommuteTimes commute_time = 1;
+    }
+}
+
+message DispatchState {
+    optional Entry entry = 1;
+    enum Entry {
+        ENTRY_UNSPECIFIED = 0;
+        PENDING = 1;
+        SENT = 8;
+        CONFIRMED = 2;
+        CONFIRMED_BY_OTHER_DRIVER = 3;
+        REJECTED = 4;
+        SOFT_REJECTED = 11;
+        EXPIRED = 5;
+        DRIVER_CANCELLED = 10;
+        PAX_CANCELLED = 6;
+        SEEN = 7;
+        SKIPPED = 9;
+        RECEIVED = 12;
+        ALREADY_SCHEDULED = 13 [deprecated = true];
+        AUTO_TERMINATED = 14;
+    }
+    
+    optional int64 time = 2;
+    
+    oneof extras {
+        Rejected rejected = 3;
+        Skipped skipped = 4;
+        DriverCancelled driver_cancelled = 5;
+        AutoTerminated auto_terminated = 6;
+    }
+    
+    message Rejected {
+        optional string reason = 1 [deprecated = true];
+        optional bool bad_timing = 2;
+        optional bool detour_too_long = 3;
+        optional bool schedule_conflict = 4;
+        optional bool not_worth_it = 5;
+        optional bool other = 6;
+        optional string other_reason = 7;
+        optional UserTuneup user_tuneup = 8;
+        optional linqmap.proto.questions.Answer answer = 100;
+    }
+    
+    message Skipped {
+        optional SkipReason reason = 1;
+        enum SkipReason {
+            SKIP_REASON_UNSPECIFIED = 0;
+            DRIVER_NOT_IN_SYSTEM = 1;
+            SEEN_BY_DRIVER = 2;
+            INCOMPATIBLE_MULTI_PAX = 3;
+            DRIVER_OUT_OF_TOWN = 7;
+            DRIVER_PAST_PICKUP_RADIUS = 8;
+            CANDIDATE_IS_NOT_A_DRIVER = 9;
+            BLOCKED = 10;
+            FAILED_TO_GET_DISTANCE = 4 [deprecated = true];
+            CANDIDATE_IS_ALREADY_SCHEDULED = 6 [deprecated = true];
+        }
+    }
+    
+    message DriverCancelled {
+        optional string reason = 1;
+    }
+    
+    message AutoTerminated {
+        optional AutoTerminateReason reason = 1;
+        enum AutoTerminateReason {
+            AUTO_REJECT_REASON_UNSPECIFIED = 0;
+            ALREADY_SCHEDULED = 1;
+            NOT_DRIVING = 2;
+            DRIVER_DELETED_ACCOUNT = 3;
+        }
+    }
+}
+
+message PaxDispatchState {
+    optional Entry entry = 1;
+    enum Entry {
+        ENTRY_UNSPECIFIED = 0;
+        PENDING = 1;
+        CONFIRMED = 2;
+        REJECTED = 3;
+        EXPIRED = 4;
+        HAS_CONFIRMED_OTHER_DRIVE = 5;
+    }
+    
+    optional int64 time = 2;
+    
+    optional ExpiredReason expired_reason = 3;
+    enum ExpiredReason {
+        DRIVE_CHANGED = 0;
+        RIDE_CANCELLED = 1;
+        TIME_EXPIRED = 2;
+    }
+}
+
+message PathDirections {
+    repeated LatLngPoint geometry = 1;
+}
+
+message TravelInfo {
+    optional int32 time_seconds = 1;
+    optional double distance_meters = 2;
+    optional PathDirections path_points = 3;
+}
+
+message CompleteTripInfo {
+    optional TravelInfo origin_to_pickup = 1;
+    optional TravelInfo pickup_to_dropoff = 2;
+    optional TravelInfo dropoff_to_destination = 3;
+}
+
+message PaxDispatchPrice {
+    optional int32 pax_actual_payment_minor_units = 1;
+    optional string new_price_inquiry_id = 2;
+    optional int32 new_itinerary_default_price_minors = 3;
+    optional int32 new_itinerary_max_price_minors = 4;
+    optional string original_price_inquiry_id = 5;
+    optional int32 original_driver_price_offer_minors = 6;
+    optional int32 original_default_price_minors = 7;
+}
+
+message PaxDispatch {
+    optional string dispatch_id = 1;
+    optional string obfuscated_pax_id = 2;
+    optional string drive_id = 3;
+    optional PaxDispatchState state = 4;
+    repeated PaxDispatchState history = 5;
+    optional string ride_id = 6;
+    
+    optional PaxDispatchMatchingInfo matching_info = 7;
+    message PaxDispatchMatchingInfo {
+        optional CompleteTripInfo walking_info = 1;
+        optional CompleteTripInfo driving_info = 2;
+        optional TimeWindow pickup_window = 3;
+        optional PaxDispatchPrice pax_dispatch_price = 8;
+        optional TravelInfo driver_detour = 5;
+        optional Location pickup = 6;
+        optional Location dropoff = 7;
+    }
+    
+    optional Location origin = 8;
+    optional Location destination = 9;
+    
+    optional PaxDispatchType dispatch_type = 10;
+    enum PaxDispatchType {
+        UNSPECIFIED = 0;
+        RIDE_REQUEST = 1;
+        RIDER_COMMUTE_MODEL = 2;
+        RIDER_DRIVER_COMMUTE_MODEL = 3;
+    }
+}
+
+message Dispatch {
+    optional string obfuscated_driver_id = 1;
+    optional DispatchState state = 6;
+    repeated DispatchState history = 7;
+    optional int32 fee_cents_usd = 2;
+    optional int32 original_fee_cents_usd = 38;
+    optional int32 pax_actual_payment_minor_units = 22;
+    optional SimpleDriverPriceBreakdown driver_price_breakdown = 60;
+    optional SimplePaxPriceBreakdown pax_price_breakdown = 64;
+    optional UserBonus driver_bonus = 61;
+    optional double histogram_match = 14;
+    optional bool no_commute_times = 26;
+    optional int32 detour_time_seconds = 3;
+    optional double detour_distance_meters = 13;
+    optional int32 pickup_time_seconds = 12;
+    optional double pickup_distance_meters = 18;
+    optional int32 destination_time_seconds = 15;
+    optional double destination_distance_meters = 19;
+    optional int32 pax_commute_time_seconds = 20;
+    optional double pax_commute_distance_meters = 21;
+    optional int32 driver_commute_time_seconds = 23;
+    optional double driver_commute_distance_meters = 24;
+    optional int32 routing_timestamp_seconds = 32;
+    
+    optional RouteDetourInfo routing_optimized_route_detour_info = 59;
+    message RouteDetourInfo {
+        optional TimeAndDistance detour = 1;
+        message TimeAndDistance {
+            optional double distance_meters = 1;
+            optional int32 time_seconds = 2;
+        }
+        
+        optional TimeAndDistance pickup = 2;
+        optional TimeAndDistance destination = 3;
+        optional TimeAndDistance pax_commute = 4;
+        optional TimeAndDistance driver_commute = 5;
+        optional Location pickup_point = 7;
+        optional TimeAndDistance walking_to_pickup = 8;
+        optional PathDirections walking_path_to_pickup = 9;
+        optional Location dropoff_point = 10;
+        optional TimeAndDistance walking_to_dropoff = 11;
+        optional PathDirections walking_path_to_dropoff = 12;
+    }
+    
+    optional int64 value_index = 36;
+    optional Price.Quality quality = 37;
+    optional double score = 46;
+    optional bool carpooled_together = 47 [deprecated = true];
+    optional bool driver_removed_from_list = 48;
+    
+    optional ZeroizePaxPriceByOps zeroize_pax_price_by_ops_data = 52;
+    message ZeroizePaxPriceByOps {
+        optional int64 timestamp_seconds = 1;
+        optional string user = 2;
+        optional int32 original_pax_actual_payment_minor_units = 3;
+    }
+    
+    optional bool zeroize_pax_price_by_ops = 45 [deprecated = true];
+    optional Location origin = 16;
+    optional Location destination = 17;
+    
+    optional DispatchType dispatch_type = 25;
+    enum DispatchType {
+        SCHEDULED = 0;
+        REAL_TIME = 1;
+        EARLIER_CONFIRM = 2;
+        PLANNED_DRIVE = 3;
+        OFFER_RIDE = 4;
+        PRE_ONBOARDED = 5;
+        OFFER_RIDE_PAX_DISPATCH = 6;
+    }
+    
+    optional UserCommuteTimes.DrivingDirection driving_direction = 28;
+    
+    optional DriverLocationSource driver_home_work_source = 29;
+    enum DriverLocationSource {
+        DRIVER_LOCATION_SOURCE_UNDEFINED = 0;
+        USER = 1;
+        LH = 2;
+        USER_BUT_SIMILAR_TO_LH = 3;
+        LH_BUT_SIMILAR_TO_USER = 4;
+    }
+    
+    optional Location optimized_pickup = 39;
+    optional int32 walking_seconds_to_pickup = 41;
+    optional int32 walking_meters_to_pickup = 42;
+    optional PathDirections walking_path_to_pickup = 53;
+    optional Location optimized_dropoff = 40;
+    optional int32 walking_seconds_to_dropoff = 43;
+    optional int32 walking_meters_to_dropoff = 44;
+    optional PathDirections walking_path_to_dropoff = 54;
+    optional int64 last_message_timestamp_seconds = 34;
+    optional int32 pickup_window_default_offset_seconds = 31;
+    optional int64 digest_ping_sec = 33;
+    optional uint64 dispatch_id = 35;
+    optional string drive_id = 49;
+    optional bool pax_dispatch = 50;
+    optional bool hitchhike = 57;
+    optional RideSeenState seen_state = 55;
+    optional int64 time_seen = 56;
+    optional string pax_dispatch_id = 63;
+    optional LatLngPoint driver_location_when_pinged = 58;
+    optional int32 last_message_time_seconds = 30 [deprecated = true];
+    optional string old_topic_match = 8 [deprecated = true];
+    optional bool old_topic_created_by_pax = 9 [deprecated = true];
+    optional bool old_topic_created_by_driver = 10 [deprecated = true];
+    optional float old_detour_distance_meters = 4 [deprecated = true];
+    optional float old_histogram_match = 11 [deprecated = true];
+    optional UserTuneup.Question tuneup_question = 27 [deprecated = true];
+    optional linqmap.proto.questions.Question rejection_question = 100;
+}
+
+message PaxPromo {
+    optional DiscountType discount_type = 5;
+    enum DiscountType {
+        NONE = 0;
+        FIXED_PRICE = 1;
+        PERCENTAGE = 2;
+    }
+    
+    optional int32 price_fractional_units = 2;
+    optional string country_code = 3;
+    optional int32 percent_discount = 6;
+    optional bool is_eligible = 1 [deprecated = true];
+}
+
+message Itinerary {
+    optional Location pickup = 1;
+    optional Location dropoff = 2;
+    optional int64 window_start_time = 4;
+    optional int32 window_duration_seconds = 5;
+    optional string time_zone_id = 6;
+    optional string obfuscated_passenger_id = 7;
+    optional int32 max_offer_cents_usd = 8;
+    optional string price_inquiry_id = 26;
+    optional string coupon_id = 13;
+    optional string specific_driver_id = 14;
+    optional string ride_note = 17;
+    optional Hashtag user_tag = 24;
+    repeated string preferred_driver_id = 18;
+    optional bool strict_preferred_drivers = 19;
+    optional int32 minutes_willing_to_walk = 21;
+    optional int32 max_extra_pax = 22;
+    optional bool same_gender_enabled = 23;
+    optional bool generated_by_test = 27;
+    optional int64 preferred_time = 3 [deprecated = true];
+    repeated int64 repeat_times = 9 [deprecated = true];
+    repeated string obfuscated_driver_ids = 10 [deprecated = true];
+    optional double pax_reputation_repay = 11 [deprecated = true];
+    optional double driver_reputation_repay = 12 [deprecated = true];
+    optional PriceSelectionType price_selection_type = 15 [deprecated = true];
+    optional int32 fixed_pax_price_fractional_units = 16 [deprecated = true];
+    optional bool use_coupon = 20 [deprecated = true];
+}
+
+message RideState {
+    optional Entry entry = 1;
+    enum Entry {
+        ENTRY_UNSPECIFIED = 0;
+        REQUESTED = 13;
+        FINDING_DRIVER = 1;
+        PAX_CANCELLED = 2;
+        FAILED_NO_DRIVER = 5;
+        CANCELLED_AFTER_DEADLINE = 6;
+        MISSED = 15;
+        CONFIRMED = 7;
+        DRIVER_CANCELLED = 3;
+        DRIVER_STARTED = 10;
+        DRIVER_ARRIVED = 16;
+        DRIVER_STARTED_WITH_ETA = 8003;
+        DRIVER_STARTED_WITH_SHARE = 8001;
+        PAX_PICKED_UP = 8;
+        PAX_PICKED_UP_IN_DROPOFF_RADIUS = 8002;
+        PAX_DROPPED_OFF = 9;
+        COMPLETED = 4;
+        PAX_REVIEWED = 11;
+        DRIVER_REVIEWED = 12;
+        SYSTEM_CANCELLED = 14;
+    }
+    
+    optional int64 time = 2;
+    optional StateSource source = 7;
+    optional double accuracy_meters = 8;
+    optional LatLngPoint latlng = 9;
+    
+    oneof extras {
+        Confirmed confirmed = 3;
+        PaxCancelled pax_cancelled = 5;
+    }
+    
+    message Confirmed {
+        optional string obfuscated_driver_id = 1;
+    }
+    
+    message PaxCancelled {
+        optional string reason = 1;
+    }
+    
+    message SystemCancelled {
+        optional Reason reason = 1;
+        enum Reason {
+            REASON_UNSPECIFIED = 0;
+            AUTO_REQUEST_CHANGED = 1;
+            AUTO_REQUEST_PAX_OUT_OF_TOWN = 2;
+            AUTO_REQUEST_UNPAID_RIDES = 3;
+            AUTO_REQUEST_PAX_OVERRIDE = 4;
+            RIDE_CONFLICT = 5;
+            UNPAID_RIDES = 6;
+        }
+    }
+    
+    message DriverCancel {
+        optional string obfuscated_driver_id = 1;
+    }
+}
+
+message CouponState {
+    optional Entry entry = 1;
+    enum Entry {
+        NEW = 0;
+        SENT = 1;
+        PENDING = 2;
+        REDEEMED = 3;
+        CANCELLED = 4;
+    }
+    
+    optional int64 time = 2;
+}
+
+message Review {
+    optional Rating rating = 1;
+    enum Rating {
+        RATING_UNSPECIFIED = 0;
+        NEUTRAL = 1;
+        POSITIVE = 2;
+        DETAILED = 3;
+    }
+    
+    optional int32 star_rating = 3;
+    optional Endorsement endorsement = 4;
+    
+    oneof extras {
+        Detailed detailed = 2;
+    }
+    
+    message Detailed {
+        repeated string question_response_string = 1;
+        optional string form_id = 2;
+        repeated ReviewFormResponse question_response = 3;
+        
+        message QuestionResponse {
+            optional int32 id = 1;
+            optional string question = 2;
+            optional string response = 3;
+        }
+    }
+}
+
+message Ride {
+    optional string uuid = 1;
+    optional Itinerary itinerary = 2;
+    optional Dispatch dispatch = 3;
+    optional RideState state = 5;
+    repeated RideState history = 6;
+    repeated RideJournal journal = 41;
+    optional int64 response_deadline = 7;
+    optional int64 response_deadline_for_ping = 23;
+    optional int64 expected_notification_time = 38;
+    optional bool is_debug = 14;
+    optional bool real_time_only = 24;
+    optional bool auto_requested = 26;
+    optional string child_auto_retry_ride_id = 31;
+    optional string parent_auto_retry_ride_id = 32;
+    optional int32 estimated_drive_seconds = 19;
+    optional int32 estimated_drive_meters = 20;
+    optional uint64 pickup_s2_cell = 21;
+    optional uint64 dropoff_s2_cell = 22;
+    optional int32 total_drivers = 28;
+    optional int32 num_pingable_drivers = 29;
+    optional int32 num_considered_drivers = 36;
+    optional int32 num_pinged_drivers = 30;
+    optional string driver_id = 25;
+    optional string drive_id = 37;
+    optional int64 pickup_time = 4;
+    optional int64 waze_driver_mood = 8;
+    optional string pax_proxy_number = 9;
+    optional string driver_proxy_number = 11;
+    optional string waze_shared_drive_token = 10;
+    repeated string debug_info = 33;
+    optional Review pax_review_of_driver = 12;
+    optional Review driver_review_of_pax = 13;
+    optional bool claimed_meters = 34;
+    optional bool rider_arrived_at_pickup_point = 35;
+    optional LatLngPoint rider_arrived_latlng = 40;
+    optional bool implicitly_created = 39;
+    optional string pax_dispatch_id = 42;
+    optional SimplePaxPriceBreakdown pax_price_breakdown = 43;
+    optional UserCommuteTimes.DrivingDirection pax_driving_direction = 27 [deprecated = true];
+    optional int32 pax_travel_distance_meters = 17 [deprecated = true];
+    optional Review detailed_pax_review_of_driver = 15 [deprecated = true];
+    optional Review detailed_driver_review_of_pax = 16 [deprecated = true];
+}
+
+message Location {
+    optional LatLngPoint latlng = 1;
+    optional string address = 2;
+    optional string short_address = 11;
+    optional string place_name = 3;
+    optional string waze_routing_context = 4;
+    optional string waze_venue_id = 5;
+    optional int32 waze_favorite_type = 10;
+    optional string time_zone_id = 6;
+    optional string country_code = 7;
+    optional string state_code = 13;
+    
+    optional StructuredAddress structured_address = 9;
+    message StructuredAddress {
+        repeated string address_line = 1;
+        optional string locality_name = 2;
+        optional string postal_code = 3;
+        optional string administrative_area_name = 4;
+    }
+    
+    optional uint64 s2_cell_id = 12;
+}
+
+message LatLngPoint {
+    optional double lat = 3;
+    optional double lng = 4;
+    optional float old_lat = 1 [deprecated = true];
+    optional float old_lng = 2 [deprecated = true];
+}
+
+message CarInfo {
+    optional string make = 1;
+    optional string model = 2;
+    optional string color = 3;
+    optional int32 year = 4;
+    optional string license_plate = 5;
+    optional string photo_url = 6;
+}
+
+message OutputPrice {
+    optional int64 driver_base_payment_micros = 1;
+    optional int64 driver_actual_payment_micros = 2;
+    optional int64 pax_actual_payment_micros = 3;
+    optional int64 commission_micros = 4;
+}
+
+message Price {
+    optional string country_code = 25;
+    optional int64 driver_cost_micros = 26;
+    optional int64 max_offer_micros = 27;
+    optional int64 min_offer_micros = 28;
+    optional int64 max_legal_reimbursement_micros = 29;
+    optional int64 default_pax_price_micros = 30;
+    optional int64 pax_offer_micros = 31;
+    optional int64 detour_cost_micros = 32;
+    optional int64 remote_pickup_penalty_micros = 33;
+    optional int32 detour_time_seconds = 34;
+    optional int32 detour_distance_meters = 35;
+    optional int32 driver_origin_to_pax_pickup_seconds = 36;
+    optional int32 pax_travel_distance_meters = 37;
+    optional int64 pax_reputation_cost_micros = 38;
+    optional int64 driver_reputation_cost_micros = 50;
+    optional int64 uncapped_max_driver_take_micros = 39;
+    optional int64 max_driver_take_micros = 40;
+    optional int32 driver_distance_meters = 41;
+    optional int64 cost_of_alert_micros = 44;
+    optional double driver_acceptance_propensity = 62;
+    optional int64 total_cost_micros = 63;
+    optional int64 total_cost_unpinged_micros = 64;
+    optional int64 value_index = 45;
+    optional int64 relevance_ratio_micros = 46;
+    optional double alert_stock = 48;
+    optional int64 commission_micros = 53;
+    optional int64 commission_unpinged_micros = 54;
+    optional int64 max_reputation_penalty = 56;
+    optional InternalUserStats driver_stats = 57;
+    optional int64 driver_base_payment_micros = 42;
+    optional int64 driver_base_payment_unpinged_micros = 43;
+    optional int64 driver_actual_payment_micros = 58;
+    optional int64 driver_actual_payment_unpinged_micros = 59;
+    optional int64 pax_actual_payment_micros = 49;
+    optional int64 pax_actual_payment_unpinged_micros = 51;
+    optional OutputPrice esp_pinged_output_price = 73;
+    optional OutputPrice esp_unpinged_output_price = 74;
+    
+    optional Quality quality = 55;
+    enum Quality {
+        QUALITY_UNSPECIFIED = 0;
+        PING = 1;
+        SHOW = 2;
+        POOR = 3;
+        REAL_TIME_PING = 4;
+    }
+    
+    optional Error error = 60;
+    enum Error {
+        OK = 0;
+        ABSURD = 1;
+        PAX_PAYS_MORE_THAN_EXPECTATION = 2;
+        DRIVER_REIMBURSED_TOO_MUCH = 3;
+    }
+    
+    optional int64 real_time_value_index = 61;
+    optional int64 old_price_micros = 47 [deprecated = true];
+    optional float old_driver_cost_usd = 1 [deprecated = true];
+    optional float old_passenger_benefit_usd = 2 [deprecated = true];
+    optional float old_alert_cost_usd = 3 [deprecated = true];
+    optional float old_pre_adjusted_cost_usd = 4 [deprecated = true];
+    optional float old_experimental_modifier = 6 [deprecated = true];
+    optional float old_arriving_early_cost_usd = 7 [deprecated = true];
+    optional float old_detour_cost_usd = 8 [deprecated = true];
+    optional float old_passenger_tardiness_cost_usd = 9 [deprecated = true];
+    optional float old_loss_of_flexibility_usd = 10 [deprecated = true];
+    optional float old_topic_benefits_usd = 11 [deprecated = true];
+    optional float old_pre_adjusted_cost_sans_alert_usd = 12 [deprecated = true];
+    optional double driver_cost_usd = 14 [deprecated = true];
+    optional double passenger_benefit_usd = 15 [deprecated = true];
+    optional double alert_cost_usd = 16 [deprecated = true];
+    optional double pre_adjusted_cost_usd = 17 [deprecated = true];
+    optional int32 adjusted_cost_cents = 5 [deprecated = true];
+    optional double experimental_modifier = 18 [deprecated = true];
+    optional double arriving_early_cost_usd = 19 [deprecated = true];
+    optional double detour_cost_usd = 20 [deprecated = true];
+    optional double passenger_tardiness_cost_usd = 21 [deprecated = true];
+    optional double loss_of_flexibility_usd = 22 [deprecated = true];
+    optional double topic_benefits_usd = 23 [deprecated = true];
+    optional double pre_adjusted_cost_sans_alert_usd = 24 [deprecated = true];
+    optional int32 adjusted_cost_sans_alert_cents = 13 [deprecated = true];
+    
+    enum PaxPriceType {
+        PAX_UNSPECIFIED = 0;
+        PAX_SMALLEST = 1;
+        PAX_COST_BASED = 2;
+        PAX_ESP = 3;
+        PAX_OFFER_BASED = 4;
+        PAX_FIXED_PRICE_PROMO = 5;
+        PAX_LOW_PRIORITY_SHOW_EXPERIMENT = 6;
+    }
+    
+    enum DriverPriceType {
+        DRIVER_UNSPECIFIED = 0;
+        DRIVER_SMALLEST = 1;
+        DRIVER_COST_BASED = 2;
+        DRIVER_ESP = 3;
+        DRIVER_OFFER_BASED = 4;
+        DRIVER_PARTIAL_SUBSIDY = 5;
+        DRIVER_PROMO = 6;
+        DRIVER_WR_FIRST = 7;
+        DRIVER_LOW_PRIORITY_SHOW_EXPERIMENT = 8;
+    }
+}
+
+message Message {
+    optional int32 num_sent = 3;
+    repeated string s2d_id = 2;
+    repeated string obfuscated_id = 1 [deprecated = true];
+}
+
+message AppVersions {
+    optional string android_ridewith = 1;
+    optional string android_waze = 2;
+    optional string android_carpool = 3;
+    optional string ios_ridewith = 4;
+    optional string ios_waze = 5;
+}
+
+message GeoMultiplier {
+    
+}
+
+message FeedbackCost {
+    repeated QuestionAnswerCost pax_cost = 1;
+    message QuestionAnswerCost {
+        optional int32 id = 1;
+        optional string question = 2;
+        optional double yes_cost = 3;
+        optional double no_cost = 4;
+        optional double skip_cost = 5;
+    }
+    
+    repeated QuestionAnswerCost driver_cost = 2;
+    optional string form_id = 3;
+}
+
+message ReviewFormResponse {
+    optional int32 question_id = 1;
+    optional string question = 2;
+    
+    optional ResponseType response_type = 3;
+    enum ResponseType {
+        RESPONSE_TYPE_UNSPECIFIED = 0;
+        RESPONSE_TYPE_STRING = 1;
+        RESPONSE_TYPE_BOOL = 2;
+        RESPONSE_TYPE_INT = 3;
+    }
+    
+    optional string response_string = 4;
+    optional int32 response_int = 5;
+    optional bool response_bool = 6;
+    optional bool no_response = 7;
+}
+
+message UnlockState {
+    optional Entry entry = 1;
+    enum Entry {
+        ENTRY_UNSPECIFIED = 0;
+        UNSUPPORTED_COUNTRY = 1;
+        NO_COMMUTE = 2;
+        NO_TIMEZONE = 3;
+        BACKEND_FAILURE = 4;
+        LOW_DRIVER_COUNT = 5;
+        LOW_DRIVER_QUALITY = 6;
+        UNLOCKED = 7;
+        UNLOCKED_MANUALLY = 8;
+    }
+    
+    optional int32 count = 2;
+    optional LatLngPoint inferred_home = 3;
+    optional LatLngPoint inferred_work = 4;
+    optional int64 unlock_epoch_time = 5;
+}
+
+message PhotoType {
+    enum Type {
+        UNSPECIFIED = 0;
+        OTHER = 1;
+        FACE = 2;
+        CAR = 3;
+        PORN = 4;
+        BROKEN_LINK = 5;
+    }
+}
+
+message CrowdComputeQuestion {
+    repeated string category = 1;
+    optional string expected_category = 2;
+    optional string url = 3;
+    optional string show_url = 4;
+    optional string user_id = 5;
+}
+
+message CrowdComputeAnswer {
+    optional string answer = 1;
+}
+
+message RealTimeRideData {
+    optional string pax_id = 1;
+    optional string country_code = 2;
+    optional int64 response_deadline = 3;
+    optional int64 ride_request_time = 4;
+    optional int32 estimated_drive_seconds = 5;
+    optional int32 estimated_drive_meters = 6;
+    optional int32 offer_selected_fractional_units = 7;
+    optional int32 default_price_fractional_units = 8;
+    optional int32 uncapped_max_driver_take_fractional_units = 9;
+}
+
+message RealTimeRideStats {
+    repeated Stats stats = 1;
+    message Stats {
+        optional string ride_id = 1;
+        optional int64 value_index = 2;
+        optional bool selected = 3;
+        optional int64 driver_request_time = 4;
+        optional int64 driver_leave_time = 5;
+        optional int32 origin_to_pickup_meters = 6;
+        optional int32 origin_to_pickup_seconds = 7;
+        optional int32 dropoff_to_dest_meters = 8;
+        optional int32 dropoff_to_dest_seconds = 9;
+        optional int32 detour_meters = 10;
+        optional int32 detour_seconds = 11;
+    }
+}
+
+message BankAccount {
+    optional string account_id = 1;
+    optional string customer_first_name = 2;
+    optional string customer_middle_name = 5;
+    optional string customer_last_name = 6;
+    optional string bank_code = 3;
+    optional string branch_id = 4;
+}
+
+message Payee {
+    optional PayoutProviderStatus payout_status = 6;
+    
+    optional PersonalDetails personal_details = 1;
+    message PersonalDetails {
+        optional string first_name = 1;
+        optional string last_name = 2;
+        optional string date_of_birth = 3;
+        optional string address1 = 4;
+        optional string address2 = 5;
+        optional string city = 6;
+        optional string country = 7;
+        optional string state = 8;
+        optional string zip_code = 9;
+        optional string phone_number = 10;
+    }
+    
+    optional MaskedPayoutAccount masked_payout_account = 2;
+    message MaskedPayoutAccount {
+        optional PayoutAccountType type = 1;
+        enum PayoutAccountType {
+            PAYOUT_ACCOUNT_TYPE_UNSPECIFIED = 0;
+            PAYOUT_ACCOUNT_BANK_ACCOUNT = 1;
+        }
+        
+        optional string value = 2;
+    }
+    
+    optional int32 unpaid_balance_minor_units = 3;
+    optional int32 total_paid_minor_units = 4;
+    optional string currency_code = 5;
+}
+
+message DriveMember {
+    optional string ride_id = 1;
+}
+
+message DriveMembership {
+    repeated DriveMember member = 1;
+    optional int64 update_time_ms = 2;
+    
+    optional DriveMembershipUpdateReason update_reason = 3;
+    enum DriveMembershipUpdateReason {
+        UNKNOWN_REASON = 0;
+        CREATED = 1;
+        RIDE_JOINED = 2;
+        RIDE_LEFT = 3;
+        RIDE_REMOVED = 4;
+    }
+}
+
+message TimeWindow {
+    optional int64 window_start_sec = 1;
+    optional int32 window_duration_sec = 2;
+}
+
+message DriveItinerary {
+    optional string driver_id = 1;
+    optional Location origin = 2;
+    optional Location destination = 3;
+    optional TimeWindow departure_window = 4;
+    optional int32 available_seats = 5;
+    optional DriverPriceOffer price_offer = 6;
+    optional bool generated_by_test = 7;
+}
+
+message DriveState {
+    optional Entry entry = 1;
+    enum Entry {
+        UNKNOWN_DRIVE_STATE_ENTRY = 0;
+        PENDING = 1;
+        CONFIRMED = 2;
+        CANCELLED = 3;
+        EXPIRED = 4;
+        IN_PROGRESS = 5;
+        COMPLETED = 6;
+    }
+    
+    optional int64 update_time_ms = 2;
+    
+    optional Cancelled cancelled = 4;
+    message Cancelled {
+        optional CancelReason reason = 1;
+        enum CancelReason {
+            CANCEL_REASON_UNSPECIFIED = 0;
+            CANCELLED_BY_DRIVER = 1;
+            DRIVER_DELETED = 2;
+        }
+    }
+    
+    optional StateSource source = 3;
+}
+
+message DriverPriceOffer {
+    optional OfferType offer_type = 1;
+    enum OfferType {
+        NOT_SET = 0;
+        FREE = 1;
+        PRICED = 2;
+        WAS_FREE_BUT_ACCEPTED_PAID_DISPATCH = 3;
+        SET_BY_SYSTEM = 4;
+    }
+    
+    optional int32 offered_price_minors = 2;
+    optional string price_inquiry_id = 3;
+}
+
+message ClientAck {
+    optional int64 last_ack_time_ms = 1;
+}
+
+message Hashtag {
+    optional string tag_text = 1;
+}
+
+message UserBonus {
+    optional string uuid = 1;
+    
+    optional BonusType type = 2;
+    enum BonusType {
+        UNDEFINED = 0;
+        DRIVER_FIRST_RIDE = 1;
+        DRIVER_CASH_BONUS = 2;
+        RIDER_DISCOUNT = 3;
+    }
+    
+    optional StateEntry current_state = 3;
+    message StateEntry {
+        optional State state = 3;
+        enum State {
+            INELIGIBLE = 0;
+            MAYBE_ELIGIBLE = 1;
+            REDEEMED = 2;
+        }
+        
+        optional int64 time_ms = 2;
+    }
+    
+    repeated StateEntry history = 4;
+    optional int64 eligible_from_epoch_seconds = 9;
+    optional int64 expiration_epoch_in_seconds = 5;
+    optional string currency = 8;
+    
+    oneof amount {
+        int32 nominal_value_minor_units = 6;
+        int32 percent_value = 7;
+    }
+}
+
+message RideJournal {
+    optional Entry entry = 1;
+    enum Entry {
+        RIDE_JOURNAL_UNSPECIFIED = 0;
+        MATCHING_DONE = 1;
+        MATCHING_DONE_NO_DISPATCHES = 2;
+    }
+    
+    optional int64 time_sec = 2;
+}
+
+message SimpleDriverPriceBreakdown {
+    optional int32 total_minors = 1;
+    optional int32 ride_base_price_minors = 2;
+    optional int32 driver_incentive_minors = 3;
+    optional int32 extra_for_detour_minors = 4;
+    optional int32 service_fee_minors = 6;
+    optional string currency = 7;
+    optional int32 shared_travel_distance_meteres = 8;
+    optional DistanceUnit display_distance_unit = 9;
+    optional int64 timestamp_seconds = 5;
+}
+
+message SimplePaxPriceBreakdown {
+    optional int32 total_minors = 1;
+    optional int32 ride_base_price_minors = 2;
+    optional int32 coupon_discount_minors = 3;
+    optional int32 service_fee_minors = 4;
+    optional string currency = 6;
+    optional int32 shared_travel_distance_meteres = 7;
+    optional DistanceUnit display_distance_unit = 8;
+    optional int64 timestamp_seconds = 5;
+}
+
+message ReferralCode {
+    optional string referral_code = 1;
+    
+    optional ReferrerSource source = 2;
+    enum ReferrerSource {
+        UNDEFINED = 0;
+        DRIVER = 1;
+        RIDER = 2;
+    }
+    
+    optional string referrer_obfuscated_gaia_id = 3;
+}
+
+enum RideSeenState {
+    SEEN_STATE_UNKNOWN = 0;
+    SEEN_STATE_NOT_SEEN = 1;
+    SEEN_STATE_SEEN = 2;
+}
+
+enum PriceSelectionType {
+    BID = 0;
+    FIXED = 1;
+}
+
+enum StateSource {
+    SOURCE_UNSPECIFIED = 0;
+    MANUAL = 1;
+    RT_AUTO = 3;
+    RIDEMATCH_AUTO = 4;
+}
+
+enum Endorsement {
+    ENDORSEMENT_UNSPECIFIED = 0;
+    ENDORSEMENT_COOLPOOLER = 1;
+    ENDORSEMENT_PUNCTUAL = 2;
+    ENDORSEMENT_QUICK_TO_RESPOND = 3;
+    ENDORSEMENT_DRIVER_CLEAN_RIDE = 4;
+    ENDORSEMENT_DRIVER_CAREFUL_DRIVER = 5;
+    ENDORSEMENT_DRIVER_SWEET_RIDE = 6;
+}
+
+enum PayoutProviderStatus {
+    PAYOUT_STATUS_UNSPECIFIED = 0;
+    PAYOUT_OK = 1;
+    PAYOUT_PROVIDER_UNAVAILABLE = 2;
+    PAYOUT_USER_COUNTRY_UNAVAILABLE = 3;
+    PAYOUT_USER_COUNTRY_UNSUPPORTED = 4;
+}
+
+enum RTDriverFilterReason {
+    FILTER_REASON_NONE = 0;
+    FILTER_REASON_NO_PHONE = 1;
+    FILTER_REASON_MISSING_BACKGROUND_DATA = 2;
+    FILTER_REASON_DANGER_ZONE_ROUTES_ALLOWED = 3;
+    FILTER_REASON_OFFER_RATE_CAP_EXCEEDED = 4;
+    FILTER_REASON_DRIVER_NOT_INTERESTED = 5;
+    FILTER_REASON_ROUTE_IN_DANGER_ZONE = 6;
+    FILTER_REASON_DRIVER_HOME_WORK_IN_DANGER_ZONE = 7;
+    FILTER_REASON_ROUTE_NOT_IN_OPEN_ZONE = 8;
+    FILTER_REASON_COMPLETED_RIDES_RATE_CAP_EXCEEDED = 9;
+    FILTER_REASON_EXCEEDS_SPEED_THRESHOLD = 10;
+    FILTER_REASON_OTHER = 11;
+}
+
+enum RTRideDisqualifyReason {
+    DISQUALIFY_REASON_NONE = 0;
+    DISQUALIFY_REASON_DRIVER_WAIT_TOO_LONG = 1;
+    DISQUALIFY_REASON_DETOUR_DISTANCE_TOO_LONG = 2;
+    DISQUALIFY_REASON_DETOUR_TIME_TOO_LONG = 3;
+    DISQUALIFY_REASON_INVALID_PAX = 4;
+    DISQUALIFY_REASON_FILTERD_BY_RT = 5;
+}
+
+enum DriveType {
+    DRIVE_TYPE_UNKNOWN = 0;
+    DRIVE_TYPE_REALTIME = 1;
+    DRIVE_TYPE_PLANNED = 2;
+    DRIVE_TYPE_OFFER_RIDE = 3;
+    DRIVE_TYPE_RIDE_CONFIRMED = 4;
+}
+
+enum DistanceUnit {
+    KILOMETERS = 0;
+    MILES = 1;
+}

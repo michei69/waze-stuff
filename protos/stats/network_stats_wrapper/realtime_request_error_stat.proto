@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RealtimeRequestErrorStat {
+    string error_internal_code = 2;
+    
+    oneof _error_code {
+        int64 error_code = 1;
+    }
+}

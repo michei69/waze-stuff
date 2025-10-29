@@ -1,0 +1,60 @@
+syntax = "proto2";
+
+package linqmap.proto.rt.carpool;
+
+import "carpool_data.proto";
+import "logging.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPRTC";
+option java_package = "linqmap.proto.rt.carpool";
+
+message GetMinAppVersionRequest {
+    optional string version = 1;
+    optional google.carpool.PushMapping.DeviceType device_type = 3;
+    optional google.carpool.PushMapping.AppType view = 5;
+}
+
+message CarpoolDriveInProgress {
+    
+}
+
+message CarpoolErrorContainer {
+    optional CarpoolError error = 1;
+}
+
+message CarpoolError {
+    optional int32 code = 1;
+    optional string message = 2;
+    optional string status = 3;
+    optional BadRequest bad_request = 4;
+}
+
+message BadRequest {
+    repeated FieldViolation field_violations = 1;
+    message FieldViolation {
+        optional string field = 1;
+        optional string description = 2;
+    }
+}
+
+message UpdateNonWhitelistedEmail {
+    optional string email = 1;
+}
+
+message CarpoolShareGetDriverInfoRequest {
+    optional string ride_id = 1;
+    optional string carpool_id = 2;
+}
+
+message CarpoolShareGetDriverInfoResponse {
+    optional string share_info_json = 1;
+}
+
+message GetRemoveTokenRequest {
+    
+}
+
+message GetRemoveTokenResponse {
+    optional string token = 1;
+}

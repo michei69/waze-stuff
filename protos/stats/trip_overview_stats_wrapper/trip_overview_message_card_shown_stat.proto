@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewMessageCardShownStat {
+    InformationType information_type = 1;
+    enum InformationType {
+        INFORMATION_TYPE_UNSPECIFIED = 0;
+        EVENT = 1;
+        CLOSURE = 2;
+    }
+}

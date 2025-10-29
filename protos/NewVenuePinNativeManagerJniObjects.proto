@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "VenueData.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message NewVenuePin {
+    VenueData venue = 1;
+    bool show_initial_popup = 2;
+}

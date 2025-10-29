@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RegulationFlags {
+    oneof _aadc_on {
+        bool aadc_on = 1;
+    }
+    
+    oneof _gdpr_on {
+        bool gdpr_on = 2;
+    }
+    
+    oneof _nd4c_on {
+        bool nd4c_on = 3;
+    }
+    
+    oneof _u18_on {
+        bool u18_on = 4;
+    }
+}

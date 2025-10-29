@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message MapAdObject {
+    oneof _pinType {
+        PinType pinType = 1;
+    }
+    
+    oneof _position {
+        IntPosition position = 2;
+    }
+    
+    oneof _venue_id {
+        string venue_id = 3;
+    }
+    
+    oneof _venue_context {
+        string venue_context = 4;
+    }
+    
+    enum PinType {
+        PIN_TYPE_UNSPECIFIED = 0;
+        AD = 1;
+        AD_ARROW = 2;
+    }
+}

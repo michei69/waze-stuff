@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DestinationCard {
+    CardTrigger card_trigger = 1;
+    enum CardTrigger {
+        CARD_TRIGGER_UNSPECIFIED = 0;
+        PLANNED_DRIVE = 1;
+        CALENDAR_EVENT = 2;
+        ETA_CHECK = 3;
+        PREDICTION = 4;
+        SUGGESTED_DESTINATION = 5;
+        SET_HOME_CTA = 6;
+        SET_WORK_CTA = 7;
+        ADD_CONTACTS_CTA = 8;
+        ADD_CALENDAR_CTA = 9;
+        STICKY = 10;
+        HISTORY = 11;
+    }
+    
+    DestinationType destination_type = 2;
+    enum DestinationType {
+        DESTINATION_TYPE_UNSPECIFIED = 0;
+        HOME = 1;
+        WORK = 2;
+        FAVORITE = 3;
+        RECENT = 4;
+        NEW_DESTINATION = 5;
+    }
+    
+    CardSource card_source = 3;
+    enum CardSource {
+        CARD_SOURCE_UNSPECIFIED = 0;
+        SERVER = 1;
+        CLIENT = 2;
+    }
+    
+    LatLng destination_coordinates = 4;
+    string venue_id = 5;
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GasPricesScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BACK = 1;
+        CLOSE = 2;
+        CONFIRM = 3;
+    }
+    
+    oneof _availability_changed {
+        bool availability_changed = 2;
+    }
+    
+    oneof _prices_changed {
+        bool prices_changed = 3;
+    }
+}

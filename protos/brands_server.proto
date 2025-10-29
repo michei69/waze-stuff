@@ -1,0 +1,49 @@
+syntax = "proto2";
+
+package linqmap.proto.brandsserver;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPBS";
+option java_package = "linqmap.proto.brandsserver";
+
+message GetUserFavoriteBrandsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetUserFavoriteBrandsResponse {
+    optional Status status = 1;
+    repeated Brand brands = 2;
+}
+
+message UpdateUserFavoriteBrandRequest {
+    optional int64 user_id = 1;
+    optional string brand_id = 2;
+    optional bool opt_in = 3;
+}
+
+message UpdateUserFavoriteBrandResponse {
+    optional Status status = 1;
+}
+
+message Category {
+    optional string id = 1;
+    optional Category parent_category = 2;
+    optional string name = 3;
+    optional string category_group_logo = 4;
+    optional bool is_visible = 5;
+}
+
+message Brand {
+    optional string brand_id = 1;
+    optional string brand_name = 2;
+    optional bool is_enabled = 3;
+    optional bool is_advertiser = 4;
+    optional Category main_category = 5;
+    repeated Category additional_categories = 6;
+    optional string logo = 7;
+    optional bool is_visible = 8;
+    repeated string limited_to_countries = 9;
+    repeated string limited_to_states = 10;
+    optional Brand merged_into_brand = 11;
+}

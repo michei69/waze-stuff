@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BootPerformanceStat {
+    oneof _entry_point_ms {
+        int64 entry_point_ms = 1;
+    }
+    
+    oneof _ios_application_init_ms {
+        int64 ios_application_init_ms = 2;
+    }
+    
+    oneof _android_app_created_ms {
+        int64 android_app_created_ms = 3;
+    }
+    
+    oneof _common_code_init_ms {
+        int64 common_code_init_ms = 4;
+    }
+    
+    oneof _common_code_start_ms {
+        int64 common_code_start_ms = 5;
+    }
+    
+    oneof _common_code_ready_ms {
+        int64 common_code_ready_ms = 6;
+    }
+    
+    oneof _enter_foreground_ms {
+        int64 enter_foreground_ms = 7;
+    }
+    
+    oneof _gps_location_received_ms {
+        int64 gps_location_received_ms = 8;
+    }
+    
+    oneof _network_connected_ms {
+        int64 network_connected_ms = 9;
+    }
+    
+    oneof _login_success_ms {
+        int64 login_success_ms = 10;
+    }
+    
+    oneof _main_screen_visible_ms {
+        int64 main_screen_visible_ms = 11;
+    }
+    
+    oneof _map_shown_and_ready_ms {
+        int64 map_shown_and_ready_ms = 12;
+    }
+    
+    oneof _start_state_ready_ms {
+        int64 start_state_ready_ms = 13;
+    }
+    
+    oneof _regular_session {
+        bool regular_session = 14;
+    }
+    
+    oneof _info_around_bubble_shown_ms {
+        int64 info_around_bubble_shown_ms = 15;
+    }
+    
+    oneof _map_jams_alerts_received_ms {
+        int64 map_jams_alerts_received_ms = 16;
+    }
+}

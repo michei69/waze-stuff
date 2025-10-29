@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_information.proto";
+import "stats/location_preview_stats_wrapper/address_preview_context.proto";
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/reusable_types/venue_opening_status.proto";
+import "stats/search_stats_wrapper/electric_vehicle_charging_station_slots_information.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AddressPreviewClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ADD_FAVORITE = 1;
+        ADD_PHOTO = 2;
+        BACK = 3;
+        BEST_PARKING = 4;
+        CALL = 5;
+        EDIT = 6;
+        GO = 7;
+        IMAGE = 8;
+        MORE_PARKING = 9;
+        MORE = 10;
+        REPORT_PROBLEM = 11;
+        SEND_LOCATION = 12;
+        WEBSITE = 13;
+        X = 14;
+        SHOW_ON_MAP = 15;
+        REMOVE_FAVORITE = 16;
+        SET_START_POINT = 17;
+        CALENDAR_CONFIRM = 18;
+        CALENDAR_CHANGE = 19;
+        CALENDAR_REMOVE = 20;
+        ADD_STOP = 21;
+        NEW_DRIVE = 22;
+        PARKING_INFO = 23;
+        BOOK_PARKING = 24;
+        WHY_THIS_AD = 25;
+        AD_BANNER = 26;
+    }
+    
+    AddressPreviewContext context = 2;
+    string venue_id = 4;
+    
+    Source source = 5;
+    enum Source {
+        SOURCE_UNSPECIFIED = 0;
+        PIN = 1;
+        LIST = 2;
+    }
+    
+    VenueOpeningStatus venue_opening_status = 6;
+    ElectricVehicleChargingStationInformation electric_vehicle_charging_station_information = 9;
+    string parking_venue_id = 11;
+    TriggeringPlatform triggering_platform = 16;
+    
+    oneof _residential {
+        bool residential = 3;
+    }
+    
+    oneof _venue_rating {
+        double venue_rating = 7;
+    }
+    
+    oneof _venue_price_level {
+        int64 venue_price_level = 8;
+    }
+    
+    oneof _parking {
+        bool parking = 10;
+    }
+    
+    oneof _parking_prices_shown {
+        bool parking_prices_shown = 12;
+    }
+    
+    oneof _book_parking_shown {
+        bool book_parking_shown = 13;
+    }
+    
+    oneof _is_ad {
+        bool is_ad = 14;
+    }
+    
+    oneof _google_ad_information {
+        GoogleAdInformation google_ad_information = 15;
+    }
+}

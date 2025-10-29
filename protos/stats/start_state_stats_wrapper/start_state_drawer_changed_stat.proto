@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/start_state_stats_wrapper/drawer_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message StartStateDrawerChangedStat {
+    NewState new_state = 1 [deprecated = true];
+    enum NewState {
+        NEW_STATE_UNSPECIFIED = 0;
+        PARTIALLY_OPEN = 1;
+        SERACH_ONLY = 2;
+        FULL_SCREEN = 3;
+        REMOVED = 4;
+    }
+    
+    ChangeReason change_reason = 2;
+    enum ChangeReason {
+        CHANGE_REASON_UNSPECIFIED = 0;
+        APP_OPEN = 1;
+        ROAMING = 2;
+        USER_SWIPE = 3;
+        MAP_INTERACTION = 4;
+        NAVIGATION_STARTED = 5;
+        NAVIGATION_ENDED = 6;
+        BACK_FROM_SEARCH = 7;
+        WARNING_INDICATOR_VISIBILITY_CHANGED = 8;
+        SUGGESTION_CARD_TIMEOUT = 9;
+        RECENTER_BUTTON_TAPPED = 10;
+        UGC_MENU_DISMISS = 11;
+    }
+    
+    DrawerState new_drawer_state = 4;
+    
+    oneof _portrait {
+        bool portrait = 3;
+    }
+}

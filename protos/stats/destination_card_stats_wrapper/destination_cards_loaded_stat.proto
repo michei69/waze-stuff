@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/destination_card_stats_wrapper/destination_card_screen_context.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DestinationCardsLoadedStat {
+    DestinationCardScreenContext context = 1;
+    
+    FallbackReason fallback_reason = 5;
+    enum FallbackReason {
+        FALLBACK_REASON_UNSPECIFIED = 0;
+        TIMEOUT = 1;
+        LOADING_ERROR = 2;
+        SUGGESTIONS_DISABLED = 3;
+    }
+    
+    oneof _total_cards {
+        int64 total_cards = 3;
+    }
+    
+    oneof _fallback_to_local {
+        bool fallback_to_local = 4;
+    }
+    
+    reserved 2;
+}

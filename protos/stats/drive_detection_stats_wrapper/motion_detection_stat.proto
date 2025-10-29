@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MotionDetectionStat {
+    repeated MotionType motion_types = 1;
+    enum MotionType {
+        MOTION_UNSPECIFIED = 0;
+        STATIONARY = 1;
+        WALKING = 2;
+        RUNNING = 3;
+        AUTOMOTIVE = 4;
+        CYCLING = 5;
+        UNKNOWN = 6;
+    }
+    
+    Confidence confidence = 2;
+    enum Confidence {
+        CONFIDENCE_UNSPECIFIED = 0;
+        HIGH = 1;
+        MEDIUM = 2;
+        LOW = 3;
+    }
+    
+    Context context = 3;
+    enum Context {
+        CONTEXT_UNSPECIFIED = 0;
+        USER_LOGIN = 1;
+        APP_WAKE_UP_SYSTEM = 2;
+    }
+    
+    oneof _motion_start_timestamp_ms {
+        int64 motion_start_timestamp_ms = 4;
+    }
+    
+    oneof _wakeup_session_id {
+        int64 wakeup_session_id = 5;
+    }
+}

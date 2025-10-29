@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_assistant_stats_wrapper/google_assistant_combined_onboarding_legal_screen_clicked_stat.proto";
+import "stats/google_assistant_stats_wrapper/google_assistant_combined_onboarding_legal_screen_shown_stat.proto";
+import "stats/google_assistant_stats_wrapper/google_assistant_finished_stat.proto";
+import "stats/google_assistant_stats_wrapper/google_assistant_initiated_stat.proto";
+import "stats/google_assistant_stats_wrapper/google_assistant_post_action_stat.proto";
+import "stats/google_assistant_stats_wrapper/google_assistant_searchbar_tooltip_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAssistantStatsWrapper {
+    oneof stat {
+        GoogleAssistantFinishedStat google_assistant_finished = 1;
+        GoogleAssistantSearchbarTooltipShownStat google_assistant_searchbar_tooltip_shown = 2;
+        GoogleAssistantCombinedOnboardingLegalScreenShownStat google_assistant_combined_onboarding_legal_screen_shown = 3;
+        GoogleAssistantPostActionStat google_assistant_post_action = 4;
+        GoogleAssistantCombinedOnboardingLegalScreenClickedStat google_assistant_combined_onboarding_legal_screen_clicked = 5;
+        GoogleAssistantInitiatedStat google_assistant_initiated = 6;
+    }
+}

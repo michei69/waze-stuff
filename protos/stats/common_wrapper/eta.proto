@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EtaClick {
+    Action action = 1;
+    enum Action {
+        UNKNOWN = 0;
+        COLLAPSE = 1;
+        OVERVIEW = 2;
+        STOP = 3;
+        CLOSE = 4;
+        BACK = 5;
+        ADD_A_STOP = 6;
+        GAS_WAYPOINT = 7;
+        FOOD_WAYPOINT = 8;
+        COFFEE_WAYPOINT = 9;
+        PARKING_WAYPOINT = 10;
+        SEARCH_WAYPOINT = 11;
+        EV_CHARGING_STATION_WAYPOINT = 12;
+    }
+}

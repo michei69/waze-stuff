@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package linqmap.proto.marketplace_cache;
+
+option objc_class_prefix = "LPMC";
+option java_package = "linqmap.proto.marketplace_cache";
+
+message Voice {
+    string id = 1;
+    string name = 2;
+    string lang = 3;
+    string locale = 4;
+}
+
+message Mood {
+    int32 id = 1;
+    string name = 2;
+    bool is_ads = 3;
+    bool is_hidden = 4;
+}
+
+message Car {
+    int64 car_id = 1;
+    string car_name = 2;
+    bool is_ads = 3;
+    bool is_hidden = 4;
+    
+    oneof _car_3D_info {
+        Car3DInfo car_3D_info = 5;
+    }
+}
+
+message Car3DInfo {
+    float scale = 1;
+    bool has_taxi_texture = 2;
+    bool has_share_texture = 3;
+    bool has_normal_texture = 4;
+    LightingInfo lighting_info = 5;
+}
+
+message LightingInfo {
+    float ambient_intensity = 2;
+    float diffuse_intensity = 3;
+}

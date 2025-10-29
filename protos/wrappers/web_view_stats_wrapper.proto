@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/web_view_stats_wrapper/in_app_web_page_load_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WebViewStatsWrapper {
+    oneof stat {
+        InAppWebPageLoadStat in_app_web_page_load = 1;
+    }
+}

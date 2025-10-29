@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/share_drive_stats_wrapper/account_state.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ShareDriveDrawerShownStat {
+    AccountState account_state = 1;
+    
+    oneof _already_sharing {
+        bool already_sharing = 2;
+    }
+}

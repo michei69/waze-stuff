@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MapFrameRenderLatencyStat {
+    oneof _threshold_ms {
+        int64 threshold_ms = 1;
+    }
+    
+    oneof _frames_above_threshold {
+        int64 frames_above_threshold = 2;
+    }
+    
+    oneof _total_frames {
+        int64 total_frames = 3;
+    }
+    
+    oneof _average_render_time_ms {
+        double average_render_time_ms = 4;
+    }
+    
+    oneof _min_render_time_ms {
+        int64 min_render_time_ms = 5;
+    }
+    
+    oneof _max_render_time_ms {
+        int64 max_render_time_ms = 6;
+    }
+    
+    oneof _measurement_window_duration_ms {
+        int64 measurement_window_duration_ms = 7;
+    }
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/main_menu_stats_wrapper/banner_clicked_stat.proto";
+import "stats/main_menu_stats_wrapper/banner_received_stat.proto";
+import "stats/main_menu_stats_wrapper/banner_shown_stat.proto";
+import "stats/main_menu_stats_wrapper/main_menu_button_clicked_stat.proto";
+import "stats/main_menu_stats_wrapper/main_menu_button_shown_stat.proto";
+import "stats/main_menu_stats_wrapper/main_menu_clicked_stat.proto";
+import "stats/main_menu_stats_wrapper/main_menu_shown_stat.proto";
+import "stats/main_menu_stats_wrapper/promotional_chip_clicked_stat.proto";
+import "stats/main_menu_stats_wrapper/promotional_chip_received_stat.proto";
+import "stats/main_menu_stats_wrapper/promotional_chip_shown_stat.proto";
+import "stats/main_menu_stats_wrapper/promotional_chip_skipped_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MainMenuStatsWrapper {
+    oneof stat {
+        BannerShownStat banner_shown = 1;
+        BannerClickedStat banner_clicked = 2;
+        BannerReceivedStat banner_received = 3;
+        MainMenuButtonClickedStat main_menu_button_clicked = 4;
+        MainMenuButtonShownStat main_menu_button_shown = 5;
+        MainMenuClickedStat main_menu_clicked = 6;
+        MainMenuShownStat main_menu_shown = 7;
+        PromotionalChipClickedStat promotional_chip_clicked = 8;
+        PromotionalChipReceivedStat promotional_chip_received = 9;
+        PromotionalChipShownStat promotional_chip_shown = 10;
+        PromotionalChipSkippedStat promotional_chip_skipped = 11;
+    }
+}

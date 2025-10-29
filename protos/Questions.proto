@@ -1,0 +1,121 @@
+syntax = "proto2";
+
+package linqmap.proto.questions;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPQ";
+option java_package = "linqmap.proto.questions";
+
+message GetQuestionRequest {
+    optional int64 user_id = 1;
+    optional Coordinate location = 2;
+    optional QuestionContext context = 3;
+    optional StringMap user_config = 4;
+}
+
+message QuestionContext {
+    optional string search_venue_id = 1;
+}
+
+message GetQuestionResponse {
+    optional Question question = 1;
+}
+
+message Question {
+    optional string id = 1;
+    
+    optional Type type = 2;
+    enum Type {
+        UNKNOWN = 0;
+        NONE = 1;
+        ALERT = 2;
+        ANSWER = 3;
+    }
+    
+    optional string message = 3;
+    optional string incar_message = 27;
+    repeated AnswerOption answer_option = 4;
+    repeated AnswerOption incar_answer_option = 29;
+    optional DefaultAnswer default_answer = 5;
+    optional string key = 6;
+    optional string sub_title = 7;
+    optional string incar_sub_title = 28;
+    optional string image_url = 8;
+    repeated Link link = 9;
+    
+    optional Orientation buttons_orientation = 10;
+    enum Orientation {
+        HORISONTAL = 0;
+        VERTICAL = 1;
+    }
+    
+    optional int32 displayTimeSeconds = 11;
+    optional bool always_show = 12;
+    
+    optional TemplateType template_type = 13;
+    enum TemplateType {
+        FULL_SCREEN = 0;
+        MESSAGE_BOX = 1;
+        ETA_CARD = 2;
+        ETA_POPUP = 3;
+        APP_LAUNCH_DIALOG = 4;
+    }
+    
+    optional bool dismissible = 14;
+    optional int32 message_rgb = 15;
+    optional int32 sub_title_rgb = 16;
+    optional int32 background_rgb = 17;
+    optional string waze_url = 18;
+    repeated string display_context = 19;
+    optional string profile_image_url = 20;
+    optional bool dont_show_again_checkbox_visible = 21;
+    
+    optional FontScheme font_scheme = 22;
+    enum FontScheme {
+        LARGE = 1;
+        SMALL = 2;
+    }
+    
+    optional int32 alt_message_rgb = 23;
+    optional int32 alt_sub_title_rgb = 24;
+    optional int32 alt_background_rgb = 25;
+    optional bool dismiss_on_click = 26;
+}
+
+message Link {
+    optional string visible_html = 1;
+    optional string url = 2;
+    optional string browser_title = 3;
+}
+
+message DefaultAnswer {
+    optional string id = 1;
+    optional string waze_url = 2;
+}
+
+message AnswerOption {
+    optional string id = 1;
+    optional string text = 2;
+    optional string waze_url = 3;
+    optional bool destructive = 4;
+    optional bool offline = 5 [default = false];
+    optional string image_url = 6;
+    optional int64 background_rgb = 7;
+    optional int64 text_rgb = 8;
+    optional double ratio = 9;
+}
+
+message Answer {
+    optional string id = 1;
+    optional string question_id = 2;
+}
+
+message AnswerRequest {
+    optional Answer answer = 1;
+    optional int64 user_id = 2;
+}
+
+message AnswerResponse {
+    
+}

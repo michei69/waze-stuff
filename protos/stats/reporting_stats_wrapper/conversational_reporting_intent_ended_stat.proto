@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/conversational_reporting_mode.proto";
+import "stats/reusable_types/alerter_info.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ConversationalReportingIntentEndedStat {
+    string ugc_context_id = 1;
+    ConversationalReportingMode mode = 7;
+    
+    oneof result {
+        AlertInfo alert_info = 4;
+        FailureReason failure_reason = 5;
+        bool backend_cancel = 6 [deprecated = true];
+    }
+    
+    oneof _conversation_id {
+        string conversation_id = 2;
+    }
+    
+    oneof _success {
+        bool success = 3;
+    }
+    
+    oneof _failed_to_initiate_conversation {
+        bool failed_to_initiate_conversation = 8;
+    }
+    
+    message AlertInfo {
+        string report_id = 4;
+        UgcTypeInfo.UgcSubtype report_subtype = 5;
+        
+        oneof _alert_id {
+            int64 alert_id = 1;
+        }
+        
+        oneof _alert_type {
+            AlerterInfo.AlerterType alert_type = 2 [deprecated = true];
+        }
+        
+        oneof _alert_subtype {
+            AlerterInfo.AlerterSubtype alert_subtype = 3 [deprecated = true];
+        }
+    }
+    
+    enum FailureReason {
+        FAILURE_REASON_UNSPECIFIED = 0;
+        CLIENT_ERROR = 1;
+        BACKEND_ERROR = 2;
+        BACKEND_CANCELLED_PER_USER_MESSAGE = 3;
+        USER_SELECTED_REPORT_MANUALLY = 4;
+        USER_EXPANDED_MENU = 5;
+        USER_DISMISSED = 6;
+        NO_RESPONSE_FROM_SERVER = 7;
+        SPEECH_TO_TEXT_FAILURE = 8;
+        TEXT_TO_SPEECH_FAILURE = 9;
+        NO_SPEECH_RECOGNIZED = 10;
+        SOUND_MUTED = 11;
+        PERMISSION_DENIED = 12;
+        RECORDING_INPUT_BUSY = 13;
+        MAX_LIMIT_MESSAGES = 14;
+        EMPTY_TEXT_FAILURE = 15;
+    }
+}

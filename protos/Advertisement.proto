@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "VenueData.proto";
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message PinAdDisplay {
+    string ad_id = 1;
+    string place_id = 2;
+    string business_name = 3;
+    IntPosition position = 4;
+    string ad_text = 5;
+    string ad_body = 6;
+    string logo_image_url = 7;
+    string cta_message = 8;
+    string click_url = 9;
+    string visible_url = 10;
+    
+    OpenStatus open_status = 13;
+    enum OpenStatus {
+        STATUS_UNSPECIFIED = 0;
+        OPEN = 1;
+        OPENS_SOON = 2;
+        CLOSED = 3;
+        CLOSES_SOON = 4;
+    }
+    
+    string pin_icon_url = 14;
+    string about_this_ad_url = 15;
+    string track_add_stop_url = 16;
+    bool is_test = 17;
+    
+    oneof _rating {
+        float rating = 12;
+    }
+}
+
+message Advertisement {
+    oneof _channel {
+        string channel = 1;
+    }
+    
+    oneof _pin_id {
+        int32 pin_id = 2;
+    }
+    
+    oneof _promotion_id {
+        string promotion_id = 3;
+    }
+    
+    oneof _brand_id {
+        string brand_id = 4;
+    }
+    
+    oneof _preview_icon_name {
+        string preview_icon_name = 5;
+    }
+    
+    oneof _menu_icon_name {
+        string menu_icon_name = 6;
+    }
+    
+    oneof _navigable {
+        bool navigable = 7;
+    }
+    
+    oneof _venue_data {
+        VenueData venue_data = 11;
+    }
+    
+    oneof _advil_request {
+        AdvilRequest advil_request = 12;
+    }
+}
+
+message AdvilRequest {
+    oneof _page_url {
+        string page_url = 1;
+    }
+    
+    oneof _offer_json {
+        string offer_json = 2;
+    }
+}

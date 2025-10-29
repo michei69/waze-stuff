@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum LocationPermissionRequestType {
+    LOCATION_PERMISSION_REQUEST_TYPE_UNSPECIFIED = 0;
+    ASK_FOR_ALWAYS = 1;
+    PERMISSION_UPDATE = 2;
+}

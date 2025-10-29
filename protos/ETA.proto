@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package linqmap.routing.proto;
+
+option objc_class_prefix = "LRP";
+option java_package = "linqmap.routing.proto";
+
+message HistogramRequest {
+    optional int32 range = 1;
+    optional int32 interval = 2;
+    optional bool arrive_at = 3;
+}
+
+message HistogramPoint {
+    optional int64 time_to_leave = 1;
+    optional int64 eta = 2;
+    optional int32 route_length_in_minutes = 3;
+    optional string text = 4;
+}

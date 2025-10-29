@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/detour_stats_wrapper/detour.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DetourClickedStat {
+    Detour detour = 1;
+    
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        NAIVE_ROUTE = 1;
+        NAIVE_ROUTE_LABEL = 2;
+    }
+}

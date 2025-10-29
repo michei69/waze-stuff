@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/search_stats_wrapper/search_filter.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchFailedStat {
+    string search_id = 2;
+    repeated SearchFilter filter_fields = 4;
+    string query = 5;
+    
+    oneof _error_code {
+        int64 error_code = 1;
+    }
+    
+    oneof _search_again {
+        bool search_again = 3;
+    }
+}

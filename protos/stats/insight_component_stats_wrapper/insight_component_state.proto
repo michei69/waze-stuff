@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum InsightComponentState {
+    INSIGHT_COMPONENT_STATE_UNSPECIFIED = 0;
+    MINI = 1;
+    MINI_FULL = 2;
+    REGULAR = 3;
+    EXTENDED = 4;
+    HIDDEN = 5;
+    REMOVED = 6;
+    MULTI = 7;
+    STREET = 8;
+}

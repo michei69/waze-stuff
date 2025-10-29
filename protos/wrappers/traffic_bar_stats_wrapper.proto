@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/traffic_bar_stats_wrapper/average_speed_camera_area_entered_stat.proto";
+import "stats/traffic_bar_stats_wrapper/average_speed_camera_area_exited_stat.proto";
+import "stats/traffic_bar_stats_wrapper/average_speed_camera_bar_clicked_stat.proto";
+import "stats/traffic_bar_stats_wrapper/jam_cross_time_clicked_stat.proto";
+import "stats/traffic_bar_stats_wrapper/jam_cross_time_removed_stat.proto";
+import "stats/traffic_bar_stats_wrapper/jam_cross_time_shown_stat.proto";
+import "stats/traffic_bar_stats_wrapper/traffic_pill_shown_stat.proto";
+import "stats/traffic_bar_stats_wrapper/traffic_pill_toggle_stat.proto";
+import "stats/traffic_bar_stats_wrapper/zone_pill_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TrafficBarStatsWrapper {
+    oneof stat {
+        JamCrossTimeClickedStat jam_cross_time_clicked = 1;
+        JamCrossTimeRemovedStat jam_cross_time_removed = 2;
+        JamCrossTimeShownStat jam_cross_time_shown = 3;
+        AverageSpeedCameraAreaExitedStat average_speed_camera_area_exited = 4;
+        AverageSpeedCameraAreaEnteredStat average_speed_camera_area_entered = 5;
+        AverageSpeedCameraBarClickedStat average_speed_camera_bar_clicked = 6;
+        TrafficPillShownStat traffic_pill_shown = 7;
+        TrafficPillToggleStat traffic_pill_toggle = 8;
+        ZonePillShownStat zone_pill_shown = 9;
+    }
+}

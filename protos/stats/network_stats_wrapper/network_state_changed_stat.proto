@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NetworkStateChangedStat {
+    Mode connection_type = 1;
+    enum Mode {
+        MODE_UNSPECIFIED = 0;
+        WIFI = 1;
+        CELL = 2;
+        OTHER = 3;
+        NA = 4;
+    }
+    
+    LatLng coordinates = 3;
+    string radio_access_technology = 6;
+    
+    oneof _accuracy {
+        double accuracy = 2;
+    }
+    
+    oneof _ipv4 {
+        bool ipv4 = 4;
+    }
+    
+    oneof _ipv6 {
+        bool ipv6 = 5;
+    }
+    
+    oneof _mobile_country_code {
+        int64 mobile_country_code = 7;
+    }
+    
+    oneof _mobile_network_code {
+        int64 mobile_network_code = 8;
+    }
+}

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlternativeRoutesScreenModeUpdatedStat {
+    Mode to_mode = 1;
+    enum Mode {
+        MODE_UNSPECIFIED = 0;
+        MAP = 1;
+        LIST = 2;
+    }
+    
+    UpdateSource update_source = 2;
+    enum UpdateSource {
+        UPDATE_SOURCE_UNSPECIFIED = 0;
+        USER_ACTION = 1;
+        SYSTEM = 2;
+    }
+    
+    oneof _pct_of_list_shown {
+        float pct_of_list_shown = 3;
+    }
+}

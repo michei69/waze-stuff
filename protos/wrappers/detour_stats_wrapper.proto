@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/detour_stats_wrapper/detour_approaching_stat.proto";
+import "stats/detour_stats_wrapper/detour_clicked_stat.proto";
+import "stats/detour_stats_wrapper/detour_reached_stat.proto";
+import "stats/detour_stats_wrapper/detour_received_stat.proto";
+import "stats/detour_stats_wrapper/detour_removed_stat.proto";
+import "stats/detour_stats_wrapper/detour_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DetourStatsWrapper {
+    oneof stat {
+        DetourShownStat detour_shown = 1;
+        DetourApproachingStat detour_approaching = 2;
+        DetourRemovedStat detour_removed = 3;
+        DetourReachedStat detour_reached = 4;
+        DetourReceivedStat detour_received = 5;
+        DetourClickedStat detour_clicked = 6;
+    }
+}

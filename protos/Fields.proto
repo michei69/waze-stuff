@@ -1,0 +1,93 @@
+syntax = "proto2";
+
+package linqmap.proto;
+
+import "Types.proto";
+
+option objc_class_prefix = "LPR";
+option java_package = "linqmap.proto";
+
+message PrecisionCoordinate {
+    required double x = 1;
+    required double y = 2;
+}
+
+message FieldInfo {
+    optional int64 user_id = 1;
+    optional int64 ts = 2;
+    optional string provider = 3;
+    optional bool is_deleted = 4;
+}
+
+message StringField {
+    optional string value = 1;
+    optional FieldInfo info = 2;
+}
+
+message RepeatedStringField {
+    repeated string value = 1;
+    optional FieldInfo info = 2;
+}
+
+message LongField {
+    optional int64 value = 1;
+    optional FieldInfo info = 2;
+}
+
+message RepeatedLongField {
+    repeated int64 value = 1;
+    optional FieldInfo info = 2;
+}
+
+message IntegerField {
+    optional int32 value = 1;
+    optional FieldInfo info = 2;
+}
+
+message RepeatedIntegerField {
+    repeated int32 value = 1;
+    optional FieldInfo info = 2;
+}
+
+message BoolField {
+    optional bool value = 1;
+    optional FieldInfo info = 2;
+}
+
+message CoordinateField {
+    optional PrecisionCoordinate value = 1;
+    optional FieldInfo info = 2;
+}
+
+message Geometry {
+    optional Type type = 1;
+    enum Type {
+        POINT = 0;
+        POLYGON = 1;
+        LINE_STRING = 2;
+        MULTI_GEOMETRY = 3;
+    }
+    
+    repeated PrecisionCoordinate coordinate = 2;
+    repeated Geometry geometry = 3;
+}
+
+message GeometryField {
+    optional Geometry value = 1;
+    optional FieldInfo info = 2;
+}
+
+message EnvelopeField {
+    optional Envelope value = 1;
+    optional FieldInfo info = 2;
+}
+
+message StringMapField {
+    optional StringMap value = 1;
+    optional FieldInfo info = 2;
+}
+
+message SegmentDirectionField {
+    repeated SegmentDirection segment_direction = 1;
+    optional FieldInfo info = 2;
+}

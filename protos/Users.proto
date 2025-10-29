@@ -1,0 +1,333 @@
+syntax = "proto2";
+
+package linqmap.proto.users;
+
+import "Types.proto";
+import "logging.proto";
+
+option objc_class_prefix = "LPU";
+option java_package = "linqmap.proto.users";
+
+message UserProperties {
+    optional int64 user_id = 1;
+    optional StringBytesMap properties = 2;
+}
+
+message UserPropertiesTimestamp {
+    optional int64 user_id = 1;
+    optional StringLongMap properties = 2;
+}
+
+message UserCounters {
+    optional int64 user_id = 1;
+    optional StringLongMap counters = 2;
+}
+
+message GenerateAuthenticationTokenRequest {
+    optional int64 user_id = 1;
+    optional string installation_id = 2;
+    optional AppType app_type = 5;
+    
+    reserved 3, 4;
+    
+    reserved "client", "reason";
+}
+
+message RevokeAuthenticationTokenRequest {
+    optional int64 user_id = 1;
+    optional string token = 2;
+    
+    reserved 3, 4;
+    
+    reserved "client", "reason";
+}
+
+message RevokeAllAuthenticationTokensRequest {
+    optional int64 user_id = 1;
+    optional AppType app_type = 5;
+    
+    reserved 3, 4;
+    
+    reserved "client", "reason";
+}
+
+message GenerateAuthenticationTokenResponse {
+    optional string token = 1;
+}
+
+message AuthenticateUserRequest {
+    optional string username = 1;
+    optional string password = 2;
+    repeated string properties = 3;
+    optional string client = 4;
+    optional string reason = 5;
+    optional UserIdentifier identifier = 6;
+    optional string token = 7;
+    optional bool generate_new_token_if_expired = 8;
+}
+
+message AuthenticateUserResponse {
+    optional UserProperties user = 1;
+    optional Status status = 2;
+    optional string token = 3;
+}
+
+message AddGeneratedPasswordRequest {
+    optional int64 user_id = 1;
+    optional string password = 2;
+    optional string client = 3;
+    optional string reason = 4;
+}
+
+message SetUserMainPasswordRequest {
+    optional int64 user_id = 1;
+    optional string password = 2;
+    optional string client = 3;
+    optional string reason = 4;
+}
+
+message UserHasMainPasswordRequest {
+    optional int64 user_id = 1;
+    
+    reserved 3, 4;
+    
+    reserved "client", "reason";
+}
+
+message UserHasMainPasswordResponse {
+    optional bool has_main_password = 1;
+}
+
+message ClearGeneratedPasswordsRequest {
+    optional int64 user_id = 1;
+    optional string client = 2;
+    optional string reason = 3;
+}
+
+message GetUsersPropertiesRequest {
+    repeated UserIdentifier identifier = 1;
+    repeated string properties = 2;
+    optional string client = 5;
+    optional string reason = 6;
+    optional bool allow_all_properties = 7;
+    
+    reserved 3, 4;
+    
+    reserved "timeout", "retries";
+}
+
+message UserIdentifier {
+    oneof by {
+        int64 user_id = 1;
+        string username = 2;
+        string email = 3;
+    }
+}
+
+message GetUsersPropertiesResponse {
+    repeated UserProperties user = 1;
+}
+
+message GetUserHistoryRequest {
+    optional int64 user_id = 1;
+    repeated string history_properties = 2;
+}
+
+message UserHistory {
+    optional int64 timestamp = 1;
+    optional string client = 2;
+    optional string reason = 3;
+    optional StringBytesMap properties = 4;
+}
+
+message GetUserHistoryResponse {
+    repeated UserHistory history = 1;
+}
+
+message UserHistoryForDump {
+    optional int64 user_id = 1;
+    optional string history_id = 2;
+    optional int64 timestamp = 3;
+    optional string client = 4;
+    optional string reason = 5;
+    optional StringMap properties = 6;
+}
+
+message SetUserPropertiesRequest {
+    optional int64 user_id = 1;
+    optional StringBytesMap properties = 2;
+    optional int32 ttl = 3;
+    optional string client = 4;
+    optional string reason = 5;
+    optional bool only_if_absent = 6;
+}
+
+message InvalidateUserPropertiesRequest {
+    optional int64 user_id = 1;
+    repeated string properties = 2;
+    optional string client = 3;
+    optional string reason = 4;
+    optional bool sync = 5;
+    optional string sent_from_env = 6;
+}
+
+message CreateUserRequest {
+    optional StringBytesMap properties = 1;
+    optional int32 ttl = 2;
+    optional string client = 3;
+    optional int64 user_id = 5;
+    
+    reserved 4;
+    
+    reserved "reason";
+}
+
+message CreateUserResponse {
+    optional int64 user_id = 1;
+    optional Status status = 2;
+}
+
+message DeleteUserRequest {
+    optional int64 user_id = 1;
+    optional string client = 2;
+    optional string reason = 3;
+}
+
+message RemoveUserPropertiesRequest {
+    optional int64 user_id = 1;
+    repeated string properties = 2;
+    optional string client = 3;
+    optional string reason = 4;
+}
+
+message GetUsersCountersRequest {
+    repeated int64 user_id = 1;
+    repeated string counters = 2;
+    
+    reserved 3, 4, 5;
+    
+    reserved "timeout", "client", "reason";
+}
+
+message GetUsersCountersResponse {
+    repeated UserCounters user = 1;
+}
+
+message IncrementUserCountersRequest {
+    optional int64 user_id = 1;
+    optional StringLongMap counters = 2;
+    
+    reserved 3, 4;
+    
+    reserved "client", "reason";
+}
+
+message AuthenticationTokenInfo {
+    optional int64 user_id = 1;
+    optional int64 issued_on = 2;
+    optional string installation_id = 3;
+    optional AppType app_type = 4;
+    optional string secret = 5;
+    optional int32 version = 6;
+    optional string environemnt = 7;
+}
+
+message AuthenticationTokenUsageInfo {
+    optional int64 last_used = 1;
+}
+
+message PropertyValue {
+    oneof values {
+        string value_str = 1;
+        int64 value_int = 2;
+        double value_double = 3;
+        bytes value_bytes = 4;
+        bool value_bool = 5;
+    }
+}
+
+message SetUserPropertiesEntry {
+    optional string key = 1;
+    optional PropertyValue value = 2;
+}
+
+message SetUserPropertiesV2Request {
+    optional int64 user_id = 1;
+    repeated SetUserPropertiesEntry properties = 2;
+    optional string client = 3;
+    optional string reason = 4;
+    optional bool only_if_absent = 5;
+}
+
+message SetUserPropertiesV2Response {
+    optional Status status = 1;
+}
+
+message GetUsersPropertiesV2Request {
+    repeated int64 user_id = 1;
+    repeated string properties = 2;
+    optional string client = 3;
+    optional string reason = 4;
+    optional bool return_defaults_for_missing_properties = 5;
+}
+
+message UserPropertiesV2 {
+    optional int64 user_id = 1;
+    repeated UserPropertiesV2Entry properties = 2;
+}
+
+message UserPropertiesV2Entry {
+    optional string key = 1;
+    optional PropertyValue value = 2;
+}
+
+message GetUsersPropertiesV2Response {
+    optional Status status = 1;
+    repeated UserPropertiesV2 users = 2;
+}
+
+message Empty {
+    
+}
+
+enum UserFlags {
+    NONE = 0;
+    MEGA_MAPPER = 1;
+    MEGA_DRIVER = 2;
+    MEGA_REPORTER = 4;
+    BETA_TESTER = 8;
+    WAZE_HERO = 16;
+    ONE_MILLION_POINTS = 32;
+    DEBUG_EDITOR = 64;
+    GLOBAL_EDITOR = 128;
+    SENSITIVE_USER_DATA_AUTHORIZED = 256;
+    MAP_EDITING_BANNED = 512;
+    BETA_EDITOR_USER = 1024;
+    BETA_CLIENT_USER = 2048;
+    BETA_ROUTING_USER = 4096;
+    FORCED_RANK_USER = 8192;
+    TRANSLATOR = 16384;
+    CHAT_BANNED = 32768;
+    INTERNAL_TEST_USER = 65536;
+    ADMANAGER = 131072 [deprecated = true];
+    ADVAR = 262144 [deprecated = true];
+    ADBILL = 524288 [deprecated = true];
+    LOCAL_CHAMP = 1048576;
+    GLOBAL_CHAMP = 2097152;
+    MUNICIPALITY_USER = 4194304;
+    RIDEWITH_DEBUG_DRIVER = 8388608;
+    ACCIDENTAL_CALENDAR_NOTIF_PUSH = 16777216;
+    USE_TRAFFIC_PREDICTIONS = 33554432;
+    CALENDAR_NOTIF_SLM = 67108864;
+    VOICE_PROMPTS_TESTER_A = 134217728;
+    VOICE_PROMPTS_TESTER_B = 268435456;
+    EXTERNAL_ADOPS = 536870912;
+}
+
+enum PartnerType {
+    CCP = 1;
+    MTE = 2;
+    BROADCAST = 3;
+    GEP = 4;
+    POLICE = 5;
+}

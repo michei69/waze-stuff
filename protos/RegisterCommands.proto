@@ -1,0 +1,93 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+import "ProfileCommands.proto";
+import "SocialMedia.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message Register {
+    optional string code = 1;
+}
+
+message RegisterSuccessful {
+    optional string username = 1;
+    optional string password = 2;
+    optional string token = 3;
+    optional int64 user_id = 4;
+}
+
+message RegisterError {
+    optional int64 reason = 1;
+}
+
+message ClientAuthToken {
+    optional string token = 1;
+}
+
+message GenerateToken {
+    
+}
+
+message RecoverAccount {
+    optional string token = 1;
+}
+
+message RecoverAccountSuccessful {
+    optional string userName = 1;
+    optional string password = 2;
+    optional bool guest = 3;
+    optional bool anonymous = 4;
+    optional string nickname = 5;
+    optional string name = 6;
+    optional string email = 7;
+    optional string pictureId = 8;
+    optional bool isNew = 9;
+}
+
+message RecoverAccountError {
+    optional int64 reason = 1;
+}
+
+message LocateAccountByEmailRequest {
+    optional string email = 1;
+}
+
+message LocateAccountByEmailResponse {
+    repeated EmailInfo email_info = 1;
+    message EmailInfo {
+        optional string community = 1;
+    }
+}
+
+message LocateAccountByCommunityRequest {
+    optional string community = 1;
+    optional string token = 2;
+    optional socialmedia.AccessTokenType accessTokenType = 3;
+    optional bool use_device_type_for_google_oauth = 4;
+}
+
+message LocateAccountByCommunityResponse {
+    optional LocateStatus status = 3;
+    enum LocateStatus {
+        SUCCESS = 0;
+        INTERNAL_ERROR = 1;
+        INVALID_TOKEN = 2;
+        DISABLED = 3;
+        NOT_FOUND = 4;
+    }
+    
+    optional string email = 1;
+    
+    optional AccountInfo account_info = 2;
+    message AccountInfo {
+        optional string community = 1;
+        optional bool meaningful = 2 [default = true];
+        optional MyProfile profile = 3;
+        optional int64 user_id = 4;
+    }
+}

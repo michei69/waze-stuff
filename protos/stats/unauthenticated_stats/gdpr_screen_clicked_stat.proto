@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/regulation_flags.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GdprScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ACCEPT = 1;
+        BACK = 2;
+        DECLINE = 3;
+    }
+    
+    RegulationFlags regulation_flags = 2;
+}

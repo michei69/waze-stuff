@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/segment_info.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcMenuClosureReportShownStat {
+    UgcTypeInfo ugc_type_info = 1;
+    SegmentInfo segment_info = 2;
+    
+    SegmentSelectionMethod segment_selection_method = 3;
+    enum SegmentSelectionMethod {
+        SEGMENT_SELECTION_METHOD_UNSPECIFIED = 0;
+        NEXT_SEGMENT = 1;
+        DEVIATED_FROM_SEGMENT = 2;
+        NEXT_SEGMENT_FALLBACK = 3;
+    }
+}

@@ -1,0 +1,136 @@
+syntax = "proto2";
+
+package com.waze.guidance;
+
+import "Types.proto";
+import "proto/waze/type/MeasurementSystem.proto";
+
+option objc_class_prefix = "CWG";
+option java_package = "com.waze.guidance";
+
+message GetRouteDescriptionRequest {
+    optional VoiceSettings voice_settings = 1;
+    message VoiceSettings {
+        optional string voice_id = 1;
+        optional string locale = 2;
+        optional VoiceCategory category = 3;
+        optional VoiceGuidanceMode guidance_mode = 4;
+        optional InstructionMode instruction_mode = 5;
+        optional .waze.type.MeasurementSystem units = 6;
+    }
+    
+    optional string alternative_route_uuid = 2;
+}
+
+message GetRouteDescriptionResponse {
+    optional linqmap.proto.Status status = 1;
+    optional string voice_description = 2;
+    optional string displayed_description = 3;
+}
+
+message GetVoiceInstructionsRequest {
+    optional string alternative_route_uuid = 1;
+    optional DistanceUnit distance_unit = 2;
+    optional InstructionMode instruction_mode = 3;
+    optional Destination destination = 4;
+}
+
+message GetVoiceInstructionsResponse {
+    repeated VoiceInstruction voice_instructions = 1;
+    optional InitialAnnouncement initial_announcement = 2;
+}
+
+message InitialAnnouncement {
+    oneof announcement {
+        SkipInitialAnnouncement skip_initial_announcement = 1;
+        DefaultInitialAnnouncement default_initial_announcement = 2;
+        RouteInitialAnnouncement route_initial_announcement = 3;
+    }
+}
+
+message SkipInitialAnnouncement {
+    
+}
+
+message DefaultInitialAnnouncement {
+    
+}
+
+message RouteInitialAnnouncement {
+    optional bytes route_initial_announcement_data = 1;
+}
+
+message VoiceInstruction {
+    optional int64 route_segment_index = 1;
+    optional bytes instruction_announcement_data = 2;
+    repeated ClientAnnouncement client_announcements = 3;
+}
+
+message ClientAnnouncement {
+    optional int64 announcement_id = 1;
+    optional int32 distance_meters = 2;
+    optional bool include_lane_guidance = 3;
+    optional AnnouncementTiming announcement_timing = 4;
+}
+
+message Destination {
+    optional FavoriteInfo favorite_info = 1;
+    optional VenueInfo venue_info = 2;
+}
+
+message FavoriteInfo {
+    oneof favorite {
+        HomeFavorite home_favorite = 1;
+        WorkFavorite work_favorite = 2;
+        CustomFavorite custom_favorite = 3;
+    }
+}
+
+message HomeFavorite {
+    
+}
+
+message WorkFavorite {
+    
+}
+
+message CustomFavorite {
+    optional string favorite_name = 1;
+}
+
+message VenueInfo {
+    optional string venue_name = 1;
+}
+
+enum VoiceGuidanceMode {
+    VOICE_GUIDANCE_MODE_UNSPECIFIED = 0;
+    ON = 1;
+    OFF = 2;
+    ALERTS_ONLY = 3;
+}
+
+enum VoiceCategory {
+    VOICE_CATEGORY_UNSPECIFIED = 0;
+    TTS = 1;
+    PROMPT = 2;
+    COPILOT = 3;
+    CUSTOM = 4;
+}
+
+enum AnnouncementTiming {
+    ANNOUNCEMENT_TIMING_UNSPECIFIED = 0;
+    START_AT_DISTANCE = 1;
+    FINISH_BY_DISTANCE = 2;
+}
+
+enum InstructionMode {
+    INSTRUCTION_MODE_UNSPECIFIED = 0;
+    FULL = 1;
+    BRIEF = 2;
+}
+
+enum DistanceUnit {
+    DISTANCE_UNIT_UNSPECIFIED = 0;
+    METER = 1;
+    FOOT = 2;
+}

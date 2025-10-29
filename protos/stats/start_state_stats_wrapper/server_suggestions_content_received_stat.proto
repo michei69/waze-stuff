@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ServerSuggestionsContentReceivedStat {
+    oneof _ad_count {
+        int64 ad_count = 1;
+    }
+    
+    oneof _calendar_event_count {
+        int64 calendar_event_count = 2;
+    }
+    
+    oneof _eta_check_count {
+        int64 eta_check_count = 3;
+    }
+    
+    oneof _planned_drive_count {
+        int64 planned_drive_count = 4;
+    }
+    
+    oneof _prediction_count {
+        int64 prediction_count = 5;
+    }
+    
+    oneof _suggested_destination_count {
+        int64 suggested_destination_count = 6;
+    }
+}

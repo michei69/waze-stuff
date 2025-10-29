@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/bounding_box.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewScreenPositioningSetStat {
+    BoundingBox destination_icon_location = 1;
+    BoundingBox origin_icon_location = 2;
+    BoundingBox parking_icon_location = 3;
+    repeated BoundingBox labels_locations = 4;
+}

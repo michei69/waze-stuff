@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GpsSourceChangedStat {
+    GpsSourceType changed_from = 1;
+    enum GpsSourceType {
+        GPS_SOURCE_UNSPECIFIED = 0;
+        DEVICE = 1;
+        EXTERNAL_DEVICE = 2;
+        NONE = 3;
+    }
+    
+    GpsSourceType changed_to = 2;
+}

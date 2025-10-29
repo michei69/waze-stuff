@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AddressPreviewSuggestedParkingShownStat {
+    ParkingNotSuggestedReason parking_not_suggested_reason = 1;
+    enum ParkingNotSuggestedReason {
+        REASON_UNSPECIFIED = 0;
+        CAR_WASH = 1;
+        CHARGING_STATION = 2;
+        GAS_STATION = 3;
+        NO_RESULTS = 4;
+        PARKING_LOT = 5;
+        VENUE_FAILED = 6;
+    }
+    
+    ShownAtTop shown_at_top = 2;
+    enum ShownAtTop {
+        SHOWN_AT_TOP_UNSPECIFIED = 0;
+        NEAREST = 1;
+        POPULAR = 2;
+        NONE = 3;
+    }
+    
+    string parking_venue_id = 5;
+    string venue_id = 6;
+    
+    oneof _popular_parking {
+        bool popular_parking = 3;
+    }
+    
+    oneof _has_more_parking_lots {
+        bool has_more_parking_lots = 4;
+    }
+    
+    oneof _parking_suggested {
+        bool parking_suggested = 9;
+    }
+    
+    oneof _parking_prices_shown {
+        bool parking_prices_shown = 10;
+    }
+    
+    oneof _book_parking_shown {
+        bool book_parking_shown = 11;
+    }
+}

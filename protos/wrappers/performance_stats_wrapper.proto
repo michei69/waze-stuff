@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/performance_stats_wrapper/boot_performance_stat.proto";
+import "stats/performance_stats_wrapper/downloader_initialized_stat.proto";
+import "stats/performance_stats_wrapper/health_report_stat.proto";
+import "stats/performance_stats_wrapper/ios_metrickit_diagnostic_report_stat.proto";
+import "stats/performance_stats_wrapper/ios_metrickit_metric_report_stat.proto";
+import "stats/performance_stats_wrapper/resources_consumption_stat.proto";
+import "stats/performance_stats_wrapper/shutdown_from_bg_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PerformanceStatsWrapper {
+    oneof stat {
+        ResourcesConsumptionStat resources_consumption = 1;
+        IosMetrickitMetricReportStat ios_metrickit_metric_report = 2;
+        BootPerformanceStat boot_performance = 3;
+        HealthReportStat health_report = 4;
+        DownloaderInitializedStat downloader_initialized = 5;
+        IosMetrickitDiagnosticReportStat ios_metrickit_diagnostic_report = 6 [deprecated = true];
+        ShutdownFromBgStat shutdown_from_bg = 7;
+    }
+}

@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package com.waze.proto.asks;
+
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+
+option objc_class_prefix = "CWPA";
+option java_package = "com.waze.proto.asks";
+
+message AnswerQuestionRequestWrapper {
+    optional AnswerQuestionRequest request = 1;
+    optional AsksUserInfo userInfo = 2;
+}
+
+message QuestionAnsweredRequest {
+    optional AnswerQuestionRequest request = 1;
+    optional AsksUserInfo userInfo = 2;
+}
+
+message AnswerQuestionResponseWrapper {
+    optional AnswerQuestionResponse response = 1;
+}
+
+message AnswerQuestionResponse {
+    optional int64 received_points = 1;
+}
+
+message AsksUserInfo {
+    optional int64 id = 1;
+    optional string uuid = 2;
+    optional int64 dbid = 3;
+    optional string device = 4;
+    optional string language = 5;
+    optional bool status_visible = 6;
+    optional string client_uuid = 7;
+    optional int64 flags = 9;
+    optional int32 rank = 10;
+    optional int32 show_nickname_next_to_my_reports = 11;
+    optional string nick_name = 12;
+    optional int32 mood = 13;
+    optional string full_social_name = 14;
+    optional string full_name = 15;
+    optional string user_name = 22;
+    
+    reserved 8;
+}
+
+message AnswerQuestionRequest {
+    optional string entity_id = 1;
+    optional string question_key = 2;
+    optional string answer_key = 3;
+}

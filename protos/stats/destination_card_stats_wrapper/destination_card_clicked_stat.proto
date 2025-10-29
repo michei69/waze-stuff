@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/destination_card_stats_wrapper/destination_card.proto";
+import "stats/destination_card_stats_wrapper/destination_card_screen_context.proto";
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DestinationCardClickedStat {
+    DestinationCardScreenContext context = 4;
+    DestinationCard.CardTrigger card_trigger = 5 [deprecated = true];
+    DestinationCard.DestinationType destination_type = 6 [deprecated = true];
+    DestinationCard.CardSource card_source = 7 [deprecated = true];
+    string venue_id = 10;
+    LatLng destination_coordinates = 11 [deprecated = true];
+    
+    Action action = 12;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CLICK = 1;
+        LONG_PRESS = 2;
+        OPTIONS_FROM_SWIPE = 3;
+    }
+    
+    DestinationCard destination_card = 13;
+    
+    oneof _eta_shown {
+        bool eta_shown = 1;
+    }
+    
+    oneof _rt_traffic_shown {
+        bool rt_traffic_shown = 2;
+    }
+    
+    oneof _leave_arrive_shown {
+        bool leave_arrive_shown = 3;
+    }
+    
+    oneof _decorated {
+        bool decorated = 8;
+    }
+    
+    oneof _index {
+        int64 index = 9;
+    }
+}

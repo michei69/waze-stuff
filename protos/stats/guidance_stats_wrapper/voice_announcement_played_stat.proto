@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AnnouncementChunk {
+    string text = 1;
+    string file_uri = 2;
+}
+
+message VoiceAnnouncementPlayedStat {
+    string alternative_route_uuid = 1;
+    
+    InstructionMode voice_instructions_mode = 4;
+    enum InstructionMode {
+        INSTRUCTION_MODE_UNSPECIFIED = 0;
+        FULL = 1;
+        BRIEF = 2;
+    }
+    
+    repeated AnnouncementChunk announcement_chunks = 8;
+    
+    oneof _route_segment_index {
+        int64 route_segment_index = 2;
+    }
+    
+    oneof _announcement_id {
+        int64 announcement_id = 3;
+    }
+    
+    oneof _announcement_distance_meters_actual {
+        int64 announcement_distance_meters_actual = 5;
+    }
+    
+    oneof _announcement_distance_meters_played {
+        int64 announcement_distance_meters_played = 6;
+    }
+    
+    oneof _current_speed_kmh {
+        int64 current_speed_kmh = 7;
+    }
+}

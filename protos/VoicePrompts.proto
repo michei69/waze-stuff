@@ -1,0 +1,94 @@
+syntax = "proto2";
+
+package linqmap.proto.voice;
+
+import "logging.proto";
+
+option objc_class_prefix = "LPVO";
+
+message VoicePrompt {
+    optional string id = 1;
+    optional string name = 2;
+    optional string lang = 3;
+    optional string locale = 4;
+    optional string description = 5;
+    optional string version = 6;
+    optional bool visible = 7;
+    optional int32 type = 8;
+    optional int64 created_on = 9;
+    optional int64 created_by = 10;
+    optional int64 updated_on = 11;
+    optional int32 revision = 12;
+}
+
+message VoicePromptsConfig {
+    repeated VoicePrompt prompts = 1;
+}
+
+message PromptData {
+    optional string prompt_id = 1;
+    
+    optional PromptFormat format = 2 [default = WAV];
+    enum PromptFormat {
+        WAV = 1;
+        MP3 = 2;
+        RAW = 3;
+    }
+    
+    optional bytes voice = 3;
+    optional int32 bit_rate = 4;
+}
+
+message UploadPromptsRequest {
+    optional string name = 1;
+    repeated PromptData data = 2;
+}
+
+message PromptDescription {
+    optional string name = 1;
+    optional string path = 2;
+    optional string description = 3;
+}
+
+message PromptDescriptions {
+    repeated PromptDescription prompts = 1;
+}
+
+message CreateVoicePromptRequest {
+    optional int64 user_id = 1;
+    optional VoicePrompt voice_prompt = 2;
+    optional bytes data = 3;
+}
+
+message UpdateVoicePromptRequest {
+    optional int64 user_id = 1;
+    optional VoicePrompt voice_prompt = 2;
+    optional bytes data = 3;
+}
+
+message AddVoicePromptRequest {
+    optional int64 user_id = 1;
+    repeated string id = 2;
+}
+
+message RemoveVoicePromptRequest {
+    optional int64 user_id = 1;
+    optional string id = 2;
+}
+
+message GetVoicePromptsRequest {
+    optional int64 user_id = 1;
+    optional bool owned_by_user_only = 2 [default = false];
+}
+
+message GetVoicePromptsResponse {
+    repeated VoicePrompt voice_prompt = 1;
+}
+
+message GetVoicePromptRequest {
+    optional string id = 1;
+}
+
+message GetVoicePromptResponse {
+    optional VoicePrompt voice_prompt = 1;
+}

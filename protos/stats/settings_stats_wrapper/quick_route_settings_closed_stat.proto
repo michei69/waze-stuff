@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/settings_stats_wrapper/quick_route_settings_context.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message QuickRouteSettingsClosedStat {
+    QuickRouteSettingsContext context = 3;
+    
+    oneof _avoid_tolls_changed_to {
+        bool avoid_tolls_changed_to = 1;
+    }
+    
+    oneof _avoid_ferries_changed_to {
+        bool avoid_ferries_changed_to = 2;
+    }
+}

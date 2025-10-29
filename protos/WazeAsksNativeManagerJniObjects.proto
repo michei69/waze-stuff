@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.asks;
+
+import "AlerterNativeManagerJniObjects.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.asks";
+
+message EnrichAlertQuestion {
+    QuestionTitleType title_type = 1;
+    enum QuestionTitleType {
+        WHAT_DO_YOU_SEE = 0;
+        ARE_LANES_BLOCKED = 1;
+    }
+    
+    repeated Answer answers = 2;
+    message Answer {
+        string answer_key = 1;
+        
+        oneof variant {
+            HazardVariant hazard = 2;
+            NotThereVariant validation = 3;
+            BlockedLaneVariant blocked_lane = 4;
+        }
+        
+        message HazardVariant {
+            AlerterSubType.HazardSubType sub_type = 1;
+        }
+        
+        message BlockedLaneVariant {
+            AlerterSubType.BlockedLaneSubType sub_type = 1;
+        }
+        
+        message NotThereVariant {
+            
+        }
+    }
+    
+    int32 stats_alert_id = 3;
+    AlerterType stats_alerter_type = 4;
+}
+
+message WazeAsksQuestion {
+    string question_key = 1;
+    string entity_id = 2;
+    bool is_mock = 3;
+    
+    oneof question {
+        EnrichAlertQuestion enrich_alert_question = 4;
+    }
+}

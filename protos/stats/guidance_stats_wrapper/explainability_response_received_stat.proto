@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ExplainabilityResponseReceivedStat {
+    string alternative_route_uuid = 1;
+    
+    ResponseStatus response_status = 2;
+    enum ResponseStatus {
+        RESPONSE_STATUS_UNSPECIFIED = 0;
+        SUCCESS = 1;
+        SERVER_ERROR = 2;
+        PARSING_ERROR = 3;
+        NO_DATA = 4;
+    }
+}

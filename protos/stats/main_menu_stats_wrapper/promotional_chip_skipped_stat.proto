@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/main_menu_stats_wrapper/promotional_chip_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PromotionalChipSkippedStat {
+    SkipReason skip_reason = 1;
+    enum SkipReason {
+        SKIP_REASON_UNSPECIFIED = 0;
+        NAVIGATING = 1;
+        IN_CAR_PROJECTED_CONNECTED = 2;
+        ROAMING = 3;
+    }
+    
+    PromotionalChipInfo promotional_chip_info = 2;
+}

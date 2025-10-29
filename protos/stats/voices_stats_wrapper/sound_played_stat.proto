@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SoundPlayedStat {
+    string text_played = 3;
+    
+    SoundType sound_type = 4;
+    enum SoundType {
+        SOUND_TYPE_UNSPECIFIED = 0;
+        GUIDANCE_ANNOUCEMENTS = 1;
+        NOTIFICATIONS = 2;
+        OTHER_SOUNDS = 3;
+    }
+    
+    oneof _success {
+        bool success = 1;
+    }
+    
+    oneof _failure_reason {
+        string failure_reason = 2;
+    }
+}

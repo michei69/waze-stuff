@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_assistant_stats_wrapper/google_assistant_source.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAssistantInitiatedStat {
+    GoogleAssistantSource source_type = 1;
+    string android_invocation_code = 2;
+}

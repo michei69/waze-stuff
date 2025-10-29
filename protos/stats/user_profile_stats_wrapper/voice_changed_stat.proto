@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/user_profile_stats_wrapper/asset_changed_source.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message VoiceChangedStat {
+    string changed_from = 1;
+    string changed_to = 2;
+    AssetChangedSource changed_source = 3;
+}

@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_ads_stats_wrapper/google_ad_information.proto";
+import "stats/location_preview_stats_wrapper/address_preview_context.proto";
+import "stats/reusable_types/triggering_platform.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AddressPreviewShownStat {
+    AddressPreviewContext context = 1;
+    string venue_id = 2;
+    TriggeringPlatform triggering_platform = 7;
+    
+    oneof _photos_count {
+        int64 photos_count = 3;
+    }
+    
+    oneof _residential {
+        bool residential = 4 [deprecated = true];
+    }
+    
+    oneof _is_ad {
+        bool is_ad = 5;
+    }
+    
+    oneof _google_ad_information {
+        GoogleAdInformation google_ad_information = 6;
+    }
+}

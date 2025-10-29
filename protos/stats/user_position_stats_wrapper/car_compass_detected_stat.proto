@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CarCompassDetectedStat {
+    oneof _current_heading_degrees {
+        double current_heading_degrees = 1;
+    }
+}

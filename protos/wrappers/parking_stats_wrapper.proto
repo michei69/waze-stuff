@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/parking_stats_wrapper/near_destination_parking_pins_stat.proto";
+import "stats/parking_stats_wrapper/no_near_destination_parking_pins_stat.proto";
+import "stats/parking_stats_wrapper/parking_mark_popup_menu_clicked_stat.proto";
+import "stats/parking_stats_wrapper/parking_mark_send_location_click_stat.proto";
+import "stats/parking_stats_wrapper/parking_near_destination_find_nearby_clicked_stat.proto";
+import "stats/parking_stats_wrapper/parking_near_destination_get_pins_failed_stat.proto";
+import "stats/parking_stats_wrapper/parking_near_destination_menu_clicked_stat.proto";
+import "stats/parking_stats_wrapper/parking_near_destination_menu_option_clicked_stat.proto";
+import "stats/parking_stats_wrapper/parking_suggestion_pin_clicked_stat.proto";
+import "stats/parking_stats_wrapper/parking_suggestions_latency_stat.proto";
+import "stats/parking_stats_wrapper/parking_suggestions_shown_stat.proto";
+import "stats/parking_stats_wrapper/remove_parking_mark_stat.proto";
+import "stats/parking_stats_wrapper/set_parking_mark_stat.proto";
+import "stats/parking_stats_wrapper/walking_detected_stat.proto";
+import "stats/parking_stats_wrapper/walking_mode_ended_stat.proto";
+import "stats/parking_stats_wrapper/walking_mode_started_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ParkingStatsWrapper {
+    oneof stat {
+        ParkingSuggestionPinClickedStat parking_suggestion_pin_clicked = 1;
+        NearDestinationParkingPinsStat near_destination_parking_pins = 2;
+        NoNearDestinationParkingPinsStat no_near_destination_parking_pins = 3;
+        ParkingSuggestionsLatencyStat parking_suggestions_latency = 4;
+        ParkingSuggestionsShownStat parking_suggestions_shown = 5;
+        ParkingNearDestinationMenuClickedStat parking_near_destination_menu_clicked = 6;
+        ParkingNearDestinationMenuOptionClickedStat parking_near_destination_menu_option_clicked = 7;
+        WalkingModeStartedStat walking_mode_started = 8;
+        ParkingNearDestinationFindNearbyClickedStat parking_near_destination_find_nearby_clicked = 9;
+        ParkingMarkPopupMenuClickedStat parking_mark_popup_menu_clicked = 10;
+        ParkingMarkSendLocationClickedStat parking_mark_send_location_click = 11;
+        RemoveParkingMarkStat remove_parking_mark = 12;
+        WalkingDetectedStat walking_detected = 13;
+        WalkingModeEndedStat walking_mode_ended = 14;
+        ParkingNearDestinationGetPinsFailedStat parking_near_destination_get_pins_failed = 15;
+        SetParkingMarkStat set_parking_mark = 16;
+    }
+}

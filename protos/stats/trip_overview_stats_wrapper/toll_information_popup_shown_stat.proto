@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TollInformationPopupShownStat {
+    string toll_road_names = 1;
+    string toll_price_currency = 3;
+    
+    ActionSource action_source = 4;
+    enum ActionSource {
+        ACTION_SOURCE_UNSPECIFIED = 0;
+        ETA_SCREEN = 1;
+        TRIP_OVERVIEW_SCREEN = 2;
+        ALTERNATE_ROUTES_SCREEN = 3;
+        UNKNOWN = 4;
+    }
+    
+    PopupID popup_id = 5;
+    enum PopupID {
+        TOLL_INFO_UNSPECIFIED = 0;
+        TOLL_INFO_MISSING_PASS = 1;
+        TOLL_INFO_MISSING_PASS_WITH_PRICE = 2;
+        TOLL_INFO_PRICE_CHANGE = 3;
+        TOLL_INFO_PRICE_CHANGE_BY_TIME = 4;
+        TOLL_INFO_WITH_PASS = 5;
+        TOLL_INFO_DEFAULT = 6;
+        TOLL_INFO_NO_PRICE = 7;
+        TOLL_INFO_DISABLED_BY_CONFIG = 8;
+        TOLL_INFO_DYNAMIC_PRICE_SHOWN = 9;
+        TOLL_INFO_DYNAMIC_PRICE_NOT_SHOWN = 10;
+    }
+    
+    oneof _toll_price {
+        double toll_price = 2;
+    }
+}

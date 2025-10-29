@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/search_stats_wrapper/search_category_group.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MoreCategoriesScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BACK = 1;
+        CLOSE = 2;
+        CATEGORY = 3;
+    }
+    
+    SearchCategoryGroup categorical_group_search_name = 2;
+}

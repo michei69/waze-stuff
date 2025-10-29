@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SendReportScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ADD_COMMENT = 1;
+        CLOSE = 2;
+        CANCEL = 3;
+        EMERGENCY_CALL = 4;
+        LATER = 5;
+        PHOTO = 6;
+        REPORT = 7;
+        ROAD_ASSISTANCE = 8;
+        SELECT = 9;
+        SEND_LOCATION = 10;
+    }
+    
+    LatLng coordinates = 4;
+    string comment = 5;
+    UgcTypeInfo.UgcType report_type = 8;
+    UgcTypeInfo.UgcSubtype report_subtype = 9;
+    
+    oneof _type {
+        sint64 type = 2;
+    }
+    
+    oneof _subtype {
+        int64 subtype = 3;
+    }
+    
+    oneof _photo_added {
+        bool photo_added = 6;
+    }
+    
+    oneof _quick_closure_flow {
+        bool quick_closure_flow = 7;
+    }
+}

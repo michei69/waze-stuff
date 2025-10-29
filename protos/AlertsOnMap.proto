@@ -1,0 +1,1027 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap;
+
+import "AoMCommands.proto";
+import "AoMCommon.proto";
+import "RealtimeNg.proto";
+import "RTCommonTypes.proto";
+import "Types.proto";
+import "proto/waze/type/Timestamp.proto";
+import "Common.proto";
+import "logging.proto";
+
+option objc_class_prefix = "WAOM";
+option java_package = "com.waze.proto.alertsonmap";
+
+message Abusers {
+    repeated int64 user_id = 1;
+}
+
+message UserCommonInfo {
+    optional int64 id = 1;
+    optional string uuid = 2;
+    optional int64 dbid = 5;
+    optional int32 mood = 7;
+    optional string full_name = 8;
+    optional string full_social_name = 9;
+    optional string nick_name = 11;
+    optional string locale = 13;
+    optional int64 flags = 15;
+    optional string language = 18;
+    optional string device = 19;
+    optional bool status_visible = 20;
+    optional int32 show_nickname_next_to_my_reports = 21;
+    optional string user_name = 22;
+    optional int32 rank = 23;
+    optional rtcommon.UserPosition position = 24;
+    optional int64 join_date = 25;
+    optional int32 metro_id = 26;
+    optional int64 login_time = 28;
+    optional string client_uuid = 29;
+    optional bool test_user = 31;
+    optional bool prober_user = 32;
+    optional bool automation_user = 33;
+    optional int32 historical_alerts_count = 102;
+    optional PrivateJams private_jams = 104;
+    optional rtcommon.QuotaValues quota_values = 106;
+    optional Abusers abuser_list = 111;
+    optional bool draw_private_jam_alerts = 53;
+    optional int32 blocked_weight = 54;
+    optional string report_wheeler_alert_use_case = 55;
+    optional string report_alert_res_title = 56;
+    optional string report_alert_res_description = 57;
+    optional string block_alert_comments_error_title = 58;
+    optional string block_alert_comments_error_text = 59;
+    optional string max_alert_comments_error_title = 61;
+    optional string max_alert_comments_error_text = 62;
+    optional bool send_seen_on_tv_message = 65;
+    optional double report_not_there_user_star_factor = 66;
+    repeated string quota_config = 67;
+    repeated string all_types_quota_config = 68;
+    optional int32 max_alert_comments = 70;
+    optional bool thumbs_up_show_nickname = 71;
+    optional bool block_alert_comments = 72;
+    optional bool disable_free_text = 73;
+    repeated linqmap.proto.StringBoolEntry block_alert_report_map = 74;
+    optional bool spammer = 75;
+    optional bool alerts_qa_user = 76;
+    optional CommonInfo common = 100;
+    
+    reserved 3, 4, 6, 10, 12, 16, 17, 27, 30, 50, 51, 52, 63, 64, 77, 109, 110;
+    
+    reserved "active_group", "followed_groups", "report_alert_use_user_active_group", "allow_public_block", "allow_conversational_reporting", "selected_route";
+}
+
+message AlertPosition {
+    optional linqmap.proto.Coordinate coordinate = 1;
+    optional int32 azimuth = 2;
+    optional rtcommon.SegmentDirectionID segment_direction_id = 3;
+    optional int32 road_type = 4;
+    optional int32 metro_id = 5;
+    optional int32 state_id = 6;
+    optional bool should_index = 7;
+    optional string ipc_area_id = 8;
+    optional string ipc_server_id = 9;
+    optional rtcommon.SegDirection seg_direction = 10;
+    optional linqmap.proto.Coordinate bearing_pos = 11;
+    optional linqmap.proto.Coordinate came_from_pos = 12;
+    optional linqmap.proto.Coordinate came_from_bearing_pos = 13;
+    optional bool is_both_directions = 14;
+    optional double speed = 15;
+    optional double altitude = 16;
+    optional int32 street_id = 17;
+    optional string street_name = 18;
+    optional int32 city_id = 19;
+    repeated string city_name = 20;
+    optional string state_name = 21;
+    optional string country_name = 22;
+    optional int32 country_id = 23;
+    optional string country_abbr = 24;
+    optional int32 segment_id = 25;
+    optional int32 zoom_level = 26;
+    repeated linqmap.proto.Coordinate segment_geometry_coordinates = 27;
+    optional int32 turn_segment_id = 28;
+    optional rtcommon.SegmentDirectionID turn_segment_direction_id = 29;
+    optional rtcommon.SegDirection turn_seg_direction = 30;
+    optional rtcommon.SegDirection alert_direction_relative_to_segment = 31;
+}
+
+message CommunityAndPrivacyLevel {
+    optional string name = 1;
+    optional CommunityPrivacyLevel level = 2;
+}
+
+message AtData {
+    optional double longitude = 1;
+    optional double latitude = 2;
+    optional double altitude = 3;
+    optional int32 azymuth = 4;
+    optional double speed = 5;
+    optional rtcommon.SegmentDirectionID sid = 6;
+    optional int32 delay = 7;
+}
+
+message ReportUserAlertRequest {
+    option deprecated = true;
+    optional UserCommonInfo user_info = 1;
+    optional AtData at_data = 2;
+    optional AtData real_gps_ar_data = 4;
+    optional AlertType alert_type = 5;
+    optional AlertSubType sub_type = 6;
+    optional string description = 7;
+    optional string external_image_id = 8;
+    optional string external_voice_id = 10;
+    optional Enums.AlertDuration duration = 11;
+    optional string use_case = 12;
+    repeated CommunityAndPrivacyLevel communities = 13;
+    optional string group_name = 14 [deprecated = true];
+    optional rtcommon.SegDirection seg_direction = 15;
+    optional int32 metro_id = 16;
+    optional int64 external_id = 17;
+    optional ReportedAlertDetails new_reporting_flow_metadata = 18;
+}
+
+message ReportUserAlertResponse {
+    option deprecated = true;
+    optional int64 received_points = 1;
+    optional string title = 2;
+    optional string description = 3;
+    optional AlertOperationRC rc = 4;
+    optional int64 message_id = 5;
+}
+
+message AddUserReportedAlertRequest {
+    optional rtcommon.MatchedGPSPosition user_position = 1;
+    optional int32 azymuth = 2;
+    optional ReportedAlertDetails alert_details = 3;
+    optional rtcommon.SegDirection segment_direction = 4;
+    optional .waze.type.Timestamp report_time = 5;
+    optional bool is_offline_delayed_report = 6;
+    
+    optional ReportingManner reporting_manner = 7;
+    enum ReportingManner {
+        REPORTING_MANNER_UNSPECIFIED = 0;
+        REPORTING_MANNER_DEFAULT = 1;
+        REPORTING_MANNER_VOICE = 2;
+        REPORTING_MANNER_VOICE_CONVERSATION = 3;
+    }
+}
+
+message AddUserReportedAlertRequestWrapper {
+    optional AddUserReportedAlertRequest request = 1;
+    optional UserCommonInfo user_info = 2;
+}
+
+message AddUserReportedAlertResponse {
+    optional linqmap.proto.Status status = 1;
+    optional int64 received_points_count = 2;
+    optional int64 client_alert_id = 3;
+    optional SurfacedAlertDetails alert_details = 4;
+    optional string alert_uuid = 5;
+}
+
+message AddUserReportedAlertResponseWrapper {
+    optional AddUserReportedAlertResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message PrivateJam {
+    optional rtcommon.SegmentDirectionID segment_direction_id = 1;
+    optional linqmap.proto.Coordinate coordinate = 2;
+    optional int32 level = 3;
+    optional bool is_comment = 4;
+}
+
+message PrivateJams {
+    repeated PrivateJam jams = 1;
+}
+
+message ReportUserAlertResponseWrapper {
+    option deprecated = true;
+    optional ReportUserAlertResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message UserAlertSessionResponse {
+    optional PrivateJams private_jams = 4;
+    optional int32 historical_alerts_count = 5;
+    optional rtcommon.QuotaValues quota_values = 6;
+    repeated int32 deleteField = 10;
+    optional Alert last_reported_alert = 11;
+    optional CommonSession common = 100;
+}
+
+message PostAlertCommentRequest {
+    optional UserCommonInfo user_info = 1;
+    optional int64 aid = 2;
+    optional string text = 3;
+    repeated CommunityAndPrivacyLevel communities = 4;
+    optional string group = 5 [deprecated = true];
+    optional int64 external_id = 6;
+    optional string alert_uuid = 7;
+}
+
+message PostAlertCommentResponse {
+    optional int64 received_points = 1;
+    optional string title = 2;
+    optional string description = 3;
+    optional AlertOperationRC rc = 4;
+    optional int64 message_id = 5;
+}
+
+message PostAlertCommentResponseWrapper {
+    optional PostAlertCommentResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message ThumbsUpRequest {
+    optional UserCommonInfo user_info = 1;
+    optional int64 aid = 2;
+    optional int64 external_id = 3;
+    optional string alert_uuid = 4;
+}
+
+message ThumbsUpResponse {
+    optional int64 received_points = 1;
+}
+
+message ThumbsUpResponseWrapper {
+    optional ThumbsUpResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message ReportThumbsUpRequestWrapper {
+    optional ReportThumbsUpRequest request = 1;
+    optional UserCommonInfo user_info = 2;
+}
+
+message ReportThumbsUpResponseWrapper {
+    optional ReportThumbsUpResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message ReportThumbsDownRequestWrapper {
+    optional ReportThumbsDownRequest request = 1;
+    optional UserCommonInfo user_info = 2;
+}
+
+message ReportThumbsDownResponseWrapper {
+    optional ReportThumbsDownResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message PingWazerEnrichedData {
+    optional int64 dbid = 1;
+}
+
+message PingWazerRequest {
+    optional UserCommonInfo user_info = 1;
+    optional AlertPosition pos = 2;
+    optional int64 user_id = 3;
+    optional AlertType alert_type = 4;
+    optional string description = 5;
+    optional string external_image_id = 6;
+    optional string external_voice_id = 7;
+    optional bool prvt = 8;
+    optional int64 dbid = 9;
+    repeated CommunityAndPrivacyLevel communities = 10;
+    optional int64 external_id = 11;
+    optional PingWazerEnrichedData enriched_data = 12;
+}
+
+message ReportAbuseRequest {
+    optional UserCommonInfo user_info = 1;
+    optional int64 alert_id = 2;
+    optional int64 comment_id = 3;
+    optional string alert_uuid = 4;
+    optional string comment_uuid = 5;
+}
+
+message ReportAbuseResponseWrapper {
+    repeated RmAlertCommand response = 1;
+    optional ReportAbuseSessionResponse session = 2;
+    repeated RemoveAlertAction remove_alert_action = 3;
+}
+
+message ReportAbuseSessionResponse {
+    optional Alerts displayed_alerts = 1;
+    optional Abusers abuser_list = 2;
+}
+
+message ReportRmAlertRequest {
+    optional UserCommonInfo user_info = 1;
+    optional int64 aid = 2;
+    optional int64 external_id = 3;
+    optional string alert_uuid = 4;
+}
+
+message ReportRmAlertResponseWrapper {
+    optional int32 received_points = 4;
+    
+    reserved 3;
+    
+    reserved "serialized_events";
+}
+
+message FeedAlertsRequest {
+    optional string provider = 1;
+    optional string id = 2;
+    optional string filter = 3;
+    optional bool remove = 4;
+}
+
+message UpdateMeasurementsFeedAlertsRequest {
+    
+}
+
+message RemoveFeedAlertRequest {
+    optional int64 id = 1;
+    optional string db_id = 2;
+}
+
+message RemoveAlertRequest {
+    optional int64 id = 1;
+    optional string db_id = 5;
+    optional bool confirm = 2;
+    optional bool toggleEvalBlock = 4;
+}
+
+message RemoveAlertForAutomationRequest {
+    optional RemoveAlertRequest request = 1;
+    optional string secret_key = 2;
+}
+
+message RemoveAlertResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message RemoveAlertsRequest {
+    repeated string db_id = 1;
+}
+
+message ReadClosuresRequest {
+    
+}
+
+message RemoveOldAlertsRequest {
+    optional int64 timeout_seconds = 1;
+}
+
+message ImportClosuresRequest {
+    
+}
+
+message AlertToUserRequest {
+    optional string alert_strings = 1;
+}
+
+message AlertToUserResponse {
+    optional int64 dbid = 1;
+}
+
+message StringResponse {
+    optional string data = 1;
+}
+
+message FetchOptions {
+    optional bool fetch_comments_thumbs_up = 1;
+    optional bool fetch_comments_not_thumbs_up = 2;
+    optional bool fetch_weight_info = 3;
+}
+
+message QueryAlertsRequest {
+    optional linqmap.proto.Envelope env = 1;
+    optional int32 zoom_level = 2;
+    repeated rtcommon.SegmentDirectionID segments = 3;
+    repeated int64 client_id = 5;
+    optional int32 max_results = 4;
+    repeated string db_id = 6;
+    repeated string permanent_hazard_ids = 7;
+    optional int32 min_zoom_level = 10;
+    optional int32 max_zoom_level = 11;
+    optional bytes polygon_wkb = 12;
+    repeated string type = 13;
+    repeated string sub_type = 14;
+    optional int32 group = 15 [deprecated = true];
+    repeated string country_abbr = 16;
+    optional bool include_types = 17;
+    optional bool include_sub_types = 18;
+    optional bool include_inactive = 20;
+    optional bool include_cannot_be_shared = 21;
+    optional bool only_reported_by_municipal_user = 22;
+    optional bool include_jam_unified = 23 [deprecated = true];
+    optional bool include_archive = 24 [deprecated = true];
+    optional bool include_private = 25;
+    optional bool include_parked = 26 [deprecated = true];
+    optional bool include_feed = 27;
+    optional bool only_feed = 28;
+    optional bool include_hidden = 29;
+    optional bool include_pictures = 30;
+    optional bool include_comments = 31;
+    optional bool include_web_provider = 32 [deprecated = true];
+    optional bool include_system_road_closed = 33 [deprecated = true];
+    optional bool include_jam_show_closed_future = 34 [deprecated = true];
+    optional bool include_private_road_closed = 35;
+    optional bool only_relevant = 36;
+    optional bool only_public = 37;
+    repeated AlertType apply_update_is_active = 38;
+    optional bool exclude_non_visible_closures = 39;
+    optional FetchOptions fetch_options = 41;
+    optional Sort sort = 42;
+    optional CrashProneUserInfo crash_prone_user_info = 43;
+    optional bool include_surfacing_alert_type = 44;
+    optional bool include_permanent_hazard_alert_type = 45;
+    optional bool include_turn_closed_alert_type = 46;
+    optional bool include_future_closure_alerts = 47;
+    optional bool include_personal_safety_alerts = 48;
+    optional bool include_police_mobile_camera_alerts = 49;
+    optional bool override_true_all_includes = 70;
+}
+
+message DebugQueryAlertsRequest {
+    optional linqmap.proto.Envelope env = 1;
+    optional int32 zoom_level = 2;
+    repeated rtcommon.SegmentDirectionID segments = 3;
+    repeated int64 client_id = 5;
+    repeated string db_id = 6;
+    repeated string permanent_hazard_ids = 7;
+}
+
+message CrashProneUserInfo {
+    optional string timezone = 1;
+}
+
+message QueryAlertsResponse {
+    repeated Alert alert = 1;
+}
+
+message Alert {
+    optional string id = 1;
+    optional int64 client_id = 2;
+    optional int64 reported_by = 3;
+    optional string feed_provider = 5;
+    optional string feed_provider_id = 6;
+    optional int64 report_time = 7;
+    optional int64 start_time = 8;
+    optional int64 end_time = 9;
+    optional string extra_info = 10;
+    optional AlertType type = 11;
+    optional AlertSubType sub_type = 12;
+    repeated Alert comments = 13;
+    optional Enums.AlertDuration duration = 14;
+    optional AlertPosition position = 15;
+    optional string description = 16;
+    optional string near_by_name = 17;
+    optional string report_by_nick_name = 18;
+    optional int32 confidence = 19;
+    optional int32 mood = 20;
+    optional int32 star_rating = 21;
+    optional string external_image_id = 22;
+    optional string external_voice_id = 23;
+    optional string show_full_name = 24;
+    optional int64 jam_id = 26 [deprecated = true];
+    optional bool is_jam_unified_alert = 27 [deprecated = true];
+    optional int32 reliability = 28;
+    optional string waze_data = 29;
+    optional string report_by_active_group_name = 30 [deprecated = true];
+    optional string report_by_active_group_icon = 31 [deprecated = true];
+    optional string additional_info = 32;
+    optional bool show_nick_name = 33;
+    optional int64 expiration = 34;
+    optional string external_type = 35;
+    optional string feed_extra_info = 36;
+    optional int32 not_there_count = 37;
+    optional AlertWeightInfo weight_info = 38;
+    optional int32 num_comments = 39;
+    optional int32 num_thumbs_up = 40;
+    optional int64 last_change_time = 41;
+    optional string icon_addon = 42;
+    optional bool is_eval_block = 50;
+    optional bool is_reported_by_municipal_user = 51;
+    optional bool is_cannot_be_shaed = 52 [deprecated = true];
+    optional bool is_hidden = 53;
+    optional bool is_archive = 54;
+    optional bool is_feed = 55;
+    optional bool is_active = 56;
+    optional bool is_public_view = 68;
+    optional bool is_super = 57;
+    optional bool is_thumbs_up = 58;
+    optional bool is_waze_relevant = 59;
+    optional bool is_comment = 60;
+    optional bool has_lane_closed = 61;
+    optional ReportedAlertDetails reported_alert_details = 70;
+    optional SurfacedAlertDetails alert_details = 63;
+    optional bool is_cannot_be_shared = 64;
+    optional bool is_from_node_closed = 65;
+    optional linqmap.proto.UserInfo.UserChannel closure_creation_channel = 66;
+    optional string closure_id = 67;
+    optional bool is_private_ping = 71;
+    optional int64 pinged_user_id = 72;
+    optional bool is_test_flow = 73;
+    optional string permanent_hazard_id = 74;
+    optional string schedule_id = 75;
+    
+    reserved 25;
+}
+
+message QueryMetroSizeRequest {
+    repeated int32 metro_id = 1;
+    repeated MetroIndexCategory category = 2;
+}
+
+message QueryMetroSizeResponse {
+    optional int32 size = 1;
+}
+
+message QueryAllAlertsRequestStream {
+    optional string area_id = 1;
+}
+
+message QueryAllAlertsResponse {
+    repeated bytes serialized_alerts = 1;
+}
+
+message AlertWeightInfo {
+    optional int32 popup_weight = 1;
+    optional double popup_distance = 2;
+    
+    reserved 3, 4, 5, 6;
+}
+
+message MaybeRemoveBlockAlertRequest {
+    option deprecated = true;
+    optional linqmap.proto.Coordinate coord = 1;
+    repeated rtcommon.SegmentDirectionID segment_direction_id = 2;
+    optional int64 pass_time = 3;
+    optional double speed = 4;
+    optional int32 rolling_window_speed_count = 5 [deprecated = true];
+}
+
+message RecalcBlocksRequest {
+    optional linqmap.proto.Coordinate coord = 1;
+    repeated string area_id = 2;
+    repeated rtcommon.SegmentDirectionID blocked_segments = 3;
+    repeated rtcommon.SegmentDirectionID unblocked_segments = 4;
+    repeated rtcommon.SegmentDirectionID blocked_segments_without_block_alerts = 5;
+    repeated rtcommon.TurnDirectionId blocked_turns = 6;
+    repeated rtcommon.TurnDirectionId unblocked_turns = 7;
+    repeated rtcommon.TurnDirectionId blocked_turns_without_block_alerts = 8;
+}
+
+message MemDumpRequest {
+    optional double factor = 1;
+    optional bool only_public = 2;
+    repeated string area_id = 3;
+}
+
+message RemoveUserAlerts {
+    optional int64 dbid = 1;
+    optional bool confirm = 2;
+}
+
+message RemoveUserFromAbusers {
+    optional int64 dbid = 1;
+    optional bool confirm = 2;
+}
+
+message DebugAlertsRequest {
+    optional UserCommonInfo user_info = 1;
+    optional DebugOption debug = 2;
+}
+
+message DebugAlertsSessionResponse {
+    optional rtcommon.UserPosition road_closed_question_stored_location = 1;
+    optional bool forced_road_closed_question = 2;
+}
+
+message DebugAlertsResponse {
+    optional DebugAlertsSessionResponse session = 1;
+}
+
+message DebugForceClosureSuspensionCheckRequest {
+    optional string closure_id = 1;
+}
+
+message CreateAbuserRecordRequest {
+    optional int64 abuser = 1;
+    optional int64 reporter = 2;
+}
+
+message RemoveAbuserRecordRequest {
+    optional int64 abuser = 1;
+    optional int64 reporter = 2;
+}
+
+message IsAbuserRequest {
+    optional int64 abuser = 1;
+}
+
+message IsAbuserResponse {
+    optional bool is_abuser = 1;
+}
+
+message FeedAlert {
+    optional int64 id = 1;
+    optional linqmap.proto.Coordinate coordinate = 3;
+    optional int64 segment_id = 4;
+    optional int64 from_node_id = 5;
+    optional int64 to_node_id = 6;
+    optional bool both_directions = 7;
+    optional AlertType type = 8;
+    optional AlertSubType subtype = 9;
+    optional string description = 10;
+    optional bool waze_relevant = 11;
+    optional string extra_info = 12;
+    optional string other_type = 13;
+    optional string credits = 14;
+    optional int64 start_time = 15;
+    optional int64 expected_end_time = 16;
+    repeated WeekDaySchedule daily_hours = 17;
+    optional string group_icon = 18 [deprecated = true];
+    optional bool cannotBeShared = 19;
+    optional int64 external_id = 20;
+    optional Enums.ReportingContext reporting_context = 22;
+    optional bool is_test_flow = 24;
+}
+
+message WeekDaySchedule {
+    optional int32 weekday = 1;
+    repeated DailySchedule schedule = 2;
+}
+
+message DailySchedule {
+    optional int32 from_minutes = 1;
+    optional int32 to_minutes = 2;
+}
+
+message ComparePhMemoryDataToPhDbDataRequest {
+    repeated AlertSubType sub_types = 1;
+}
+
+message ComparePhMemoryDataToPhDbDataResult {
+    optional int32 num_different_alerts_values = 1;
+    optional int32 num_same_alerts_values = 2;
+    optional int32 num_missing_alerts = 3;
+    optional int32 num_of_compared_alerts = 4;
+}
+
+message LoadPermanentHazardsDataRequest {
+    optional bool force_load = 1 [default = false];
+    optional int64 tile_version = 2;
+    repeated AlertSubType force_updated_sub_types = 3;
+    
+    optional LoadPermanentDataType load_permanent_data_type = 4 [default = LOAD_PERMANENT_DATA_ALL];
+    enum LoadPermanentDataType {
+        LOAD_PERMANENT_DATA_UNKNOWN = 0;
+        LOAD_PERMANENT_DATA_ALL = 1;
+        LOAD_PERMANENT_DATA_PERMANENT_HAZARD_ONLY = 2;
+        LOAD_PERMANENT_DATA_PERMANENT_SCHEDULES_ONLY = 3;
+    }
+    
+    optional bool dry_run = 5;
+    repeated string permanent_hazard_ids = 6;
+}
+
+message LoadPermanentHazardsDataResponse {
+    optional string loaded_version = 1;
+    optional bool is_last_version_loaded = 2;
+    optional int32 num_new_ph_entries = 3;
+    optional int32 num_updated_ph_entries = 4;
+    optional int32 num_deleted_ph_entries = 5;
+    optional int32 num_failed_to_be_processed_ph_entries = 7;
+    optional int32 num_skipped_ph_entries = 8;
+    optional int32 num_not_changed_ph_entries = 9;
+    optional bool ph_loaded_successfully = 10;
+    optional NotLoadingReason not_loading_reason = 6;
+    optional int32 num_above_operations_limit_ph_entries = 11;
+    optional bool schedules_loaded_successfully = 12;
+    optional int32 number_of_schedules_loaded = 13;
+    optional bool dry_run = 14;
+}
+
+message LoadCrashProneSegmentsDataRequest {
+    optional linqmap.proto.Date current_date = 1;
+    optional PartOfDay current_part_of_day = 2;
+    repeated linqmap.proto.Environment environment = 3;
+}
+
+message LoadCrashProneSegmentsDataResponse {
+    repeated LoadingResults loading_results = 1;
+}
+
+message LoadingResults {
+    optional linqmap.proto.Date date = 1;
+    optional PartOfDay part_of_day = 2;
+    optional linqmap.proto.Environment environment = 3;
+    optional bool is_recent_load = 4;
+    optional int32 num_of_entries = 5;
+    optional bool is_fallback_data = 6;
+}
+
+message SetCrashProneQaDataRequest {
+    optional linqmap.proto.Date date = 1;
+    optional PartOfDay part_of_day = 2;
+    repeated SegmentData segment_to_add = 3;
+    repeated SegmentData segment_to_remove = 4;
+}
+
+message SegmentData {
+    optional int32 segment_id = 1;
+    optional int32 from_node = 2;
+    optional int32 to_node = 3;
+    optional string road_type = 4;
+    optional double score = 5;
+    optional double score_percentile = 6;
+    optional string score_percentile_context = 7;
+}
+
+message SetCrashProneQaDataResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message SessionEventResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message AlerterShownRequestWrapper {
+    optional AlerterShownRequest request = 1;
+    optional AlerterShownRequestSessionData session = 2;
+}
+
+message AlerterShownRequestSessionData {
+    optional int64 user_id = 1;
+}
+
+message AlerterShownResponseWrapper {
+    optional AlerterShownResponse response = 1;
+}
+
+message CommonInfo {
+    optional bool is_initialized = 2;
+    optional string sos_alert_id = 5;
+    optional ReportedAlerts reported_alerts = 6;
+    optional ReportedAlerts private_pings = 7;
+    optional Alerts displayed_alerts = 8;
+    
+    reserved 4;
+}
+
+message CommonSession {
+    optional bool is_initialized = 2;
+    optional string parked_alert_id = 4 [deprecated = true];
+    optional string sos_alert_id = 5;
+    optional ReportedAlerts reported_alerts = 6;
+    optional ReportedAlerts private_pings = 7;
+    optional Alerts displayed_alerts = 8;
+    repeated int32 delete_field = 100;
+}
+
+message LastCalculatedAlertsSessionData {
+    repeated int64 speed_limit_decrease_alert_ids = 1;
+    repeated int64 permanent_hazards_alert_ids = 2;
+    repeated int64 cameras_alert_ids = 3;
+    repeated string speed_limit_decrease_alert_uuids = 4;
+    repeated string permanent_hazards_alert_uuids = 5;
+    repeated string cameras_alert_uuids = 6;
+}
+
+message LastCalculatedAlertsSessionUpdates {
+    repeated int64 speed_limit_decrease_alert_ids = 1;
+    repeated int64 permanent_hazards_alert_ids = 2;
+    repeated int64 cameras_alert_ids = 3;
+    repeated string speed_limit_decrease_alert_uuids = 4;
+    repeated string permanent_hazards_alert_uuids = 5;
+    repeated string cameras_alert_uuids = 6;
+}
+
+message SpeedLimitDecreaseRequestConfig {
+    optional bool enable_sld_alerts = 1;
+    optional int32 sld_min_speed_decrease_in_kmph = 2;
+    optional int32 sld_familiarity_capping_num_of_days = 3;
+    optional int32 sld_familiarity_capping_max_num_of_alerts = 4;
+}
+
+message PermanentHazardsRequestConfig {
+    optional bool enable_permanent_hazards_capping_by_distance = 1;
+    repeated linqmap.proto.StringLongEntry min_permanent_hazards_distance_in_meters_by_subtype = 2;
+    optional bool enable_permanent_hazards_surfacing = 3;
+    repeated linqmap.proto.StringIntegerEntry ph_familiarity_capping_num_of_days = 4;
+    repeated linqmap.proto.StringIntegerEntry ph_familiarity_capping_max_num_of_alerts = 5;
+    optional bool enable_school_zone_permanent_hazards_surfacing = 6;
+}
+
+message SendUgcMonthlySummaryEmailRequest {
+    optional int64 user_id = 1;
+}
+
+message CamerasRequestConfig {
+    repeated linqmap.proto.StringBoolEntry is_camera_detection_type_enabled = 1;
+    repeated linqmap.proto.StringLongEntry min_cameras_grouping_distance_in_meters_by_detection_type = 2;
+}
+
+message SendUgcMonthlySummaryEmailResponse {
+    
+}
+
+message ReportAlertCommentRequestWrapper {
+    optional ReportAlertCommentRequest request = 1;
+    optional UserCommonInfo user_info = 2;
+}
+
+message ReportAlertCommentRequest {
+    optional string alert_uuid = 2;
+    optional string text = 3;
+}
+
+message ReportAlertCommentResponse {
+    optional linqmap.proto.Status status = 1;
+    optional int64 received_points_count = 2;
+    optional string title = 3;
+    optional string description = 4;
+}
+
+message ReportAlertCommentResponseWrapper {
+    optional ReportAlertCommentResponse response = 1;
+    optional UserAlertSessionResponse session = 2;
+}
+
+message ReportAbusiveCommentRequestWrapper {
+    optional ReportAbusiveCommentRequest request = 1;
+    optional UserCommonInfo user_info = 2;
+}
+
+message ReportAbusiveCommentRequest {
+    optional string alert_uuid = 1;
+    optional string comment_uuid = 2;
+}
+
+message ReportAbusiveCommentResponseWrapper {
+    repeated RemoveAlertAction response = 1;
+    optional ReportAbuseSessionResponse session = 2;
+}
+
+message ReportMapIssueRequest {
+    optional MapIssueType map_issue_type = 1;
+    optional rtcommon.MatchedGPSPosition user_position = 2;
+    optional string description = 3;
+    optional bool ur_disclaimer_shown = 4;
+}
+
+message ReportMapIssueRequestWrapper {
+    optional ReportMapIssueRequest request = 1;
+}
+
+message ReportMapIssueResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message ReportMapIssueResponseWrapper {
+    optional ReportMapIssueResponse response = 1;
+}
+
+message TruncateAlertsCommentsMaintenanceRequest {
+    optional string alert_id = 1;
+    optional int32 waiting_time_millis = 2;
+    optional bool perform_truncation = 3;
+    optional bool truncate_secondary_thumbsup = 4;
+}
+
+message TruncateAlertsCommentsMaintenanceResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message TruncateAlertsDeletedCommentsMaintenanceRequest {
+    optional string alert_id = 1;
+    optional bool perform_truncation = 2;
+}
+
+message TruncateAlertsDeletedCommentsMaintenanceResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+enum AlertOperationRC {
+    RC_OK = 0;
+    RC_USER_BLOCKED = 1;
+    RC_QUOTA_EXCEEDED = 2;
+}
+
+enum AlertDuration {
+    ALERT_DURATION_NONE = 0;
+    ALERT_DURATION_DONT_KNOW = 1;
+    ALERT_DURATION_LESS_THAN_AN_HOUR = 2;
+    ALERT_DURATION_SEVERAL_HOURS = 3;
+    ALERT_DURATION_ALL_DAY = 4;
+    ALERT_DURATION_SEVERAL_DAYS = 5;
+    ALERT_DURATION_LONG_TERM = 6;
+}
+
+enum CommunityPrivacyLevel {
+    NOTHING = 0;
+    CITY = 1;
+    STREET = 2;
+    NUMBER = 3;
+    FFU4 = 4;
+    FFU5 = 5;
+    FFU6 = 6;
+    FFU7 = 7;
+    FFU8 = 8;
+    FFU9 = 9;
+    ALL = 10;
+}
+
+enum AlertRemoveReason {
+    REASON_UNKNOWN = 0;
+    NOT_REMOVED = 1;
+    REMOVED_BY_SUPER_USER = 2;
+    REMOVE_ON_END_TIME = 3;
+    INVALID_LOCATION = 4;
+    THUMBED_DOWN = 5;
+    INACTIVE = 6;
+    REMOVED_BY_SYSTEM = 7;
+    REMOVE_USER_DATA = 8;
+    REMOVED_BY_REPORTER = 9;
+    SOS_TOO_FAR = 10;
+    CLOSURE_STOPPED = 11;
+    CLOSURE_REMOVED = 12;
+    EXPIRED = 13;
+    SYSTEM_LIMIT = 14;
+    JAM_REMOVED = 15;
+    JAM_CLEARED = 16;
+    INDEX_WAS_REMOVED = 17;
+    RECREATED = 18;
+    REMOVED_BY_MAP_EDITOR = 19;
+    PRIMARY_REMOVED = 20;
+}
+
+enum Sort {
+    NONE = 0;
+    CREATION = 1;
+    UPDATE = 2;
+}
+
+enum MetroIndexCategory {
+    CATEGORY_REGULAR = 1;
+    CATEGORY_FEED = 2;
+    CATEGORY_PARKED = 3;
+}
+
+enum NeedExtras {
+    NON_NEEDED = 1;
+    NEED_DESCRIPTION = 2;
+    NEED_PHOTO = 3;
+    NEED_COMMENTS = 4;
+    NEED_DESCRIPTION_AND_PHOTO = 5;
+    NEED_DESCRIPTION_AND_COMMENTS = 6;
+    NEED_PHOTO_AND_COMMENTS = 7;
+    NEED_DESCRIPTION_AND_PHOTO_AND_COMMENTS = 8;
+    NEED_PHOTO_OR_DESCRIPTION = 9;
+    NEED_PHOTO_OR_DESCRIPTION_AND_COMMENTS = 10;
+}
+
+enum DebugOption {
+    DEBUG_UNKNOWN = 0;
+    DEBUG_FORCE_ROAD_CLOSED_QUESTION = 1;
+    DEBUG_FORCE_ROAD_CLOSED_LOCATION = 2;
+}
+
+enum NotLoadingReason {
+    NOT_LOADING_REASON_UNKNOWN = 0;
+    LOADING_PH_GENERAL_ERROR = 1;
+    LOADING_PH_NO_NEWER_VERSION = 2;
+    LOADING_PH_REQUESTED_TILE_VERSION_NOT_FOUND = 3;
+    LOADING_PH_CANT_RESOLVE_CURRENT_TILE_VERSION = 4;
+    LOADING_PH_NOT_ENABLED = 5;
+}
+
+enum PartOfDay {
+    OTHER = 0;
+    MORNING = 1;
+    NOON = 2;
+    EVENING = 3;
+    NIGHT = 4;
+}

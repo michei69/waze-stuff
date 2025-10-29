@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PlacesNearDestinationShownStat {
+    string current_eta = 2;
+    LatLng destination_coordinates = 3;
+    string venue_id = 5;
+    
+    oneof _collapsed {
+        bool collapsed = 1;
+    }
+    
+    oneof _num_photos {
+        int64 num_photos = 4;
+    }
+}

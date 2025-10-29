@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package linqmap.proto.audit;
+
+import "AuditRecordingEnums.proto";
+
+option objc_class_prefix = "LPA";
+option java_package = "linqmap.proto.audit";
+
+message RecordEventRequest {
+    optional int64 user_id = 1;
+    optional string installation_id = 2;
+    optional string app_version = 3;
+    optional int32 device_id = 4;
+    optional Event event = 5;
+    optional string session_uuid = 6;
+}
+
+message Event {
+    optional WazeEventName name = 1;
+    optional EventContext context = 2;
+    repeated EventText text = 3;
+    optional string text_version = 4;
+    optional string locale = 6;
+    optional string system_locale = 8;
+    optional RecordEventValue value = 7;
+}
+
+message EventText {
+    optional int32 text_id = 1;
+    repeated string template_parameter = 2;
+}
+
+message RecordEventValue {
+    optional EventValue value = 1;
+    optional string selected_option = 2;
+}

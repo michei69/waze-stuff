@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum SearchCategoryGroup {
+    CATEGORY_UNSPECIFIED = 0;
+    CATEGORY_SAVED_PLACES = 1;
+    CATEGORY_DRIVE_THRU = 2;
+    CATEGORY_PARKING = 3;
+    CATEGORY_GAS_STATION = 4;
+    CATEGORY_FOOD = 5;
+    CATEGORY_MORE = 6;
+    CATEGORY_COFFEE = 7;
+    CATEGORY_SHOPPING = 8;
+    CATEGORY_PHARMACIES = 9;
+    CATEGORY_GROCERY_STORES = 10;
+    CATEGORY_CHARGING_STATION = 11;
+    CATEGORY_HOSPITAL_AND_MEDICAL_CARE = 12;
+    CATEGORY_HOTELS_AND_LODGING = 13;
+    CATEGORY_OUTDOOR_PARKS = 14;
+    CATEGORY_CRISIS_LOCATION = 15;
+}

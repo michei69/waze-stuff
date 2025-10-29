@@ -1,0 +1,234 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "FavoritesNativeManagerJniObjects.proto";
+import "Place.proto";
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message VenueData {
+    repeated VenueImage images = 7;
+    repeated string new_image_ids = 8;
+    repeated string categories = 13;
+    repeated string services = 14;
+    repeated OpeningHours opening_hours = 15;
+    repeated string aliases = 16;
+    repeated CandidateProduct products = 17;
+    
+    oneof _id {
+        string id = 1;
+    }
+    
+    oneof _name {
+        string name = 2;
+    }
+    
+    oneof _provider_id {
+        string provider_id = 3;
+    }
+    
+    oneof _is_updatable {
+        bool is_updatable = 4;
+    }
+    
+    oneof _is_residence {
+        bool is_residence = 5;
+    }
+    
+    oneof _has_more_data {
+        bool has_more_data = 6;
+    }
+    
+    oneof _address {
+        places.Address address = 9;
+    }
+    
+    oneof _brand_id {
+        string brand_id = 26;
+    }
+    
+    oneof _brand {
+        string brand = 10;
+    }
+    
+    oneof _details {
+        string details = 11;
+    }
+    
+    oneof _position {
+        IntPosition position = 12;
+    }
+    
+    oneof _about {
+        string about = 18;
+    }
+    
+    oneof _phone_number {
+        string phone_number = 19;
+    }
+    
+    oneof _website {
+        string website = 20;
+    }
+    
+    oneof _website_display_text {
+        string website_display_text = 21;
+    }
+    
+    oneof _venue_context {
+        string venue_context = 22;
+    }
+    
+    oneof _routing_context {
+        string routing_context = 23;
+    }
+    
+    oneof _reporter {
+        Reporter reporter = 24;
+    }
+    
+    oneof _updater {
+        Reporter updater = 25;
+    }
+    
+    oneof _ev_charging_venue {
+        EVChargingVenue ev_charging_venue = 27;
+    }
+    
+    oneof _rating {
+        double rating = 28;
+    }
+    
+    oneof _price_level {
+        int32 price_level = 29;
+    }
+    
+    oneof _business_status {
+        BusinessStatus business_status = 30;
+    }
+    
+    oneof _takeover_image {
+        string takeover_image = 31;
+    }
+    
+    oneof _takeover_label {
+        string takeover_label = 32;
+    }
+}
+
+message VenueImage {
+    oneof _url {
+        string url = 1;
+    }
+    
+    oneof _thumbnail_url {
+        string thumbnail_url = 2;
+    }
+    
+    oneof _reporter {
+        Reporter reporter = 3;
+    }
+    
+    oneof _liked {
+        bool liked = 4;
+    }
+    
+    oneof _by_me {
+        bool by_me = 5;
+    }
+}
+
+message OpeningHours {
+    repeated int32 days = 1;
+    
+    oneof _from {
+        string from = 2;
+    }
+    
+    oneof _to {
+        string to = 3;
+    }
+}
+
+message CandidateProduct {
+    oneof _id {
+        string id = 1;
+    }
+    
+    oneof _price {
+        float price = 2;
+    }
+    
+    oneof _last_updated {
+        int64 last_updated = 3;
+    }
+    
+    oneof _updated_by {
+        string updated_by = 4;
+    }
+}
+
+message Reporter {
+    oneof _name {
+        string name = 1;
+    }
+    
+    oneof _mood {
+        string mood = 2;
+    }
+}
+
+message EVChargingVenue {
+    repeated EVConnectorOverview ev_connector_overviews = 1;
+    message EVConnectorOverview {
+        oneof _ev_connector {
+            EVConnector ev_connector = 1;
+        }
+        
+        oneof _count {
+            int32 count = 2;
+        }
+        
+        oneof _max_power_kw {
+            float max_power_kw = 3;
+        }
+        
+        oneof _available_count {
+            int32 available_count = 4;
+        }
+    }
+    
+    repeated string payment_methods = 3;
+    
+    oneof _directions {
+        string directions = 2;
+    }
+    
+    oneof _restricted_access {
+        bool restricted_access = 4;
+    }
+    
+    message EVConnector {
+        oneof _type_id {
+            string type_id = 1;
+        }
+    }
+}
+
+message VenueOrPlace {
+    oneof endpoint {
+        VenueData venue = 1;
+        favorites.Favorite favorite = 2;
+        places.Place place = 3;
+    }
+}
+
+enum BusinessStatus {
+    BUSINESS_STATUS_UNSPECIFIED = 0;
+    OPERATIONAL = 1;
+    TEMPORARILY_CLOSED = 2;
+    PERMANENTLY_CLOSED = 3;
+}

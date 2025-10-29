@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package linqmap.proto.map_data;
+
+message Coordinate {
+    int32 lon_times_1000000 = 101;
+    int32 lat_times_1000000 = 102;
+}
+
+message RailroadCrossing {
+    Coordinate position = 1;
+    int32 line_id = 2;
+    SegmentDirection direction = 3;
+}
+
+message Camera {
+    repeated CameraType camera_types = 1;
+    enum CameraType {
+        CAMERA_TYPE_UNSPECIFIED = 0;
+        SPEED = 1;
+        RED_LIGHT = 2;
+        DUMMY = 3;
+        SEATBELT = 4;
+        MOBILE_PHONE = 5;
+        STOP = 6;
+        NOISE = 7;
+        DISTANCE = 8;
+        CARPOOL_LANE = 9;
+        BUS_LANE = 10;
+        HOV_LANE = 11;
+    }
+    
+    Coordinate position = 2;
+    int32 line_id = 3;
+    SegmentDirection direction = 4;
+}
+
+message DangerousCurve {
+    Coordinate position = 1;
+    int32 line_id = 2;
+    SegmentDirection direction = 3;
+}
+
+message DangerousIntersection {
+    Coordinate position = 1;
+    int32 line_id = 2;
+    SegmentDirection direction = 3;
+}
+
+message DangerousMerge {
+    Coordinate position = 1;
+    int32 line_id = 2;
+    SegmentDirection direction = 3;
+}
+
+message SpeedBump {
+    repeated SpeedBumpType speed_bump_types = 1;
+    enum SpeedBumpType {
+        SPEED_BUMP_TYPE_UNSPECIFIED = 0;
+        DANGEROUS = 1;
+    }
+    
+    Coordinate position = 2;
+    int32 line_id = 3;
+    SegmentDirection direction = 4;
+}
+
+message TollBooth {
+    Coordinate position = 2;
+    int32 line_id = 3;
+    SegmentDirection direction = 4;
+}
+
+message MapFeature {
+    int64 id = 1;
+    
+    oneof feature {
+        Camera camera = 2;
+        RailroadCrossing railroad_crossing = 3;
+        TollBooth toll_booth = 4;
+        SpeedBump speed_bump = 5;
+        DangerousCurve dangerous_curve = 6;
+        DangerousIntersection dangerous_intersection = 7;
+        DangerousMerge dangerous_merge = 8;
+    }
+}
+
+enum SegmentDirection {
+    DIRECTION_UNSPECIFIED = 0;
+    FWD = 1;
+    REV = 2;
+    BOTH = 3;
+}

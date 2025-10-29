@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/conversational_reporting_mode.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ConversationalReportingFteHintShownStat {
+    ConversationalReportingMode mode = 1;
+    
+    HintCopyVariant hint_copy_variant = 2;
+    enum HintCopyVariant {
+        VARIANT_UNSPECIFIED = 0;
+        VARIANT_A = 1;
+        VARIANT_B = 2;
+    }
+}

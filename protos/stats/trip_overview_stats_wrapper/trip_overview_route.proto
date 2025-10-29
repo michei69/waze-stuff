@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/eta_stats_wrapper/hov_information.proto";
+import "stats/reusable_types/alerter_info.proto";
+import "stats/reusable_types/route_insight_type.proto";
+import "stats/reusable_types/toll_information.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewRoute {
+    repeated RouteInsightType insights = 1;
+    repeated AlerterInfo alerts = 2;
+    TollInformation toll_information = 4;
+    HovInformation hov_information = 5;
+    string alternative_route_uuid = 7;
+    
+    oneof _ghg_emission_shown {
+        bool ghg_emission_shown = 3;
+    }
+    
+    oneof _route_alt_id {
+        int64 route_alt_id = 6;
+    }
+    
+    oneof _is_best {
+        bool is_best = 8;
+    }
+    
+    oneof _is_preferred {
+        bool is_preferred = 9;
+    }
+}

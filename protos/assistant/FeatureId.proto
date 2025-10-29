@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+package waze.geostore;
+
+message FeatureId {
+    optional fixed64 cell_id = 1;
+    optional fixed64 fprint = 2;
+}

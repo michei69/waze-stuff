@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum GoogleAssistantOnboardingTriggeringFlow {
+    GOOGLE_ASSISTANT_ONBOARDING_TRIGGERING_FLOW_UNSPECIFIED = 0;
+    GOOGLE_ASSISTANT_ONBOARDING_TRIGGERING_FLOW_STARTUP = 1;
+    GOOGLE_ASSISTANT_ONBOARDING_TRIGGERING_FLOW_MIC = 2;
+    GOOGLE_ASSISTANT_ONBOARDING_TRIGGERING_FLOW_SETTINGS = 3;
+}

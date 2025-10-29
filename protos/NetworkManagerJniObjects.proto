@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message MessageRequestMetadata {
+    string url = 1;
+    string type = 2;
+    int32 transaction_id = 3;
+    MessageAuthType auth_type = 4;
+    uint64 context = 5;
+    TransactionQueueId queue_id = 6;
+    
+    oneof _priority {
+        MessagePriority priority = 7;
+    }
+}
+
+message TransactionStatsMessage {
+    int32 queue_latency_ms = 1;
+    int32 retries = 4;
+    TransactionQueueId queue_id = 8;
+    
+    oneof _server_processing_latency_ms {
+        int32 server_processing_latency_ms = 2;
+    }
+    
+    oneof _network_latency_ms {
+        int32 network_latency_ms = 3;
+    }
+    
+    oneof _priority {
+        MessagePriority priority = 5;
+    }
+    
+    oneof _request_size_bytes {
+        int32 request_size_bytes = 6;
+    }
+    
+    oneof _response_size_bytes {
+        int32 response_size_bytes = 7;
+    }
+}
+
+message ResultStructMessage {
+    int32 code = 1;
+    string title = 2;
+    string body = 3;
+    string action = 4;
+    string deepLink = 5;
+    bool showAsToast = 6;
+    bool hideCloseButton = 7;
+    bool terminal = 8;
+    string analytics = 9;
+    string errorCode = 10;
+    TransactionStatsMessage stats = 11;
+}
+
+enum TransactionQueueId {
+    General = 0;
+    Routing = 1;
+    Background = 2;
+    Register = 3;
+    DriveSuggestions = 4;
+    GeoConfig = 5;
+    Username = 6;
+    RoutingUpdate = 7;
+}
+
+enum MessagePriority {
+    USER_AWAITING = 0;
+    USER_VISIBLE = 1;
+    DATA_FETCH = 2;
+    DATA_SEND = 3;
+}
+
+enum MessageAuthType {
+    SESSION = 0;
+    SESSION_OR_OFFLINE = 1;
+    CLIENT_INFO = 2;
+}

@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/app_lifecycle_stats_wrapper/first_use_stat.proto";
+import "stats/unauthenticated_stats/account_not_found_error_clicked_stat.proto";
+import "stats/unauthenticated_stats/account_not_found_error_shown_stat.proto";
+import "stats/unauthenticated_stats/account_recovery_from_icloud_attempt_stat.proto";
+import "stats/unauthenticated_stats/account_recovery_result_stat.proto";
+import "stats/unauthenticated_stats/age_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/age_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/choose_between_accounts_confirmation_clicked_stat.proto";
+import "stats/unauthenticated_stats/choose_between_accounts_confirmation_shown_stat.proto";
+import "stats/unauthenticated_stats/choose_between_accounts_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/choose_between_accounts_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/email_is_already_used_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/email_is_already_used_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/email_verification_error_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/email_verification_error_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/email_verification_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/email_verification_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/gdpr_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/gdpr_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/nd4c_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/nd4c_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/onboarding_completed_stat.proto";
+import "stats/unauthenticated_stats/qr_code_login_shown_stat.proto";
+import "stats/unauthenticated_stats/sign_up_sheet_clicked_stat.proto";
+import "stats/unauthenticated_stats/sign_up_sheet_shown_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_popup_clicked_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_popup_shown_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/welcome_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/welcome_screen_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WazeAppUnauthenticatedPayload {
+    oneof stat {
+        WelcomeScreenShownStat welcome_screen_shown = 1;
+        FirstUseStat first_use = 2;
+        QrCodeLoginShownStat qr_code_login_shown = 3;
+        WelcomeScreenClickedStat welcome_screen_clicked = 4;
+        GdprScreenShownStat gdpr_screen_shown = 5;
+        GdprScreenClickedStat gdpr_screen_clicked = 6;
+        AgeScreenShownStat age_screen_shown = 7;
+        AgeScreenClickedStat age_screen_clicked = 8;
+        UserAgeWarningPopupShownStat user_age_warning_popup_shown = 9;
+        UserAgeWarningPopupClickedStat user_age_warning_popup_clicked = 10;
+        UserAgeWarningScreenShownStat user_age_warning_screen_shown = 11;
+        UserAgeWarningScreenClickedStat user_age_warning_screen_clicked = 12;
+        AccountRecoveryFromIcloudAttemptStat account_recovery_from_icloud_attempt = 13;
+        AccountRecoveryResultStat account_recovery_result = 14;
+        SignUpSheetShownStat sign_up_sheet_shown = 15;
+        SignUpSheetClickedStat sign_up_sheet_clicked = 16;
+        OnboardingCompletedStat onboarding_completed = 17;
+        AccountNotFoundErrorShownStat account_not_found_error_shown = 18;
+        AccountNotFoundErrorClickedStat account_not_found_error_clicked = 19;
+        Nd4cScreenShownStat nd4c_screen_shown = 20;
+        Nd4cScreenClickedStat nd4c_screen_clicked = 21;
+        EmailIsAlreadyUsedScreenShownStat email_is_already_used_screen_shown = 22;
+        EmailIsAlreadyUsedScreenClickedStat email_is_already_used_screen_clicked = 23;
+        EmailVerificationScreenShownStat email_verification_screen_shown = 24;
+        EmailVerificationScreenClickedStat email_verification_screen_clicked = 25;
+        ChooseBetweenAccountsScreenShownStat choose_between_accounts_screen_shown = 26;
+        ChooseBetweenAccountsScreenClickedStat choose_between_accounts_screen_clicked = 27;
+        ChooseBetweenAccountsConfirmationShownStat choose_between_accounts_confirmation_shown = 28;
+        ChooseBetweenAccountsConfirmationClickedStat choose_between_accounts_confirmation_clicked = 29;
+        EmailVerificationErrorScreenShownStat email_verification_error_screen_shown = 30;
+        EmailVerificationErrorScreenClickedStat email_verification_error_screen_clicked = 31;
+    }
+}

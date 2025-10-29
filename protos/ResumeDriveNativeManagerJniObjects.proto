@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "GenericPlace.proto";
+import "VenueData.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message GenericPlaceOrVenueData {
+    oneof destination {
+        places.GenericPlace place = 1;
+        VenueData venue = 2;
+    }
+}

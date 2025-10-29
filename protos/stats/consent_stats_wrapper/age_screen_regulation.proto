@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum AgeScreenRegulation {
+    AGE_SCREEN_REGULATION_UNSPECIFIED = 0;
+    AGE_SCREEN_REGULATION_AADC = 1;
+    AGE_SCREEN_REGULATION_U18 = 2;
+}

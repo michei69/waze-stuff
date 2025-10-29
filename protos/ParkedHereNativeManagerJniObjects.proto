@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message ParkedHere {
+    int32 latitude = 1;
+    int32 longitude = 2;
+    ParkedHereSetReason reason = 3;
+    bool visible = 4;
+}
+
+enum ParkedHereSetReason {
+    UNSPECIFIED = 0;
+    AUTO_DETECTED = 1;
+    MANUALLY = 2;
+    MANUALLY_PARK_NOW = 3;
+    LOCATION_EDITED = 4;
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "RoutingCommand.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message AlternativeRoutesRequest {
+    optional RoutingRequest routing_request = 1;
+    optional bool return_only_safety_incident_free_alternatives = 2;
+}
+
+message AlternativeRoutesResponse {
+    optional RoutingResponse alternative_routes = 3;
+    
+    oneof current_route {
+        RoutingUpdate routing_update = 1;
+        SuggestReroute silent_reroute_suggestion = 2;
+    }
+}

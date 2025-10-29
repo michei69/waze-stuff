@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum InsightAvailableClickOptions {
+    INSIGHT_AVAILABLE_CLICK_OPTIONS_UNSPECIFIED = 0;
+    GENERIC_CLICK_OPTION = 1;
+    CLOSE = 2;
+    REROUTE_SUGGESTION_DEFAULT_ACCEPT = 3;
+    REROUTE_SUGGESTION_DEFAULT_DECLINE = 4;
+}

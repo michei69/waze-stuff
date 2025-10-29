@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ClosureSegmentClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        SELECTED = 1;
+    }
+    
+    oneof _from_node {
+        sint64 from_node = 2;
+    }
+    
+    oneof _to_node {
+        sint64 to_node = 3;
+    }
+    
+    oneof _level {
+        int64 level = 4;
+    }
+}

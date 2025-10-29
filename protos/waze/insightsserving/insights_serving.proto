@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package waze.insightsserving;
+
+import "waze/insightsserving/client/configurations/insight_client_configurations.proto";
+import "waze/insightsserving/client/questions/triggers.proto";
+import "waze/insightsserving/client/questions/questions.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "InsightsServingProto";
+option java_package = "com.waze.insightsserving.proto";
+
+message GetInsightConfigurationsRequest {
+    
+}
+
+message GetInsightConfigurationsResponse {
+    oneof _insight_configurations {
+        client.configurations.InsightConfigurations insight_configurations = 1;
+    }
+}
+
+message GetQuestionByTriggerRequest {
+    oneof _trigger {
+        client.questions.Trigger trigger = 1;
+    }
+}
+
+message GetQuestionByTriggerResponse {
+    oneof _question {
+        client.questions.Question question = 1;
+    }
+}

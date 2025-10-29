@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package waze.assistant.api.params;
+
+option java_outer_classname = "NavigationAppParamsProto";
+option java_package = "com.google.assistant.api.params.proto";
+
+message NavigationAppParam {
+    optional NavigationState navigation_state = 1;
+    enum NavigationState {
+        NAVIGATION_STATE_UNSPECIFIED = 0;
+        NO_NAVIGATION = 1;
+        ACTIVE_NAVIGATION_WITH_DESTINATION = 2;
+        ACTIVE_NAVIGATION_WITH_NO_DESTINATION = 3;
+    }
+    
+    optional LocationAliasState home_alias_state = 2;
+    enum LocationAliasState {
+        LOCATION_ALIAS_STATE_UNSPECIFIED = 0;
+        LOCATION_ALIAS_SET_IN_APP = 1;
+        LOCATION_ALIAS_UNSET_IN_APP = 2;
+    }
+    
+    optional LocationAliasState work_alias_state = 3;
+    optional int64 final_destination_arrival_timestamp_seconds = 4;
+    
+    optional DrivingInfoConsentState driving_info_consent_state = 6;
+    enum DrivingInfoConsentState {
+        USER_CONSENT_STATE_UNKNOWN = 0;
+        USER_HAS_GIVEN_CONSENT_FOR_DRIVING_INFO_SHARING = 1;
+        USER_HAS_NOT_GIVEN_CONSENT_FOR_DRIVING_INFO_SHARING = 2;
+    }
+}

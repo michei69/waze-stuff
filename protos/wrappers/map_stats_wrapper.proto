@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/map_stats_wrapper/frame_render_time_above_threshold_stat.proto";
+import "stats/map_stats_wrapper/map_compass_button_clicked_stat.proto";
+import "stats/map_stats_wrapper/map_first_frame_rendered_stat.proto";
+import "stats/map_stats_wrapper/map_frame_render_latency_stat.proto";
+import "stats/map_stats_wrapper/map_object_density_stat.proto";
+import "stats/map_stats_wrapper/map_panned_via_gesture_stat.proto";
+import "stats/map_stats_wrapper/map_placeholder_hidden_stat.proto";
+import "stats/map_stats_wrapper/map_placeholder_shown_stat.proto";
+import "stats/map_stats_wrapper/map_rendering_engine_completed_loading_stat.proto";
+import "stats/map_stats_wrapper/map_rendering_engine_started_loading_stat.proto";
+import "stats/map_stats_wrapper/map_shown_and_ready_stat.proto";
+import "stats/map_stats_wrapper/map_zoom_button_clicked_stat.proto";
+import "stats/map_stats_wrapper/map_zoomed_in_via_double_tap_gesture_stat.proto";
+import "stats/map_stats_wrapper/map_zoomed_out_via_dual_tap_gesture_stat.proto";
+import "stats/map_stats_wrapper/map_zoomed_via_gesture_pinch_stat.proto";
+import "stats/map_stats_wrapper/pin_clicked_stat.proto";
+import "stats/map_stats_wrapper/pin_popup_clicked_stat.proto";
+import "stats/map_stats_wrapper/polygon_render_error_stat.proto";
+import "stats/map_stats_wrapper/speedometer_speed_limit_reached_shown_stat.proto";
+import "stats/map_stats_wrapper/tile_batch_downloaded_stat.proto";
+import "stats/map_stats_wrapper/tile_download_error_stat.proto";
+import "stats/map_stats_wrapper/tile_inconsistency_stat.proto";
+import "stats/map_stats_wrapper/tile_latency_stat.proto";
+import "stats/map_stats_wrapper/tile_parsing_error_stat.proto";
+import "stats/map_stats_wrapper/total_downloaded_tiles_size_changed_stat.proto";
+import "stats/map_stats_wrapper/transport_sdk_button_clicked_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MapStatsWrapper {
+    oneof stat {
+        TileLatencyStat tile_latency = 1;
+        MapZoomedOutViaDualTapGestureStat map_zoomed_out_via_dual_tap_gesture = 2;
+        MapZoomedInViaDoubleTapGestureStat map_zoomed_in_via_double_tap_gesture = 3;
+        FrameRenderTimeAboveThresholdStat frame_render_time_above_threshold = 4;
+        MapObjectDensityStat map_object_density = 5;
+        MapPannedViaGestureStat map_panned_via_gesture = 6;
+        MapZoomedViaGesturePinchStat map_zoomed_via_gesture_pinch = 7;
+        TileDownloadErrorStat tile_download_error = 8;
+        MapShownAndReadyStat map_shown_and_ready = 9;
+        SpeedometerSpeedLimitReachedShownStat speedometer_speed_limit_reached_shown = 10;
+        TileBatchDownloadedStat tile_batch_downloaded = 11;
+        TotalDownloadedTilesSizeChangedStat total_downloaded_tiles_size_changed = 12;
+        PinClickedStat pin_clicked = 13;
+        PinPopupClickedStat pin_popup_clicked = 14;
+        TileInconsistencyStat tile_inconsistency = 15;
+        TileParsingErrorStat tile_parsing_error = 16;
+        PolygonRenderErrorStat polygon_render_error = 17;
+        MapPlaceholderShownStat map_placeholder_shown = 18;
+        MapPlaceholderHiddenStat map_placeholder_hidden = 19;
+        MapRenderingEngineStartedLoadingStat map_rendering_engine_started_loading = 20;
+        MapRenderingEngineCompletedLoadingStat map_rendering_engine_completed_loading = 21;
+        MapZoomButtonClickedStat map_zoom_button_clicked = 22;
+        MapCompassButtonClickedStat map_compass_button_clicked = 23;
+        TransportSdkButtonClickedStat transport_sdk_button_clicked = 24;
+        MapFrameRenderLatencyStat map_frame_render_latency = 25;
+        MapFirstFrameRenderedStat map_first_frame_rendered = 26;
+    }
+}

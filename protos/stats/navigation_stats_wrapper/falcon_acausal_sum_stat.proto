@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message FalconAcausalSumStat {
+    oneof _on_path_probability {
+        double on_path_probability = 1;
+    }
+    
+    oneof _off_path_probability {
+        double off_path_probability = 2;
+    }
+    
+    oneof _unresolved_probability {
+        double unresolved_probability = 3;
+    }
+    
+    oneof _mode_on_path_seconds {
+        double mode_on_path_seconds = 4;
+    }
+    
+    oneof _mode_off_path_seconds {
+        double mode_off_path_seconds = 5;
+    }
+    
+    oneof _off_road_seconds {
+        double off_road_seconds = 6;
+    }
+    
+    oneof _unresolved_seconds {
+        double unresolved_seconds = 7;
+    }
+    
+    oneof _mode_alternate_path_seconds {
+        double mode_alternate_path_seconds = 8;
+    }
+    
+    oneof _off_road_reroutes {
+        int64 off_road_reroutes = 9;
+    }
+    
+    oneof _off_path_reroutes {
+        int64 off_path_reroutes = 10;
+    }
+    
+    oneof _on_path_reroutes {
+        int64 on_path_reroutes = 11;
+    }
+    
+    oneof _unresolved_reroutes {
+        int64 unresolved_reroutes = 12;
+    }
+    
+    oneof _alternate_path_reroutes {
+        int64 alternate_path_reroutes = 13;
+    }
+}

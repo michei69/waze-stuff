@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SchedulePlannedDriveScreenClickedStat {
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BACK = 1;
+        SAVE = 2;
+    }
+    
+    FromLocation from_location = 3;
+    enum FromLocation {
+        FROM_LOCATION_UNSPECIFIED = 0;
+        CURRENT = 1;
+        CHANGED = 2;
+    }
+    
+    oneof _days_ahead {
+        int64 days_ahead = 1;
+    }
+}

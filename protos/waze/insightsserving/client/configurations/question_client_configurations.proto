@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+import "waze/insightsserving/client/configurations/common_client_configurations.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "WazeAsksClientConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message QuestionConfiguration {
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 1;
+    }
+}
+
+message TriggeredQuestionPolicy {
+    oneof _is_active {
+        bool is_active = 1;
+    }
+}
+
+message InsightQuestionTriggerPolicy {
+    oneof _trigger_question_policy {
+        TriggeredQuestionPolicy trigger_question_policy = 1;
+    }
+}

@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "LocationNativeManagerJniObjects.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message RtAlertItem {
+    int32 id = 1;
+    
+    Type type = 2;
+    enum Type {
+        CHIT_CHAT = 0;
+        INVALID = -1;
+        POLICE = 1;
+        ACCIDENT = 2;
+        TRAFFIC_JAM = 3;
+        TRAFFIC_INFO = 4;
+        HAZARD = 5;
+        OTHER = 6;
+        CONSTRUCTION = 7;
+        PARKING = 8;
+        DYNAMIC = 9;
+        CAMERA = 10;
+        PARKED = 11;
+        CLOSURE = 12;
+        SOS = 15;
+        REROUTE = 16;
+        GUARDIAN = 17;
+        ECO = 18;
+        BLOCKED_LANE = 19;
+        BAD_WEATHER = 20;
+        PERMANENT_HAZARD = 21;
+        SPEED_LIMIT_DECREASE = 22;
+        TURN_CLOSURE = 23;
+        PERSONAL_SAFETY = 24;
+        DANGER_ZONE = 25;
+    }
+    
+    string title = 3;
+    string icon = 4;
+    string location_str = 5;
+    string description = 8;
+    string distance_str = 12;
+    int32 distance = 13;
+    string unit = 14;
+    bool is_auto_jam = 17;
+    bool is_alert_by_me = 18;
+    bool is_thumbs_up_by_me = 19;
+    bool is_alert_on_route = 20;
+    int32 num_comments = 21;
+    int32 num_thumbs_up = 22;
+    int32 screen_x = 23;
+    int32 screen_y = 24;
+    string mood_name = 25;
+    string time_on_route = 26;
+    int32 background_color = 27;
+    
+    oneof _longitude {
+        int32 longitude = 6;
+    }
+    
+    oneof _latitude {
+        int32 latitude = 7;
+    }
+    
+    oneof _time_relative {
+        string time_relative = 9;
+    }
+    
+    oneof _time_stamp_sec {
+        int32 time_stamp_sec = 10;
+    }
+    
+    oneof _reported_by {
+        string reported_by = 11;
+    }
+    
+    oneof _image_id {
+        string image_id = 15;
+    }
+    
+    oneof _image_url {
+        string image_url = 16;
+    }
+    
+    oneof _is_commenting_allowed {
+        bool is_commenting_allowed = 28;
+    }
+    
+    oneof _is_liking_allowed {
+        bool is_liking_allowed = 29;
+    }
+}
+
+message RtAlertItemList {
+    repeated RtAlertItem rtAlertItem = 1;
+}
+
+message ReportLocationProto {
+    oneof _position {
+        ProviderPosition position = 1;
+    }
+    
+    oneof _from_node_db_id {
+        int64 from_node_db_id = 2;
+    }
+    
+    oneof _to_node_db_id {
+        int64 to_node_db_id = 3;
+    }
+}

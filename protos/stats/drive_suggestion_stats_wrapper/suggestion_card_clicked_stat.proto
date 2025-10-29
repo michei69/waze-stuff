@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/drive_suggestion_stats_wrapper/suggestion_card.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_button_cta.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_timer_behavior.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SuggestionCardClickedStat {
+    SuggestionCardTimerBehavior timer_behavior = 1;
+    SuggestionCardButtonCta button_cta = 2;
+    SuggestionCard suggestion_card = 3;
+    
+    Action action = 4;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        GO = 1;
+        GO_TIMEOUT = 2;
+        CLOSE = 3;
+        INFO = 4;
+    }
+}

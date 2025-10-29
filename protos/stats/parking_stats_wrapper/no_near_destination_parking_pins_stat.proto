@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NoNearDestinationParkingPinsStat {
+    Reason reason = 2;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        CAR_WASH = 1;
+        CHARGING_STATION = 2;
+        GAS_STATION = 3;
+        PARKING_LOT = 4;
+        HOME = 5;
+        WORK = 6;
+        NO_RESULTS = 7;
+        NETWORK_ERROR = 8;
+    }
+    
+    oneof _error_code {
+        int64 error_code = 1;
+    }
+}

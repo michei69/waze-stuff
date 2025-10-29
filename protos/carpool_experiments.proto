@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package google.carpool;
+
+option objc_class_prefix = "CPP";
+option java_package = "com.google.ridematch.proto";
+
+message UserExperiments {
+    optional UnlockPrompt unlock_prompt = 1;
+    enum UnlockPrompt {
+        UNLOCK_PROMPT_UNSPECIFIED = 0;
+        UNLOCK_PROMPT_ONE_OFF = 1;
+        UNLOCK_PROMPT_AUTO_REQUEST = 2;
+    }
+    
+    optional BrowseFlow browse_flow = 2 [deprecated = true];
+    enum BrowseFlow {
+        BROWSE_FLOW_UNSPECIFIED = 0;
+        BROWSE_FLOW_OFF = 1;
+        BROWSE_FLOW_ON = 2;
+    }
+    
+    optional OnboardingFirstScreen onboarding_first_screen = 3;
+    enum OnboardingFirstScreen {
+        ONBOARDING_FIRST_SCREEN_UNSPECIFIED = 0;
+        ONBOARDING_FIRST_SCREEN_TUTORIAL = 1;
+        ONBOARDING_FIRST_SCREEN_TEST = 2;
+    }
+}

@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/eta_stats_wrapper/eta_drawer_navigation_type.proto";
+import "stats/eta_stats_wrapper/hov_information.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EtaDrawerClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        GO = 1;
+        GO_LATER = 2;
+        GO_TIMEOUT = 3;
+        OVERVIEW = 4;
+        SHARE = 5;
+        UNSHARE = 6;
+        STOP = 7;
+        GAS_WAYPOINT = 8;
+        FOOD_WAYPOINT = 9;
+        COFFEE_WAYPOINT = 10;
+        PARKING_WAYPOINT = 11;
+        SEARCH_WAYPOINT = 12;
+        EV_CHARGING_STATION_WAYPOINT = 13;
+        CLOSE = 14;
+        RESUME = 15;
+        SPECIAL_ROUTE_CARD = 16;
+        MANAGE_SOUNDS = 17;
+        SETTINGS = 18;
+        ALGO_TRANSPARENCY_LINK = 19;
+        ALTERNATIVE_ROUTES = 20;
+        SEARCH = 21;
+        EXIT_LOCK_SCREEN_NAVIGATION = 22;
+    }
+    
+    SpecialRouteType special_route_type = 2;
+    enum SpecialRouteType {
+        SPECIAL_ROUTE_TYPE_UNSPECIFIED = 0;
+        TOLL = 1;
+        HOV = 2;
+    }
+    
+    EtaDrawerNavigationType navigation_type = 3;
+    string venue_id = 4;
+    HovInformation hov_card_information = 5;
+    repeated SpecialRouteType displayed_special_routes = 7;
+    
+    oneof _share_suggestion_displayed {
+        bool share_suggestion_displayed = 6;
+    }
+    
+    oneof _drawer_open {
+        bool drawer_open = 8;
+    }
+    
+    oneof _lock_screen_mode {
+        bool lock_screen_mode = 9;
+    }
+}

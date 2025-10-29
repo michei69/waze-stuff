@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/beacon_stats_wrapper/beacon_data_stat.proto";
+import "stats/beacon_stats_wrapper/beacon_telemetry_stat.proto";
+import "stats/beacon_stats_wrapper/beacons_reception_changed_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BeaconStatsWrapper {
+    oneof stat {
+        BeaconDataStat beacon_data = 1;
+        BeaconsReceptionChangedStat beacons_reception_changed = 2;
+        BeaconTelemetryStat beacon_telemetry = 3;
+    }
+}

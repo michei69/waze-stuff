@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EncouragementInfo {
+    Type type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        ETA_CARD = 1;
+        ETA_POPUP = 2;
+        ENCOURAGEMENT_POPUP = 3;
+    }
+    
+    string image_name = 2;
+}

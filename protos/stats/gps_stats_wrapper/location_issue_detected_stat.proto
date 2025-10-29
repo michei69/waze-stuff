@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/gps_stats_wrapper/location_details.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message LocationIssueDetectedStat {
+    LocationIssueType location_issue_type = 1;
+    enum LocationIssueType {
+        LOCATION_ISSUE_TYPE_UNSPECIFIED = 0;
+        TIME_INCONSISTENCY = 1;
+        LOCATION_INCONSISTENCY = 2;
+        STALE_LOCATION = 3;
+    }
+    
+    repeated LocationDetails locations_details = 2;
+    
+    oneof _time_difference_ms {
+        int64 time_difference_ms = 3;
+    }
+    
+    oneof _location_distance_meters {
+        int64 location_distance_meters = 4;
+    }
+    
+    oneof _stale_duration_ms {
+        int64 stale_duration_ms = 5;
+    }
+}

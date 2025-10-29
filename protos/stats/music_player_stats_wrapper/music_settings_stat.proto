@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/setting_action.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MusicSettingsStat {
+    Button button = 1;
+    enum Button {
+        BUTTON_UNSPECIFIED = 0;
+        ENABLE_AUDIO_APPS = 1;
+        ENABLE_ALERT_WHILE_MUSIC_PLAYING = 2;
+        OTHER_PARTNER_APP = 3;
+    }
+    
+    SettingAction action = 2;
+    string partner_name = 5;
+    
+    oneof _changed_from {
+        bool changed_from = 3;
+    }
+    
+    oneof _changed_to {
+        bool changed_to = 4;
+    }
+}

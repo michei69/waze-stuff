@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/trip_overview_stats_wrapper/source.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewShownStat {
+    Source source = 6;
+    
+    OriginType origin_type = 7;
+    enum OriginType {
+        ORIGIN_TYPE_UNSPECIFIED = 0;
+        CURRENT_LOCATION = 1;
+        PLACE = 2;
+    }
+    
+    OriginProvider origin_provider = 8;
+    enum OriginProvider {
+        ORIGIN_PROVIDER_UNSPECIFIED = 0;
+        BEACON = 1;
+        GPS = 2;
+        NETWORK = 3;
+        NOT_APPLICABLE = 4;
+    }
+    
+    TriggeringPlatform triggering_platform = 13;
+    
+    oneof _is_now {
+        bool is_now = 1;
+    }
+    
+    oneof _default_alt_id {
+        int64 default_alt_id = 2;
+    }
+    
+    oneof _latency_ms {
+        int64 latency_ms = 3;
+    }
+    
+    oneof _time_to_departure_minutes {
+        int64 time_to_departure_minutes = 4;
+    }
+    
+    oneof _portrait {
+        bool portrait = 5;
+    }
+    
+    oneof _origin_accuracy_meters {
+        int64 origin_accuracy_meters = 9;
+    }
+    
+    oneof _nd4c_algo_transparency_link_shown {
+        bool nd4c_algo_transparency_link_shown = 10 [deprecated = true];
+    }
+    
+    oneof _avoid_badge {
+        int64 avoid_badge = 11;
+    }
+    
+    oneof _in_car_screen_type {
+        InCarScreenType in_car_screen_type = 12;
+    }
+    
+    enum InCarScreenType {
+        IN_CAR_SCREEN_TYPE_UNSPECIFIED = 0;
+        PANE_VIEW = 1;
+        LIST_VIEW = 2;
+    }
+}

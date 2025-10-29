@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NoNetworkErrorStat {
+    LatLng coordinates = 2;
+    
+    ErrorType error_type = 6;
+    enum ErrorType {
+        ERROR_TYPE_UNSPECIFIED = 0;
+        NO_NETWORK = 1;
+        NO_SERVER_CONNECTIVITY = 2;
+    }
+    
+    oneof _is_connected_to_network {
+        bool is_connected_to_network = 1 [deprecated = true];
+    }
+    
+    oneof _location_accuracy_meters {
+        sint64 location_accuracy_meters = 3 [deprecated = true];
+    }
+    
+    oneof _line_id {
+        sint64 line_id = 4 [deprecated = true];
+    }
+    
+    oneof _tile_id {
+        sint64 tile_id = 5 [deprecated = true];
+    }
+}

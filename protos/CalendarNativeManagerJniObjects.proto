@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.calendar;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.calendar";
+
+message CalendarEvent {
+    oneof _address {
+        string address = 1;
+    }
+    
+    oneof _recurring {
+        bool recurring = 2;
+    }
+}

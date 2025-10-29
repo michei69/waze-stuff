@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ClientAlerterShownStat {
+    AlerterType alerter_type = 1;
+    enum AlerterType {
+        ALERTER_TYPE_UNSPECIFIED = 0;
+        NO_NETWORK = 1;
+    }
+    
+    oneof _timeout_seconds {
+        int64 timeout_seconds = 2;
+    }
+}

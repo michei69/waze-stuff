@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/alternate_routes_stats_wrapper/routes_screen_view.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RoutesScreenShownStat {
+    RoutesScreenView routes_screen_view = 2;
+    
+    oneof _nd4c_algo_transparency_link_shown {
+        bool nd4c_algo_transparency_link_shown = 1;
+    }
+}

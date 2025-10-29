@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/ads_stats_wrapper/ad_generic_event_stat.proto";
+import "stats/ads_stats_wrapper/ad_navigate_around_destination_stat.proto";
+import "stats/ads_stats_wrapper/ad_navigate_arrived_stat.proto";
+import "stats/ads_stats_wrapper/ad_navigate_start_stat.proto";
+import "stats/ads_stats_wrapper/ad_navigate_stopped_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AdsStatsWrapper {
+    oneof stat {
+        AdGenericEventStat ad_generic_event = 1;
+        AdNavigateAroundDestinationStat ad_navigate_around_destination_stat = 2;
+        AdNavigateStartStat ad_navigate_start_stat = 3;
+        AdNavigateStoppedStat ad_navigate_stopped_stat = 4;
+        AdNavigateArrivedStat ad_navigate_arrived_stat = 5;
+    }
+}

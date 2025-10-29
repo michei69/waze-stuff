@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AutocompleteItemShownStat {
+    string venue_id = 2;
+    string venue_name = 3;
+    string query = 4;
+    
+    oneof _index {
+        int64 index = 1;
+    }
+    
+    oneof _meter_distance {
+        int64 meter_distance = 5;
+    }
+}

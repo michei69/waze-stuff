@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/start_state_stats_wrapper/drawer_state.proto";
+import "stats/start_state_stats_wrapper/favorites_carousel.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message StartStateDrawerShownStat {
+    DrawerState drawer_state = 1;
+    FavoritesCarousel favorites_carousel = 2;
+    
+    Reason reason = 6;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        APP_LAUNCH = 1;
+        NAVIGATION_END = 2;
+        UGC_MENU_DISMISS = 3;
+    }
+    
+    oneof _list_cards_count {
+        int64 list_cards_count = 3;
+    }
+    
+    oneof _planned_drive_cards_count {
+        int64 planned_drive_cards_count = 4;
+    }
+    
+    oneof _calendar_cards_count {
+        int64 calendar_cards_count = 5;
+    }
+}

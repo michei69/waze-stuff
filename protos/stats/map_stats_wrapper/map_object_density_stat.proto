@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MapObjectDensityStat {
+    LatLng coordinates = 1;
+    
+    repeated MapObject objects = 5;
+    message MapObject {
+        oneof _type {
+            int64 type = 1;
+        }
+        
+        oneof _right_coordinate {
+            int64 right_coordinate = 2;
+        }
+        
+        oneof _left_coordinate {
+            int64 left_coordinate = 3;
+        }
+        
+        oneof _top_coordinate {
+            int64 top_coordinate = 4;
+        }
+        
+        oneof _bottom_coordinate {
+            int64 bottom_coordinate = 5;
+        }
+    }
+    
+    oneof _distance_to_junction_meters {
+        int64 distance_to_junction_meters = 2;
+    }
+    
+    oneof _map_height_pixels {
+        int64 map_height_pixels = 3;
+    }
+    
+    oneof _map_width_pixels {
+        int64 map_width_pixels = 4;
+    }
+}

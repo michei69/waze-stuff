@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/waze_asks_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WazeAsksShownStat {
+    WazeAsksInfo waze_asks_info = 1;
+}

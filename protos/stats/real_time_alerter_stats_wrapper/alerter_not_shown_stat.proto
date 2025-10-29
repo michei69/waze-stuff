@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlerterNotShownStat {
+    AlerterInfo alerter_info = 1;
+    
+    Reason reason = 4;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        COLLISION = 1;
+        JAM = 2;
+        BELOW_SPEED_LIMIT = 3;
+    }
+    
+    AlerterInfo existing_alerter_info = 5;
+    
+    oneof _existing_alert_id {
+        int64 existing_alert_id = 2 [deprecated = true];
+    }
+    
+    oneof _jam_level {
+        int64 jam_level = 3;
+    }
+}

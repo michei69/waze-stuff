@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PlannedDriveShownStat {
+    PlannedDriveScreenState planned_drive_screen_state = 1;
+    enum PlannedDriveScreenState {
+        STATE_UNSPECIFIED = 0;
+        HAS_PLANNED_DRIVES = 1;
+        NO_ACTIVE_PLANNED_DRIVES = 2;
+        NO_ACTIVE_AND_NO_PAST_PLANNED_DRIVES = 3;
+    }
+    
+    NotificationToggleState notification_toggle_state = 2;
+    enum NotificationToggleState {
+        TOGGLE_UNSPECIFIED = 0;
+        NOT_SHOWN = 1;
+        OFF = 2;
+        ON = 3;
+    }
+}

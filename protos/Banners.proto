@@ -1,0 +1,105 @@
+syntax = "proto2";
+
+package com.waze.banners;
+
+import "RealtimeNg.proto";
+import "Types.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "WZB";
+option java_package = "com.waze.banners";
+
+message ListBannersRequestWrapper {
+    optional ListBannersRequest request = 1;
+    optional UserInfo userInfo = 2;
+}
+
+message UpdateBannerActionRequestWrapper {
+    optional UpdateBannerActionRequest request = 1;
+    optional int64 user_id = 3;
+    
+    reserved 2;
+    
+    reserved "userInfo";
+}
+
+message ListBannersRequest {
+    optional Type banner_type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        MENU = 1;
+        MAP = 2;
+    }
+}
+
+message ListBannersResponse {
+    optional linqmap.proto.Status status = 1;
+    repeated Banner banners = 2;
+}
+
+message UpdateBannerActionRequest {
+    optional string banner_id = 1 [deprecated = true];
+    
+    optional Action action_type = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        SHOWN = 1;
+        CLICKED = 2;
+    }
+    
+    optional string name = 3;
+    optional string button_id = 4;
+}
+
+message UpdateBannerActionResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message UserInfo {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+    optional string user_locale = 3;
+    optional bool has_deleted_drives = 4;
+    optional linqmap.proto.rt.ClientInfo client_info = 10;
+}
+
+message Banner {
+    optional string id = 1 [deprecated = true];
+    optional string name = 2;
+    optional string banner_id = 3;
+    
+    oneof additional_info {
+        MenuBanner menu_banner = 10;
+        MapBanner map_banner = 11;
+    }
+}
+
+message MenuBanner {
+    optional string content = 1;
+    optional string cta_content = 2;
+    optional string deeplink = 3;
+    optional string image_uri = 4;
+}
+
+message MapBanner {
+    optional string content = 1;
+    optional string cta_content = 2;
+    optional string deeplink = 3;
+    optional string image_uri = 4;
+}
+
+message ConditionResult {
+    optional bool is_eligible = 1;
+    
+    optional Reason reason = 2;
+    enum Reason {
+        UNKNOWN_REASON = 0;
+        AUDIENCE_ID_NOT_FOUND = 1;
+        AUDIENCE_NOT_MET = 2;
+        EXPIRED = 3;
+        USER_HAS_DELETED_DRIVES = 4;
+        ALREADY_SHOWN = 5;
+        ALREADY_CLICKED = 6;
+        EXPERIMENT_CONDITION_NOT_MET = 7;
+    }
+}

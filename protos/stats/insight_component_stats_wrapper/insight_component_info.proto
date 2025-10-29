@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/insight_component_stats_wrapper/type_info/non_location_based_message_info.proto";
+import "stats/insight_component_stats_wrapper/type_info/permanent_location_based_insight_info.proto";
+import "stats/insight_component_stats_wrapper/type_info/real_time_location_based_insight_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InsightComponentInfo {
+    InsightMessageType insight_message_type = 1;
+    enum InsightMessageType {
+        INSIGHT_MESSAGE_TYPE_UNSPECIFIED = 0;
+        REAL_TIME_LOCATION_BASED_INSIGHT = 1;
+        PERMANENT_LOCATION_BASED_INSIGHT = 2;
+        NON_LOCATION_BASED_MESSAGE = 3;
+    }
+    
+    oneof insight_info {
+        RealTimeLocationBasedInsightInfo real_time_location_based_insight_info = 6;
+        PermanentLocationBasedInsightInfo permanent_location_based_insight_info = 7;
+        NonLocationBasedMessageInfo non_location_based_message_info = 8;
+    }
+    
+    oneof _insight_message_id {
+        string insight_message_id = 2;
+    }
+    
+    oneof _primary {
+        bool primary = 3;
+    }
+    
+    oneof _is_timeout_message {
+        bool is_timeout_message = 4;
+    }
+    
+    oneof _above_speed_limit {
+        bool above_speed_limit = 5;
+    }
+}

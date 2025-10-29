@@ -1,0 +1,198 @@
+syntax = "proto2";
+
+package com.waze.proto.alertsonmap;
+
+import "AoMCommon.proto";
+import "RTCommonTypes.proto";
+import "Types.proto";
+import "google/protobuf/timestamp.proto";
+import "asks/AsksQuestions.proto";
+
+option objc_class_prefix = "WAOM";
+option java_package = "com.waze.proto.alertsonmap";
+
+message RmAlertCommand {
+    optional int64 aid = 1;
+}
+
+message AddReportCommand {
+    optional int64 id = 1;
+    optional int64 parent_id = 2;
+    optional Kind kind = 3;
+    optional AlertType type = 4;
+    optional linqmap.proto.Coordinate pos = 5;
+    optional rtcommon.SegmentDirectionID sid = 6;
+    optional rtcommon.SegDirection seg_direction = 7;
+    optional int32 azymuth = 8;
+    optional string description = 9;
+    optional int64 report_time = 10;
+    optional string report_by = 11;
+    optional bool report_by_me = 12;
+    optional string near_by = 13;
+    optional int32 report_by_mood = 14;
+    optional int32 report_by_points_star_rating = 15;
+    optional string external_image_id = 16;
+    optional string street_name = 17;
+    optional string city_name = 18;
+    optional bool ping_user = 19;
+    optional bool on_route = 20;
+    optional string addon = 22;
+    optional string full_name = 23;
+    optional string group = 25;
+    optional string group_icon = 26;
+    optional GroupStatus group_status = 27;
+    optional int32 age = 28;
+    optional bool archive = 29;
+    optional AlertSubType sub_type = 30;
+    optional int32 num_thumbs_up = 31;
+    optional bool thumbs_up_by_me = 32;
+    optional string external_voice_id = 33;
+    optional int32 priority = 34;
+    optional bool prvt = 35;
+    optional int32 popup_duration_seconds = 36;
+    optional string report_by_persistent_id = 37;
+    optional int32 seconds_to_report = 38;
+    optional bool has_lane_closed = 39;
+    optional string driving_guidance = 40;
+    
+    reserved 21, 24;
+}
+
+message AddAlertAction {
+    optional RealtimeAlert realtime_alert = 1;
+    optional asks.AsksQuestion question = 2;
+}
+
+message RemoveAlertAction {
+    optional string alert_uuid = 1;
+}
+
+message RealtimeAlert {
+    optional int64 id = 1;
+    optional AlertInfo alert_info = 2;
+    optional bool notify_alerter_shown = 5;
+    optional string alert_uuid = 6;
+    optional string alerter_shown_token = 7;
+    
+    oneof additional_info {
+        AlertReportingInfo alert_reporting_info = 3;
+        CrashProneInfo crash_prone_info = 4;
+    }
+}
+
+message AlertInfo {
+    optional AlertType type = 1 [deprecated = true];
+    optional AlertSubType sub_type = 2 [deprecated = true];
+    optional linqmap.proto.Coordinate position = 3;
+    optional rtcommon.SegmentDirectionID segment_direction_id = 4;
+    optional rtcommon.SegDirection seg_direction = 5;
+    optional int32 azymuth = 6;
+    optional bool on_route = 7;
+    optional int32 priority = 8;
+    optional SurfacedAlertDetails alert_details = 9;
+}
+
+message AlertReportingInfo {
+    optional int64 primary_alert_id = 1;
+    optional Kind kind = 2;
+    optional string description = 3;
+    optional int64 report_time = 4;
+    optional string reporter_username = 5;
+    optional bool current_user_is_reporter = 6;
+    optional string report_image_id = 7;
+    optional AlertAddress alert_address = 8;
+    optional int32 thumbs_up_count = 9;
+    optional bool current_user_thumbed_up = 10;
+    optional int32 seconds_to_report = 11;
+    optional bool should_ping_user = 12;
+    optional bool archive = 13;
+    optional BeepInfo beepInfo = 14;
+    optional CommentInfo commentInfo = 15;
+    optional ChatInfo chatInfo = 16;
+}
+
+message AlertAddress {
+    optional string location_near_by_report = 1;
+    optional string street = 2;
+    optional string city = 3;
+}
+
+message ChatInfo {
+    optional bool private = 1;
+}
+
+message BeepInfo {
+    optional SenderInfo sender_info = 1;
+    optional int32 seconds_since_report = 3;
+    
+    reserved 2;
+}
+
+message CommentInfo {
+    optional SenderInfo commenter_info = 1;
+}
+
+message SenderInfo {
+    optional int32 mood = 1;
+    optional string facebook_full_name = 2;
+    optional string user_persistent_id = 3;
+}
+
+message CrashProneInfo {
+    option deprecated = true;
+    optional int64 length_meters = 1;
+    optional int64 creation_time_millis = 2;
+}
+
+message ReportThumbsUpRequest {
+    optional int64 aid = 1;
+    optional string alert_uuid = 2;
+}
+
+message ReportThumbsUpResponse {
+    optional int64 received_points = 1;
+}
+
+message ReportThumbsDownRequest {
+    optional int64 aid = 1;
+    optional string alert_uuid = 2;
+}
+
+message ReportThumbsDownResponse {
+    optional int64 received_points = 1;
+}
+
+message AlerterShownRequest {
+    optional int64 id = 1;
+    optional google.protobuf.Timestamp shown_time = 2;
+    optional string alerter_shown_token = 3;
+    
+    oneof additional_info {
+        CrashProneInfoForAlerterShown crash_prone_info = 4;
+        SpeedLimitDecreaseForAlerterShown speed_limit_decrease_info = 5;
+    }
+}
+
+message CrashProneInfoForAlerterShown {
+    optional int64 length_meters = 1;
+}
+
+message SpeedLimitDecreaseForAlerterShown {
+    
+}
+
+message AlerterShownResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+enum GroupStatus {
+    IRRELEVANT = 0;
+    FOLLOWING = 1;
+    ACTIVE = 2;
+}
+
+enum Kind {
+    PRIMARY = 0;
+    SECONDARY = 1;
+    COMMENT = 2;
+}

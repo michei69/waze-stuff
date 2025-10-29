@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.questions;
+
+import "waze/insightsserving/client/questions/enrich_insight_question.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "QuestionsProto";
+option java_package = "com.waze.insightsserving.proto.questions";
+
+message Question {
+    oneof question {
+        EnrichInsightQuestion enrich_insight_question = 100;
+    }
+    
+    oneof _question_token {
+        string question_token = 1;
+    }
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DriveTypeStat {
+    NavigationType type = 1;
+    enum NavigationType {
+        NAVIGATION_TYPE_UNSPECIFIED = 0;
+        PLANNED_DRIVE = 1;
+        HOME = 2;
+        PLACE_TAP_ON_MAP = 3;
+        PARKING = 4;
+        SEARCH = 5;
+        SHARED_DRIVE = 6;
+        CALENDAR = 7;
+        WORK = 8;
+        GAS_SEARCH = 9;
+        CALENDAR_DRIVE = 10;
+        FAVORITE = 11;
+        PARKING_SUGGESTION = 12;
+        PLACE_SEARCH = 13;
+        LOCATION = 14;
+        CALENDAR_PUSH = 15;
+        URL_SEARCH = 16;
+        SHARED_LOCATION = 17;
+        PLANNED_DRIVE_PUSH = 18;
+        AD_TAP_ON_MAP = 19;
+        HISTORY = 20;
+        OTHER_FAVORITE = 21;
+        URL_LOCATION = 22;
+        RECENT_AD = 23;
+        AD_SEARCH = 24;
+    }
+    
+    string planned_drive_id = 2;
+}

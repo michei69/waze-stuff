@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package com.waze.proto.asks;
+
+import "AoMAsks.proto";
+
+option objc_class_prefix = "CWPA";
+option java_package = "com.waze.proto.asks";
+
+message AsksQuestion {
+    optional string question_key = 1;
+    optional string entity_id = 2;
+    
+    oneof question {
+        alertsonmap.asks.EnrichAlertQuestion enrich_alert_question = 3;
+    }
+}

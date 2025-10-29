@@ -1,0 +1,330 @@
+syntax = "proto2";
+
+package linqmap.proto.trip;
+
+import "Favorites.proto";
+import "PIIManagement.proto";
+import "Types.proto";
+import "TripClient.proto";
+import "RoutingAPI.proto";
+import "RTCommonTypes.proto";
+import "TripOverview.proto";
+import "RealtimeNg.proto";
+import "RoutingResult.proto";
+import "logging.proto";
+
+option objc_class_prefix = "LPT";
+option java_package = "linqmap.proto.trip";
+
+message TripTime {
+    optional int64 user_id = 1;
+    optional favorites.Place source = 2;
+    optional favorites.Place dest = 3;
+    optional int64 time_epoch = 4;
+}
+
+message GetHistoricNavigationsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetHistoricNavigationsResponse {
+    optional int64 user_id = 1;
+    repeated HistoricNavigation historic_navigations = 2;
+}
+
+message DeleteHistoricNavigationRequest {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+}
+
+message DeleteHistoricNavigationResponse {
+    optional Status status = 1;
+}
+
+message DeleteAllHistoricNavigationsRequest {
+    optional int64 user_id = 1;
+}
+
+message DeleteAllHistoricNavigationsResponse {
+    optional Status status = 1;
+}
+
+message GetDeletedNavigationsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetDeletedNavigationsResponse {
+    repeated DeletedNavigation deleted_navigations = 1;
+}
+
+message GetAverageDriveTimeRequest {
+    optional int64 user_id = 1;
+    optional client.TimePreference.DayOfWeek day_of_week = 3;
+    optional int32 hour_of_day = 4;
+    optional int32 minute_of_hour = 5;
+    optional Coordinate source = 6;
+    optional Coordinate destination = 7;
+}
+
+message GetAverageDriveTimeResponse {
+    optional int64 avg_duration_millis = 1;
+}
+
+message DeletedNavigation {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+    optional int64 delete_epoch_millis = 3;
+    optional int64 session_end_epoch_millis = 4;
+}
+
+message HistoricNavigation {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+    optional favorites.Place source = 3;
+    optional favorites.Place dest = 4;
+    
+    optional PoiInferenceType source_poi_inference = 5 [default = ORIGINAL_POI];
+    enum PoiInferenceType {
+        ORIGINAL_POI = 1;
+        NEARBY_POI = 2;
+        REVERSE_GEOCODING = 3;
+        LOCATION_ONLY = 4;
+    }
+    
+    optional PoiInferenceType dest_poi_inference = 6 [default = ORIGINAL_POI];
+    optional int64 start_time = 7;
+    optional int64 end_time = 8;
+    
+    optional HistoryType history_type = 9;
+    enum HistoryType {
+        DRIVE = 1;
+        ETA_CHECK = 2;
+    }
+}
+
+message TripTimeWithSourceFilled {
+    optional int64 trip_time_id = 1;
+    optional TripTime trip_time = 2;
+    
+    optional SourcePoiInferredType optimize_for = 3 [default = ORIGINAL_SOURCE_POI];
+    enum SourcePoiInferredType {
+        ORIGINAL_SOURCE_POI = 1;
+        NEARBY_USER_POI = 2;
+        SOURCE_POI_MISSING_FILLED_STREET_ID_AND_NAME = 3;
+        SOURCE_POI_MISSING_AND_CANNOT_BE_INFERRED = 4;
+    }
+    
+    optional int64 nearby_street_id_if_source_poi_is_missing = 4;
+    optional string nearby_street_name_if_source_poi_is_missing = 5;
+}
+
+message GetHistoricalNavigationsListRequest {
+    optional int64 user_id = 1;
+}
+
+message GetHistoricalNavigationsListResponse {
+    repeated TripTimeWithSourceFilled trip_time = 1;
+}
+
+message DeleteHistoricalNavigationRequest {
+    optional int64 user_id = 1;
+    optional int64 trip_time_id = 2;
+}
+
+message DeleteHistoricalNavigationResponse {
+    optional bool success = 1;
+}
+
+message TimeInterval {
+    optional int64 from_millis = 1;
+    optional int64 to_millis = 2;
+}
+
+message RTUserPOI {
+    optional int64 id = 1;
+    optional Coordinate coord = 2;
+    optional string name = 3;
+    optional int64 last_drive_time = 4;
+    optional favorites.Favorite.Type type = 5;
+    optional int32 weight = 6;
+}
+
+message RTTripRoute {
+    optional int64 id = 1;
+    optional int32 weight = 2;
+    optional Coordinate start_point = 3;
+    optional Coordinate end_point = 4;
+    repeated RouteSegment route_segments = 5;
+    optional string trip_route_context_id = 10;
+    optional double confidence_level = 11;
+    optional double jaccard_fastest_route_avg = 12;
+    optional int64 n_past_drives = 13;
+    optional double jaccard_avg = 14;
+    
+    reserved 6, 7, 8, 9;
+    
+    reserved "last_drive_time", "pref_price_secs", "is_preferred_route", "rate";
+}
+
+message RouteSegment {
+    optional int64 segment_id = 1;
+    optional int64 node_id = 2;
+    optional Coordinate coord = 3;
+    optional bool direction = 4;
+}
+
+message RecentRouting {
+    optional routing.proto.Request routing_request = 1;
+    optional routing.proto.Responses routing_responses = 2;
+    repeated RouteAlternativeInsights insights = 3;
+}
+
+message RouteAlternativeInsights {
+    optional string alternative_route_uuid = 1;
+    repeated rt.EventOnRoute event_on_routes = 2;
+    repeated rt.RouteInsight route_insights = 3;
+}
+
+message UpdateNavStartRequest {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+    optional Coordinate src_location = 3;
+    optional Coordinate dest_location = 4;
+    optional string dest_venue_id = 5;
+    optional string routing_context = 6;
+    optional int32 route_id = 7;
+    optional string client_use_case = 8;
+    optional string carpool_id = 9;
+    optional routing.proto.Request routing_request = 10;
+    optional int32 total_distance_meters = 12;
+    optional int32 total_route_time_secs = 13;
+    optional routing.proto.Responses nav_responses = 14;
+    repeated RouteAlternativeInsights insights = 15;
+    
+    reserved 11;
+    
+    reserved "routing_responses";
+}
+
+message UpdateNavEndRequest {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+    optional int32 route_id = 3;
+    optional int64 drive_start_time_millis = 4;
+    optional int64 estimated_arrival_time_millis = 5;
+    optional int32 distance_to_dest_meters = 6;
+    optional int32 total_distance_meters = 7;
+    optional Coordinate user_location = 8;
+    optional AppType app_type = 9;
+}
+
+message GetTripRoutesRequest {
+    optional int64 user_id = 1;
+    optional Coordinate source_point = 2;
+    optional Coordinate dest_point = 3;
+    optional int64 source_poi_id = 4;
+    optional int64 dest_poi_id = 5;
+    optional int64 current_time = 6;
+    optional int32 max_num_routes = 7;
+    optional int32 min_weight = 8;
+    
+    reserved 9;
+    
+    reserved "min_rate";
+}
+
+message GetTripRoutesResponse {
+    optional int64 user_id = 1;
+    repeated RTTripRoute trip_routes = 2;
+    optional RTUserPOI source_poi = 3;
+    optional RTUserPOI dest_poi = 4;
+}
+
+message SetTripAnalysisEnabledRequest {
+    optional int64 user_id = 1;
+    optional bool enable_analysis = 2;
+}
+
+message SetTripAnalysisEnabledResponse {
+    optional bool success = 1;
+}
+
+message GetLastDriveRequest {
+    optional int64 user_id = 1;
+}
+
+message GetLastDriveResponse {
+    optional int64 user_id = 1;
+    optional int64 departure_time = 2;
+    optional RTUserPOI destination_poi = 3;
+}
+
+message EndTripOverviewRequestWrapper {
+    optional tripOverview.EndTripOverviewRequest request = 1;
+    optional EndTripOverviewRequestSession session_data = 2;
+}
+
+message EndTripOverviewRequestSession {
+    optional int64 user_id = 1;
+    optional com.waze.proto.rtcommon.UserPosition position = 3;
+    optional Coordinate last_destination = 4;
+    optional AppType app_type = 5;
+}
+
+message EndTripOverviewResponseWrapper {
+    optional tripOverview.EndTripOverviewResponse response = 1;
+}
+
+message UserPerformedPlanDriveCheckWrapper {
+    optional UserPerformedPlanDriveCheckEvent request = 1;
+    optional UserPerformedPlanDriveCheckSession session_data = 2;
+}
+
+message UserPerformedPlanDriveCheckEvent {
+    
+}
+
+message UserPerformedPlanDriveCheckSession {
+    optional int64 user_id = 1;
+}
+
+message UserPerformedPlanDriveCheckResponseWrapper {
+    optional UserPerformedPlanDriveCheckResponse response = 1;
+}
+
+message UserPerformedPlanDriveCheckResponse {
+    
+}
+
+message WrapUpCompleteUserSessionRequest {
+    optional CompleteUserSessionData session_data = 1;
+}
+
+message CompleteUserSessionData {
+    optional int64 user_id = 1;
+    optional string session_uuid = 2;
+    optional int64 start_time_millis = 3;
+    optional Coordinate start_location = 4;
+    optional Coordinate end_location = 5;
+    optional Coordinate last_destination = 8;
+    optional double max_speed_kmh = 6;
+    optional int32 last_route_id = 7;
+    optional AppType app_type = 9;
+}
+
+message WrapUpCompleteUserSessionResponse {
+    
+}
+
+message UpdateNavRequest {
+    optional int64 user_id = 1;
+    optional NavProperties nav_properties = 3;
+    
+    reserved 2;
+    
+    reserved "route_id";
+}
+
+message NavProperties {
+    optional bool isEtaCheck = 1;
+}

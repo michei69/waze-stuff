@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/ugc_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcButtonClickedStat {
+    UgcInfo ugc_info = 1;
+    
+    oneof _lock_screen_mode {
+        bool lock_screen_mode = 2;
+    }
+}

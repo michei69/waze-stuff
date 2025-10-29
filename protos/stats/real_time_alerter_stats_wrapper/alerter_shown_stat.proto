@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlerterShownStat {
+    AlerterInfo alerter_info = 1;
+    
+    oneof _timeout_seconds {
+        int64 timeout_seconds = 2;
+    }
+    
+    oneof _distance_to_report_meters {
+        int64 distance_to_report_meters = 3;
+    }
+    
+    oneof _above_speed_limit {
+        bool above_speed_limit = 4;
+    }
+    
+    oneof _new_alerter_component {
+        bool new_alerter_component = 5;
+    }
+    
+    oneof _sound_enabled {
+        bool sound_enabled = 6;
+    }
+    
+    oneof _silent {
+        bool silent = 7;
+    }
+}

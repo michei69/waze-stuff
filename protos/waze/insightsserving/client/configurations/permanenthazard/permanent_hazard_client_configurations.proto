@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+import "waze/insightsserving/client/configurations/permanenthazard/camera_client_configurations.proto";
+import "waze/insightsserving/client/configurations/common_client_configurations.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "PermanentHazardClientConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message SpeedBumpConfiguration {
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 1;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 2;
+    }
+    
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 3;
+    }
+}
+
+message TopesConfiguration {
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 1;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 2;
+    }
+}
+
+message TollBoothConfiguration {
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 1;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 2;
+    }
+}
+
+message DangerousCurveConfiguration {
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 1;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 2;
+    }
+    
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 3;
+    }
+}
+
+message DangerousIntersectionConfiguration {
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 1;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 2;
+    }
+}
+
+message DangerousMergeConfiguration {
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 1;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 2;
+    }
+}
+
+message CameraConfiguration {
+    oneof CameraTypeConfiguration {
+        SpeedConfiguration speed_configuration = 1;
+        RedLightConfiguration red_light_configuration = 2;
+        DummyConfiguration dummy_configuration = 3;
+        SeatbeltConfiguration seatbelt_configuration = 4;
+        MobilePhoneConfiguration mobile_phone_configuration = 5;
+        StopConfiguration stop_configuration = 6;
+        NoiseConfiguration noise_configuration = 7;
+        DistanceConfiguration distance_configuration = 8;
+        CarpoolLaneConfiguration carpool_lane_configuration = 9;
+        BusLaneConfiguration bus_lane_configuration = 10;
+        HovLaneConfiguration hov_lane_configuration = 11;
+    }
+}

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Advertisement.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message InboxMessage {
+    oneof _id {
+        string id = 1;
+    }
+    
+    oneof _unread {
+        bool unread = 2;
+    }
+    
+    oneof _sent_time_seconds {
+        int64 sent_time_seconds = 3;
+    }
+    
+    oneof _sent_formatted_string {
+        string sent_formatted_string = 4;
+    }
+    
+    oneof _title {
+        string title = 5;
+    }
+    
+    oneof _preview {
+        string preview = 6;
+    }
+    
+    oneof _message {
+        string message = 7;
+    }
+    
+    oneof _type {
+        Type type = 8;
+    }
+    
+    oneof _advertisement {
+        Advertisement advertisement = 9;
+    }
+    
+    enum Type {
+        UNKNOWN = 0;
+        LINK = 1;
+        CONTENT = 2;
+        SECURED_LINK = 3;
+    }
+}

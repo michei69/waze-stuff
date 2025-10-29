@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message IosMetrickitMetricReportStat {
+    NetworkTransferKilobytes network_transfer_kilobytes = 8;
+    message NetworkTransferKilobytes {
+        oneof _cellular_download {
+            int64 cellular_download = 1;
+        }
+        
+        oneof _wifi_download {
+            int64 wifi_download = 2;
+        }
+        
+        oneof _cellular_upload {
+            int64 cellular_upload = 3;
+        }
+        
+        oneof _wifi_upload {
+            int64 wifi_upload = 4;
+        }
+    }
+    
+    AppUsageDurations app_usage_durations = 9;
+    message AppUsageDurations {
+        oneof _foreground_seconds {
+            int64 foreground_seconds = 1;
+        }
+        
+        oneof _background_seconds {
+            int64 background_seconds = 2;
+        }
+        
+        oneof _background_audio_seconds {
+            int64 background_audio_seconds = 3;
+        }
+        
+        oneof _background_location_seconds {
+            int64 background_location_seconds = 4;
+        }
+    }
+    
+    BackgroundExits background_exits = 10;
+    message BackgroundExits {
+        oneof _app_watchdog {
+            int64 app_watchdog = 1;
+        }
+        
+        oneof _memory_resource_limit {
+            int64 memory_resource_limit = 2;
+        }
+        
+        oneof _abnormal_exit {
+            int64 abnormal_exit = 3;
+        }
+        
+        oneof _suspended_with_locked_file {
+            int64 suspended_with_locked_file = 4;
+        }
+        
+        oneof _illegal_instruction {
+            int64 illegal_instruction = 5;
+        }
+        
+        oneof _memory_pressure {
+            int64 memory_pressure = 6;
+        }
+        
+        oneof _bad_access {
+            int64 bad_access = 7;
+        }
+        
+        oneof _cpu_resource_limit {
+            int64 cpu_resource_limit = 8;
+        }
+        
+        oneof _background_task_assertion_timeout {
+            int64 background_task_assertion_timeout = 9;
+        }
+        
+        oneof _normal_app_exit {
+            int64 normal_app_exit = 10;
+        }
+    }
+    
+    ForegroundExits foreground_exits = 11;
+    message ForegroundExits {
+        oneof _app_watchdog {
+            int64 app_watchdog = 1;
+        }
+        
+        oneof _memory_resource_limit {
+            int64 memory_resource_limit = 2;
+        }
+        
+        oneof _bad_access {
+            int64 bad_access = 3;
+        }
+        
+        oneof _abnormal_exit {
+            int64 abnormal_exit = 4;
+        }
+        
+        oneof _illegal_instruction {
+            int64 illegal_instruction = 5;
+        }
+        
+        oneof _normal_app_exit {
+            int64 normal_app_exit = 6;
+        }
+    }
+    
+    oneof _period_start_timestamp_unix {
+        int64 period_start_timestamp_unix = 1;
+    }
+    
+    oneof _period_end_timestamp_unix {
+        int64 period_end_timestamp_unix = 2;
+    }
+    
+    oneof _disk_write_kilobytes {
+        int64 disk_write_kilobytes = 3;
+    }
+    
+    oneof _cpu_seconds {
+        int64 cpu_seconds = 4;
+    }
+    
+    oneof _cpu_instructions {
+        int64 cpu_instructions = 5;
+    }
+    
+    oneof _peak_memory_usage_kilobytes {
+        int64 peak_memory_usage_kilobytes = 6;
+    }
+    
+    oneof _average_suspended_memory_usage_kilobytes {
+        int64 average_suspended_memory_usage_kilobytes = 7;
+    }
+    
+    oneof _total_app_hang_duration_ms {
+        int64 total_app_hang_duration_ms = 12;
+    }
+}

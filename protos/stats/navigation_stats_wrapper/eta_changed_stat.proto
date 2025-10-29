@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EtaChangedStat {
+    oneof _eta_delta_minutes {
+        sint64 eta_delta_minutes = 1;
+    }
+    
+    oneof _remaining_eta_minutes {
+        int64 remaining_eta_minutes = 2;
+    }
+    
+    oneof _segment_id {
+        int64 segment_id = 3;
+    }
+}

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/permissions_stats_wrapper/location_permission_request_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message LocationPermissionRequestPopupClickedStat {
+    LocationPermissionRequestType request_type = 1;
+    
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        OS_SETTINGS = 1;
+        CLOSE = 2;
+        ALLOW = 3;
+        TAP_OUTSIDE = 4;
+    }
+    
+    oneof _dont_show_again {
+        bool dont_show_again = 3;
+    }
+}

@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/generic_setting_action.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AccountAndLoginSettingsExtraInfoStat {
+    GenericSettingAction action = 1;
+    
+    Button button = 2;
+    enum Button {
+        BUTTON_UNSPECIFIED = 0;
+        USER_IMAGE = 1;
+        USERNAME = 2;
+        REGISTER = 3;
+        PASSWORD = 5;
+        LOGOUT = 6;
+        LOGIN = 7;
+        IN_CAR_SIGN_OUT = 8;
+        FULL_NAME = 9;
+        EMAIL = 11;
+        EDIT_AGE = 12;
+        DELETE_ACCOUNT = 13;
+    }
+    
+    EmailInfo email_info = 3;
+    enum EmailInfo {
+        EMAIL_TYPE_UNSPECIFIED = 0;
+        EMPTY = 1;
+        UNVERIFIED = 2;
+        VERIFIED = 3;
+    }
+    
+    oneof _has_google_email {
+        bool has_google_email = 5;
+    }
+    
+    oneof _registered {
+        bool registered = 6;
+    }
+}

@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Place.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message StartNavigationResponse {
+    int32 code = 1;
+    string server_desc = 2;
+}
+
+message AnalyticsRouting {
+    enum AnalyticsRoutingUseCase {
+        USE_CASE_TRIP_OVERVIEW = 0;
+    }
+}
+
+message AlternativeHovRouteInfo {
+    int32 duration_seconds = 1;
+    
+    HovInfo hov_info = 2;
+    message HovInfo {
+        int32 min_passengers = 1;
+        repeated string required_permits = 2;
+    }
+}

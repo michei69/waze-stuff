@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/alerter_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RerouteSuggestionResolvedStat {
+    string suggested_alternate_route_uuid = 1;
+    
+    IgnoreReason ignore_reason = 2;
+    enum IgnoreReason {
+        IGNORE_REASON_UNSPECIFIED = 0;
+        CLOSE_TO_SHOWN_REASSURANCE_DETOUR = 1;
+        CLOSE_TO_SPLIT_POINT = 2;
+        EXPLICIT = 3 [deprecated = true];
+        INVALID_CASE = 4;
+        NO_SPLIT_POINT = 5;
+        PREVIOUS_REROUTE_NOT_RESOLVED = 6;
+        RECENT_USER_DECLINE = 7;
+        TIMEOUT = 8 [deprecated = true];
+        ACCEPTED_FRESHER_SUGGESTION = 9;
+    }
+    
+    Result result = 3;
+    enum Result {
+        RESULT_UNSPECIFIED = 0;
+        DISPLAYED = 1;
+        DISPLAYED_ALERTER_ONLY = 2;
+        IGNORED = 3;
+        SILENT = 4;
+    }
+    
+    oneof _time_since_received_seconds {
+        int64 time_since_received_seconds = 4;
+    }
+    
+    oneof _meters_from_next_turn {
+        int64 meters_from_next_turn = 5;
+    }
+    
+    oneof _meters_to_decision_point {
+        int64 meters_to_decision_point = 6;
+    }
+    
+    oneof _minutes_saved {
+        int64 minutes_saved = 7;
+    }
+    
+    oneof _has_toll {
+        bool has_toll = 8;
+    }
+    
+    oneof _seconds_from_next_turn {
+        int64 seconds_from_next_turn = 9;
+    }
+    
+    oneof _seconds_to_decision_point {
+        int64 seconds_to_decision_point = 10;
+    }
+    
+    oneof _alert_reason {
+        AlerterInfo.AlerterType alert_reason = 11;
+    }
+}

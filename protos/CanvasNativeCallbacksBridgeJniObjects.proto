@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.canvas;
+
+import public "Map.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.canvas";
+
+message MainCanvasStateChanged {
+    string canvas_id = 1;
+    MainCanvasCameraStateProto camera_state = 2;
+}
+
+enum MainCanvasCameraStateProto {
+    OVERVIEW = 0;
+    OVERVIEW_WITH_OFFSET = 1;
+    TRACKING_USER_LOCATION = 2;
+    EXTERNAL_CANVAS = 3;
+    OTHER = 4;
+}

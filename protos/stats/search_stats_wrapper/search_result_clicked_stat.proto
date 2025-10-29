@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+import "stats/reusable_types/triggering_platform.proto";
+import "stats/reusable_types/venue_opening_status.proto";
+import "stats/search_stats_wrapper/electric_vehicle_charging_station_slots_information.proto";
+import "stats/search_stats_wrapper/search_category_group.proto";
+import "stats/search_stats_wrapper/search_filter.proto";
+import "stats/search_stats_wrapper/search_sort_field.proto";
+import "stats/search_stats_wrapper/search_source.proto";
+import "stats/search_stats_wrapper/search_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SearchResultClickedStat {
+    Action action = 6;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        SELECT = 1;
+        PIN = 2;
+        MAP = 3;
+        ALGO_TRANSPARENCY_LINK = 4;
+        CLOSE = 5;
+        BACK_TO_LIST = 6;
+        BACK = 7;
+    }
+    
+    string categorical_search_name = 9;
+    SearchCategoryGroup categorical_group_search_name = 10;
+    string venue_id = 11;
+    LatLng result_coordinates = 12;
+    
+    ResultSource result_source = 13;
+    enum ResultSource {
+        RESULT_SOURCE_UNSPECIFIED = 0;
+        WAZE = 1;
+        GOOGLE = 2;
+    }
+    
+    SearchSource source = 14;
+    SearchSortField sort_field = 15;
+    SearchType type = 16;
+    string search_id = 17;
+    VenueOpeningStatus venue_opening_status = 18;
+    ElectricVehicleChargingStationInformation electric_vehicle_charging_station_information = 21;
+    repeated SearchFilter filter_fields = 24;
+    TriggeringPlatform triggering_platform = 26;
+    
+    oneof _index {
+        int64 index = 1;
+    }
+    
+    oneof _original_index {
+        int64 original_index = 2;
+    }
+    
+    oneof _displaying_ad {
+        bool displaying_ad = 3;
+    }
+    
+    oneof _distance_to_result_meters {
+        int64 distance_to_result_meters = 4;
+    }
+    
+    oneof _detour_to_result_minutes {
+        int64 detour_to_result_minutes = 5;
+    }
+    
+    oneof _parking {
+        bool parking = 7;
+    }
+    
+    oneof _popular_parking {
+        bool popular_parking = 8;
+    }
+    
+    oneof _venue_rating {
+        float venue_rating = 19;
+    }
+    
+    oneof _venue_price_level {
+        int64 venue_price_level = 20;
+    }
+    
+    oneof _search_again {
+        bool search_again = 22;
+    }
+    
+    oneof _parking_prices_shown {
+        bool parking_prices_shown = 23;
+    }
+    
+    oneof _book_parking_indication_shown {
+        bool book_parking_indication_shown = 25;
+    }
+}

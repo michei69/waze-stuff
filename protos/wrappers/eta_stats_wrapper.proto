@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/eta_stats_wrapper/bottom_pane_clicked_stat.proto";
+import "stats/eta_stats_wrapper/eta_changed_bubble_shown_stat.proto";
+import "stats/eta_stats_wrapper/eta_drawer_clicked_stat.proto";
+import "stats/eta_stats_wrapper/eta_drawer_shown_stat.proto";
+import "stats/eta_stats_wrapper/eta_route_shown_stat.proto";
+import "stats/eta_stats_wrapper/overview_bar_clicked_stat.proto";
+import "stats/eta_stats_wrapper/venue_multi_entry_card_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EtaStatsWrapper {
+    oneof stat {
+        BottomPaneClickedStat bottom_pane_clicked = 1;
+        EtaChangedBubbleShownStat eta_changed_bubble_shown = 2;
+        EtaRouteShownStat eta_route_shown = 3;
+        OverviewBarClickedStat overview_bar_clicked = 4;
+        VenueMultiEntryCardShownStat venue_multi_entry_card_shown = 5;
+        EtaDrawerShownStat eta_drawer_shown = 6;
+        EtaDrawerClickedStat eta_drawer_clicked = 7;
+    }
+}

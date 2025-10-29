@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/encouragement_stats_wrapper/encouragement_clicked_stat.proto";
+import "stats/encouragement_stats_wrapper/encouragement_received_stat.proto";
+import "stats/encouragement_stats_wrapper/encouragement_shown_stat.proto";
+import "stats/encouragement_stats_wrapper/encouragement_skipped_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EncouragementStatsWrapper {
+    oneof stat {
+        EncouragementShownStat encouragement_shown = 1;
+        EncouragementClickedStat encouragement_clicked = 2;
+        EncouragementReceivedStat encouragement_received = 3;
+        EncouragementSkippedStat encouragement_skipped = 4;
+    }
+}

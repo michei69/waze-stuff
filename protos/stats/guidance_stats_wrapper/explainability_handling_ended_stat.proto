@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ExplainabilityHandlingEndedStat {
+    string alternative_route_uuid = 1;
+    
+    ExplainabilityFailureReason explainability_failure_reason = 2;
+    enum ExplainabilityFailureReason {
+        EXPLAINABILITY_FAILURE_REASON_UNSPECIFIED = 0;
+        CLIENT_TIMEOUT = 1;
+        BACKEND_TIMEOUT = 2;
+        CLIENT_ERROR = 3;
+        BACKEND_ERROR = 4;
+    }
+    
+    VoicePlayedStatus voice_played_status = 3;
+    enum VoicePlayedStatus {
+        VOICE_PLAYED_STATUS_UNSPECIFIED = 0;
+        SUCCESS = 1;
+        EMPTY_MESSAGE = 2;
+    }
+    
+    UiDismissMethod ui_dismiss_method = 4;
+    enum UiDismissMethod {
+        UI_DISMISS_METHOD_UNSPECIFIED = 0;
+        TIMER = 1;
+        USER = 2;
+    }
+}

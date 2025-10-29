@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/regulation_flags.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GdprScreenShownStat {
+    RegulationFlags regulation_flags = 1;
+    
+    View view = 2;
+    enum View {
+        VIEW_UNSPECIFIED = 0;
+        REGULAR = 1;
+        UNDER_18 = 2;
+    }
+}

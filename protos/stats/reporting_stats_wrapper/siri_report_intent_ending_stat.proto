@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SiriReportIntentEndingStat {
+    string ugc_context_id = 1;
+    string siri_dialog_text = 2;
+    string report_type_phrase = 6;
+    
+    oneof report_ending_info {
+        FailureReason failure_reason = 4;
+        int64 client_alert_id = 5;
+    }
+    
+    oneof _success {
+        bool success = 3;
+    }
+    
+    enum FailureReason {
+        FAILURE_REASON_UNSPECIFIED = 0;
+        UNRECOGNIZED_REPORT_TYPE = 1;
+        NO_REPORT_LOCATION = 2;
+        CLIENT_ERROR = 3;
+        BACKEND_ERROR = 4;
+        UNKNOWN_ERROR_WHILE_CLARIFYING_REPORT_TYPE = 5;
+    }
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/consent_stats_wrapper/age_screen_context.proto";
+import "stats/consent_stats_wrapper/age_screen_type.proto";
+import "stats/reusable_types/regulation_flags.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AgeScreenShownStat {
+    AgeScreenRegulation age_screen_flow = 1;
+    enum AgeScreenRegulation {
+        AGE_SCREEN_REGULATION_UNSPECIFIED = 0;
+        AADC = 1;
+        U18 = 2;
+    }
+    
+    RegulationFlags regulation_flags = 2;
+    AgeScreenContext context = 3;
+    AgeScreenType screen_type = 4;
+    
+    oneof _birthdate_timestamp_seconds {
+        sint64 birthdate_timestamp_seconds = 5;
+    }
+    
+    oneof _clickable_cta {
+        bool clickable_cta = 6;
+    }
+}

@@ -1,0 +1,107 @@
+syntax = "proto2";
+
+package com.waze.proto.userdrive.v2;
+
+import "AoMCommon.proto";
+import "RTCommonTypes.proto";
+import "RoutingCommand.proto";
+import "RoutingResult.proto";
+import "v2/UserDriveV2.proto";
+
+option objc_class_prefix = "UD2";
+option java_package = "com.waze.proto.userdrive.v2";
+
+message RouteUpdateRequest {
+    optional string route_uuid = 1;
+    optional int64 current_route_revision = 2;
+    optional Location current_position = 3;
+}
+
+message RouteUpdateResponse {
+    optional CurrentRouteUpdate current_route_update = 1;
+    optional RerouteSuggestion reroute_suggestion = 2;
+    optional NextUpdateSchedule next_update_schedule = 3;
+}
+
+message CurrentRouteUpdate {
+    optional int64 route_revision = 1;
+    optional CrossTimesUpdate cross_times_update = 2;
+    optional DetoursUpdate detours_update = 3;
+    optional RouteDescription update_description = 4;
+    optional AlertsUpdate alerts_update = 5;
+    optional TrafficJamsUpdate traffic_jams_update = 6;
+}
+
+message AlertsUpdate {
+    repeated VisualAlert alerts = 1;
+}
+
+message TrafficJamsUpdate {
+    repeated VisualTrafficJam traffic_jams = 1;
+}
+
+message CrossTimesUpdate {
+    optional int32 first_segment_index = 1;
+    repeated int32 cross_times_seconds = 2;
+}
+
+message DetoursUpdate {
+    repeated DetourUpdateInstruction detour_update_instructions = 1;
+}
+
+message DetourUpdateInstruction {
+    oneof detour_instruction_one_of {
+        AddDetourInstruction add_detour_instruction = 1;
+        RemoveDetourInstruction remove_detour_instruction = 2;
+        RefreshDetourInstruction refresh_detour_instruction = 3;
+    }
+    
+    message AddDetourInstruction {
+        optional Detour detour = 1;
+    }
+    
+    message RemoveDetourInstruction {
+        optional int64 detour_id = 1;
+    }
+    
+    message RefreshDetourInstruction {
+        optional int64 id = 1;
+        optional int64 current_route_time_from_split_to_merge_seconds = 2;
+        optional int64 detour_time_seconds = 3;
+        optional linqmap.proto.rt.DetourLabel label = 4;
+    }
+}
+
+message RouteDescription {
+    optional string comment_text = 1;
+    optional string comment_voice = 2;
+}
+
+message RerouteSuggestion {
+    optional FullRoute route = 1;
+    optional int32 split_point_index = 2;
+    optional RouteDescription route_description = 3;
+    repeated Detour detours = 7;
+    optional StartNavigationInfo start_navigation_info = 6;
+    
+    oneof reroute_visibility {
+        SilentReroute silent_reroute = 4;
+        PromptReroute prompt_reroute = 5;
+    }
+    
+    message SilentReroute {
+        
+    }
+    
+    message PromptReroute {
+        optional DefaultAction default_action = 1;
+        enum DefaultAction {
+            DEFAULT_ACTION_UNSPECIFIED = 1;
+            DEFAULT_ACTION_ACCEPT = 2;
+            DEFAULT_ACTION_REJECT = 3;
+        }
+        
+        optional linqmap.proto.rt.RerouteExplanation prompt_description = 2;
+        optional VisualAlert causing_alert = 3;
+    }
+}

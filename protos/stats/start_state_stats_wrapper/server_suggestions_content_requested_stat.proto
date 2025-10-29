@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ServerSuggestionsContentRequestedStat {
+    Reason reason = 1;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        APP_LAUNCH = 1;
+        DESTINATIONS_DATA_CHANGED = 2;
+        END_OF_DRIVE = 3;
+        LOCATION_CHANGED = 4;
+        SETTINGS_CHANGED = 5;
+        USER_CHANGED = 6;
+    }
+}

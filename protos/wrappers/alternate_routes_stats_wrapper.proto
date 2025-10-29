@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/alternate_routes_stats_wrapper/alternative_routes_blocking_popup_clicked_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_blocking_popup_shown_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_fte_tooltip_shown_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_loader_hidden_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_screen_clicked_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_screen_mode_updated_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_screen_shown_stat.proto";
+import "stats/alternate_routes_stats_wrapper/alternative_routes_shown_stat.proto";
+import "stats/alternate_routes_stats_wrapper/in_car_alternative_routes_button_clicked_stat.proto";
+import "stats/alternate_routes_stats_wrapper/route_card_timeline_shown_stat.proto";
+import "stats/alternate_routes_stats_wrapper/routes_screen_clicked_stat.proto";
+import "stats/alternate_routes_stats_wrapper/routes_screen_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlternateRoutesStatsWrapper {
+    oneof stat {
+        RoutesScreenClickedStat routes_screen_clicked = 1;
+        RoutesScreenShownStat routes_screen_shown = 2;
+        AlternativeRoutesBlockingPopupClickedStat alternative_routes_blocking_popup_clicked = 3;
+        AlternativeRoutesBlockingPopupShownStat alternative_routes_blocking_popup_shown = 4;
+        AlternativeRoutesScreenShownStat alternative_routes_screen_shown = 5;
+        InCarAlternativeRoutesButtonClickedStat in_car_alternative_routes_button_clicked = 6;
+        AlternativeRoutesLoaderHiddenStat alternative_routes_loader_hidden = 7;
+        AlternativeRoutesShownStat alternative_routes_shown = 8;
+        AlternativeRoutesScreenClickedStat alternative_routes_screen_clicked = 9;
+        AlternativeRoutesFteTooltipShownStat alternative_routes_fte_tooltip_shown = 10;
+        AlternativeRoutesScreenModeUpdatedStat alternative_routes_screen_mode_updated = 11;
+        RouteCardTimelineShownStat route_card_timeline_shown = 12;
+    }
+}

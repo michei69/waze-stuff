@@ -1,0 +1,147 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+import "ProfileCommands.proto";
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message UID {
+    optional int64 id = 1;
+    optional string secret_key = 2;
+    optional int32 protocol = 3;
+}
+
+message TID {
+    option deprecated = true;
+    optional string token = 1;
+    optional int32 protocol = 2;
+}
+
+message LoginRequest {
+    optional ReasonType reason = 3 [default = NORMAL];
+    enum ReasonType {
+        NORMAL = 0;
+        SIGN_IN = 1;
+    }
+    
+    optional bool logout_other_devices = 4 [default = true];
+    
+    repeated LoginResponseType excluded_login_responses = 5;
+    enum LoginResponseType {
+        FORMAT_UNSPECIFIED = 0;
+        USER_PROFILE = 1;
+        LOGIN_ENCOURAGEMENT = 2;
+        GET_MEETINGS = 3;
+        CONSENT = 4;
+        POINTS = 6;
+    }
+    
+    oneof credential {
+        PasswordCredential password_credential = 1;
+        TokenCredential token_credential = 2;
+    }
+}
+
+message PasswordCredential {
+    optional string username = 1;
+    optional string password = 2;
+}
+
+message TokenCredential {
+    optional string token = 1;
+}
+
+message Login {
+    optional string username = 1;
+    optional string password = 2;
+    optional string nickname = 3 [deprecated = true];
+    optional int32 configVersion = 4;
+    optional int32 lastSystemMessage = 5 [deprecated = true];
+    optional int64 lastTilesRefresh = 6 [deprecated = true];
+    optional string reason = 7 [default = "normal"];
+    optional bool generate_token = 8 [default = false];
+    optional bool force = 9 [default = true];
+}
+
+message LoginError {
+    optional int64 reason = 1 [deprecated = true];
+    
+    optional LoginErrorType error_type = 2;
+    enum LoginErrorType {
+        UNKNOWN_ERROR = 0;
+        WRONG_USER_PASSWORD = 1;
+        INTERNAL_ISSUES = 2;
+        NOT_AUTHORIZED = 3;
+        REFRESH_TOKEN = 4;
+        ANOTHER_DEVICE_LOGGED_IN = 5;
+        INVALID_TOKEN = 6;
+        UNAUTHENTICATED_TOKEN = 7;
+        TOKEN_QUOTA_EXCEEDED = 8;
+    }
+    
+    oneof details {
+        AnotherDeviceLoggedInDetails another_device_logged_in_details = 3;
+    }
+}
+
+message AnotherDeviceLoggedInDetails {
+    optional AppType app_type = 1;
+}
+
+message LoginSuccessful {
+    optional int64 id = 1;
+    optional string secret_key = 2;
+    optional int32 max_protocol = 3;
+    optional string serverVersion = 4;
+    optional string community_name = 5;
+    optional string email = 6;
+    optional string auth_token = 7;
+    optional string session_token = 8;
+}
+
+message LoginSuccess {
+    optional int64 server_session_id = 1;
+    optional string global_user_id = 2;
+    optional string secret_key = 3;
+    optional string session_id = 4;
+}
+
+message LoginResponse {
+    oneof response {
+        LoginSuccess login_success = 1;
+        LoginError login_error = 2;
+    }
+}
+
+message Authenticate {
+    optional int32 protocol = 1;
+    optional string user_name = 2;
+    optional string password = 3;
+}
+
+message AuthenticateRequest {
+    oneof credential {
+        PasswordCredential password_credential = 1;
+        TokenCredential token_credential = 2;
+    }
+}
+
+message AuthenticateResponse {
+    optional Status status = 1;
+}
+
+message CheckUserAuthRequest {
+    optional string username = 1;
+    optional string password = 2;
+    optional bool get_profile = 3;
+}
+
+message CheckUserAuthResponse {
+    optional bool valid = 1;
+    optional bool has_verified_email = 2;
+    optional MyProfile profile = 3;
+}

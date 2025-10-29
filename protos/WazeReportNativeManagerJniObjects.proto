@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message SosProviders {
+    repeated SosProvider sos_providers = 1;
+}
+
+message SosProvider {
+    oneof _name {
+        string name = 1;
+    }
+    
+    oneof _type {
+        ProviderType type = 2;
+    }
+    
+    oneof _subtype {
+        ProviderSubType subtype = 3;
+    }
+    
+    oneof _phone_call {
+        string phone_call = 4;
+    }
+    
+    oneof _phone_send {
+        string phone_send = 5;
+    }
+    
+    oneof _email {
+        string email = 6;
+    }
+    
+    oneof _url {
+        string url = 7;
+    }
+    
+    enum ProviderType {
+        EMERGENCY = 0;
+        ASSISTANCE = 1;
+        OTHER = 2;
+    }
+    
+    enum ProviderSubType {
+        POLICE = 0;
+        AMBULANCE = 1;
+        FIRE = 2;
+        ROADSIDE_ASSISTANCE = 3;
+    }
+}

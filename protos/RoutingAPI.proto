@@ -1,0 +1,1113 @@
+syntax = "proto2";
+
+package linqmap.routing.proto;
+
+import "linqmap/geocoding/proto/Schedule.proto";
+import "GeoCoding.proto";
+import "Lanes.proto";
+import "linqmap/ipc/TaggedMessage.proto";
+import "logging.proto";
+import "ETA.proto";
+import "TollPrice.proto";
+import "RoadSigns.proto";
+import "Types.proto";
+import "RoutingAPIExternal.proto";
+
+option objc_class_prefix = "LRP";
+option java_package = "linqmap.routing.proto";
+
+message PointId {
+    optional LatLngPoint latlng = 1;
+    message LatLngPoint {
+        optional float lat = 1;
+        optional float lng = 2;
+    }
+    
+    optional int32 segment_id = 2 [default = 0];
+    optional bool segment_direction = 3 [default = false];
+    optional double segment_fraction = 4 [default = 0];
+    optional double r = 6 [default = -1];
+    optional double cd = 7 [default = -1];
+    optional int32 segment_from_node_id = 8 [default = 0];
+    optional int32 segment_to_node_id = 9 [default = 0];
+    optional bool bidirectional = 10 [default = false];
+    optional int32 tile_id = 11 [default = 0];
+    optional int32 tile_update_time = 12 [default = 0];
+    optional int32 client_id = 13 [default = 0];
+    optional string street = 14;
+    optional int32 street_id = 15 [default = -1];
+    optional string streetNumber = 16;
+    optional string cityName = 17;
+    optional string stateName = 18;
+    optional SegmentDirectionPenalty segment_direction_penalty = 19;
+}
+
+message SegmentDirectionPenalty {
+    optional int32 from_node_id = 1;
+    optional int32 to_node_id = 2;
+    optional double penalty_percentage = 3;
+}
+
+message Request {
+    optional string session_id = 1;
+    optional RoutingType type = 2 [default = HISTORIC_TIME];
+    repeated RoutingOptionFieldEntry routing_option = 3;
+    optional int32 start_at_minute = 4;
+    optional bool return_geometries = 5;
+    optional bool return_instructions = 6;
+    optional bool return_client_ids = 7;
+    optional int32 max_points = 8;
+    optional PointId from = 9;
+    repeated PointId to = 10;
+    optional bool return_per_segment_geometries = 11 [default = false];
+    optional int32 n_paths = 12 [default = 0];
+    optional GpsInfo gps_info = 13;
+    optional RoutingStyle nav_style = 14 [default = CLASSIC];
+    optional string client_version = 15;
+    repeated PointId way_point = 16;
+    optional bool visit_all_way_points = 17 [deprecated = true];
+    optional bool estimate_all_way_points = 18 [deprecated = true];
+    optional int32 way_point_delay = 19;
+    optional RoutingType result_cost_type = 20;
+    repeated SegmentStart stick_to_path = 21;
+    repeated AvoidPath avoid_path = 23 [deprecated = true];
+    repeated int32 block_path = 24;
+    repeated int32 block_turn = 25;
+    optional bool reverse = 26 [default = false];
+    optional EntrySegment entry_segment = 27;
+    optional RequestTime start_at = 28;
+    repeated SegmentStart init_with_path = 29;
+    optional geocoding.proto.DriveProfile drive_profile = 31;
+    optional bool is_way_point = 35 [default = false, deprecated = true];
+    optional Response first_path_found = 36 [deprecated = true];
+    optional int64 first_short_segment = 37 [default = -1, deprecated = true];
+    optional RoutingRequestType request_type = 38;
+    optional SideOfTheRoad side_of_the_road = 39;
+    optional RoutingResultReorderConfig rrr_config = 40;
+    repeated RRRMLFeatureEntry personal_data = 41;
+    optional bool serialize_directions = 42 [default = false];
+    repeated ExperimentEntry experiments = 64;
+    optional bool return_required_permits = 44;
+    optional EncouragementParameters encouragement = 45;
+    optional HistogramRequest show_histogram = 46;
+    repeated EntryPoint entry_point = 47;
+    optional int32 alternative_calculation_time_offset = 49;
+    optional TollPriceVector toll_price_user_vector = 50;
+    optional int32 geom_density_distance_from_extremities = 51 [default = 5000, deprecated = true];
+    optional bool return_geometries_as_wkb = 52 [default = false, deprecated = true];
+    optional string debug_speed_container_name = 53 [default = "_global"];
+    repeated linqmap.proto.StringBoolEntry feature_flags = 54;
+    optional int32 max_visits = 55;
+    optional bool throw_on_error = 56 [default = true];
+    optional int32 seconds_before_allow_reroute = 57;
+    repeated int64 current_route_segment_ids = 58;
+    optional bool return_speed_limits = 59 [default = false];
+    repeated geocoding.proto.Geometry geometry_constraints = 61;
+    optional GeometryParams geometry_params = 62;
+    optional bool return_closure_impact_info = 63;
+    
+    extensions 100 to 199;
+    
+    reserved 22, 30, 43, 60;
+}
+
+message CategorySearchRequest {
+    optional Request request = 1;
+}
+
+message EncouragementParameters {
+    optional int32 minimal_time_save = 1;
+    repeated string encouraged_subscription = 2;
+}
+
+message AlternativesRequest {
+    optional Request routing_request = 1;
+    repeated Path preferred_path = 2;
+    
+    reserved 3;
+}
+
+message GapFromPreviousLocationRequest {
+    optional AlternativesRequest alternatives_request = 1;
+}
+
+message BulkRouteCostRequest {
+    repeated RouteCostRequest request = 1;
+}
+
+message BulkRouteCostResponse {
+    repeated Responses response = 1;
+}
+
+message RouteCostRequest {
+    optional string session_id = 1;
+    optional RoutingType type = 2;
+    repeated RoutingOptionFieldEntry routing_option = 3;
+    optional int32 start_at_minute = 4;
+    optional RequestTime start_at = 27;
+    optional bool return_geometries = 5;
+    optional bool return_instructions = 6;
+    optional bool return_client_ids = 7;
+    optional int32 max_points = 8;
+    repeated SegmentStart path = 9;
+    optional double from_fraction = 10;
+    optional double from_x = 11;
+    optional double from_y = 12;
+    optional double to_fraction = 13;
+    optional double to_x = 14;
+    optional double to_y = 15;
+    optional bool points_are_on_path = 16;
+    optional bool is_reroute = 17;
+    optional RoutingStyle nav_style = 18;
+    optional string client_version = 19;
+    repeated PointId way_point = 20;
+    optional int32 way_point_delay = 21;
+    repeated int32 block_turn = 22;
+    repeated AvoidPath avoid_path = 23 [deprecated = true];
+    optional EntrySegment entrySegment = 24;
+    optional int64 first_short_segment = 25;
+    optional geocoding.proto.DriveProfile drive_profile = 26;
+    optional bool project_points_on_route = 28;
+    optional SideOfTheRoad side_of_the_road = 29;
+    optional bool should_fail_if_path_not_valid = 30;
+    optional bool serialize_directions = 31 [default = false];
+    optional bool return_required_permits = 33;
+    repeated ExperimentEntry experiments = 49;
+    optional HistogramRequest show_histogram = 34;
+    optional bool reverse = 35;
+    repeated RoutePath additional_paths = 37;
+    optional TollPriceVector toll_price_user_vector = 38;
+    optional bool return_route_name = 39;
+    optional bool return_geometries_as_wkb = 40 [default = false, deprecated = true];
+    optional string debug_speed_container_name = 41 [default = "_global"];
+    optional RoutingRequestType request_type = 42;
+    repeated linqmap.proto.StringBoolEntry feature_flags = 43;
+    optional bool throw_on_error = 44 [default = true];
+    optional bool return_per_segment_geometries = 45 [default = false];
+    optional bool return_speed_limits = 46 [default = false];
+    optional bool return_invalid_for_private_vehicle = 47 [default = false];
+    optional GeometryParams geometry_params = 48;
+    
+    reserved 32;
+}
+
+message RoutePath {
+    repeated SegmentStart path = 1;
+}
+
+message RequestTime {
+    optional int64 minute = 1;
+    optional string hour = 2;
+    optional Weekday weekday = 3;
+}
+
+message Path {
+    repeated SegmentStart path = 1;
+    optional int32 weight = 2;
+    optional bool is_preferred = 3;
+    repeated external.RouteType.Enum route_type = 4;
+    repeated external.RouteAttr.Enum route_attr = 5;
+    optional int32 hov_index = 6;
+    repeated geocoding.proto.SegmentRestriction.LaneType lane_type = 7;
+    optional int32 uid = 8;
+    optional string trip_route_context_id = 9;
+}
+
+message EntrySegment {
+    optional int32 segment_id = 1;
+    optional bool segment_direction = 2;
+}
+
+message AvoidPath {
+    optional int64 edge_id = 1;
+    optional double cost_factor = 2;
+}
+
+message SegmentStart {
+    optional int32 segment_id = 1;
+    optional int32 node_id = 2;
+    optional double x = 3;
+    optional double y = 4;
+    optional bool direction = 5;
+}
+
+message GpsInfo {
+    optional int32 gps_cur_satellites = 1;
+    optional int32 gps_cur_accuracy = 2;
+    optional int32 gps_cur_heading = 3;
+    optional int32 cur_compass = 4;
+    optional double cur_gyro_x = 5;
+    optional double cur_gyro_y = 6;
+    optional double cur_gyro_z = 7;
+    optional double gps_last_pos_x = 8;
+    optional double gps_last_pos_y = 9;
+    optional int32 gps_last_heading = 10;
+}
+
+message RoutingOptionFieldEntry {
+    optional RoutingOption key = 1;
+    optional bool value = 2;
+}
+
+message Responses {
+    repeated Response response = 1;
+    optional ErrorInfo error_info = 2;
+    repeated BlockedRoute blocked_routes = 3;
+    optional UnreachableDestinationInfo unreachable_destination_info = 4;
+}
+
+message ErrorInfo {
+    optional string error_type = 1;
+    optional string error_message = 2;
+    
+    optional ErrorCode error_code = 3;
+    enum ErrorCode {
+        Unknown = 0;
+        CouldNotLocateEndPoint = 401;
+        RouteTooLong = 402;
+        CouldNotLocateStartPoint = 502;
+        CouldNotFindRoute = 503;
+        CouldNotFindRouteNoRetry = 403;
+        GeneralError = 501;
+    }
+    
+    optional RouteNotFoundInfo route_not_found_info = 4;
+}
+
+message RouteNotFoundInfo {
+    optional Reason reason = 1;
+    enum Reason {
+        Unknown = 0;
+        TimedOut = 1;
+        MaxVisitedExceeded = 2;
+        Exhausted = 3;
+    }
+    
+    optional SegmentStart last_failed_segment = 2;
+    repeated string penalty_types = 3;
+}
+
+message Response {
+    repeated RoutingSegmentResult result = 1;
+    repeated string street_name = 2;
+    repeated int32 tile_id = 3;
+    repeated int32 tile_update_time = 4;
+    optional geocoding.proto.Geometry geom = 5;
+    optional float fromloc_meters_from_geom = 70;
+    optional double from_fraction = 6;
+    optional double to_fraction = 7;
+    optional bool same_from_segment = 8;
+    optional bool same_to_segment = 9;
+    repeated float astar_point = 10;
+    repeated int32 way_point_index = 11;
+    repeated double way_point_fraction = 12;
+    repeated int32 way_point_segment_index = 56;
+    repeated PointId way_point = 72;
+    optional int32 toll_meters = 13;
+    optional int32 prefered_route_id = 14 [default = -1];
+    optional bool is_invalid = 15 [deprecated = true];
+    optional bool is_blocked = 16 [deprecated = true];
+    optional string server_unique_id = 17;
+    optional bool display_route = 18 [default = true, deprecated = true];
+    optional int32 astar_visited = 19;
+    optional string astar_result = 20 [default = "UNKNOWN"];
+    repeated AstarData astar_data = 21;
+    optional bool is_restricted = 22;
+    optional AvoidStatus avoid_status = 23 [default = OPEN, deprecated = true];
+    optional string due_to_override = 24;
+    repeated external.RouteType.Enum route_type = 25;
+    repeated external.RouteAttr.Enum route_attr = 26;
+    optional int32 astar_cost = 27;
+    repeated geocoding.proto.Geometry seg_geom = 28 [deprecated = true];
+    optional string route_name = 29;
+    optional int32 penalty = 30;
+    optional int32 weight = 31;
+    optional bool is_preferred = 32 [default = false];
+    optional int32 uid = 33 [default = 0];
+    optional int32 length = 34;
+    optional bool passes_through_danger_area = 36;
+    optional int32 distance_from_source = 37;
+    optional int32 distance_from_target = 38;
+    repeated int32 route_name_street_id = 39;
+    optional int32 min_passengers = 40;
+    optional int32 hov_index = 41;
+    repeated bool reorder_choice = 42;
+    optional int32 total_route_time = 43;
+    optional PreferredStoppingPoints preferred_stopping_points = 44;
+    repeated geocoding.proto.SegmentRestriction.LaneType lane_type = 45;
+    repeated string area = 46;
+    repeated string required_permits = 47;
+    repeated HistogramPoint eta_histogram = 48;
+    optional int32 big_penalty_sum = 49;
+    optional EntryPoint entry_point = 50;
+    optional string short_route_name = 51;
+    optional double toll_price = 52;
+    repeated CostMapEntry cost = 53;
+    repeated CostMapEntry penalties = 54;
+    optional bool is_invalid_for_private_vehicle = 55;
+    optional string alternative_route_uuid = 57;
+    optional CostInfo cost_info = 58;
+    optional int32 total_route_time_without_ml = 59;
+    optional int64 server_tiles_version = 60;
+    optional int32 rank_before_reordering = 61;
+    optional RoutingServerType server_type = 62;
+    repeated RouteCreationMechanism creation_mechanism = 63;
+    optional SegmentInformation destination_information = 64;
+    optional int32 pre_refined_route_index = 65;
+    optional int32 blocked_route_uid = 66;
+    optional int32 total_route_time_without_realtime = 67;
+    repeated ClosureInformation affecting_closures = 68;
+    
+    optional MarathonDebugData marathon_debug_data = 69;
+    message MarathonDebugData {
+        optional CostInfo ground_truth_index_speeds_cost = 1;
+    }
+    
+    optional int32 total_route_time_free_flow = 71;
+    repeated string areas_to_avoid = 73;
+    optional GuidanceParameters guidance_parameters = 74;
+}
+
+message GuidanceParameters {
+    
+}
+
+message BlockedRoute {
+    optional Response response = 1;
+    optional int32 open_route_uid = 2;
+    optional bool impactful_blocked_route = 3;
+}
+
+message UnreachableDestinationInfo {
+    optional Response response = 1;
+}
+
+message SegmentInformation {
+    optional int64 segment_id = 1;
+    optional int32 street_id = 2;
+    optional int32 city_id = 3;
+    optional int32 country_id = 4;
+    optional string street_name = 5;
+    optional string city_name = 6;
+    optional int32 exit_node_id = 7;
+}
+
+message CostInfo {
+    optional int32 unbiased_astar_cost = 58 [default = 0];
+    optional int32 toll_as_seconds = 59 [default = 0];
+}
+
+message RoutingSegmentResult {
+    optional SegmentStart path = 1;
+    optional int32 street = 2;
+    repeated int32 alt_street = 3;
+    optional int32 distance = 4 [deprecated = true];
+    optional int32 length = 5;
+    optional int32 cross_time = 6;
+    optional int32 cross_time_without_real_time = 7;
+    repeated int32 tile = 8;
+    repeated int32 client_id = 9;
+    optional bool known_direction = 11;
+    optional int32 penalty = 12;
+    optional uint32 road_type = 13;
+    optional bool is_toll = 15;
+    optional bool use_hov_lane = 19;
+    repeated CostMapEntry cost = 20;
+    repeated CostMapEntry penalties = 21;
+    optional geocoding.proto.SegmentRestriction.Location lane = 22;
+    optional geocoding.proto.SegmentRestriction.LaneType lane_type = 23;
+    repeated string area = 24;
+    repeated string required_permit = 26;
+    optional AvoidStatus avoid_status = 30;
+    optional geocoding.proto.ClientLaneSet client_lane_set = 31;
+    optional geocoding.proto.RoadSign road_sign = 32;
+    optional bool is_invalid = 33;
+    optional bool is_blocked = 34;
+    optional DetourInfo detour = 35;
+    optional int32 speed_limit = 36;
+    optional geocoding.proto.Geometry geom = 37;
+    optional EntrySegment entry_segment = 38;
+    optional int32 cross_time_free_flow = 39;
+    repeated string areas_to_avoid = 40;
+    optional EntrySegment exit_segment = 41;
+}
+
+message DetourInfo {
+    optional int64 id = 1;
+    optional DetourRoute naive = 2;
+    optional DetourRoute detour = 3;
+    optional int32 seconds_saved = 4;
+    optional int32 seconds_saved_without_realtime = 5;
+    optional bool is_naive_blocked = 9;
+    optional int32 detour_removal_threshold_in_seconds = 10;
+    optional RoutingSegmentResult next_common_segment = 11;
+    optional external.DetourType.Enum detour_type = 12;
+    repeated external.RouteType.Enum route_type = 13;
+    optional int32 preferred_route_weight = 14;
+    optional double preferred_route_confidence_level = 15;
+    optional string alternative_route_uuid = 16;
+}
+
+message DetourRoute {
+    repeated RoutingSegmentResult route = 1;
+    optional int32 length_in_meters = 2;
+    optional int32 time_in_seconds = 3;
+}
+
+message CostMapEntry {
+    optional string key = 1;
+    optional int32 value = 2;
+}
+
+message LineString {
+    optional string wkt = 1;
+    optional bytes wkb = 2;
+}
+
+message AstarData {
+    optional string key = 1;
+    optional string value = 2;
+}
+
+message ReloadTiles {
+    optional string segments_list_file = 1;
+    optional string tiles_list_file = 2;
+    optional int32 dispose_wait = 3;
+    optional string tile_time_stamp_file = 4;
+    optional int32 dayOfWeek = 5;
+}
+
+message ShowTiles {
+    
+}
+
+message TileReport {
+    
+}
+
+message RealTimeData {
+    optional int32 squareId = 1;
+}
+
+message RoutingStats {
+    
+}
+
+message ConsistencyReport {
+    
+}
+
+message SegmentInfoRequest {
+    optional bool get_all = 1;
+    repeated SegmentStart segments = 2;
+}
+
+message SegmentInfoResponse {
+    repeated SegmentInfo info = 1;
+    message SegmentInfo {
+        optional int32 cur_speed = 1;
+        optional int32 cur_weight = 2;
+        optional int32 historic_speed = 3;
+        optional int32 historic_weight = 4;
+        optional int32 speed = 5;
+        repeated CrossTimesInfo cross_times = 6;
+    }
+    
+    message CrossTimesInfo {
+        optional bool direction = 1;
+        optional int64 to_seg_id = 2;
+        repeated int32 speeds = 3;
+    }
+}
+
+message SoftStop {
+    
+}
+
+message RefreshDbConnPool {
+    optional int32 count = 1;
+}
+
+message RunGc {
+    optional int32 count = 1;
+}
+
+message CommandResponse {
+    optional ResponseCode code = 1 [default = OK];
+    enum ResponseCode {
+        OK = 1;
+        NA = 2;
+        ERROR = 3;
+    }
+    
+    optional string message = 2;
+}
+
+message TraverseStats {
+    
+}
+
+message MultiDestinationRoutingRequest {
+    optional Request request = 1;
+    optional int32 max_route_time_in_minutes = 2;
+}
+
+message MultiDestinationRoutingResponse {
+    repeated DistanceToPoint distances = 1;
+    message DistanceToPoint {
+        optional PointId point = 1;
+        optional int32 timeInMinutes = 2;
+        optional int32 distanceInMeters = 3;
+    }
+    
+    optional RoutingServerType server_type = 2;
+}
+
+message CheckPointOnRouteRequest {
+    optional string session_id = 1;
+    repeated SegmentStart route = 2;
+    repeated PointId interest_point = 3;
+    optional int32 max_walking_distance = 4 [default = 400];
+    repeated linqmap.proto.StringBoolEntry feature_flags = 5;
+}
+
+message CheckPointOnRouteResponse {
+    repeated MultiDestinationRoutingResponse.DistanceToPoint interest_points_on_route = 1;
+}
+
+message DisabledSchedule {
+    optional string schedule_id = 1;
+    repeated geocoding.proto.TimeFrame time_frame = 2;
+    optional geocoding.proto.Restrictions replacement = 3;
+}
+
+message DisableScheduleRequest {
+    optional string schedule_id = 1;
+    
+    optional Action action = 2;
+    enum Action {
+        ADD = 1;
+        SET = 2;
+        REMOVE = 3;
+        STATUS = 4;
+        REFRESH = 5;
+    }
+    
+    repeated geocoding.proto.TimeFrame time_frame = 3;
+    optional geocoding.proto.Restrictions replacement = 4;
+}
+
+message DisabledSchedules {
+    repeated DisabledSchedule disabled_schedules = 1;
+}
+
+message RoutingBroadcastRequest {
+    optional Type type = 1;
+    enum Type {
+        RELOAD_DISABLED_SCHEDULES = 1;
+    }
+    
+    optional int64 event_timestamp_epoch_millis = 2;
+}
+
+message EstimateDetoursRequest {
+    repeated SegmentStart current_route = 1;
+    repeated PointId way_point = 2;
+    optional PointId from = 3;
+    optional PointId to = 4;
+    repeated EntryPoint entry_point = 5;
+    optional geocoding.proto.DriveProfile drive_profile = 6;
+    optional TollPriceVector toll_price_user_vector = 7;
+    repeated int32 block_turn = 8;
+    repeated int32 block_path = 9;
+    repeated RoutingOptionFieldEntry routing_option = 10;
+    optional int32 way_point_delay = 11;
+    optional string debug_speed_container_name = 13;
+    repeated linqmap.proto.StringBoolEntry feature_flags = 14;
+    optional bool return_geometries = 15;
+}
+
+message EstimateDetoursResponse {
+    optional Response main_route_cost = 1;
+    
+    repeated DetourEstimationEntry detour_routes = 2;
+    message DetourEstimationEntry {
+        optional int32 client_id = 1;
+        optional Response route = 2;
+    }
+}
+
+message RoutingResultReorderConfig {
+    optional TollNoToll tollNoTollConfig = 1;
+    message TollNoToll {
+        optional int32 minDelta = 1 [default = 120];
+        optional int32 maxDelta = 2 [default = 360];
+        optional double ratio = 3 [default = 0.033333334];
+    }
+    
+    optional Faster fasterConfig = 2;
+    message Faster {
+        optional int32 minDecreasedTime = 1 [default = 60];
+        optional double minDecreasedTimeRatio = 2 [default = 0.033333334];
+        optional int32 maxIncreasedDistance = 3 [default = 10000];
+        optional double maxIncreasedDistanceRatio = 4 [default = 0.25];
+    }
+    
+    optional MuchShorter muchShorterConfig = 3;
+    message MuchShorter {
+        optional int32 minDecreasedDistance = 1 [default = 5000];
+        optional double minDecreaseDistanceRatio = 2 [default = 0.2];
+        optional int32 maxIncreasedTime = 3 [default = 240];
+        optional double maxIncreasedTimeRatio = 4 [default = 0.033333334];
+    }
+}
+
+message PreferredStoppingPoints {
+    repeated PointId.LatLngPoint bus_stops = 1;
+}
+
+message RRRMLFeatureEntry {
+    optional RRRMLFeature feature = 1;
+    optional double value = 2;
+}
+
+message ExperimentEntry {
+    optional string name = 1;
+    repeated ExperimentParam value = 2;
+}
+
+message ExperimentParam {
+    optional string name = 1;
+    optional string value = 2;
+}
+
+message EntryPoint {
+    optional PointId point = 1;
+    optional string name = 2;
+}
+
+message ClosureInformation {
+    optional int32 segment_id = 1;
+    optional int32 to_segment_id = 14;
+    optional bool is_planned = 2;
+    optional int64 planned_start_time_epoch_millis = 3;
+    optional int64 planned_end_time_epoch_millis = 4;
+    optional string street_name = 5;
+    optional string city_name = 6;
+    optional string closure_id = 7;
+    optional string mte_id = 8;
+    repeated ClientTileInformation client_info = 9;
+    optional uint32 road_type = 10;
+    optional geocoding.proto.Geometry segment_geometry = 11;
+    optional geocoding.proto.Geometry to_segment_geometry = 12;
+    
+    optional ClosureType closure_type = 13;
+    enum ClosureType {
+        CLOSURE_TYPE_UNSPECIFIED = 0;
+        SEGMENT = 1;
+        TURN = 2;
+    }
+    
+    optional NodeInformation node_a = 16;
+    optional NodeInformation node_b = 17;
+    optional bool from_a_to_b = 15;
+}
+
+message NodeInformation {
+    optional int64 node_id = 1;
+    optional double x = 2;
+    optional double y = 3;
+}
+
+message ClientTileInformation {
+    optional int32 tile = 1;
+    optional int32 client_id = 2;
+}
+
+message GetRouteAttributesRequest {
+    repeated SegmentStart path = 1;
+    optional double from_fraction = 2;
+    optional double to_fraction = 3;
+    optional string session_id = 4;
+    optional string route_request_uuid = 5;
+    optional int64 tiles_version = 6;
+    optional RequestTime request_time = 7;
+    repeated RoutingOptionFieldEntry routing_option = 8;
+    repeated PointId way_point = 9;
+    optional geocoding.proto.DriveProfile drive_profile = 10;
+    optional string alternative_route_uuid = 11;
+    optional string route_type = 12;
+}
+
+message GetRouteAttributesResponse {
+    optional int32 route_length_meters = 1;
+    optional bool is_valid = 2;
+    map<string, int32> num_of_segments_for_road_type = 3;
+    map<string, int32> total_length_of_segments_for_road_type = 4;
+    optional int32 number_of_distinct_road_names = 5;
+    optional int32 number_of_road_name_switches = 6;
+    optional int32 number_of_higher_to_lower_switches = 7;
+    optional int32 number_of_lower_to_higher_switches = 8;
+    map<string, int32> instructions_count = 9;
+    map<string, int32> seconds_per_penalty = 10;
+    map<string, int32> seconds_per_cost_type = 11;
+    optional double toll_price = 12;
+    optional string alternative_route_uuid = 13;
+    optional string route_type = 14;
+    repeated string street_names = 15;
+}
+
+message GeometryParams {
+    optional ENCODING encoding = 1 [default = WKT];
+    enum ENCODING {
+        ENCODING_UNSPECIFIED = 0;
+        WKB = 1;
+        WKT = 2;
+        POLYLINE = 3;
+        S2 = 4;
+    }
+    
+    optional int32 s2_cell_level = 2 [default = 27];
+    optional bool apply_topology_preserving_simplification = 3;
+}
+
+enum AvoidStatus {
+    OPEN = 10;
+    CAN_PASS = 20;
+    MAYBE = 30;
+    AVOID = 40;
+    DANGER = 50;
+    CLOSED = 60;
+}
+
+enum RoutingServerType {
+    ROUTING_TYPE_UNKNOWN = 0;
+    NORMAL = 1;
+    LONG = 2;
+    FUTURE = 3 [deprecated = true];
+    FORECAST = 4;
+    SHADOW = 5;
+    LIVEMAP = 6;
+    MARATHON = 7;
+}
+
+enum RouteCreationMechanism {
+    UNKNOWN_REASON = 0;
+    PREFERRED = 1;
+    ENCOURAGEMENT = 2;
+    ASTAR = 3;
+    BIDI = 4;
+    LONGEST = 5;
+    XLGM = 6;
+    XLBD = 7;
+    HUBCAP_HEURISTIC = 8;
+    AERIAL_TIME_HEURISTIC = 9;
+    AERIAL_DISTANCE_HEURISTIC = 10;
+    OTHER_HEURISTIC = 11;
+    AD_HOC_TOLL_FREE = 12;
+    AD_HOC_RESTRICTED_AREA = 13;
+    REFINED = 14;
+    PROVIDED_ROUTE = 15;
+    PROVIDED_CURRENT_ROUTE = 16;
+    XL_FALLBACK_ASTAR = 17;
+    XL_FALLBACK_BIDI = 18;
+}
+
+enum RoutingRequestType {
+    InitialRoute = 1;
+    MidDriveAlternatives = 46;
+    PlanDrive = 2;
+    VerifyRoute = 3;
+    VerifyEta = 45;
+    VerifyDetour = 32;
+    VerifyReassuranceDetour = 56;
+    ReassurancesFromDeviation = 59;
+    CostBestReassurance = 60;
+    Calendar = 4;
+    LiveMap = 5;
+    Reroute = 6;
+    Ads = 7;
+    Broadcast = 8 [deprecated = true];
+    Carpool = 9;
+    AddWayPoints = 10;
+    MultiDestination = 11;
+    Stateless = 12 [deprecated = true];
+    SearchParking = 14;
+    RefineGeometry = 31;
+    AdsCheckAddRouteWaypoint = 33;
+    AdsCheckNewRouting = 34;
+    Walking = 35;
+    GapFromPreviousLocation = 36;
+    RealtimeSpeedsDriveReminder = 37 [deprecated = true];
+    NonRealtimeSpeedsDriveReminder = 39 [deprecated = true];
+    Standalone = 38 [deprecated = true];
+    WaypointsCategorySearch = 40;
+    SelectDetourRoute = 41;
+    RemoveDetour = 42;
+    TrafficView = 43;
+    PartnerHub = 62;
+    HealthCheck = 44;
+    StartStateRealtime = 47;
+    StartStateNonRealtime = 48;
+    EtaCheckNotificationRealtime = 49;
+    EtaCheckNotificationNonRealtime = 50;
+    DrivePredictionNotificationRealtime = 51;
+    DrivePredictionNotificationNonRealtime = 52;
+    PlannedDriveNotification = 53;
+    GeoRss = 54;
+    RoutesDuration = 55;
+    CurrentAndAlternativeRoutes = 57;
+    CarmaCurrentRouteCost = 58;
+    Other = 99;
+}
+
+enum SideOfTheRoad {
+    UNKNONWN = 1;
+    LEFT = 2;
+    RIGHT = 3;
+    COMPUTE = 4;
+}
+
+enum Weekday {
+    MON = 1;
+    TUE = 2;
+    WED = 3;
+    THU = 4;
+    FRI = 5;
+    SAT = 6;
+    SUN = 7;
+}
+
+enum VehicleType {
+    TRUCK = 0;
+    PUBLIC_TRANSPORTATION = 1;
+    TAXI = 2;
+    BUS = 3;
+    HOV_2 = 4;
+    HOV_3 = 5;
+    RV = 6;
+    TOWING_VEHICLE = 7;
+    MOTORCYCLE = 8;
+    PRIVATE = 9;
+    HAZARDOUS_MATERIALS = 10;
+    CAV = 11;
+    EV = 12;
+    HYBRID = 13;
+    CLEAN_FUEL = 14;
+}
+
+enum RoutingStyle {
+    CLASSIC = 0;
+    CLOCK_WATCHER = 1;
+    DISTANCE_WATCHER = 2;
+    SHARK = 3;
+}
+
+enum RoutingType {
+    NONE = 0;
+    DISTANCE = 1;
+    TIME = 2;
+    HISTORIC_TIME = 3;
+    WALKING = 4;
+    FAST = 5;
+    PARKING = 6;
+}
+
+enum RoutingOption {
+    AVOID_PRIMARIES = 1;
+    AVOID_TRAILS = 2;
+    AVOID_LONG_TRAILS = 3;
+    PREFER_SAME_STREET = 4;
+    IGNORE_REALTIME_INFO = 5;
+    ALLOW_UNKNOWN_DIRECTIONS = 6;
+    ALLOW_NEAR_BY_SOURCE = 7;
+    ALLOW_NEAR_BY_TARGET = 8;
+    IGNORE_SEGMENT_INFO = 9;
+    AVOID_TOLL_ROADS = 10;
+    IGNORE_PENALTIES = 11;
+    PREFER_UNKNOWN_DIRECTIONS = 12;
+    AVOID_DANGER_ZONES = 13;
+    PREFER_LESS_SEGMENTS = 14;
+    IGNORE_HISTORIC_INFO = 15;
+    USE_EXTENDED_INSTRUCTIONS = 16;
+    __AVOID_LANDMARKS = 17;
+    PREFER_COMMON_ROUTES = 18;
+    USE_SHORT_CUTS = 19;
+    PREFER_SHORTER_DISTANCES = 20;
+    USE_LANE_DATA = 21;
+    AVOID_PRIVATE_ROADS = 22;
+    AVOID_TOLLS_IN_ALTERNATIVES = 23;
+    ALLOW_TOLLS_IN_ALTERNATIVES = 24;
+    USE_NEW_AVG_METHOD = 25;
+    PREFER_ALT_COMMON_ROUTES = 26;
+    PREFER_SMOOTH_ROUTES = 27 [deprecated = true];
+    USE_NEW_ALTERNATIVES_COMPUTATION = 28;
+    USE_RATE_FOR_LONG_DRIVE = 29;
+    ALLOW_BLOCKED_ROUTES = 30;
+    USE_LAST_DIRECTION_ON_START = 31;
+    ALLOW_UTURNS = 32;
+    REMOVE_SMALL_DETOURS = 33;
+    AVOID_DANGEROUS_TURNS = 34;
+    BIDIRECTIONAL_ASTAR = 35 [deprecated = true];
+    USE_TRAFFIC_PREDICTIONS = 36;
+    ALLOW_MAX_ALTERNATIVES = 37;
+    AVOID_RESTRICTED_AREA = 38;
+    PENALIZE_SWITCH_TO_TOLL_ROAD = 39;
+    USE_CROSSROADS = 40;
+    RETAIN_RESULTS = 41;
+    AVOID_FERRIES = 42;
+    COMPUTE_ALTERNTIVES_ONLY = 43;
+    ORIGIN_IN_DANGER_ZONE = 44;
+    DESTINATION_IN_DANGER_ZONE = 45;
+    AVOID_COUNTRY_SWITCH = 46;
+    USE_ETA_TWEAK = 47;
+    REORDER_SMALLEST_COST = 48;
+    REORDER_TOLL_NO_TOLL = 49;
+    REORDER_FASTER_AND_SHORTER = 50;
+    REORDER_FASTER = 51;
+    REORDER_MUCH_SHORTER = 52;
+    ADD_HOV_ROUTES = 53;
+    REORDER_HEURISTICS_SHUFFLE = 54;
+    FILTER_OUT_BLOCKED_FREQUENT_ROUTES = 56;
+    FILTER_OUT_INVALID_FREQUENT_ROUTES = 57;
+    INDICATE_PREFERRED_STOPPING_POINTS_ALONG_ROUTE = 58;
+    FILTER_OUT_LOOPY_FREQUENT_ROUTES = 59;
+    FILTER_OUT_PARKING_FREQUENT_ROUTES = 60;
+    OPTIMIZE_XL_ROUTE = 61;
+    ADD_HOV_INSTRUCTIONS = 62;
+    AGGREGATE_SEGMENTS = 63;
+    WAZIFY_XL_ROUTE = 64;
+    DISABLE_LONG_ROUTE_PENALTY = 65;
+    USE_DEBUG_SPEEDS = 66;
+    USE_PETA_IN_ROUTE_CALCULATION = 67;
+    USE_PETA_IN_ALT_ROUTE_CALCULATION = 68;
+    USE_TOLL_PRICES = 69;
+    FIX_REVERSE_ROUTE = 71;
+    USE_FASTER_RUNNING_TIME = 72;
+    COMPUTE_DUE_TO_RESULTS = 73;
+    GENERATE_TRAVERSED_TILE_IDS = 74;
+    DENSE_GEOM_AT_ROUTE_EXTREMITIES = 75;
+    ALLOW_INNER_NODES_NAVIGATION = 76;
+    GENERATE_LANE_GUIDANCE = 77;
+    CLIENT_INSTRUCTION_LANE_GUIDANCE_SEPARATION = 78;
+    DISABLE_FORWARD_TO_FUTURE = 79;
+    USE_PETA = 80;
+    ENABLE_FORECAST_RESPONSE = 81;
+    GENERATE_ROAD_SIGNS = 82;
+    USE_FUTURE_CLOSURES = 83;
+    REORDER_HEURISTICS_MARK = 84;
+    DESTINATION_IS_AN_END_POINT = 85;
+    TO_VERTEX_IS_TO_NODE_OF_TO_SEGMENT = 86;
+    USE_HUBCAP = 87;
+    USE_EXPERIMENTAL_SPEED_INFORMATION = 88;
+    EMIT_RESPONSE_EVENT = 90;
+    FORWARD_FUTURE_REQUESTS_AFTER_X_MINUTES = 91;
+    DEBUG_LIMIT_TO_ROUTE = 92;
+    USE_TOLL_PRICES_FOR_ASTAR = 94;
+    DEBUG_XL_FAILURE = 95;
+    FORCE_XL_ROUTE = 96;
+    USE_OTHERWAZE = 97 [deprecated = true];
+    EMIT_ROUTE_DATA_EVENT = 98;
+    EMIT_DPM_EVENT = 99;
+    AVOID_STREETS = 100;
+    EMIT_ETA_FEATURES_EVENT = 101;
+    EMIT_DPM_EVENT_FOR_MAIN_ROUTE = 102;
+    EMIT_DPM_EVENT_FOR_REFINED_ROUTES = 103;
+    EMIT_DPM_EVENT_FOR_COST_REQUESTS = 104;
+    DETAILED_COST_IN_RESPONSE = 105;
+    DEBUG_LONG_ROUTE_PENALTY = 106;
+    AVOID_PERSONAL_SAFETY_INCIDENTS = 107;
+}
+
+enum RRRMLFeature {
+    sourceLon = 1;
+    sourceLat = 2;
+    destinationLon = 3;
+    destinationLat = 4;
+    isTrip = 5;
+    isCalendar = 6;
+    isFuture = 7;
+    isPickup = 8;
+    sourceIsHome = 9;
+    sourceIsWork = 10;
+    sourceIsFavorite = 11;
+    destinationIsHome = 12;
+    destinationIsWork = 13;
+    destinationIsFavorite = 14;
+    destinationIsVenue = 15;
+    monthOfYear_1 = 20;
+    monthOfYear_2 = 21;
+    monthOfYear_3 = 22;
+    monthOfYear_4 = 23;
+    monthOfYear_5 = 24;
+    monthOfYear_6 = 25;
+    monthOfYear_7 = 26;
+    monthOfYear_8 = 27;
+    monthOfYear_9 = 28;
+    monthOfYear_10 = 29;
+    monthOfYear_11 = 30;
+    monthOfYear_12 = 31;
+    dayOfWeek_1 = 40;
+    dayOfWeek_2 = 41;
+    dayOfWeek_3 = 42;
+    dayOfWeek_4 = 43;
+    dayOfWeek_5 = 44;
+    dayOfWeek_6 = 45;
+    dayOfWeek_7 = 46;
+    hourOfDay_0 = 50;
+    hourOfDay_1 = 51;
+    hourOfDay_2 = 52;
+    hourOfDay_3 = 53;
+    hourOfDay_4 = 54;
+    hourOfDay_5 = 55;
+    hourOfDay_6 = 56;
+    hourOfDay_7 = 57;
+    hourOfDay_8 = 58;
+    hourOfDay_9 = 59;
+    hourOfDay_10 = 60;
+    hourOfDay_11 = 61;
+    hourOfDay_12 = 62;
+    hourOfDay_13 = 63;
+    hourOfDay_14 = 64;
+    hourOfDay_15 = 65;
+    hourOfDay_16 = 66;
+    hourOfDay_17 = 67;
+    hourOfDay_18 = 68;
+    hourOfDay_19 = 69;
+    hourOfDay_20 = 70;
+    hourOfDay_21 = 71;
+    hourOfDay_22 = 72;
+    hourOfDay_23 = 73;
+    altIndex_1 = 80;
+    timeZScore_1 = 81;
+    distanceZScore_1 = 82;
+    isToll_1 = 83;
+    isFrequent_1 = 84;
+    altIndex_2 = 85;
+    timeZScore_2 = 86;
+    distanceZScore_2 = 87;
+    isToll_2 = 88;
+    isFrequent_2 = 89;
+    isMidRoute = 90;
+    aerialDistance = 91;
+    wazerMood = 92;
+    manufacturer = 93;
+    os = 94;
+    clientVersion = 95;
+    engagementGroup = 96;
+    device = 97;
+    numberOfDrivesLastMonth = 98;
+    drivenKMLastMonth = 99;
+    numberOfRouteRequestsLastMonth = 100;
+}
+
+enum ExperimentName {
+    motorcycleSpeedCalculation = 1;
+    privateSpeedCalculation = 2;
+    xlThreshold = 3;
+    tollPriceUserVector = 4;
+    refinement = 5;
+    dpm = 6;
+    inspectorTrafficIntegration = 7;
+    penaltyWeights = 8;
+}

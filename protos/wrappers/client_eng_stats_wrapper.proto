@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/client_eng_stats_wrapper/client_temporary_dynamic_event_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ClientEngStatsWrapper {
+    oneof stat {
+        ClientTemporaryDynamicEventStat client_temporary_dynamic_event = 1;
+    }
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/push_stats_wrapper/push_message_button_clicked_stat.proto";
+import "stats/push_stats_wrapper/push_message_dismissed_stat.proto";
+import "stats/push_stats_wrapper/push_message_launched_stat.proto";
+import "stats/push_stats_wrapper/push_message_received_while_not_running_stat.proto";
+import "stats/push_stats_wrapper/push_message_received_while_running_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PushStatsWrapper {
+    oneof stat {
+        PushMessageLaunchedStat push_message_launched = 1;
+        PushMessageButtonClickedStat push_message_button_clicked = 2;
+        PushMessageDismissedStat push_message_dismissed = 3;
+        PushMessageReceivedWhileNotRunningStat push_message_received_while_not_running = 4;
+        PushMessageReceivedWhileRunningStat push_message_received_while_running = 5;
+    }
+}

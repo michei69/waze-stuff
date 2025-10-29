@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ShutdownFromBgStat {
+    oneof _distance_to_destination_meters {
+        int64 distance_to_destination_meters = 1;
+    }
+}

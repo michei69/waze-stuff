@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/alternate_routes_stats_wrapper/alternative_route.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AlternativeRoutesScreenClickedStat {
+    AlternativeRoute alternative_route = 1;
+    
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ROUTE_SELECTED = 1;
+        ROUTE_LABEL_SELECTED = 2;
+        SWIPE = 3;
+        CHECK = 4;
+        GO = 5;
+        RESUME = 6;
+        BACK = 7;
+        PAN = 8;
+        ZOOM = 9;
+        RECENTER = 10;
+        DRIVING_INSTRUCTIONS_BAR_OPENED = 11;
+        DRIVING_INSTRUCTIONS_BAR_COLLAPSED = 12;
+        MORE_DETAILS = 13;
+        HOV_TOGGLE = 14;
+        SCROLL = 15;
+        TOGGLE_SCREEN_MODE = 16;
+    }
+    
+    ActionSource action_source = 3;
+    enum ActionSource {
+        ACTION_SOURCE_UNSPECIFIED = 0;
+        MAP = 1;
+        CARD = 2;
+        INCAR_CHECKLIST = 3;
+        HARDWARE_BACK = 4;
+        RECENTER_ICON = 5;
+        DRIVING_INSTRUCTIONS_BAR = 6;
+        SCREEN_MODE_TOGGLE = 7;
+    }
+}

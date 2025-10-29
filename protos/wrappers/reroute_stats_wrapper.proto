@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reroute_stats_wrapper/reroute_eta_difference_stat.proto";
+import "stats/reroute_stats_wrapper/reroute_stat.proto";
+import "stats/reroute_stats_wrapper/reroute_suggestion_filtered_stat.proto";
+import "stats/reroute_stats_wrapper/reroute_suggestion_received_stat.proto";
+import "stats/reroute_stats_wrapper/reroute_suggestion_resolved_stat.proto";
+import "stats/reroute_stats_wrapper/select_detour_eta_difference_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RerouteStatsWrapper {
+    oneof stat {
+        RerouteStat reroute = 1;
+        RerouteSuggestionFilteredStat reroute_suggestion_filtered = 2;
+        RerouteSuggestionReceivedStat reroute_suggestion_received = 3;
+        RerouteSuggestionResolvedStat reroute_suggestion_resolved = 4;
+        RerouteEtaDifferenceStat reroute_eta_difference = 5;
+        SelectDetourEtaDifferenceStat select_detour_eta_difference = 6;
+    }
+}

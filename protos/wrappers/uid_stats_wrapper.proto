@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/uid_stats_wrapper/authentication_completed_stat.proto";
+import "stats/uid_stats_wrapper/onboarding_summary_stat.proto";
+import "stats/uid_stats_wrapper/set_home_work_screen_clicked_stat.proto";
+import "stats/uid_stats_wrapper/set_home_work_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/account_recovery_from_icloud_attempt_stat.proto";
+import "stats/unauthenticated_stats/account_recovery_result_stat.proto";
+import "stats/unauthenticated_stats/onboarding_completed_stat.proto";
+import "stats/unauthenticated_stats/sign_up_sheet_clicked_stat.proto";
+import "stats/unauthenticated_stats/sign_up_sheet_shown_stat.proto";
+import "stats/unauthenticated_stats/welcome_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/welcome_screen_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UidStatsWrapper {
+    oneof stat {
+        SignUpSheetClickedStat sign_up_sheet_clicked = 1 [deprecated = true];
+        WelcomeScreenClickedStat welcome_screen_clicked = 2 [deprecated = true];
+        SignUpSheetShownStat sign_up_sheet_shown = 3 [deprecated = true];
+        WelcomeScreenShownStat welcome_screen_shown = 4 [deprecated = true];
+        OnboardingCompletedStat onboarding_completed = 5 [deprecated = true];
+        AuthenticationCompletedStat authentication_completed = 6;
+        AccountRecoveryResultStat account_recovery_result = 7 [deprecated = true];
+        AccountRecoveryFromIcloudAttemptStat account_recovery_from_icloud_attempt = 8 [deprecated = true];
+        OnboardingSummaryStat onboarding_summary = 9;
+        SetHomeWorkScreenClickedStat set_home_work_screen_clicked = 10;
+        SetHomeWorkScreenShownStat set_home_work_screen_shown = 11;
+    }
+}

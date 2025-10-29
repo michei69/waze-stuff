@@ -1,0 +1,252 @@
+syntax = "proto2";
+
+package linqmap.proto.favorites;
+
+import "Types.proto";
+import "PIIManagement.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPF";
+option java_package = "linqmap.proto.favorites";
+
+message GetFavoriteInfoRequest {
+    optional int64 user_id = 1;
+}
+
+message GetFavoriteInfoRequestWrapper {
+    optional GetFavoriteInfoRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message GetFavoriteInfoResponse {
+    optional int32 sync_version = 1;
+    optional int32 update_version = 2;
+    optional int32 server_config_id = 3;
+}
+
+message FavoriteSyncRequest {
+    optional int64 user_id = 1;
+    repeated Favorite favorite = 2;
+}
+
+message FavoriteSyncRequestWrapper {
+    optional FavoriteSyncRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message GetFavoriteListRequest {
+    optional int64 user_id = 1;
+}
+
+message GetFavoriteListRequestWrapper {
+    optional GetFavoriteListRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message FavoriteResponse {
+    repeated Favorite favorite = 1;
+    optional int32 sync_version = 2;
+    optional int32 update_version = 3;
+}
+
+message CreateFavoriteRequest {
+    optional int64 user_id = 1;
+    optional Favorite favorite = 2;
+    optional string request_id = 3;
+}
+
+message CreateFavoriteRequestWrapper {
+    optional CreateFavoriteRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message CreateFavoriteResponse {
+    optional int64 favorite_id = 1;
+    optional int32 update_version = 2;
+    optional string request_id = 3;
+}
+
+message UpdateFavoriteRequest {
+    optional int64 user_id = 1;
+    optional Favorite favorite = 2;
+    optional string request_id = 3;
+}
+
+message UpdateFavoriteRequestWrapper {
+    optional UpdateFavoriteRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message UpdateFavoriteResponse {
+    optional int32 update_version = 1;
+    optional string request_id = 2;
+}
+
+message DeleteFavoriteRequest {
+    optional int64 user_id = 1;
+    optional Favorite favorite = 2;
+    optional string request_id = 3;
+}
+
+message DeleteFavoriteRequestWrapper {
+    optional DeleteFavoriteRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message DeleteFavoriteResponse {
+    optional int32 update_version = 1;
+    optional string request_id = 2;
+}
+
+message SyncFavoritesOrderRequest {
+    optional int64 user_id = 1;
+    repeated int64 favorite_ids = 2;
+    optional string request_id = 3;
+}
+
+message SyncFavoritesOrderRequestWrapper {
+    optional SyncFavoritesOrderRequest request = 1;
+    optional int64 user_id = 2;
+}
+
+message SyncFavoritesOrderResponse {
+    optional int32 update_version = 1;
+    optional string request_id = 2;
+    optional Status status = 3;
+    optional bool is_order_synced = 4;
+}
+
+message GetSharedLocationInfoRequest {
+    optional int64 user_id = 1;
+}
+
+message GetSharedLocationInfoResponse {
+    optional int32 sync_version = 1;
+    optional int32 update_version = 2;
+    optional int32 server_config_id = 3;
+}
+
+message SharedLocationSyncRequest {
+    optional int64 user_id = 1;
+    repeated SharedLocation shared_locs = 2;
+}
+
+message GetSharedLocationListRequest {
+    optional int64 user_id = 1;
+}
+
+message SharedLocationsResponse {
+    repeated SharedLocation shared_locs = 1;
+    optional int32 sync_version = 2;
+    optional int32 update_version = 3;
+}
+
+message CreateSharedLocationRequest {
+    optional int64 user_id = 1;
+    optional SharedLocation shared_loc = 2;
+    optional string request_id = 3;
+}
+
+message CreateSharedLocationResponse {
+    optional int64 shared_loc_id = 1;
+    optional int32 update_version = 2;
+    optional string request_id = 3;
+}
+
+message UpdateSharedLocationRequest {
+    optional int64 user_id = 1;
+    optional SharedLocation shared_loc = 2;
+    optional string request_id = 3;
+}
+
+message UpdateSharedLocationResponse {
+    optional int32 update_version = 1;
+    optional string request_id = 2;
+}
+
+message DeleteSharedLocationRequest {
+    optional int64 user_id = 1;
+    optional SharedLocation shared_loc = 2;
+    optional string request_id = 3;
+}
+
+message DeleteSharedLocationResponse {
+    optional int32 update_version = 1;
+    optional string request_id = 2;
+}
+
+message GetHistoryListRequest {
+    optional int64 user_id = 1;
+}
+
+message GetHistoryListResponse {
+    repeated HistoryPlace history_place = 1;
+}
+
+message Place {
+    optional int64 id = 1;
+    optional Coordinate location = 2;
+    optional string location_name = 3;
+    optional string street = 4;
+    optional string city = 5;
+    optional string state = 6;
+    optional string country = 7;
+    optional string house = 8;
+    optional string venue_id = 9;
+    optional int64 edit_time_secs = 10;
+    optional string routing_context = 11;
+}
+
+message Favorite {
+    optional Place place = 1;
+    optional string name = 2;
+    
+    optional Type type = 3;
+    enum Type {
+        UNKNOWN = 0;
+        HOME = 1;
+        WORK = 2;
+        OTHER = 3;
+    }
+    
+    repeated string notification_users = 4;
+    optional int64 last_drive_time = 5;
+}
+
+message SharedLocation {
+    optional Place place = 1;
+    optional string name = 2;
+    optional string share_user_id = 3;
+    optional int64 access_time_secs = 4;
+    optional string share_id = 5;
+    optional int64 share_time_secs = 6;
+    
+    optional Type type = 7;
+    enum Type {
+        NONE = 0;
+        LOCATION = 1;
+        DRIVE = 2;
+    }
+}
+
+message HistoryPlace {
+    optional Place place = 1;
+    optional int32 weight = 2;
+    optional int64 last_navigation_time_secs = 3;
+}
+
+message GetHomeAndWorkRequest {
+    optional int64 user_id = 1;
+}
+
+message GetHomeAndWorkResponse {
+    repeated Favorite home = 1;
+    repeated Favorite work = 2;
+    optional Status status = 3;
+}
+
+message SetHomeAndWorkRequest {
+    optional int64 user_id = 1;
+    optional Favorite home = 2;
+    optional Favorite work = 3;
+}

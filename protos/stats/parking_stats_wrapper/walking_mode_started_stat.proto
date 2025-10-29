@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/parking_stats_wrapper/walking_mode_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message WalkingModeStartedStat {
+    WalkingModeInfo walking_mode_info = 1;
+}

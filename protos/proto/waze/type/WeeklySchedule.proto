@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package waze.type;
+
+option objc_class_prefix = "WZT";
+option java_multiple_files = true;
+option java_outer_classname = "WeeklyScheduleProto";
+option java_package = "com.waze.type";
+
+message WeeklySchedule {
+    repeated TimePeriod time_periods = 1;
+    message TimePeriod {
+        optional DayOfWeek start_day = 1;
+        optional string start_time = 2;
+        optional DayOfWeek end_day = 3;
+        optional string end_time = 4;
+    }
+    
+    enum DayOfWeek {
+        DAY_OF_WEEK_UNSPECIFIED = 0;
+        MONDAY = 1;
+        TUESDAY = 2;
+        WEDNESDAY = 3;
+        THURSDAY = 4;
+        FRIDAY = 5;
+        SATURDAY = 6;
+        SUNDAY = 7;
+    }
+}

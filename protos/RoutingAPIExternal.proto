@@ -1,0 +1,172 @@
+syntax = "proto2";
+
+package linqmap.routing.proto.external;
+
+import "Types.proto";
+
+option objc_class_prefix = "LRPE";
+option java_package = "linqmap.routing.proto.external";
+
+message RouteType {
+    enum Enum {
+        UNKNOWN = 0;
+        BEST = 1;
+        NATURAL = 2;
+        FREQUENT = 3;
+        CURRENT = 4;
+    }
+}
+
+message DetourType {
+    enum Enum {
+        UNKNOWN = 0;
+        SMALL = 1;
+        EXIT_ENTRY = 2;
+        REASSURANCE = 3;
+    }
+}
+
+message RouteAttr {
+    enum Enum {
+        UNKNOWN = 0;
+        INVALID = 1;
+        BLOCKED = 2;
+        TOLL = 3;
+        FERRY = 4;
+        UNPAVED = 5;
+        DANGEROUS_TURN = 6;
+        RESTRICTED_ZONE = 7;
+        DANGER_ZONE = 8;
+        SCHOOL_ZONE = 9;
+        INTERNATIONAL = 10;
+        BEACONS = 11;
+        HOV = 12;
+        BYPASSES_RESTRICTED = 13;
+        ENCOURAGEMENT = 14;
+        STEPPED_ON_IT = 15;
+        ETA_FROM_ML = 16;
+        INVALID_FOR_PRIVATE_VEHICLE = 17;
+        RESTRICTED_BY_LICENSE_PLATE = 18;
+        TOLL_FOR_AVOIDERS = 19;
+        UNNATURAL = 20;
+        PRIMARY_FOR_AVOIDERS = 21;
+        SAFETY_INCIDENTS_ON_ROUTE = 22;
+        SAFETY_INCIDENTS_FREE = 23;
+    }
+}
+
+message RoutingOptionFieldEntry {
+    optional RoutingOption key = 1;
+    optional bool value = 2;
+}
+
+message RoutingLocationInfo {
+    repeated Heading heading = 1;
+    message Heading {
+        optional float degrees = 1;
+        optional int64 epoch_millis = 2;
+        optional float accuracy_degrees = 3;
+        
+        optional Source source = 4;
+        enum Source {
+            UNSPECIFIED = 0;
+            CAR_COMPASS = 1;
+            PHONE_COMPASS = 2;
+            PREV_SESSION = 3;
+            GPS = 4;
+            DISPLAYED = 5;
+        }
+    }
+    
+    optional RawGps gps_info = 2;
+    message RawGps {
+        optional linqmap.proto.Coordinate position = 1;
+        optional int64 epoch_millis = 2;
+        optional float accuracy_meters = 3;
+    }
+    
+    optional bool in_startup_confusion = 3;
+}
+
+enum RoutingOption {
+    AVOID_PRIMARIES = 1;
+    AVOID_TRAILS = 2;
+    AVOID_LONG_TRAILS = 3;
+    PREFER_SAME_STREET = 4;
+    IGNORE_REALTIME_INFO = 5;
+    ALLOW_UNKNOWN_DIRECTIONS = 6;
+    ALLOW_NEAR_BY_SOURCE = 7;
+    ALLOW_NEAR_BY_TARGET = 8;
+    IGNORE_SEGMENT_INFO = 9;
+    AVOID_TOLL_ROADS = 10;
+    IGNORE_PENALTIES = 11;
+    PREFER_UNKNOWN_DIRECTIONS = 12;
+    AVOID_DANGER_ZONES = 13;
+    PREFER_LESS_SEGMENTS = 14;
+    IGNORE_HISTORIC_INFO = 15;
+    USE_EXTENDED_INSTRUCTIONS = 16;
+    PREFER_SHORTER_DISTANCES = 20;
+    USE_LANE_DATA = 21;
+    AVOID_PRIVATE_ROADS = 22;
+    AVOID_TOLLS_IN_ALTERNATIVES = 23;
+    ALLOW_TOLLS_IN_ALTERNATIVES = 24;
+    PREFER_ALT_COMMON_ROUTES = 26;
+    USE_RATE_FOR_LONG_DRIVE = 29;
+    ALLOW_BLOCKED_ROUTES = 30;
+    USE_LAST_DIRECTION_ON_START = 31;
+    ALLOW_UTURNS = 32;
+    REMOVE_SMALL_DETOURS = 33;
+    AVOID_DANGEROUS_TURNS = 34;
+    ALLOW_MAX_ALTERNATIVES = 37;
+    AVOID_RESTRICTED_AREA = 38;
+    PENALIZE_SWITCH_TO_TOLL_ROAD = 39;
+    USE_CROSSROADS = 40;
+    RETAIN_RESULTS = 41;
+    AVOID_FERRIES = 42;
+    ORIGIN_IN_DANGER_ZONE = 44;
+    DESTINATION_IN_DANGER_ZONE = 45;
+    AVOID_COUNTRY_SWITCH = 46;
+    REORDER_SMALLEST_COST = 48;
+    REORDER_TOLL_NO_TOLL = 49;
+    REORDER_FASTER_AND_SHORTER = 50;
+    REORDER_FASTER = 51;
+    REORDER_MUCH_SHORTER = 52;
+    ADD_HOV_ROUTES = 53;
+    FILTER_OUT_BLOCKED_FREQUENT_ROUTES = 56;
+    FILTER_OUT_INVALID_FREQUENT_ROUTES = 57;
+    INDICATE_PREFERRED_STOPPING_POINTS_ALONG_ROUTE = 58;
+    FILTER_OUT_LOOPY_FREQUENT_ROUTES = 59;
+    FILTER_OUT_PARKING_FREQUENT_ROUTES = 60;
+    OPTIMIZE_XL_ROUTE = 61;
+    ADD_HOV_INSTRUCTIONS = 62;
+    AGGREGATE_SEGMENTS = 63;
+    WAZIFY_XL_ROUTE = 64;
+    DISABLE_LONG_ROUTE_PENALTY = 65;
+    USE_DEBUG_SPEEDS = 66;
+    USE_PETA_IN_ROUTE_CALCULATION = 67;
+    USE_PETA_IN_ALT_ROUTE_CALCULATION = 68;
+    USE_TOLL_PRICES = 69;
+    PLACE_ENCOURAGEMENT_AS_SECOND = 70 [deprecated = true];
+    FIX_REVERSE_ROUTE = 71;
+    USE_FASTER_RUNNING_TIME = 72;
+    COMPUTE_DUE_TO_RESULTS = 73;
+    GENERATE_TRAVERSED_TILE_IDS = 74;
+    DENSE_GEOM_AT_ROUTE_EXTREMITIES = 75;
+    ALLOW_INNER_NODES_NAVIGATION = 76;
+    GENERATE_LANE_GUIDANCE = 77;
+    CLIENT_INSTRUCTION_LANE_GUIDANCE_SEPARATION = 78;
+    DISABLE_FORWARD_TO_FUTURE = 79;
+    USE_PETA = 80;
+    ENABLE_FORECAST_RESPONSE = 81;
+    GENERATE_ROAD_SIGNS = 82;
+    USE_FUTURE_CLOSURES = 83;
+    REORDER_HEURISTICS_MARK = 84;
+    DESTINATION_IS_AN_END_POINT = 85;
+    TO_VERTEX_IS_TO_NODE_OF_TO_SEGMENT = 86;
+    USE_HUBCAP = 87;
+    USE_EXPERIMENTAL_SPEED_INFORMATION = 88;
+    EMIT_RESPONSE_EVENT = 90;
+    FORWARD_FUTURE_REQUESTS_AFTER_X_MINUTES = 91;
+    DEBUG_LIMIT_TO_ROUTE = 92;
+    USE_TOLL_PRICES_FOR_ASTAR = 94;
+}

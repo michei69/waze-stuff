@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.planned_drive;
+
+import "Position.proto";
+import "VenueData.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.planned_drive";
+
+message FetchPlannedDriveTimeRequest {
+    string meeting_id = 1;
+}
+
+message FetchPlannedDriveTimeResponse {
+    string meeting_id = 1;
+    int32 drive_time_sec = 2;
+}
+
+message LoadPlannedDriveOptionsRequest {
+    int32 days_from_now = 1;
+    VenueData destination = 3;
+    
+    oneof _origin {
+        IntPosition origin = 2;
+    }
+}
+
+message LoadPlannedDriveOptionsResponse {
+    ResponseCode code = 1;
+    enum ResponseCode {
+        OK = 0;
+        GENERAL_ERROR = 1;
+        NETWORK_ERROR = 2;
+        ROUTE_TOO_LONG = 3;
+        QUOTA_EXCEEDED = 4;
+        NO_CURRENT_LOCATION = 5;
+    }
+    
+    repeated int32 etas = 2;
+    repeated int64 times = 3;
+    
+    oneof _is_too_late {
+        bool is_too_late = 4;
+    }
+}
+
+message CreatePlannedDriveRequest {
+    VenueData destination = 2;
+    int64 start_time_sec = 3;
+    
+    oneof _origin {
+        VenueData origin = 1;
+    }
+}
+
+message UpdatePlannedDriveRequest {
+    string meeting_id = 1;
+    int64 new_start_time_sec = 2;
+}
+
+message DeletePlannedDriveRequest {
+    string meeting_id = 1;
+}
+
+message PlannedDriveResponse {
+    bool success = 1;
+    
+    oneof _error_title {
+        string error_title = 2;
+    }
+    
+    oneof _error_message {
+        string error_message = 3;
+    }
+}

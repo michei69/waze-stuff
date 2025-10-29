@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/generic_setting_action.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SettingsStat {
+    ScreenName screen_name = 1;
+    enum ScreenName {
+        SCREEN_NAME_UNSPECIFIED = 0;
+        GENERAL_SETTINGS = 1;
+        VOICE_SETTINGS = 2;
+        WAZE_VOICE_SETTINGS = 3;
+        CAR_ICON_SETTINGS = 4;
+        VEHICLE_TYPE_SETTINGS = 5;
+        PRIVACY_SETTINGS = 6;
+        GAS_TYPE_SETTINGS = 7;
+        REPORTS_SETTINGS = 8;
+        NAVIGATION_SETTINGS = 9;
+        PLANNED_DRIVE_SETTINGS = 10;
+        TRIP_SUGGESTIONS_SETTINGS = 11;
+        ACCOUNT_AND_LOGIN_SETTINGS = 12;
+        SPEEDOMETER_SETTINGS = 13;
+        MAIN_SETTINGS = 14;
+        NAVIGATION_HISTORY_SETTINGS = 15;
+        EV_PROFILE_SETTINGS = 16;
+        EV_CONNECTORS_SETTINGS = 17;
+        GAS_STATIONS_SETTINGS = 18;
+        GOOGLE_ASSISTANT_SETTINGS = 19;
+        QUICK_GAS_SETTINGS = 20;
+        QUICK_NAVIGATION_SETTINGS = 21;
+        QUICK_SOUND_SETTINGS = 22;
+        EV_NETWORKS_SETTINGS = 23;
+        LICENSE_PLATE_SETTINGS = 24;
+        PREFERRED_STATION_SETTINGS = 25;
+        SIRI_SHORTCUTS_SETTINGS = 26;
+        VEHICLE_DETAILS_SETTINGS = 27;
+        CAMERAS_SETTINGS = 28;
+    }
+    
+    GenericSettingAction action = 2;
+    string button = 3;
+    string changed_from = 4;
+    string changed_to = 5;
+    string changed_param = 6;
+}

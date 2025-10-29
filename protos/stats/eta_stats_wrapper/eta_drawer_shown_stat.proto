@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/eta_stats_wrapper/eta_drawer_navigation_type.proto";
+import "stats/eta_stats_wrapper/hov_information.proto";
+import "stats/eta_stats_wrapper/special_route_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message EtaDrawerShownStat {
+    EtaDrawerNavigationType navigation_type = 1;
+    string venue_id = 2;
+    HovInformation hov_card_information = 3;
+    repeated SpecialRouteType displayed_special_routes = 7;
+    
+    oneof _nd4c_algo_transparency_link_shown {
+        bool nd4c_algo_transparency_link_shown = 4;
+    }
+    
+    oneof _stop_added {
+        bool stop_added = 5;
+    }
+    
+    oneof _share_suggestion_enabled {
+        bool share_suggestion_enabled = 6;
+    }
+    
+    oneof _hov_available {
+        bool hov_available = 8;
+    }
+}

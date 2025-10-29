@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package linqmap.proto.map_data;
+
+import "SegmentLineCommon.proto";
+
+message Line {
+    oneof _direction_from {
+        Direction direction_from = 1;
+    }
+    
+    oneof _direction_to {
+        Direction direction_to = 2;
+    }
+    
+    oneof _direction_common {
+        Direction direction_common = 3;
+    }
+}

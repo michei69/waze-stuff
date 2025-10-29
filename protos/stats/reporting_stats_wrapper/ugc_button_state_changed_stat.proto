@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcButtonStateChangedStat {
+    UGCButtonState changed_to = 1;
+    enum UGCButtonState {
+        UGC_BUTTON_STATE_UNSPECIFIED = 0;
+        UGC_BUTTON_SHOWN = 1;
+        UGC_BUTTON_HIDDEN = 2;
+        UGC_BUTTON_SHRINK = 3;
+        UGC_BUTTON_UNSHRINK = 4;
+    }
+}

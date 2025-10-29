@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/common_wrapper/app_state.proto";
+import "stats/common_wrapper/eta.proto";
+import "stats/common_wrapper/login.proto";
+import "stats/common_wrapper/monitoring_stats.proto";
+import "stats/common_wrapper/networking_stats.proto";
+import "stats/common_wrapper/push.proto";
+import "stats/common_wrapper/welcome_screen.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message CommonWrapper {
+    oneof stat {
+        AppCrashed app_crashed = 1 [deprecated = true];
+        ServerRequestResult server_request_result = 2 [deprecated = true];
+        AppRunningMode app_running_mode = 3 [deprecated = true];
+        PushMessageLaunched push_message_launched = 4 [deprecated = true];
+        NetworkState network_state = 5 [deprecated = true];
+        Login login = 6 [deprecated = true];
+        WelcomeScreenShown welcome_screen_shown = 7 [deprecated = true];
+        EtaClick eat_click = 8 [deprecated = true];
+    }
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/network_stats_wrapper/downloader_failed_download_stat.proto";
+import "stats/network_stats_wrapper/downloader_finished_download_aggregate_stat.proto";
+import "stats/network_stats_wrapper/login_stat.proto";
+import "stats/network_stats_wrapper/network_state_changed_stat.proto";
+import "stats/network_stats_wrapper/no_network_error_stat.proto";
+import "stats/network_stats_wrapper/realtime_refresh_cycle_triggered_stat.proto";
+import "stats/network_stats_wrapper/realtime_request_error_stat.proto";
+import "stats/network_stats_wrapper/server_request_result_stat.proto";
+import "stats/network_stats_wrapper/server_routing_request_result_stat.proto";
+import "stats/network_stats_wrapper/server_select_route_request_result_stat.proto";
+import "stats/network_stats_wrapper/successful_login_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NetworkStatsWrapper {
+    oneof stat {
+        LoginStat login = 1;
+        SuccessfulLoginStat successful_login = 2;
+        NetworkStateChangedStat network_state_changed = 3;
+        DownloaderFinishedDownloadAggregateStat downloader_finished_download_aggregate = 4;
+        DownloaderFailedDownloadStat downloader_failed_download = 5;
+        RealtimeRequestErrorStat realtime_request_error = 6;
+        NoNetworkErrorStat no_network_error = 7;
+        ServerRequestResultStat server_request_result = 8;
+        ServerRoutingRequestResultStat server_routing_request_result = 9;
+        ServerSelectRouteRequestResultStat server_select_route_request_result = 10;
+        RealtimeRefreshCycleTriggeredStat realtime_refresh_cycle_triggered = 11;
+    }
+}

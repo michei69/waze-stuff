@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package waze.type;
+
+option objc_class_prefix = "WZT";
+option java_multiple_files = true;
+option java_outer_classname = "MoneyProto";
+option java_package = "com.waze.type";
+
+message Money {
+    optional string currency_code = 1;
+    optional int64 units = 2;
+    optional int32 nanos = 3;
+}

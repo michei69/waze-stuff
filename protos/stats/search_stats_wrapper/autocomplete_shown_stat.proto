@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/triggering_platform.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AutocompleteShownStat {
+    string query = 1;
+    TriggeringPlatform triggering_platform = 8;
+    
+    oneof _number_of_results {
+        int64 number_of_results = 2;
+    }
+    
+    oneof _new_query {
+        bool new_query = 3;
+    }
+    
+    oneof _error_code {
+        int64 error_code = 4;
+    }
+    
+    oneof _nd4c_algo_transparency_link_shown {
+        bool nd4c_algo_transparency_link_shown = 5;
+    }
+    
+    oneof _voice_search {
+        bool voice_search = 6;
+    }
+    
+    oneof _category_suggested {
+        bool category_suggested = 7;
+    }
+}

@@ -1,0 +1,231 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.search;
+
+import "VenueData.proto";
+import "Advertisement.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.search";
+
+message SearchResults {
+    repeated SearchResult result = 1;
+    
+    oneof _error {
+        SearchError error = 2;
+    }
+}
+
+message SearchError {
+    oneof _message {
+        string message = 1;
+    }
+    
+    oneof _provider {
+        string provider = 2;
+    }
+    
+    oneof _can_retry {
+        bool can_retry = 3;
+    }
+}
+
+message SearchResult {
+    int32 index = 1;
+    
+    oneof _id {
+        string id = 2;
+    }
+    
+    oneof _provider {
+        string provider = 3;
+    }
+    
+    oneof _category {
+        string category = 4;
+    }
+    
+    oneof _title {
+        string title = 5;
+    }
+    
+    oneof _formatted_address {
+        string formatted_address = 6;
+    }
+    
+    oneof _venue {
+        VenueData venue = 7;
+    }
+    
+    oneof _promotion_deal {
+        PromotionDeal promotion_deal = 8;
+    }
+    
+    oneof _advil_request {
+        AdvilRequest advil_request = 9;
+    }
+    
+    oneof _distance_meters {
+        int32 distance_meters = 10;
+    }
+    
+    oneof _menu_icon_name {
+        string menu_icon_name = 11;
+    }
+    
+    oneof _has_specific_menu_icon {
+        bool has_specific_menu_icon = 12;
+    }
+    
+    oneof _preview_icon_name {
+        string preview_icon_name = 13;
+    }
+    
+    oneof _is_navigable {
+        bool is_navigable = 14;
+    }
+    
+    oneof _currency {
+        string currency = 15;
+    }
+}
+
+message PromotionDeal {
+    oneof _id {
+        string id = 1;
+    }
+    
+    oneof _type {
+        Type type = 2;
+    }
+    
+    oneof _title {
+        string title = 3;
+    }
+    
+    oneof _text {
+        string text = 4;
+    }
+    
+    oneof _price {
+        float price = 5;
+    }
+    
+    oneof _price_range {
+        PriceRange price_range = 6;
+    }
+    
+    oneof _formatted_price {
+        string formatted_price = 7;
+    }
+    
+    oneof _pin_id {
+        int32 pin_id = 8;
+    }
+    
+    oneof _last_updated_timestamp {
+        int64 last_updated_timestamp = 9;
+    }
+    
+    oneof _show_as_ad {
+        bool show_as_ad = 10;
+    }
+    
+    oneof _currency {
+        string currency = 13;
+    }
+    
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        WAZE_SPECIAL = 1;
+        SPECIAL = 2;
+    }
+    
+    enum PriceRange {
+        PRICE_RANGE_UNSPECIFIED = 0;
+        LOW = 1;
+        MED = 2;
+        HIGH = 3;
+    }
+}
+
+message ParkingSearchResults {
+    repeated ParkingSearchResult result = 1;
+}
+
+message ParkingSearchResult {
+    oneof _search_result {
+        SearchResult search_result = 1;
+    }
+    
+    oneof _popular {
+        bool popular = 2;
+    }
+    
+    oneof _best {
+        bool best = 3;
+    }
+    
+    oneof _walking_distance_meters {
+        int32 walking_distance_meters = 4;
+    }
+    
+    oneof _show_as_ad {
+        bool show_as_ad = 5;
+    }
+}
+
+message EVSearchData {
+    repeated string ev_connector_type_ids = 1;
+    repeated string ev_networks = 2;
+}
+
+message EVNetworkData {
+    repeated string ev_networks = 1;
+}
+
+message SearchVenueRequest {
+    oneof _venue_id {
+        string venue_id = 1;
+    }
+    
+    oneof _venue_context {
+        string venue_context = 2;
+    }
+    
+    oneof _return_all_data {
+        bool return_all_data = 3;
+    }
+}
+
+message SearchVenueResult {
+    oneof _result {
+        SearchResult result = 1;
+    }
+}
+
+message CategoryProductResult {
+    oneof _id {
+        string id = 1;
+    }
+    
+    oneof _label {
+        string label = 2;
+    }
+    
+    oneof _type {
+        string type = 3;
+    }
+    
+    oneof _price_format {
+        string price_format = 4;
+    }
+    
+    oneof _icon {
+        string icon = 5;
+    }
+}
+
+message CategoryProductsResult {
+    repeated CategoryProductResult product = 1;
+}

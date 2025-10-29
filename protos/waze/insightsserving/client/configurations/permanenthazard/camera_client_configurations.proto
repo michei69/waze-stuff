@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+import "waze/insightsserving/client/configurations/common_client_configurations.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "CameraClientConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message SpeedConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message RedLightConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message DummyConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message SeatbeltConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message MobilePhoneConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message StopConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message NoiseConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message DistanceConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+}
+
+message CarpoolLaneConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+    
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 4;
+    }
+}
+
+message BusLaneConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+    
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 4;
+    }
+}
+
+message HovLaneConfiguration {
+    oneof _combo_priority {
+        int32 combo_priority = 1;
+    }
+    
+    oneof _grouping_configuration {
+        GroupingConfiguration grouping_configuration = 2;
+    }
+    
+    oneof _capping_configuration {
+        CappingConfiguration capping_configuration = 3;
+    }
+    
+    oneof _segmentation_configuration {
+        SegmentationConfiguration segmentation_configuration = 4;
+    }
+}

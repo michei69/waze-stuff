@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/surfaced_insights_wrapper/surfaced_location_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SurfacedTakeoverClickedStat {
+    SurfacedLocationInfo surfaced_location_info = 1;
+    
+    TakeoverAction action = 2;
+    enum TakeoverAction {
+        TAKEOVER_ACTION_UNSPECIFIED = 0;
+        TAKEOVER_ACTION_INFO = 1;
+        TAKEOVER_ACTION_DRIVE_THERE = 2;
+    }
+}

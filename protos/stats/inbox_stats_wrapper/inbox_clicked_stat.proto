@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message InboxClickedStat {
+    string message_title = 1;
+    
+    Action action = 2;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CLOSE = 1;
+        BACK = 2;
+        MESSAGE = 3;
+        CHAT = 4;
+        DELETE = 5;
+        DELETE_ALL = 6;
+        READ = 7;
+        READ_ALL = 8;
+        SELECT = 9;
+        SELECT_ALL = 10;
+        SELECT_NONE = 11;
+    }
+    
+    string message_id = 3;
+}

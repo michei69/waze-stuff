@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/permissions_stats_wrapper/bluetooth_permission_request_popup_clicked_stat.proto";
+import "stats/permissions_stats_wrapper/bluetooth_permission_request_popup_shown_stat.proto";
+import "stats/permissions_stats_wrapper/bluetooth_permission_request_responded_stat.proto";
+import "stats/permissions_stats_wrapper/bluetooth_permission_requested_stat.proto";
+import "stats/permissions_stats_wrapper/location_access_denied_error_stat.proto";
+import "stats/permissions_stats_wrapper/location_permission_request_popup_clicked_stat.proto";
+import "stats/permissions_stats_wrapper/location_permission_request_popup_shown_stat.proto";
+import "stats/permissions_stats_wrapper/os_permissions_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message PermissionsStatsWrapper {
+    oneof stat {
+        LocationAccessDeniedErrorStat location_access_denied_error = 1;
+        OsPermissionsStat os_permissions = 2;
+        BluetoothPermissionRequestPopupClickedStat bluetooth_permission_request_popup_clicked = 3;
+        BluetoothPermissionRequestPopupShownStat bluetooth_permission_request_popup_shown = 4;
+        BluetoothPermissionRequestRespondedStat bluetooth_permission_request_responded = 5;
+        BluetoothPermissionRequestedStat bluetooth_permission_requested = 6;
+        LocationPermissionRequestPopupShownStat location_permission_request_popup_shown = 7;
+        LocationPermissionRequestPopupClickedStat location_permission_request_popup_clicked = 8;
+    }
+}

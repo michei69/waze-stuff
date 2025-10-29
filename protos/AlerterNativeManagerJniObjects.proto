@@ -1,0 +1,233 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+import "Position.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message AlerterSubType {
+    enum HazardSubType {
+        HAZARD_SUB_TYPE_UNSPECIFIED = 0;
+        HAZARD_SUB_TYPE_DEFAULT = 1;
+        HAZARD_SUB_TYPE_ON_ROAD_CONSTRUCTION = 2;
+        HAZARD_SUB_TYPE_ON_ROAD_CAR_STOPPED = 3;
+        HAZARD_SUB_TYPE_ON_ROAD_OBJECT = 4;
+        HAZARD_SUB_TYPE_ON_ROAD_POT_HOLE = 5;
+        HAZARD_SUB_TYPE_ON_ROAD_BROKEN_TRAFFIC_LIGHT = 6;
+        HAZARD_SUB_TYPE_ON_ROAD_OIL = 7;
+        HAZARD_SUB_TYPE_ON_SHOULDER_ANIMALS = 8;
+        HAZARD_SUB_TYPE_ON_SHOULDER_MISSING_SIGN = 9;
+        HAZARD_SUB_TYPE_ON_ROAD_ROAD_KILL = 10;
+        HAZARD_SUB_TYPE_ON_SHOULDER = 11;
+        HAZARD_SUB_TYPE_ON_SHOULDER_CAR_STOPPED = 12;
+        HAZARD_SUB_TYPE_EMERGENCY_VEHICLE = 13;
+    }
+    
+    enum BlockedLaneSubType {
+        BLOCKED_LANE_SUB_TYPE_UNSPECIFIED = 0;
+        BLOCKED_LANE_SUB_TYPE_DEFAULT = 1;
+        BLOCKED_LANE_SUB_TYPE_CENTER = 2;
+        BLOCKED_LANE_SUB_TYPE_RIGHT = 3;
+        BLOCKED_LANE_SUB_TYPE_LEFT = 4;
+    }
+}
+
+message AlerterId {
+    string provider_id = 1;
+    string unique_id = 2;
+}
+
+message AlerterInfo {
+    oneof _title {
+        string title = 1;
+    }
+    
+    oneof _description {
+        string description = 2;
+    }
+    
+    oneof _icon_name {
+        string icon_name = 3;
+    }
+    
+    oneof _primary_button_text {
+        string primary_button_text = 4;
+    }
+    
+    oneof _secondary_button_text {
+        string secondary_button_text = 5;
+    }
+    
+    oneof _is_bottom_alert {
+        bool is_bottom_alert = 6;
+    }
+    
+    oneof _is_cancellable {
+        bool is_cancellable = 7;
+    }
+    
+    oneof _timeout_seconds {
+        int32 timeout_seconds = 8;
+    }
+    
+    oneof _timer_type {
+        AlerterTimerType timer_type = 9;
+    }
+    
+    oneof _show_with_eta {
+        bool show_with_eta = 10;
+    }
+    
+    oneof _show_thumbs_up {
+        bool show_thumbs_up = 11;
+    }
+    
+    oneof _type {
+        AlerterType type = 12;
+    }
+    
+    oneof _is_warning_mode {
+        bool is_warning_mode = 13;
+    }
+    
+    oneof _num_thumbs_up {
+        int32 num_thumbs_up = 14;
+    }
+    
+    oneof _is_close_only {
+        bool is_close_only = 15;
+    }
+    
+    oneof _distance_string {
+        string distance_string = 16;
+    }
+    
+    oneof _alert_id {
+        AlerterId alert_id = 17;
+    }
+    
+    oneof _sub_type {
+        int32 sub_type = 18;
+    }
+    
+    oneof _should_show_still_there {
+        bool should_show_still_there = 19;
+    }
+    
+    oneof _show_distance {
+        bool show_distance = 20;
+    }
+    
+    oneof _title_with_distance {
+        string title_with_distance = 21;
+    }
+    
+    oneof _is_silent_activation {
+        bool is_silent_activation = 22;
+    }
+    
+    oneof _position {
+        IntPosition position = 23;
+    }
+    
+    oneof _capping_enabled {
+        bool capping_enabled = 24;
+    }
+    
+    oneof _is_eta_clickable {
+        bool is_eta_clickable = 25;
+    }
+}
+
+message AlertValidationResult {
+    bool is_valid = 1;
+    
+    oneof _distance_meters {
+        int32 distance_meters = 2;
+    }
+    
+    oneof _time_to_alert_sec {
+        int32 time_to_alert_sec = 3;
+    }
+}
+
+message NativeAlertDescriptor {
+    AlerterId alert_id = 1;
+    AlertPriority alert_priority = 2;
+    AlertValidationResult validation_result = 3;
+    int32 trigger_distance_meters = 5;
+    ZoneAlertData zone_alert_data = 6;
+    
+    oneof _info {
+        AlerterInfo info = 4;
+    }
+}
+
+message ZoneAlertData {
+    State state = 1;
+    enum State {
+        BeforeZone = 0;
+        InZone = 1;
+        LeftZone = 2;
+    }
+    
+    int32 zone_percent = 2;
+}
+
+message NativeAlertRepositoryUpdate {
+    repeated NativeAlertDescriptor descriptors = 1;
+}
+
+enum AlertPriority {
+    ALERT_PRIORITY_RAILROAD_CROSSING = 0;
+    ALERT_PRIORITY_DEFAULT_TILE = 1;
+    ALERT_PRIORITY_POLICE = 2;
+    ALERT_PRIORITY_ACCIDENT = 3;
+    ALERT_PRIORITY_HAZARD_ON_ROAD = 5;
+    ALERT_PRIORITY_PERMANENT_HAZARD = 6;
+    ALERT_PRIORITY_PERSONAL_SAFETY = 7;
+    ALERT_PRIORITY_SPEED_LIMIT_DECREASE = 8;
+    ALERT_PRIORITY_BAD_WEATHER = 9;
+    ALERT_PRIORITY_HAZARD_WEATHER = 10;
+    ALERT_PRIORITY_HAZARD_SHOULDER = 11;
+    ALERT_PRIORITY_GUARDIAN = 12;
+    ALERT_PRIORITY_DUMMY_SPEED_CAMERA = 13;
+    ALERT_PRIORITY_DEFAULT_REALTIME = 14;
+    ALERT_PRIORITY_DEFAULT = 15;
+    ALERT_PRIORITY_DEFAULT_REALTIME_CAMERA = 16;
+}
+
+enum AlerterType {
+    CHITCHAT = 0;
+    POLICE = 1;
+    ACCIDENT = 2;
+    TRAFFIC_JAM = 3;
+    TRAFFIC_INFO = 4;
+    HAZARD = 5;
+    OTHER = 6;
+    CONSTRUCTION = 7;
+    PARKING = 8;
+    DYNAMIC = 9;
+    CAMERA = 10;
+    PARKED = 11;
+    CLOSURE = 12;
+    SOS = 15;
+    REROUTE = 16;
+    GUARDIAN = 17;
+    ECO = 18;
+    BLOCKED_LANE = 19;
+    BAD_WEATHER = 20;
+    PERMANENT_HAZARD = 21;
+    SPEED_LIMIT_DECREASE = 23;
+    PERSONAL_SAFETY = 24;
+    DANGER_ZONE = 25;
+}
+
+enum AlerterTimerType {
+    NONE = 0;
+    TIMER_BAR = 1;
+    PRIMARY_BUTTON = 2;
+    SECONDARY_BUTTON = 3;
+}

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package com.waze.jni.protos.favorites;
+
+import "Place.proto";
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos.favorites";
+
+message Favorite {
+    places.Place place = 1;
+    string name = 2;
+    
+    Type type = 3;
+    enum Type {
+        DEFAULT = 0;
+        HOME = 1;
+        WORK = 2;
+    }
+    
+    int32 id = 4;
+}
+
+message Favorites {
+    repeated Favorite favorites = 1;
+}
+
+message IsHomeWorkSetResult {
+    bool is_home_set = 1;
+    bool is_work_set = 2;
+}

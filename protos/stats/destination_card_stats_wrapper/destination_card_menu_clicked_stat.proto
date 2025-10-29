@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message DestinationCardMenuClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ADD_SHORTCUT_SIRI = 1;
+        CALENDAR_EVENT_CHANGE_LOCATION = 2;
+        CALENDAR_SETTINGS = 3;
+        REMOVE_PLANNED_DRIVE = 4;
+        EDIT_HOME = 5;
+        EDIT_WORK = 6;
+        FIND_PARKING = 7;
+        FOOTER_NAV_HISTORY = 8;
+        FOOTER_PLANNED_DRIVES_SETTINGS = 9;
+        FOOTER_SUGGESTION_SETTINGS = 10;
+        ADDRESS_INFO = 11;
+        PLANNED_DRIVE_EDIT = 12;
+        PLANNED_DRIVE_SETTINGS = 13;
+        REMOVE_CALENDAR_ALL_RECURRING = 14;
+        REMOVE_CALENDAR_ALL_THIS_ADDRESS = 15;
+        REMOVE_CALENDAR_EVENT = 16;
+        REMOVE_DESTINATION = 17;
+        REMOVE_HOME = 18;
+        REMOVE_SIMILAR_ROUTINES = 19;
+        REMOVE_ROUTINE = 20;
+        REMOVE_WORK = 21;
+        RENAME = 22;
+        SHARE = 23;
+        CLOSE = 24;
+        CALENDAR_EVENT_SET_ADDRESS = 25;
+        REMOVE_FAVORITE = 26;
+        SAVE_PLACE = 27;
+    }
+}

@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package waze.google.maps;
+
+message SessionState {
+    optional SpotlightState spotlight_state = 4;
+}
+
+message SpotlightState {
+    optional DirectionsState directions = 4;
+}
+
+message DirectionsState {
+    repeated WaypointState waypoint = 1;
+}
+
+message WaypointState {
+    optional EntityState reference_entity = 1;
+}
+
+message EntityState {
+    optional string feature_id = 1;
+    optional FeatureIdFormat feature_id_format = 7;
+    optional string query = 2;
+    optional bool is_query_required = 3;
+}
+
+message EmptyMessage {
+    
+}
+
+enum FeatureIdFormat {
+    GEOSTORE = 0;
+    VECTOR_DB = 1;
+    LAT_LNG = 2;
+    OBFUSCATED_GAIA_ID = 3;
+}

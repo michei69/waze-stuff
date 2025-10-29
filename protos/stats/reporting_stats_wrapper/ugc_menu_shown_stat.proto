@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reporting_stats_wrapper/ugc_info.proto";
+import "stats/reusable_types/ugc_type_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message UgcMenuShownStat {
+    UgcInfo ugc_info = 1;
+    UgcTypeInfo.UgcLevel level = 2;
+    repeated UgcTypeInfo.UgcType available_types = 3;
+    repeated UgcTypeInfo.UgcSubtype available_subtypes = 4;
+    UgcTypeInfo.UgcType type = 5;
+    
+    oneof _siri_education_card_is_visible {
+        bool siri_education_card_is_visible = 6;
+    }
+    
+    oneof _conversational_reporting_button_visible {
+        bool conversational_reporting_button_visible = 7;
+    }
+}

@@ -1,0 +1,264 @@
+syntax = "proto2";
+
+package com.waze.locationserver;
+
+import "RealtimeNg.proto";
+import "GpsCommands.proto";
+import "Types.proto";
+import "RTCommonTypes.proto";
+import "ClientInfoCommand.proto";
+import "Venues.proto";
+import "ReverseGeocodeCommand.proto";
+
+option objc_class_prefix = "WLS";
+option java_outer_classname = "LocationServerProto";
+option java_package = "com.waze.locationserver";
+
+message GpsFakeStatusResponse {
+    optional GpsFakeStatusSessionUpdate session_update = 1;
+    optional linqmap.proto.Status response_message = 2;
+    repeated Executor executors = 3;
+}
+
+message GpsFakeStatusSessionUpdate {
+    optional linqmap.proto.rt.GpsFakeStatus.Status gps_fake_status = 1;
+    optional bool ignore_for_traffic = 2;
+}
+
+message MapDisplayedResponse {
+    optional MapDisplayedSessionUpdate session_update = 1;
+    optional linqmap.proto.Status response_message = 2;
+}
+
+message MapDisplayedSessionUpdate {
+    optional proto.rtcommon.ClientDisplay client_display = 1;
+}
+
+message GpsPathSessionData {
+    optional double total_distance = 1;
+    optional int32 total_driving_seconds = 2;
+    optional double total_driving_distance = 3;
+    optional proto.rtcommon.GpsTrack gps_track = 4;
+    optional int64 minimal_speed_millis = 5;
+    optional linqmap.proto.rt.GpsFakeStatus.Status gps_fake_status = 6;
+    optional proto.rtcommon.PassedNode last_passed_map_existing_node = 7;
+    optional int64 login_time = 8;
+    optional double max_speed = 9;
+    optional int64 client_clock_offset_millis = 10;
+    optional string vehicle_type = 11;
+}
+
+message GpsPathRequest {
+    optional GpsPathSessionData session_data = 1;
+    optional CommonSessionData common_session_data = 2;
+    repeated proto.rtcommon.GpsSample samples = 3;
+    optional string source = 4;
+    optional linqmap.proto.rt.GpsLocationPath request = 5;
+}
+
+message GpsPathSessionUpdate {
+    optional double total_distance = 1;
+    optional int32 total_driving_seconds = 2;
+    optional double total_driving_distance = 3;
+    optional proto.rtcommon.GpsTrack gps_track = 4;
+    optional int64 minimal_speed_millis = 5;
+    optional bool ignore_for_traffic = 6;
+    optional int64 last_gps_sample_time_ms = 7;
+    optional int64 last_gps_sample_receive_time_ms = 8;
+    optional double max_speed = 9;
+}
+
+message GpsPathResponse {
+    optional GpsPathSessionUpdate session_update = 1;
+    optional CommonSessionUpdate common_session_update = 2;
+    repeated Executor executors = 3;
+    optional linqmap.proto.Status response_message = 4;
+}
+
+message InterpolateMissingGpsSampleSession {
+    optional int64 last_gps_sample_receive_time_ms = 1;
+    optional int64 last_gps_sample_time_ms = 2;
+}
+
+message InterpolateMissingGpsSampleRequest {
+    optional InterpolateMissingGpsSampleSession session_data = 1;
+    optional GpsPathSessionData gps_session_data = 2;
+    optional CommonSessionData common_session_data = 3;
+}
+
+message WrapupLogoutLocationRequest {
+    optional CommonSessionData common_session_data = 2;
+}
+
+message LocationRequest {
+    optional linqmap.proto.Coordinate coordinate = 1;
+    optional CommonSessionData common_session_data = 3;
+    optional InfoAroundSessionData info_around_session_data = 4;
+}
+
+message LocationSessionData {
+    optional int32 country_id = 1;
+}
+
+message InfoAroundSessionData {
+    optional int64 user_id = 1;
+    optional int32 info_around_min_users = 2;
+    optional bool is_info_around_excluded = 3;
+}
+
+message LocationResponse {
+    optional LocationSessionUpdate session_update = 1;
+    optional CommonSessionUpdate common_session_update = 2;
+    repeated Executor executors = 4;
+    repeated InfoAround info_around_commands = 5;
+}
+
+message InfoAround {
+    optional string category = 1;
+    optional int64 value = 2;
+}
+
+message LocationSessionUpdate {
+    optional proto.rtcommon.City city = 2;
+}
+
+message CheckServerConfigRequest {
+    optional linqmap.proto.Coordinate coordinate = 1;
+    optional bool real_client_location = 2;
+    optional bool send_client_commands = 3;
+    optional LocationSessionData session_data = 4;
+    optional CommonSessionData common_session_data = 5;
+}
+
+message CheckServerConfigResponse {
+    optional CommonSessionUpdate common_session_update = 1;
+    repeated Executor executors = 2;
+}
+
+message At {
+    optional linqmap.proto.Coordinate3 coordinate = 12;
+    optional double longitude = 1 [deprecated = true];
+    optional double latitude = 2 [deprecated = true];
+    optional double altitude = 3 [deprecated = true];
+    optional int32 azymuth = 4;
+    optional bool refresh_users = 5;
+    optional int64 from_node = 6;
+    optional int64 to_node = 7;
+    optional int32 score = 8;
+    optional int64 alt_from_node = 9;
+    optional int64 alt_to_node = 10;
+    optional int32 alt_score = 11;
+}
+
+message AtSessionData {
+    optional bool is_silent = 1;
+    optional int64 dbid = 2;
+}
+
+message AtResponse {
+    optional AtSessionUpdate at_session_update = 1;
+    optional CommonSessionUpdate common_session_update = 2;
+    repeated Executor executors = 4;
+}
+
+message AtSessionUpdate {
+    optional int64 last_update_users_request_time = 1;
+}
+
+message UpdateLocationRequest {
+    optional linqmap.proto.Coordinate3 coordinate = 1;
+    optional UpdateLocationSessionData session_data = 2;
+    optional CommonSessionData common_session_data = 3;
+}
+
+message UpdateLocationSessionData {
+    optional int64 dbid = 1;
+}
+
+message UpdateLocationResponse {
+    
+}
+
+message GpsDisconnectRequest {
+    
+}
+
+message GpsDisconnectResponse {
+    
+}
+
+message EnableLocationReportingRequestWrapper {
+    optional EnableLocationReportingRequest request = 1;
+    optional EnableLocationReportingSessionData session_data = 2;
+}
+
+message EnableLocationReportingRequest {
+    optional bool enable_location_reporting = 1 [default = true];
+}
+
+message EnableLocationReportingSessionData {
+    optional int64 user_id = 1;
+    optional string session_id = 2;
+}
+
+message EnableLocationReportingResponseWrapper {
+    optional EnableLocationReportingResponse response = 1;
+}
+
+message EnableLocationReportingResponse {
+    optional linqmap.proto.Status status = 1;
+}
+
+message CommonSessionUpdate {
+    optional proto.rtcommon.UserPosition display_position = 1;
+    optional proto.rtcommon.UserPosition real_position = 2;
+    optional linqmap.proto.rt.ClientInfo client_info = 3;
+    optional int64 last_location_verify_time = 4;
+    optional Positions positions = 5;
+    optional linqmap.proto.Coordinate first_position = 6;
+    optional string timezone_id = 7;
+    optional Regions regions = 8;
+    optional proto.rtcommon.CountryEntry real_country = 9;
+}
+
+message Positions {
+    repeated proto.rtcommon.UserPosition positions = 1;
+}
+
+message Regions {
+    repeated string regions = 1;
+}
+
+message Executor {
+    optional bool recalc_config = 1;
+}
+
+message ReverseGeocodeRequestWrapper {
+    optional linqmap.proto.rt.ReverseGeocodeRequest request = 1;
+}
+
+message ReverseGeocodeResponseWrapper {
+    optional linqmap.proto.rt.ReverseGeocodeResponse response = 1;
+}
+
+message WrapUpExampleRequest {
+    
+}
+
+message WrapUpExampleResponse {
+    
+}
+
+message CommonSessionData {
+    optional proto.rtcommon.UserPosition display_position = 1;
+    optional proto.rtcommon.UserPosition real_position = 2;
+    optional linqmap.proto.rt.ClientInfo client_info = 3;
+    optional int64 last_location_verify_time = 4;
+    repeated proto.rtcommon.UserPosition positions = 5;
+    optional linqmap.proto.Coordinate first_position = 6;
+    optional string country = 8;
+    
+    reserved 7;
+    
+    reserved "selected_route";
+}

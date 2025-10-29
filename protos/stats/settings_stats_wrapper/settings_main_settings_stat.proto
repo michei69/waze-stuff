@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/setting_action.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SettingsMainSettingsStat {
+    Button button = 1;
+    enum Button {
+        BUTTON_UNSPECIFIED = 0;
+        GENERAL_SETTINGS = 1;
+        MAP_DISPLAY_SETTINGS = 2;
+        VOICE_SETTINGS = 3;
+        NAVIGATION_SETTINGS = 5;
+        CAR_DETAILS_SETTINGS = 6;
+        SUBSCRIPTIONS_SETTINGS = 7;
+        ALERTS_AND_REPORTS_SETTINGS = 8;
+        GAS_STATIONS_SETTINGS = 9;
+        SPEEDOMETER_SETTINGS = 10;
+        CARPOOL_SETTINGS_SETTINGS = 11;
+        MUSIC_SETTINGS = 12;
+        NOTIFICATIONS_SETTINGS = 13;
+        PLANNED_DRIVE_SETTINGS = 14;
+        REMINDERS_SETTINGS = 15;
+        ACCOUNT_AND_LOGIN_SETTINGS = 16;
+        PRIVACY_SETTINGS = 17;
+        ABOUT_SETTINGS = 18;
+        SPREAD_THE_WORD_SETTINGS = 19;
+        BECOME_AN_EDITOR_SETTINGS = 20;
+    }
+    
+    SettingAction action = 2;
+}

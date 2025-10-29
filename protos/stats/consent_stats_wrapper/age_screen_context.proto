@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum AgeScreenContext {
+    AGE_SCREEN_CONTEXT_UNSPECIFIED = 0;
+    ONBOARDING = 1;
+    EDIT = 2;
+    EXISTING_USER = 3;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ProductTakeoverCanBeShownStat {
+    oneof _eligible_stops_count {
+        int64 eligible_stops_count = 1;
+    }
+    
+    oneof _stops_shown_count {
+        int64 stops_shown_count = 2;
+    }
+}

@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TopBarErrorMessageParams {
+    LocationProvider location_provider = 1;
+    enum LocationProvider {
+        LOCATION_PROVIDER_UNSPECIFIED = 0;
+        CAR_GPS = 1;
+        GPS = 2;
+        NETWORK = 3;
+        FUSED = 4;
+    }
+    
+    LatLng coordinates = 2;
+    
+    oneof _altitude_meters {
+        double altitude_meters = 3;
+    }
+    
+    oneof _bearing_degrees {
+        double bearing_degrees = 4;
+    }
+    
+    oneof _horizontal_accuracy_meters {
+        double horizontal_accuracy_meters = 5;
+    }
+    
+    oneof _vertical_accuracy_meters {
+        double vertical_accuracy_meters = 6;
+    }
+    
+    oneof _speed_meters_per_second {
+        double speed_meters_per_second = 7;
+    }
+    
+    oneof _acquisition_timestamp_unix_ms {
+        int64 acquisition_timestamp_unix_ms = 8;
+    }
+    
+    oneof _time_elapsed_since_acquisition_ms {
+        int64 time_elapsed_since_acquisition_ms = 9;
+    }
+}

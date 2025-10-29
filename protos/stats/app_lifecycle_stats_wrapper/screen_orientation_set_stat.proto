@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ScreenOrientationSetStat {
+    Orientation orientation = 1;
+    enum Orientation {
+        ORIENTATION_UNSPECIFIED = 0;
+        LANDSCAPE = 1;
+        PORTRAIT = 2;
+    }
+}

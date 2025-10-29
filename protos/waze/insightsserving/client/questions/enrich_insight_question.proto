@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.questions;
+
+import "waze/insightsserving/client/questions/answers.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "EnrichInsightQuestionProto";
+option java_package = "com.waze.insightsserving.proto.questions";
+
+message EnrichInsightAnswer {
+    oneof answer_content {
+        InsightAnswer insight_answer = 100;
+        ValidationAnswer validation_answer = 101;
+    }
+}
+
+message EnrichInsightQuestion {
+    repeated EnrichInsightAnswer answers = 2;
+    
+    oneof _title_type {
+        TitleType title_type = 1;
+    }
+    
+    enum TitleType {
+        QUESTION_TITLE_TYPE_UNSPECIFIED = 0;
+        QUESTION_TITLE_TYPE_WHAT_DO_YOU_SEE = 1;
+        QUESTION_TITLE_TYPE_IS_LANE_CLOSED = 2;
+    }
+}

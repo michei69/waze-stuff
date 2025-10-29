@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/network_stats_wrapper/server_routing_request_result_use_case.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RerouteEtaDifferenceStat {
+    string routing_response_id = 3 [deprecated = true];
+    RoutingUseCase use_case = 4;
+    string alternative_route_uuid = 6;
+    
+    oneof _delta_seconds {
+        sint64 delta_seconds = 1;
+    }
+    
+    oneof _prev_route_remaining_seconds {
+        int64 prev_route_remaining_seconds = 2;
+    }
+    
+    oneof _reassurance {
+        bool reassurance = 5;
+    }
+}

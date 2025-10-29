@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MainMenuClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        BACK = 1;
+        BANNER = 2;
+        CLOSE = 3;
+        FEEDBACK = 4;
+        INBOX = 5;
+        MARKETPLACE = 6;
+        PLAN_DRIVE = 7;
+        PROFILE = 8;
+        SETTINGS = 9;
+        SHUT_DOWN = 10;
+        SUPPORT = 11;
+    }
+    
+    oneof _badge {
+        bool badge = 2;
+    }
+}

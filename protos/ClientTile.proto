@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package linqmap.proto.map_data;
+
+import "Line.proto";
+import "MapFeature.proto";
+
+message ClientTile {
+    repeated Line lines = 1;
+    repeated MapFeature map_features = 3;
+    
+    oneof _line_to_proto {
+        ParentToProtoMatcher line_to_proto = 2;
+    }
+}
+
+message ParentToProtoMatcher {
+    map<int32, int32> map = 1;
+}

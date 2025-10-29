@@ -1,0 +1,186 @@
+syntax = "proto2";
+
+package linqmap.geocoding.proto;
+
+import "RoadSigns.proto";
+import "linqmap/geocoding/proto/Schedule.proto";
+
+option objc_class_prefix = "LGP";
+
+message Geometry {
+    oneof geometry {
+        string wkt = 1;
+        bytes wkb = 2;
+        bytes s2_compressed_points = 3;
+        Polyline polyline = 4;
+    }
+}
+
+message Polyline {
+    optional string encoded_polyline = 1;
+    optional int32 precision = 2;
+}
+
+message RepresentativeInfo {
+    repeated int32 city_id = 1;
+    repeated int32 country_id = 2;
+    repeated int32 boundary_id = 3;
+    repeated int32 water_id = 4;
+    repeated int32 state_id = 5;
+    repeated int32 landmark_id = 6;
+    repeated int32 border_id = 8;
+}
+
+message CrossroadEntity {
+    optional int64 id = 1;
+    optional int32 type = 2;
+    optional string name = 3;
+    
+    repeated Connection connectivity = 4;
+    message Connection {
+        optional int64 from_segment = 1;
+        optional int64 to_segment = 2;
+        optional bool from_segment_fwd = 3;
+        optional bool to_segment_fwd = 4;
+        optional int32 instruction_op_code = 5;
+        optional string instruction_text = 6;
+        optional int64 v_id = 7;
+        optional string path_list = 8;
+    }
+    
+    optional Geometry geom = 5;
+    optional int32 city_id = 6;
+    optional int64 creation_time = 7;
+    optional int64 update_time = 8;
+    optional int32 updated_by_id = 9 [deprecated = true];
+    optional int32 owner_id = 10 [deprecated = true];
+    repeated Connection non_navigable_connectivity = 11;
+}
+
+message PathEntity {
+    optional int64 id = 1;
+    optional int64 from_segment_id = 2;
+    optional int64 to_segment_id = 3;
+    optional bool from_segment_fwd = 4;
+    optional bool to_segment_fwd = 5;
+    optional string path_list = 6;
+}
+
+message InstructionEntity {
+    optional int32 from_seg_id = 1;
+    
+    repeated Entry entry = 2;
+    message Entry {
+        optional int32 to_seg_id = 1;
+        optional int32 node_id = 2;
+        optional int32 instruction_op_code = 3;
+        optional string instruction_text = 4;
+        optional bool to_seg_direction = 5;
+    }
+}
+
+message TurnGuidanceEntity {
+    optional int32 from_seg_id = 1;
+    
+    repeated Entry entry = 2;
+    message Entry {
+        optional int32 to_seg_id = 1;
+        optional int32 node_id = 2;
+        optional bool from_seg_direction = 3;
+        optional bool to_seg_direction = 4;
+        optional RoadSign road_sign = 5;
+    }
+}
+
+message TimePoint {
+    optional TimeFrame.DateTime date = 1;
+    optional TimeFrame.Weekday weekday = 2;
+    optional int32 day_of_month = 3;
+    optional string time_zone = 4;
+    optional int32 minutes_in_the_future = 5;
+}
+
+message Segment {
+    optional int64 id = 1;
+    optional bool direction = 2;
+    optional double x = 3;
+    optional double y = 4;
+}
+
+message RestrictionOptionEntry {
+    optional RestrictionOption key = 1;
+    optional bool value = 2 [default = true];
+}
+
+message Address {
+    optional string id = 1;
+    optional int64 segment_id = 2;
+    optional double x = 3;
+    optional double y = 4;
+    optional string street = 5;
+    optional string city = 6;
+    optional string house_number = 7;
+    optional bool direction = 8;
+    optional string junction_with_street = 9;
+    optional string azimuth = 10;
+    optional int32 distance_from_junction = 11;
+}
+
+message InnerNodeInfo {
+    optional int64 id = 1;
+    optional double x = 2;
+    optional double y = 3;
+}
+
+message ConnectionKey {
+    optional int64 from_seg_id = 1;
+    optional int64 to_seg_id = 2;
+    optional bool from_seg_fwd = 3;
+    optional bool to_seg_fwd = 4;
+}
+
+message NodeConnection {
+    optional ConnectionKey connection_key = 1;
+    optional int64 node_id = 2;
+}
+
+message CrossroadConnection {
+    optional ConnectionKey connection_key = 1;
+    optional int64 virtual_segment_id = 2;
+    optional int64 crossroad_id = 3;
+    repeated int64 path_segment_ids = 4;
+}
+
+message PathConnection {
+    optional ConnectionKey connection_key = 1;
+    optional int64 virtual_segment_id = 2;
+    optional int64 path_id = 3;
+    repeated int64 path_segment_ids = 4;
+}
+
+enum RoadType {
+    STREET = 1;
+    HIGHWAY = 2;
+    FREEWAY = 3;
+    RAMP = 4;
+    TRAIL = 5;
+    PRIMARY = 6;
+    SECONDARY = 7;
+    _4X4 = 8;
+    WALKWAY = 9;
+    PEDESTRIAN = 10;
+    EXIT = 11;
+    _4X4_TRAIL = 14;
+    FERRY_CROSSING = 15;
+    STAIRWAY = 16;
+    PRIVATE = 17;
+    RAILROAD = 18;
+    RUNWAY = 19;
+    PARKING = 20;
+    SERVICEROAD = 21;
+    ALLEY = 22;
+    ARTIFICIAL_CONNECTOR = 90;
+    SHORT_CUT = 91;
+    IGNORE_SEGMENT = 92;
+    END = 99;
+}

@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SuggestionCardResultStat {
+    Result result = 1;
+    enum Result {
+        RESULT_UNSPECIFIED = 0;
+        RESUME_DRIVE = 1;
+        SERVER_SUGGESTION = 2;
+        NOTHING_TO_SUGGEST = 3;
+        TIMEOUT = 4;
+        SERVER_ERROR = 5;
+        NO_REQUEST_DUE_TO_NAVIGATION = 6;
+        NO_REQUEST_DUE_TO_TRIP_FORCAST_FLAG_OFF = 7;
+        RESUME_DRIVE_OLD_EXPERIENCE = 8;
+        NO_REQUEST_DUE_TO_SLEEP = 9;
+    }
+    
+    SuggestionType suggestion_type = 2;
+    enum SuggestionType {
+        SUGGESTION_TYPE_UNSPECIFIED = 0;
+        RESUME = 1;
+        PREDICTION = 2;
+        PLANNED_DRIVE = 3;
+        CALENDAR = 4;
+        ETA_CHECK = 5;
+    }
+    
+    string server_suggestion_card_id = 6;
+    
+    oneof _fresh_location_available {
+        bool fresh_location_available = 3;
+    }
+    
+    oneof _network_available {
+        bool network_available = 4;
+    }
+    
+    oneof _logged_in {
+        bool logged_in = 5;
+    }
+    
+    oneof _trip_forecast_flag {
+        bool trip_forecast_flag = 7;
+    }
+    
+    oneof _resume_drive_flag {
+        bool resume_drive_flag = 8 [deprecated = true];
+    }
+}

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/alternate_routes_stats_wrapper/routes_screen_view.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message RoutesScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        GO = 1;
+        BACK = 2;
+        SETTINGS = 3;
+        CHANGE_VIEW = 4;
+        CHOOSE_ROUTE = 5;
+        ALGO_TRANSPARENCY_LINK = 6;
+    }
+    
+    RoutesScreenView view = 7 [deprecated = true];
+    RoutesScreenView routes_screen_view = 8;
+    
+    oneof _num_passengers {
+        int64 num_passengers = 2;
+    }
+    
+    oneof _primary_route_alt_id {
+        int64 primary_route_alt_id = 3;
+    }
+    
+    oneof _route_alt_id {
+        int64 route_alt_id = 4;
+    }
+    
+    oneof _route_index {
+        int64 route_index = 5;
+    }
+    
+    oneof _subroute_index {
+        int64 subroute_index = 6;
+    }
+    
+    enum View {
+        VIEW_UNSPECIFIED = 0;
+        LIST = 1;
+        MAP = 2;
+    }
+}

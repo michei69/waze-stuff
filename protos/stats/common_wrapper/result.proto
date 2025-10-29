@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message Result {
+    Status status = 1;
+    enum Status {
+        STATUS_UNKNOWN = 0;
+        SUCCESS = 1;
+        FAILURE = 2;
+    }
+    
+    string failure_reason = 2;
+}

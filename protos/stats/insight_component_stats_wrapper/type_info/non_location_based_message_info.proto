@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NonLocationBasedMessageInfo {
+    Type non_location_based_message_type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        TURN_ON_YOUR_HEADLIGHTS = 1;
+        ECO_REGULATION = 2;
+        MID_DRIVE_TOAST = 3;
+        GTW_REROUTE_SUGGESTION = 4;
+        NETWORK_ISSUE = 6;
+    }
+    
+    Subtype non_location_based_message_subtype = 2;
+    enum Subtype {
+        SUBTYPE_UNSPECIFIED = 0;
+        TURN_ON_YOUR_HEADLIGHTS_DEFAULT = 1;
+        ECO_REGULATION_DEFAULT = 2;
+        MID_DRIVE_TOAST_THANK_YOU = 3;
+        GTW_REROUTE_SUGGESTION_DEFAULT = 4;
+        NETWORK_ISSUE_DEFAULT = 6;
+    }
+}

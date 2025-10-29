@@ -1,0 +1,68 @@
+syntax = "proto2";
+
+package com.waze.venueavailability;
+
+import "google/protobuf/timestamp.proto";
+
+option objc_class_prefix = "WVA";
+option java_package = "com.waze.venueavailability";
+
+message EvseSyncStatusUpdate {
+    optional EvseStatusUpdate evse_status_update = 1;
+}
+
+message EvseRtStatusUpdate {
+    optional EvseStatusUpdate evse_status_update = 1;
+}
+
+message EvseStatusUpdate {
+    optional Provider provider = 1;
+    optional string location_id = 2;
+    optional string evse_uid = 3;
+    optional EVSEStatus evse_status = 4;
+    optional google.protobuf.Timestamp update_time = 5;
+}
+
+message GetAvailabilityRequest {
+    repeated EVCSId evcs_ids = 1;
+}
+
+message Availability {
+    repeated EVCSAvailability evcs_availabilities = 1;
+}
+
+message EVCSId {
+    optional Provider provider = 1;
+    optional string location_id = 2;
+}
+
+message EVCSAvailability {
+    optional EVCSId evcs_id = 1;
+    repeated EVSEAvailability evse_availabilities = 2;
+}
+
+message EVSEAvailability {
+    optional string evse_uid = 1;
+    optional EVSEStatus evse_status = 2;
+}
+
+message DeleteEVCSRequest {
+    optional EVCSId evcs_id = 1;
+}
+
+enum Provider {
+    PROVIDER_UNSPECIFIED = 0;
+    ECO_MOVEMENT = 1;
+}
+
+enum EVSEStatus {
+    UNKNOWN = 0;
+    AVAILABLE = 1;
+    BLOCKED = 2;
+    CHARGING = 3;
+    INOPERATIVE = 4;
+    OUTOFORDER = 5;
+    PLANNED = 6;
+    REMOVED = 7;
+    RESERVED = 8;
+}

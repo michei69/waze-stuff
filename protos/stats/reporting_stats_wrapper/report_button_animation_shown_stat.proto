@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ReportButtonAnimationShownStat {
+    Trigger trigger = 1;
+    enum Trigger {
+        TRIGGER_UNSPECIFIED = 0;
+        START_NAVIGATION = 1;
+        ZERO_SPEED = 2;
+    }
+    
+    UseCase use_case = 2;
+    enum UseCase {
+        USE_CASE_UNSPECIFIED = 0;
+        CONVERSATIONAL_REPORTING = 1;
+        TAP_REPORTING = 2;
+    }
+}

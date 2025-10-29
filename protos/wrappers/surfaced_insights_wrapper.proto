@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/surfaced_insights_wrapper/surfaced_pin_clicked_stat.proto";
+import "stats/surfaced_insights_wrapper/surfaced_pin_shown_stat.proto";
+import "stats/surfaced_insights_wrapper/surfaced_takeover_clicked_stat.proto";
+import "stats/surfaced_insights_wrapper/surfaced_takeover_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SurfacedInsightsWrapper {
+    oneof stat {
+        SurfacedPinClickedStat surfaced_pin_clicked = 1;
+        SurfacedPinShownStat surfaced_pin_shown = 2;
+        SurfacedTakeoverClickedStat surfaced_takeover_clicked = 3;
+        SurfacedTakeoverShownStat surfaced_takeover_shown = 4;
+    }
+}

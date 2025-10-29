@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/permissions_stats_wrapper/location_permission_request_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message LocationPermissionRequestPopupShownStat {
+    LocationPermissionRequestType request_type = 1;
+}

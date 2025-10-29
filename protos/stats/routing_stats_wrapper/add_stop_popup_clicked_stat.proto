@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AddStopPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        ADD_STOP = 1;
+        ADD_STOP_TIMEOUT = 2;
+        CANCEL = 3;
+        NEW_DRIVE = 4;
+        NEW_DRIVE_TIMEOUT = 5;
+    }
+}

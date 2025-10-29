@@ -1,0 +1,243 @@
+syntax = "proto2";
+
+package linqmap.proto.engagement;
+
+import "Types.proto";
+import "Questions.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPE";
+option java_package = "linqmap.proto.engagement";
+
+message StartWalkingParams {
+    optional Coordinate current_location = 1;
+    optional string destination_name = 2;
+    optional string destination_venue_id = 3;
+    optional Coordinate destination = 4;
+    optional int64 parking_time_millis = 5;
+}
+
+message LoginParams {
+    
+}
+
+message TakeoverParams {
+    optional Coordinate destination = 1;
+    optional string destination_venue_id = 2;
+}
+
+message EndOfDriveParams {
+    optional int32 total_meters = 1;
+    optional string origin_favorite_type = 2;
+    optional string destination_favorite_type = 3;
+    optional string destination_venue_id = 4;
+}
+
+message TriggerContext {
+    oneof params {
+        StartWalkingParams start_walking_params = 1;
+        LoginParams login_params = 2;
+        TakeoverParams takeover_params = 3;
+        EndOfDriveParams end_of_drive_params = 4;
+    }
+}
+
+message ParkingReminderParams {
+    
+}
+
+message MissingVenueInfoParams {
+    optional MissingInfo missing_info = 1;
+    enum MissingInfo {
+        VENUE = 1;
+        IMAGE = 2;
+    }
+}
+
+message EngagementParams {
+    oneof params {
+        ParkingReminderParams parking_reminder_params = 1;
+        MissingVenueInfoParams missing_venue_info_params = 2;
+    }
+}
+
+message Encouragement {
+    optional questions.Question question = 1;
+}
+
+message DeliveryParams {
+    oneof params {
+        Encouragement encouragement = 1;
+    }
+}
+
+message Engagement {
+    optional string id = 1;
+    optional DeliveryType delivery_type = 2;
+    optional string engagement_type = 3;
+    optional EngagementParams engagement_params = 4;
+    optional DeliveryParams delivery_params = 5;
+    optional StringMap server_actions = 6;
+    optional int32 time_limit_seconds = 7;
+    optional string capping_key = 8;
+}
+
+message UserEngagement {
+    optional int64 shown_date = 1;
+    optional string session_id = 2;
+    optional string answer_id = 3;
+    optional Engagement engagement = 4;
+}
+
+message Decision {
+    optional string name = 1;
+    optional string status = 2;
+    optional string details = 3;
+}
+
+message UserHistory {
+    optional string session_id = 1;
+    optional string hostname = 2;
+    optional int64 timestamp = 3;
+    optional string sequence = 4;
+    repeated Decision decision = 5;
+}
+
+message EngagementTriggerRequest {
+    optional int64 user_id = 1;
+    optional string installation_id = 2;
+    optional TriggerType type = 3;
+    optional TriggerContext context = 4;
+    optional DeviceType device_type = 5;
+    optional StringMap user_config = 6;
+    optional string session_id = 7;
+    optional string forceEngagementName = 8;
+    optional bool store_history = 9;
+    optional AppType app_type = 10;
+    optional bool mark_as_seen = 11;
+}
+
+message EngagementTriggerResponse {
+    optional Status status = 1;
+    optional Engagement engagement = 2 [deprecated = true];
+    repeated Engagement engagements = 3;
+}
+
+message GetUserEngagementsRequest {
+    optional int64 user_id = 1;
+}
+
+message GetUserEngagementsResponse {
+    repeated UserEngagement user_engagement = 1;
+}
+
+message GetResourceListRequest {
+    
+}
+
+message GetResourceListResponse {
+    repeated string resource = 1;
+}
+
+message GetEngagementHistoryRequest {
+    optional int64 user_id = 1;
+    optional TriggerType trigger_type = 2;
+}
+
+message GetEngagementHistoryResponse {
+    optional int64 user_id = 1;
+    optional TriggerType trigger_type = 2;
+    repeated UserHistory user_history = 3;
+}
+
+message StartWalkingRequestWrapper {
+    optional StartWalkingRequest request = 1;
+    optional StartWalkingSessionData session_data = 2;
+}
+
+message StartWalkingRequest {
+    optional StartWalkingParams start_walking_params = 1;
+}
+
+message StartWalkingSessionData {
+    optional int64 user_id = 1;
+    optional string installation_id = 2;
+    optional string session_id = 3;
+}
+
+message StartWalkingResponseWrapper {
+    optional StartWalkingResponse response = 1;
+}
+
+message StartWalkingResponse {
+    optional Status status = 1;
+}
+
+message EngagementButtonClickedRequestWrapper {
+    optional EngagementButtonClickedRequest request = 1;
+    optional EngagementButtonClickedSessionData session_data = 2;
+}
+
+message EngagementButtonClickedRequest {
+    optional string engagement_id = 1;
+    optional string button_id = 2;
+    optional bool opted_out = 3;
+}
+
+message EngagementButtonClickedSessionData {
+    optional int64 user_id = 1;
+    optional bool is_test_user = 3;
+    optional int64 user_flags = 4;
+    
+    reserved 2;
+    
+    reserved "session_uuid";
+}
+
+message EngagementButtonClickedResponseWrapper {
+    optional EngagementButtonClickedResponse response = 1;
+}
+
+message EngagementButtonClickedResponse {
+    optional Status status = 1;
+}
+
+message EngagementDisplayedRequestWrapper {
+    optional EngagementDisplayedRequest request = 1;
+    optional EngagementDisplayedSessionData session_data = 2;
+}
+
+message EngagementDisplayedRequest {
+    optional string engagement_id = 1;
+}
+
+message EngagementDisplayedSessionData {
+    optional int64 user_id = 1;
+    optional bool is_test_user = 2;
+    optional int64 user_flags = 3;
+    optional string session_uuid = 4;
+}
+
+message EngagementDisplayedResponseWrapper {
+    optional EngagementDisplayedResponse response = 1;
+}
+
+message EngagementDisplayedResponse {
+    optional Status status = 1;
+}
+
+enum TriggerType {
+    START_WALKING = 1;
+    LOGIN = 2;
+    TAKEOVER = 3;
+    CARPOOL_BANNER_DRIVER = 4;
+    CARPOOL_BANNER_RIDER = 5;
+    ROUTE_REQUEST = 6;
+    END_OF_DRIVE = 7;
+    APP_LAUNCH = 8;
+}
+
+enum DeliveryType {
+    PUSH = 1;
+    ENCOURAGEMENT = 2;
+}

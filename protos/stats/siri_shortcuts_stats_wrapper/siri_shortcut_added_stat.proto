@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SiriShortcutAddedStat {
+    Type type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        NAVIGATE = 1;
+        CHANGE_SOUND_MODE = 2;
+    }
+    
+    Subtype subtype = 2;
+    enum Subtype {
+        SUBTYPE_UNSPECIFIED = 0;
+        HOME = 1;
+        WORK = 2;
+        FAVORITE = 3;
+        ON = 6;
+        OFF = 7;
+        ALERTS_ONLY = 8;
+    }
+    
+    oneof _success {
+        bool success = 3;
+    }
+}

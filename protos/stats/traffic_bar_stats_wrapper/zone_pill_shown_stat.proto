@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ZonePillShownStat {
+    ZoneType zone_type = 1;
+    enum ZoneType {
+        ZONE_TYPE_UNSPECIFIED = 0;
+        AVERAGE_SPEED_CAMERA_ZONE = 1;
+        ENFORCEMENT_ZONE = 2;
+    }
+    
+    oneof _distance_meters {
+        int64 distance_meters = 2;
+    }
+    
+    oneof _silent {
+        bool silent = 3;
+    }
+}

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package com.waze.jni.protos;
+
+option java_multiple_files = true;
+option java_package = "com.waze.jni.protos";
+
+message CanvasSpeedometer {
+    oneof _visible {
+        bool visible = 1;
+    }
+    
+    oneof _speed {
+        int32 speed = 2;
+    }
+    
+    oneof _speed_units {
+        string speed_units = 3;
+    }
+    
+    oneof _speed_limit_enabled {
+        bool speed_limit_enabled = 4;
+    }
+    
+    oneof _speed_limit {
+        int32 speed_limit = 5;
+    }
+    
+    oneof _speed_limit_us_style {
+        bool speed_limit_us_style = 6;
+    }
+    
+    oneof _should_adjust_bottom_offset {
+        bool should_adjust_bottom_offset = 7;
+    }
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/google_assistant_stats_wrapper/google_assistant_onboarding_triggering_flow.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GoogleAssistantCombinedOnboardingLegalScreenClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CONFIRM = 1;
+        CLOSE = 2;
+    }
+    
+    GoogleAssistantOnboardingTriggeringFlow assistant_triggering_type = 2;
+}

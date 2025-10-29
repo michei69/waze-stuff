@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/gps_stats_wrapper/dead_reckoning_stat.proto";
+import "stats/gps_stats_wrapper/future_path_follower_stat.proto";
+import "stats/gps_stats_wrapper/gps_quality_stat.proto";
+import "stats/gps_stats_wrapper/gps_reception_stat.proto";
+import "stats/gps_stats_wrapper/gps_source_changed_stat.proto";
+import "stats/gps_stats_wrapper/location_issue_detected_stat.proto";
+import "stats/gps_stats_wrapper/top_bar_gps_error_message_removed_stat.proto";
+import "stats/gps_stats_wrapper/top_bar_gps_error_message_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message GpsStatsWrapper {
+    oneof stat {
+        GpsReceptionStat gps_reception = 1;
+        DeadReckoningStat dead_reckoning = 2;
+        GpsQualityStat gps_quality = 3;
+        FuturePathFollowerStat future_path_follower = 4;
+        GpsSourceChangedStat gps_source_changed = 5;
+        TopBarGpsErrorMessageRemovedStat top_bar_gps_error_message_removed = 6;
+        TopBarGpsErrorMessageShownStat top_bar_gps_error_message_shown = 7;
+        LocationIssueDetectedStat location_issue_detected = 8;
+    }
+}

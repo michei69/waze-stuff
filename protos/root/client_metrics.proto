@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.metrics;
+
+import "metrics/login_request_metric.proto";
+import "metrics/routing_request_metric.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.metrics";
+
+message ClientMetricStat {
+    oneof labels {
+        RoutingRequestMetric routing_request_labels = 2;
+        LoginRequestMetric login_request_labels = 3;
+    }
+    
+    oneof _latency_ms {
+        int64 latency_ms = 1;
+    }
+}

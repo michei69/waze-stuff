@@ -1,0 +1,66 @@
+syntax = "proto2";
+
+package linqmap.proto.drive.reminder;
+
+import "RealtimeNg.proto";
+import "Types.proto";
+import "StartState.proto";
+
+option objc_class_prefix = "LPDD";
+option java_package = "linqmap.proto.drive.reminder";
+
+message ReportDriveDetectionRequestWrapper {
+    optional ReportDriveDetectionRequest request = 1;
+    optional ReportDriveDetectionSessionData session_data = 2;
+}
+
+message ReportDriveDetectionSessionData {
+    optional int64 user_id = 1;
+    optional startstate.UserInfo userInfo = 2;
+    optional bool enable_tide = 3;
+    optional string tide_experiment_name = 4;
+}
+
+message ReportDriveDetectionRequest {
+    optional EstimatedLocation estimated_location = 1;
+    optional MotionActivity motion_activity = 2;
+    repeated AudioChannel audio_channels = 3;
+}
+
+message EstimatedLocation {
+    optional Coordinate location = 1;
+    optional int64 accuracy_radius_meters = 3;
+}
+
+message MotionActivity {
+    optional ConfidenceLevel confidence = 1;
+    enum ConfidenceLevel {
+        CONFIDENCE_LEVEL_UNDEFINED = 0;
+        LOW = 1;
+        MEDIUM = 2;
+        HIGH = 3;
+    }
+    
+    repeated MotionType motion_types = 2;
+    enum MotionType {
+        MOTION_TYPE_UNSPECIFIED = 0;
+        AUTOMOTIVE = 1;
+        STATIONARY = 2;
+        WALKING = 3;
+        RUNNING = 4;
+        CYCLING = 5;
+    }
+}
+
+message AudioChannel {
+    optional string audio_channel_name = 1;
+    optional string audio_channel_type = 2;
+}
+
+message ReportDriveDetectionResponseWrapper {
+    optional ReportDriveDetectionResponse response = 1;
+}
+
+message ReportDriveDetectionResponse {
+    
+}

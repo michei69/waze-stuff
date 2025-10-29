@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+import "ClientInfoCommand.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message TokenAuthenticate {
+    optional string user_token = 1;
+    optional ClientInfo client_info = 2;
+}

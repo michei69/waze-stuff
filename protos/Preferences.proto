@@ -1,0 +1,330 @@
+syntax = "proto2";
+
+package linqmap.proto.preferences;
+
+import "Types.proto";
+import "RealtimeNg.proto";
+
+option objc_class_prefix = "LPP";
+
+message TokenCapabilities {
+    optional bool alert = 1;
+    optional bool badge = 2;
+    optional bool sound = 3;
+    optional bool notification_center = 4;
+    optional bool on_lock = 5;
+}
+
+message AddDeviceTokenRequest {
+    optional int64 user_id = 1;
+    optional string token = 2;
+    optional DeviceType device = 3;
+    optional string installation_id = 4;
+    optional TokenCapabilities capabilities = 5;
+    optional string client_version = 6;
+    optional string os_version = 7;
+    optional AppType app_type = 9;
+    optional bool sandbox = 10;
+    optional string manufactorer = 11;
+    optional string model = 12;
+}
+
+message RemoveDeviceTokenRequest {
+    optional int64 user_id = 1;
+    optional string token = 2;
+    optional DeviceType device = 3;
+    optional string installation_id = 4;
+    optional AppType app_type = 5;
+}
+
+message GetDeviceTokensRequest {
+    optional int64 user_id = 1;
+}
+
+message GetDeviceTokensResponse {
+    repeated DeviceToken device_token = 1;
+}
+
+message DeviceToken {
+    optional string token = 1;
+    optional DeviceType device = 2;
+    optional string installation_id = 3;
+    optional TokenCapabilities capabilities = 4;
+    optional string client_version = 5;
+    optional string os_version = 6;
+    optional AppType app_type = 8;
+    optional bool sandbox = 9;
+    optional string manufactorer = 10;
+    optional string model = 11;
+    optional int64 timestamp = 12;
+}
+
+message DeleteUserDataRequest {
+    optional int64 user_id = 1;
+}
+
+message SetNotificationPreferencesRequest {
+    optional NotificationPreferences preferences = 1;
+    optional int64 user_id = 2;
+}
+
+message SetMultiNotificationPreferencesRequest {
+    repeated NotificationPreferences preferences = 1;
+    optional int64 user_id = 2;
+}
+
+message EnableAllNotificationPreferencesRequest {
+    optional int64 user_id = 1;
+    optional Channel channel = 2;
+    optional bool enable_channel_notifications = 3;
+    optional bool enable_all_categories = 4;
+}
+
+message RemoveNotificationPreferencesRequest {
+    optional int64 user_id = 1;
+    optional string channel = 2;
+}
+
+message GetNotificationPreferencesRequest {
+    optional int64 user_id = 1;
+    optional string channel = 2;
+    optional string locale = 3;
+    optional int32 protocol = 4 [default = 1];
+    optional AppType app_type = 5;
+}
+
+message GetNotificationPreferencesMultiChannelRequest {
+    optional int64 user_id = 1;
+    repeated string channel = 2;
+    optional string locale = 3;
+    optional int32 protocol = 4 [default = 1];
+    optional AppType app_type = 5;
+}
+
+message GetNotificationPreferencesMultiChannelResponse {
+    repeated NotificationPreferences preferences = 1;
+}
+
+message NotificationPreferences {
+    optional int64 user_id = 1;
+    optional string channel = 2;
+    optional StringMap categories = 3;
+    repeated GroupInfo group_info = 4;
+    optional bool enabled = 5;
+    optional CategoriesMap extended_categories = 6;
+    optional int64 enabled_change_date = 7;
+}
+
+message Category {
+    optional string value = 1;
+    optional int64 timestamp = 2;
+}
+
+message CategoryEntry {
+    optional string key = 1;
+    optional Category value = 2;
+}
+
+message CategoriesMap {
+    repeated CategoryEntry entry = 1;
+}
+
+message GetPreferencesCategoryInfoRequest {
+    optional int64 user_id = 1;
+    optional string channel = 2;
+    optional string locale = 3;
+}
+
+message GetPreferencesCategoryInfoResponse {
+    repeated GroupInfo group_info = 1;
+    optional bool enabled = 2;
+}
+
+message GroupInfo {
+    optional string group = 1;
+    repeated CategoryInfo category_info = 2;
+}
+
+message CategoryInfo {
+    optional string category = 1;
+    optional string name = 2;
+    optional string description = 3;
+    optional string value = 4;
+}
+
+message ConfigItem {
+    optional string name = 1;
+    optional ConfigScope scope = 2;
+    optional ConfigSet set = 8;
+    optional int64 last_modified = 3;
+    
+    oneof Value {
+        bool bool_value = 4;
+        int32 int_value = 5;
+        int64 long_value = 6;
+        string string_value = 7;
+    }
+}
+
+message CachedConfigItem {
+    optional int64 user_id = 1;
+    optional string installation_id = 2;
+    optional string name = 3;
+    optional ConfigScope scope = 4;
+    optional ConfigSet set = 5;
+    optional int64 last_modified = 6;
+    optional int64 last_synced = 7;
+    optional bool migration_done = 12;
+    
+    oneof Value {
+        bool bool_value = 8;
+        int32 int_value = 9;
+        int64 long_value = 10;
+        string string_value = 11;
+    }
+}
+
+message CachedConfigItemList {
+    repeated CachedConfigItem cached_config_item = 1;
+}
+
+message SyncConfigRequest {
+    optional int64 user_id = 1;
+    optional string installtion_id = 2 [default = "ACCOUNT"];
+    optional int64 last_synced = 4;
+    repeated ConfigItem config_item = 5;
+    optional DeviceType device_type = 6 [deprecated = true];
+    optional string client_version = 7 [deprecated = true];
+    optional AppType app_type = 8 [deprecated = true];
+}
+
+message SyncConfigResponse {
+    repeated ConfigItem config_item = 1;
+    optional int64 last_synced = 2;
+}
+
+message SyncConfigRequestWrapper {
+    optional SyncConfigRequest request = 1;
+    optional SyncConfigSessionParams session_params = 2;
+}
+
+message SyncConfigSessionParams {
+    repeated ConfigItem last_changed_user_configs = 1;
+    optional int64 user_id = 2;
+}
+
+message SyncConfigResponseWrapper {
+    optional SyncConfigResponse response = 1;
+    optional SyncConfigSessionUpdate session_update = 2;
+}
+
+message SyncConfigSessionUpdate {
+    repeated ConfigItem changed_user_configs = 1;
+}
+
+message GetConfigRequest {
+    optional int64 user_id = 1;
+    optional string installtion_id = 2 [default = "ACCOUNT"];
+    repeated string config_name = 4;
+}
+
+message GetConfigResponse {
+    repeated ConfigItem config_item = 1;
+}
+
+message GetUsersConfigRequest {
+    repeated User user = 1;
+    message User {
+        optional int64 user_id = 1;
+        optional string installtion_id = 2 [default = "ACCOUNT"];
+    }
+    
+    repeated string config_name = 2;
+}
+
+message GetUsersConfigResponse {
+    repeated UserConfig users_config = 1;
+    message UserConfig {
+        optional int64 user_id = 1;
+        repeated ConfigItem config_item = 2;
+    }
+}
+
+message SetConfigRequest {
+    optional int64 user_id = 1;
+    optional string installtion_id = 2 [default = "ACCOUNT"];
+    repeated ConfigItem config_item = 3;
+}
+
+message ConfigItemChangedEvent {
+    optional int64 user_id = 1;
+    optional ConfigItem old = 2;
+    optional ConfigItem new = 3;
+    optional int64 event_millis = 4;
+}
+
+message GetConfigAndNotifPreferencesRequest {
+    optional GetNotificationPreferencesRequest get_notification_preferences_request = 1;
+    optional GetConfigRequest get_config_request = 2;
+}
+
+message GetConfigAndNotifPreferencesResponse {
+    optional NotificationPreferences notification_preferences = 1;
+    optional GetConfigResponse get_config_response = 2;
+}
+
+message SetConfigAndNotifPreferencesRequest {
+    optional int64 user_id = 1;
+    optional string installation_id = 2;
+    optional AppType app_type = 3;
+    optional DeviceType device_type = 4;
+    optional string client_version = 5;
+    optional int64 last_synced = 6;
+    repeated ConfigItem config_item = 7;
+    repeated NotificationPreferences preferences = 8;
+}
+
+message SetConfigAndNotifPreferencesResponse {
+    optional SyncConfigResponse sync_response = 1;
+}
+
+message SetNotificationPreferencesRequestWrapper {
+    optional SetNotificationPreferencesRequest request = 1;
+    optional NotificationPreferencesSessionParams session_params = 2;
+}
+
+message SetNotificationPreferencesResponseWrapper {
+    optional Status response = 1;
+    repeated Executor executors = 2;
+    optional NotificationPreferencesSessionUpdate session_update = 3;
+}
+
+message Executor {
+    optional bool recalc_config = 1;
+}
+
+message NotificationPreferencesSessionParams {
+    optional int32 events_permission = 1;
+    optional int64 user_id = 2;
+}
+
+message NotificationPreferencesSessionUpdate {
+    optional int32 events_permission = 1;
+}
+
+enum Channel {
+    UNKNOWN_CHANNEL = 0;
+    PUSH = 1;
+    EMAIL = 2;
+    TEXT = 3;
+}
+
+enum ConfigScope {
+    ACCOUNT = 0;
+    DEVICE = 1;
+}
+
+enum ConfigSet {
+    USER_PREFERENCES = 1;
+    SERVER_CONFIG = 2;
+}

@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "RealtimeNg.proto";
+import "Types.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message SetCurrentMeeting {
+    optional string meetingID = 1;
+    optional bool shouldShareInfoWithDriver = 2;
+    optional SetCurrentMeetingSession session = 3;
+}
+
+message SetCurrentMeetingResponse {
+    optional Status status = 1;
+    optional SetCurrentMeetingSessionUpdate session = 2;
+}
+
+message SetCurrentMeetingSession {
+    optional int64 db_id = 1;
+    optional string full_name = 2;
+}
+
+message SetCurrentMeetingSessionUpdate {
+    optional string current_meeting = 1;
+    optional int64 driver_dbid = 2;
+    optional string viewing_meeting = 3;
+    optional bool add_participant = 4;
+    repeated int32 deleteField = 5;
+    optional int64 last_update_users_request_time = 6;
+}

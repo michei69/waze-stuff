@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/network_stats_wrapper/server_request_result_data.proto";
+import "stats/network_stats_wrapper/server_routing_request_result_use_case.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ServerSelectRouteRequestResultStat {
+    ServerRequestResultData generic_response_data = 1;
+    RoutingUseCase use_case = 2;
+}

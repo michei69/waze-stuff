@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/conversation_stats_wrapper/conversation_reaction_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ConversationStatsWrapper {
+    oneof stat {
+        ConversationReactionStat conversation_reaction = 1;
+    }
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/drive_suggestion_stats_wrapper/suggestion_card.proto";
+import "stats/drive_suggestion_stats_wrapper/suggestion_card_button_cta.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message SuggestionCardDismissedStat {
+    Reason reason = 1;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        ROAMING_TIMEOUT = 1;
+        NAVIGATION_START = 2;
+        USER_DISMISSED = 3;
+    }
+    
+    SuggestionCardButtonCta button_cta = 2;
+    SuggestionCard suggestion_card = 3;
+}

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/cluster_stats_wrapper/cluster_change_compass_setting_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_change_speed_limit_setting_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_connect_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_disconnect_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_setting.proto";
+import "stats/cluster_stats_wrapper/cluster_window_closed_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_window_opened_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_zoom_in_stat.proto";
+import "stats/cluster_stats_wrapper/cluster_zoom_out_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ClusterStatsWrapper {
+    oneof stat {
+        ClusterChangeCompassSettingStat cluster_change_compass_setting = 1;
+        ClusterChangeSpeedLimitSettingStat cluster_change_speed_limit_setting = 2;
+        ClusterConnectStat cluster_connect = 3;
+        ClusterDisconnectStat cluster_disconnect = 4;
+        ClusterSetting cluster_setting = 5;
+        ClusterWindowClosedStat cluster_window_closed = 6;
+        ClusterWindowOpenedStat cluster_window_opened = 7;
+        ClusterZoomInStat cluster_zoom_in = 8;
+        ClusterZoomOutStat cluster_zoom_out = 9;
+    }
+}

@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package linqmap.proto.carpool;
+
+option objc_class_prefix = "LPCR";
+option java_package = "linqmap.proto.carpool";
+
+message NativeBootstrapWidgetParameters {
+    oneof encrypted_params {
+        bytes buyflow_billing_signup_params = 1;
+        bytes buyflow_billing_signup_with_funds_guarantee_params = 2;
+        bytes buyflow_checkout_purchase_params = 29;
+        bytes buyflow_make_a_payment_params = 3;
+        bytes buyflow_merchant_signup_params = 4;
+        bytes customer_pending_settings_customer_pending_settings_params = 5;
+        bytes document_viewer_params = 6;
+        bytes embedded_landing_page_params = 7;
+        bytes embedded_settings_params = 8;
+        bytes fix_instrument_params = 9;
+        bytes generic_selector_customer_selector_params = 10;
+        bytes identity_and_credit_credit_check_params = 11;
+        bytes identity_and_credit_customer_support_params = 12;
+        bytes identity_and_credit_identity_verification_params = 13;
+        bytes invoice_summary_params = 14;
+        bytes payment_methods_params = 15;
+        bytes payments_center_fix_flow_params = 16;
+        bytes payments_center_params = 17;
+        bytes purchase_manager_get_real_pan_client_params = 18;
+        bytes purchase_manager_integrator_processed_payment_challenge_params = 19;
+        bytes purchase_manager_request_challenge_instrument_migration_params = 20;
+        bytes purchase_manager_request_challenge_params = 21;
+        bytes signup_summary_params = 22;
+        bytes statements_view_params = 23;
+        bytes timeline_view_params = 24;
+        bytes tax_data_params = 25;
+        bytes wipeout_params = 26;
+    }
+    
+    oneof client_params {
+        bytes buyflow_checkout_purchase_client_params = 27;
+        bytes buyflow_billing_signup_with_funds_guarantee_client_params = 28;
+    }
+}

@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package linqmap.proto.replay;
+
+import "replay/ReplayIosLocation.proto";
+import "AoMCommands.proto";
+
+option java_package = "linqmap.proto.replay";
+
+message ReplayableEventWithTimestamp {
+    optional int64 timestamp_ms = 1;
+    optional ReplayableEvent event = 2;
+}
+
+message ReplayableEvent {
+    oneof data {
+        TestEvent testEvent = 1;
+        TestEvent2 testEvent2 = 2;
+        GpsSampleEvent gpsSample = 3;
+        IosLocationEvent ios_location_event = 4;
+        com.waze.proto.alertsonmap.AddAlertAction alertEvent = 5;
+    }
+}
+
+message TestEvent {
+    optional string testString = 1;
+}
+
+message TestEvent2 {
+    optional int32 testInt = 1;
+}
+
+message GpsSampleEvent {
+    optional int32 lat_times_1000000 = 1;
+    optional int32 lon_times_1000000 = 2;
+    optional float speed_ms = 3;
+    optional float steering_degrees = 4;
+    optional float accuracy_meters = 5;
+    optional float speed_accuracy_ms = 6;
+    optional float steering_accuracy_degrees = 7;
+}

@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "logging.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message GetTokenRequest {
+    optional string community_name = 1;
+}
+
+message GetTokenResponse {
+    optional string token = 1;
+}

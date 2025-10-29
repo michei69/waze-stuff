@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AverageSpeedCameraBarClickedStat {
+    oneof _time_remaining_seconds {
+        int64 time_remaining_seconds = 1;
+    }
+    
+    oneof _percent_remaining {
+        int64 percent_remaining = 2;
+    }
+}

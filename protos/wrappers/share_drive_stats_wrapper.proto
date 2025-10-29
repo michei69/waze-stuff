@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/share_drive_stats_wrapper/share_drive_drawer_clicked_stat.proto";
+import "stats/share_drive_stats_wrapper/share_drive_drawer_shown_stat.proto";
+import "stats/share_drive_stats_wrapper/share_location_drawer_clicked_stat.proto";
+import "stats/share_drive_stats_wrapper/share_location_drawer_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ShareDriveStatsWrapper {
+    oneof stat {
+        ShareDriveDrawerShownStat share_drive_drawer_shown = 1;
+        ShareDriveDrawerClickedStat share_drive_drawer_clicked = 2;
+        ShareLocationDrawerClickedStat share_location_drawer_clicked = 3;
+        ShareLocationDrawerShownStat share_location_drawer_shown = 4;
+    }
+}

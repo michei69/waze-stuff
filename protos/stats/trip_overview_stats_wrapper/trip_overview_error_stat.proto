@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/trip_overview_stats_wrapper/source.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewErrorStat {
+    Source source = 1;
+    
+    TriggeredFrom triggered_from = 2;
+    enum TriggeredFrom {
+        TRIGGERED_FROM_UNSPECIFIED = 0;
+        START_NAVIGATION = 1;
+        TRIP_OVERVIEW_LAUNCH = 2;
+    }
+    
+    string error_code = 3;
+    string error_server_description = 4;
+}

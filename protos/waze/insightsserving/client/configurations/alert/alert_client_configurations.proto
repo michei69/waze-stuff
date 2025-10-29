@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package waze.insightsserving.client.configurations;
+
+import "waze/insightsserving/client/configurations/alert/hazard_on_road_client_configurations.proto";
+import "waze/insightsserving/client/configurations/alert/weather_client_configurations.proto";
+import "waze/insightsserving/client/configurations/common_client_configurations.proto";
+
+option objc_class_prefix = "WINS";
+option java_multiple_files = true;
+option java_outer_classname = "AlertClientConfigurationsProto";
+option java_package = "com.waze.insightsserving.proto.client.configurations";
+
+message HazardOnRoadConfiguration {
+    oneof HazardOnRoadTypeConfiguration {
+        HazardDefaultConfiguration hazard_default_configuration = 100;
+        HazardConstructionConfiguration hazard_construction_configuration = 101;
+    }
+}
+
+message WeatherConfiguration {
+    oneof WeatherTypeConfiguration {
+        WeatherDefaultConfiguration weather_default_configuration = 1;
+        WeatherFogConfiguration weather_fog_configuration = 2;
+        WeatherHailConfiguration weather_hail_configuration = 3;
+        WeatherHeavyRainConfiguration weather_heavy_rain_configuration = 4;
+        WeatherFloodConfiguration weather_flood_configuration = 5;
+    }
+}

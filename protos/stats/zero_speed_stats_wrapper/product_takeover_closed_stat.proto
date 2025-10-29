@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/zero_speed_stats_wrapper/product_takeover_info.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ProductTakeoverClosedStat {
+    ProductTakeoverInfo product_takeover_info = 1;
+    
+    Reason reason = 2;
+    enum Reason {
+        REASON_UNSPECIFIED = 0;
+        PTO_ACTION_CLICKED = 1;
+        CLOSED_BY_USER = 2;
+        TIMEOUT = 3;
+        USER_STARTED_DRIVING = 4;
+    }
+}

@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/trip_overview_stats_wrapper/in_car_information_popup_clicked_stat.proto";
+import "stats/trip_overview_stats_wrapper/in_car_information_popup_shown_stat.proto";
+import "stats/trip_overview_stats_wrapper/in_car_list_view_cell_visibility_changed_stat.proto";
+import "stats/trip_overview_stats_wrapper/toll_information_popup_clicked_stat.proto";
+import "stats/trip_overview_stats_wrapper/toll_information_popup_shown_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_clicked_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_closure_message_closed_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_closure_message_shown_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_error_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_message_card_clicked_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_message_card_shown_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_not_shown_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_preferred_route_message_clicked.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_preferred_route_message_shown.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_route_selected_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_routes_received_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_screen_mode_updated_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_screen_positioning_set_stat.proto";
+import "stats/trip_overview_stats_wrapper/trip_overview_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message TripOverviewStatsWrapper {
+    oneof stat {
+        TripOverviewShownStat trip_overview_shown = 1;
+        TripOverviewErrorStat trip_overview_error = 2;
+        TripOverviewClickedStat trip_overview_clicked = 3;
+        TripOverviewNotShownStat trip_overview_not_shown = 4;
+        TripOverviewRouteSelectedStat trip_overview_route_selected = 5;
+        TripOverviewScreenPositioningSetStat trip_overview_screen_positioning_set = 6;
+        TripOverviewRoutesReceivedStat trip_overview_routes_received = 7;
+        TripOverviewClosureMessageShownStat trip_overview_closure_message_shown = 8;
+        TripOverviewClosureMessageClosedStat trip_overview_closure_message_closed = 9;
+        TripOverviewPreferredRouteMessageShownStat trip_overview_preferred_route_message_shown = 10;
+        TripOverviewPreferredRouteMessageClickedStat trip_overview_preferred_route_message_clicked = 11;
+        TollInformationPopupClickedStat toll_information_popup_clicked = 12;
+        TollInformationPopupShownStat toll_information_popup_shown = 13;
+        TripOverviewScreenModeUpdatedStat trip_overview_screen_mode_updated = 14;
+        InCarListViewCellVisibilityChangedStat in_car_list_view_cell_visibility_changed = 15;
+        InCarInformationPopupClickedStat in_car_information_popup_clicked = 16;
+        InCarInformationPopupShownStat in_car_information_popup_shown = 17;
+        TripOverviewMessageCardClickedStat trip_overview_message_card_clicked = 18;
+        TripOverviewMessageCardShownStat trip_overview_message_card_shown = 19;
+    }
+}

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/zero_speed_stats_wrapper/product_takeover_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ProductTakeoversReceivedStat {
+    repeated ProductTakeoverType pto_types = 4;
+    
+    oneof _status {
+        int64 status = 1;
+    }
+    
+    oneof _latency_ms {
+        int64 latency_ms = 2;
+    }
+    
+    oneof _pto_count {
+        int64 pto_count = 3;
+    }
+}

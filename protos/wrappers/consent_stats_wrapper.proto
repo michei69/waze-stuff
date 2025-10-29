@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/consent_stats_wrapper/user_age_blocked_screen_clicked_stat.proto";
+import "stats/consent_stats_wrapper/user_age_blocked_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/age_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/age_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/gdpr_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/gdpr_screen_shown_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_popup_clicked_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_popup_shown_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_screen_clicked_stat.proto";
+import "stats/unauthenticated_stats/user_age_warning_screen_shown_stat.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ConsentStatsWrapper {
+    oneof stat {
+        GdprScreenClickedStat gdpr_screen_clicked = 1 [deprecated = true];
+        GdprScreenShownStat gdpr_screen_shown = 2 [deprecated = true];
+        AgeScreenShownStat age_screen_shown = 3 [deprecated = true];
+        AgeScreenClickedStat age_screen_clicked = 4 [deprecated = true];
+        UserAgeBlockedScreenClickedStat user_age_blocked_screen_clicked = 5;
+        UserAgeBlockedScreenShownStat user_age_blocked_screen_shown = 6;
+        UserAgeWarningPopupClickedStat user_age_warning_popup_clicked = 7 [deprecated = true];
+        UserAgeWarningPopupShownStat user_age_warning_popup_shown = 8 [deprecated = true];
+        UserAgeWarningScreenClickedStat user_age_warning_screen_clicked = 9 [deprecated = true];
+        UserAgeWarningScreenShownStat user_age_warning_screen_shown = 10 [deprecated = true];
+    }
+}

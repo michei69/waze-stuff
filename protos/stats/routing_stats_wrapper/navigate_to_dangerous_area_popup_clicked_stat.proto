@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/lat_lng.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message NavigateToDangerousAreaPopupClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CLOSE = 1;
+        CONFIRM = 2;
+    }
+    
+    LatLng coordinates = 3;
+    
+    oneof _area_id {
+        int64 area_id = 2;
+    }
+}

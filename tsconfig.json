@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "rootDir": "src",
+        "outDir": "dist",
+
+        "allowJs": true,
+        "strictNullChecks": false,
+
+        "lib": ["ES2023"],
+        "skipLibCheck": true,
+        "removeComments": true,
+
+        "target": "ES2022",
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext"
+    },
+    "exclude": ["static", "garbage", "node_modules", "dist", "test"],
+    "ts-node": {
+        "swc": true
+    }
+}

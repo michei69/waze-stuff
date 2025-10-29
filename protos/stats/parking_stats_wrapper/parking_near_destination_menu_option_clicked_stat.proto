@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message ParkingNearDestinationMenuOptionClickedStat {
+    Action action = 1;
+    enum Action {
+        ACTION_UNSPECIFIED = 0;
+        CLOSE = 1;
+        FIND_PARKING = 2;
+        MARK_PARKING = 3;
+    }
+}

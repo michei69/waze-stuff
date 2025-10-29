@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message BeaconTelemetryStat {
+    string beacon_id_suffix = 1;
+    
+    oneof _temperature_degree_celsius {
+        double temperature_degree_celsius = 2;
+    }
+    
+    oneof _pdu_count {
+        sint64 pdu_count = 3;
+    }
+    
+    oneof _battery_voltage_mv {
+        sint64 battery_voltage_mv = 4 [deprecated = true];
+    }
+    
+    oneof _time_since_last_reboot_ms {
+        sint64 time_since_last_reboot_ms = 5;
+    }
+    
+    oneof _first_sample_timestamp_ms {
+        int64 first_sample_timestamp_ms = 6;
+    }
+    
+    oneof _battery_volt_mv {
+        double battery_volt_mv = 7;
+    }
+}

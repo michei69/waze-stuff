@@ -1,0 +1,217 @@
+syntax = "proto2";
+
+package linqmap.proto.search.v2;
+
+import "SearchConfig.proto";
+import "Types.proto";
+import "RTCommonTypes.proto";
+import "Venues.proto";
+import "RealtimeNg.proto";
+import "ClientInfoCommand.proto";
+import "GeoCoding.proto";
+
+option objc_class_prefix = "LPSV";
+option java_outer_classname = "SearchV2";
+option java_package = "linqmap.proto.search.v2";
+
+message SearchRequestWrapper {
+    optional SearchRequest request = 1;
+    optional UserSessionData user_session_data = 2;
+    optional SearchConfig search_config = 3;
+}
+
+message SearchRequest {
+    optional SearchArea search_area = 1;
+    repeated SearchFilter search_filters = 2;
+    optional VenuePreference venue_preference = 3 [deprecated = true];
+    optional bool merge_user_updates = 4 [default = true];
+    optional int32 page_size = 5 [default = 20];
+}
+
+message SearchArea {
+    optional Polygon viewport = 8;
+    message Polygon {
+        repeated Coordinate coordinates = 1;
+    }
+    
+    optional int32 max_distance_meters = 4;
+    
+    oneof geometry {
+        SessionBasedGeometry session_based_geometry = 1;
+        Coordinate coordinate = 2;
+        Route route = 3;
+        Polygon polygon = 6 [deprecated = true];
+        VenueLocation venue_location = 7;
+    }
+    
+    message Route {
+        repeated Coordinate coordinates = 1;
+    }
+    
+    message VenueLocation {
+        optional Coordinate location = 1;
+        optional string venue_id = 2;
+    }
+    
+    enum SessionBasedGeometry {
+        UNKNOWN_SESSION_BASED_GEOMETRY = 0;
+        CURRENT_COORDINATE = 1;
+        ALONG_ROUTE = 2;
+    }
+}
+
+message SearchFilter {
+    oneof filter {
+        string query = 1;
+        string category_group_id = 2;
+        CategoryFilter category_filter = 3;
+        AdvertiserBrandFilter advertiser_brand_filter = 4;
+        ServiceFilter service_filter = 5;
+        EvcsNetworkFilter evcs_network_filter = 6;
+        EvConnectorTypeFilter ev_connector_type_filter = 7;
+        float min_charge_power_kw_filter = 8;
+        bool public_evcs_filter = 14;
+        PriceLevelFilter price_level_filter = 9;
+        BrandFilter brand_filter = 10;
+        ProductFilter product_filter = 11;
+        bool open_now_filter = 12;
+        double min_rating_filter = 13;
+    }
+    
+    message CategoryFilter {
+        repeated string category_id = 1;
+    }
+    
+    message AdvertiserBrandFilter {
+        repeated string advertiser_brand_id = 1;
+    }
+    
+    message ServiceFilter {
+        repeated string service_id = 1;
+    }
+    
+    message EvcsNetworkFilter {
+        repeated string network_id = 1;
+    }
+    
+    message EvConnectorTypeFilter {
+        repeated string ev_connector_type_ids = 1;
+    }
+    
+    message PriceLevelFilter {
+        repeated int32 price_levels = 1;
+    }
+    
+    message BrandFilter {
+        repeated string brand_names = 1;
+    }
+    
+    message ProductFilter {
+        repeated string products = 1;
+    }
+}
+
+message VenuePreference {
+    option deprecated = true;
+    repeated string products = 1;
+    repeated string brand_names = 2;
+    repeated string ev_connector_type_ids = 3;
+}
+
+message UserSessionData {
+    optional int64 user_id = 1;
+    optional string username = 2;
+    optional string session_id = 3;
+    optional rt.ClientInfo client_info = 4;
+    optional com.waze.proto.rtcommon.CountryEntry real_country = 5;
+    optional com.waze.proto.rtcommon.ClientDisplay client_display = 6;
+    optional com.waze.proto.rtcommon.UserPosition real_position = 7;
+    optional com.waze.proto.rtcommon.UserRouting selected_route = 8;
+    optional Coordinate navigation_destination_coordinate = 10;
+    optional string navigation_destination_venue_id = 11;
+    optional geocoding.proto.Geometry selected_route_geometry = 12;
+    
+    reserved 9;
+    
+    reserved "selected_route_geom";
+}
+
+message SearchConfig {
+    repeated StringEntry external_config = 1;
+}
+
+message SearchResponse {
+    repeated SearchResult result = 1;
+    
+    optional QueryDetection query_detection = 2;
+    message QueryDetection {
+        oneof detected_item {
+            search_config.Category category = 1;
+            search_config.CategoryGroup category_group = 2;
+        }
+    }
+    
+    optional bool hide_filters = 3;
+}
+
+message SearchResult {
+    optional venue.Venue venue = 1;
+    optional string routing_context = 2;
+    optional bool updatable = 3;
+    
+    optional AdData adData = 4 [deprecated = true];
+    message AdData {
+        optional bool sponsored = 1;
+        optional Deal deal = 2;
+        optional int64 location_id = 3;
+        optional string offer_logo = 4;
+        optional int64 offer_id = 5;
+        optional int64 provider_id = 6;
+        optional string preview_uri = 7;
+        optional string preview_query_json = 8;
+        optional string context_json = 9;
+        optional string preview_icon = 10;
+        optional string promotion_uri = 11;
+        optional string frame = 12;
+        optional string badge = 13;
+        optional string logo_type = 14;
+        optional bool hide_ad_details = 15;
+    }
+    
+    optional VenueDecorationData venue_decoration_data = 5;
+    message VenueDecorationData {
+        optional string info_url = 1;
+        optional bool append_client_data = 2;
+    }
+    
+    optional VenueSource venue_source = 6;
+    enum VenueSource {
+        VENUE_SOURCE_UNSPECIFIED = 0;
+        WAZE = 1;
+        GOOGLE = 2;
+    }
+    
+    optional WalkingDistanceData walking_distance_data = 7;
+    message WalkingDistanceData {
+        optional int32 walking_distance_meters = 1;
+        optional int32 walking_minutes = 2;
+    }
+    
+    optional ParkingData parking_data = 8;
+    message ParkingData {
+        optional bool recommended = 1;
+        optional bool best = 2;
+    }
+    
+    message Deal {
+        optional int64 campaign_id = 1;
+        
+        optional Type type = 2;
+        enum Type {
+            DEAL_TYPE_UNSPECIFIED = 0;
+            SPECIAL = 1;
+        }
+        
+        optional string description = 3;
+    }
+}

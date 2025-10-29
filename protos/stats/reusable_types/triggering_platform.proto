@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+enum TriggeringPlatform {
+    TRIGGERING_PLATFORM_UNSPECIFIED = 0;
+    MOBILE_IOS = 1;
+    MOBILE_ANDROID = 2;
+    CARPLAY = 3;
+    AAP = 4;
+    AAOS = 5;
+}

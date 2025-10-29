@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message MarketplaceHeaderShownStat {
+    oneof _back_button_available {
+        bool back_button_available = 1;
+    }
+    
+    oneof _close_button_available {
+        bool close_button_available = 2;
+    }
+    
+    oneof _share_button_available {
+        bool share_button_available = 3;
+    }
+}

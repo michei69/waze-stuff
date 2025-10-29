@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/regulation_flags.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_outer_classname = "Nd4cScreenShownStatOuterClass";
+option java_package = "stats.events";
+
+message Nd4cScreenShownStat {
+    RegulationFlags regulation_flags = 1;
+}

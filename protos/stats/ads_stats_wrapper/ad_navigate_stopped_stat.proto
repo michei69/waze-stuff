@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/ads_stats_wrapper/ad_information.proto";
+import "stats/ads_stats_wrapper/user_location_information.proto";
+import "stats/reusable_types/destination_type.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AdNavigateStoppedStat {
+    AdInformation ad_information = 1;
+    string category = 2;
+    string display_group = 3;
+    string search_query = 5;
+    UserLocationInformation user_location_information = 7;
+    DestinationType destination_type = 8;
+    
+    oneof _ad_placement_id {
+        int64 ad_placement_id = 4;
+    }
+    
+    oneof _sponsored {
+        bool sponsored = 6;
+    }
+}

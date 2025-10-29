@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats.events;
+
+import "stats/reusable_types/triggering_platform.proto";
+
+option objc_class_prefix = "WZS";
+option java_multiple_files = true;
+option java_package = "stats.events";
+
+message AddressPreviewLatencyStat {
+    TriggeringPlatform triggering_platform = 3;
+    
+    oneof _latency_ms {
+        int64 latency_ms = 1;
+    }
+    
+    oneof _residential {
+        bool residential = 2;
+    }
+}

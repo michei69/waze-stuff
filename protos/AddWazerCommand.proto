@@ -1,0 +1,163 @@
+syntax = "proto2";
+
+package linqmap.proto.rt;
+
+import "Types.proto";
+import "SocialMedia.proto";
+import "OtherCarpoolInfo.proto";
+
+option objc_class_prefix = "LPRT";
+option java_package = "linqmap.proto.rt";
+
+message AddWazer {
+    optional Mode mode = 10201;
+    enum Mode {
+        UNKNOWN = 0;
+        DELETE_IF_NOT_UPDATE = 1;
+        DO_NOT_DELETE = 2;
+    }
+    
+    optional WazerId id = 10202;
+    optional string mapName = 10203;
+    optional string firstName = 10217;
+    optional string lastName = 10218;
+    optional string free_text = 6;
+    optional string persistent_id = 10204;
+    optional GpsSample gps_sample = 10205;
+    optional int32 mood = 10206;
+    
+    optional IconAddOn addon = 10207;
+    enum IconAddOn {
+        NONE = 0;
+        CROWN = 1;
+        SWORD = 2;
+        SHIELD = 3;
+        PENCIL = 4;
+        BETA = 5;
+        HALO = 6;
+        ADDON7 = 7;
+        ADDON8 = 8;
+        ADDON9 = 9;
+        ADDON10 = 10;
+        ADDON11 = 11;
+        ADDON12 = 12;
+        ADDON13 = 13;
+        ADDON14 = 14;
+    }
+    
+    optional int32 rank = 10208;
+    optional int32 points = 10209;
+    optional int32 join_date_sec = 10210;
+    optional int32 capabilities = 10211;
+    optional bool can_ping = 10212;
+    optional bool can_private_message = 10213;
+    optional Group group = 10214 [deprecated = true];
+    optional Friendship friendship = 10215;
+    optional Acquaintance acquaintance = 10216;
+    optional int32 social_priority = 10219;
+    optional OtherSocialInfo social_info = 10222;
+    optional carpool.common.OtherCarpoolInfo carpool_info = 10220;
+    
+    reserved 10223;
+}
+
+message OtherSocialInfo {
+    optional string image_url = 2;
+    repeated OtherCommunitySocialInfo community = 1;
+}
+
+message OtherCommunitySocialInfo {
+    optional string name = 1;
+    optional string user_id = 4;
+    optional string job_title = 5;
+    optional string profile_url = 6;
+    optional string first_name = 7;
+    optional string last_name = 8;
+    optional int32 number_of_friends = 9;
+}
+
+message Group {
+    optional string name = 10221;
+    optional string icon = 10222;
+    
+    optional Status status = 10223;
+    enum Status {
+        IRRELEVANT = 0;
+        FOLLOWING = 1;
+        ACTIVE = 2;
+    }
+}
+
+message Friendship {
+    optional Type type = 10231;
+    enum Type {
+        UNKNOWN = 0;
+        FRIEND = 1;
+        FRIEND_OF_FRIEND = 2;
+        MEETING_FRIEND = 3;
+        ACQUAINTANCE = 4;
+    }
+    
+    repeated socialmedia.CommunityUserInfo community = 10238;
+    optional bool is_online = 10233;
+    optional bool is_parked = 10234;
+    optional Status status = 10235;
+    repeated MutualFriend mutual_friend = 10237;
+    
+    optional SameDestinationStatus same_driving_destination = 10239;
+    enum SameDestinationStatus {
+        SAME_DEST_STATUS_UNKNOWN = 0;
+        SAME_DEST_STATUS_DRIVING = 1;
+        SAME_DEST_STATUS_ARRIVED = 2;
+    }
+    
+    optional SharedDriveStatus meeting_destination = 10240;
+    enum SharedDriveStatus {
+        SHARED_DRIVE_STATUS_UNKNOWN = 0;
+        SHARED_DRIVE_STATUS_NOT_STARTED = 1;
+        SHARED_DRIVE_STATUS_DRIVING = 2;
+        SHARED_DRIVE_STATUS_ARRIVED = 3;
+    }
+    
+    optional int32 eta_sec = 10241;
+    
+    optional AcquaintanceType acquaintanceType = 10242;
+    enum AcquaintanceType {
+        ACQUAINTANCE_UNKNOWN = 0;
+        ACQUAINTANCE_NONE = 1;
+        ACQUAINTANCE_RECOMMENDED = 2;
+        ACQUAINTANCE_PENDING_FRIEND_APPROVAL = 3;
+        ACQUAINTANCE_PENDING_MY_APPROVAL = 4;
+        ACQUAINTANCE_REMOVED = 5;
+    }
+    
+    optional string shared_meeting_from_me = 10243;
+    optional string shared_meeting_to_me = 10244;
+    optional int32 watched_me_time_ago_sec = 10245;
+}
+
+message Acquaintance {
+    optional Type type = 10241;
+    enum Type {
+        UNKNOWN = 0;
+        NONE = 1;
+        RECOMMENDED = 2;
+        PENDING_FRIEND_APPROVAL = 3;
+        PENDING_MY_APPROVAL = 4;
+        REMOVED = 5;
+    }
+    
+    repeated socialmedia.CommunityUserInfo community = 10243;
+}
+
+message Status {
+    optional string text = 10261;
+    optional int32 time_ago_sec = 10262;
+    optional AlertType last_alert_type = 10263;
+    optional string last_alert_text = 10264;
+}
+
+message MutualFriend {
+    optional string name = 10281;
+    optional string picture_id = 10282;
+}
