@@ -111,9 +111,9 @@ more specifically, some scripts that help parse and create new tiles for waze us
 - `redirector_test.ts` uses a custom app i made in 2 minutes which uses a TCP socket to send over location data, and mock the location directly on device
 
 ### How do i even connect my waze to ur shit
-- use sth like [httptoolkit](https://httptoolkit.com/) to redirect `rt.waze.com` and `ctilesgcs-row.waze.com` to your server
+- use sth like [httptoolkit](https://httptoolkit.com/) to redirect `rt.waze.com`, `rt-xlb-row.waze.com`, `gapi.waze.com` and `ctilesgcs-row.waze.com` to your server
 - works on both root and non-root devices because you can easily [add the cert settings thing](https://httptoolkit.com/docs/guides/android/#intercepting-traffic-from-your-own-android-app) to waze since it thankfully doesnt use pairip (god bless :pray:)
-- you could also just replace `rt.waze.com` and `ctilesgcs-row.waze.com` in the app sourcecode to your own server if thats what you'd like
+- you could also just replace `rt.waze.com` and the other urls directly in the app sourcecode to your own server if thats what you'd like
 
 ### My waze crashes when i do that / Says i dont have internet connection
 - restart the app until it wants to work
@@ -148,7 +148,7 @@ note: editor ids dont match with internal waze ids for some goddamn reason, so d
 
 | cfcc | polygon category              |
 |------|-------------------------------|
-| 12   | park                          |
+| 12   | land                          |
 | 15   | building / venue              |
 | 16   | city / tile (the entire tile) |
 | 20   | water                         |
