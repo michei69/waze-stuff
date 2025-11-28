@@ -1,11 +1,17 @@
-from waze_util import rescale_tile
+from waze_scales import ScaleData, MAX_SCALE
 import json
 import random
 
 with open("test/test.json", "r") as f:
     data = json.load(f)
 
-def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, lineRoute: bytes, lineSpeedAvg: bytes, lineExtType: bytes, lineExtId: bytes, lineExtLevelByLine: bytes, lineSpeedMax: bytes, lineAttribute: bytes, laneType: bytes):
+def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, lineRoute: bytes, lineSpeedAvg: bytes, lineExtType: bytes, lineExtId: bytes, lineExtLevelByLine: bytes, lineSpeedMax: bytes, lineAttribute: bytes, laneType: bytes, polygonHeads: bytes, polygonPoints: bytes, polygonEx: bytes):
+    scale = 0
+    for i in range(1, MAX_SCALE + 1):
+        if int(tile_id) < ScaleData[i]["base_index"]:
+            scale = i - 1
+            break
+    
     STR0 = b"\x00"
     STR1 = b"\x00\x00\x00\x00Street\x00"
     STR2 = b"\x00"
@@ -27,8 +33,8 @@ def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, 
     STREETNAME = b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
     STREETCITY = b"\x00\x00\x00\x00"
 
-    POLYGONHEAD = b"\x00\x00\x04\x00\x01\x00\x10\x00\x10\x27\x00\x00\x10\x27\x00\x00"
-    POLYGONPOINT = b"\x00\x00\x01\x00\x02\x00\x03\x00"
+    POLYGONHEAD = b"\x00\x00\x04\x00\x01\x00\x10\x00\x10\x27\x00\x00\x10\x27\x00\x00" + polygonHeads
+    POLYGONPOINT = b"\x00\x00\x01\x00\x02\x00\x03\x00" + polygonPoints
     LINEREF = b""
     LINESPEEDAVG = lineSpeedAvg
     LINESPEEDID = b""
@@ -36,7 +42,7 @@ def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, 
 
     RANGE = b"\x00\x00\x00\x00\x00\x00"
     ALERTDATA = b""
-    SQUAREDATA = int(tile_id).to_bytes(4, "little") + b"\x00\x00\x00\x00\x3F\x32\x5E\x68"
+    SQUAREDATA = int(tile_id).to_bytes(4, "little") + scale.to_bytes(4, "little") + b"\x3F\x32\x5E\x68"
     METADATAATTRIBUTE = b"\x01\x00\x09\x00\x0E\x00\x00\x00\x01\x00\x28\x00\x31\x00\x00\x00\x01\x00\x3C\x00\x44\x00\x00\x00"
     VENUEHEAD = b""
     VENUEID = b""
@@ -47,7 +53,7 @@ def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, 
     LINEEXTLEVEL = b"\x00"
     LINESPEEDMAX = lineSpeedMax
 
-    POLYGONEX = b"\x00\x00\x00\x00"
+    POLYGONEX = b"\x00\x00\x00\x00" + polygonEx
     LINEATTRIBUTE = lineAttribute
     STREETID = b"\x20\x4A\x96\x02"
 
@@ -175,11 +181,11 @@ def create_wzt(tile_id: str, lineData: bytes, pointData: bytes, pointId: bytes, 
 
         f.write(data)
 
-def generate(tile_id, scale = 0):
-    actual_tile_id = str(tile_id)
-    tile_id = str(tile_id) if scale == 0 else str(rescale_tile(tile_id, scale))
+def generate(tile_id):
+    tile_id = str(tile_id)
     if tile_id not in data:
         return False
+    else: print(data[tile_id])
 
     lineData = b""
     pointData = b""
@@ -192,6 +198,9 @@ def generate(tile_id, scale = 0):
     lineSpeedMax = b""
     lineAttribute = b""
     laneType = b""
+    polygonHead = b""
+    polygonPoint = b""
+    polygonEx = b""
 
     def addPoint(x, y):
         nonlocal pointData, pointId
@@ -214,6 +223,22 @@ def generate(tile_id, scale = 0):
         lineAttribute += b"\x20\x00\x00\x00"
         laneType += b"\x00"
 
+    def addPolygon(points: list[int], type: int, north: int, west: int, south: int, east: int):
+        nonlocal polygonHead, polygonPoint, polygonEx
+        polygonHead += int(len(polygonPoint) / 2 + 4).to_bytes(2, "little")
+        polygonHead += len(points).to_bytes(2, "little")
+        polygonHead += b"\x01\x00"
+        polygonHead += b"\x0F\x00"
+        
+        polygonHead += north.to_bytes(2, "little")
+        polygonHead += west.to_bytes(2, "little")
+        polygonHead += east.to_bytes(2, "little")
+        polygonHead += south.to_bytes(2, "little")
+
+        for point in points:
+            print(point + 4)
+            polygonPoint += (point + 4).to_bytes(2, "little")
+
     for point in data[tile_id]["points"]:
         addPoint(point["x"], point["y"])
     for name in data[tile_id]["lines"]:
@@ -221,11 +246,13 @@ def generate(tile_id, scale = 0):
         for i in range(len(line["points"])):
             if i < len(line["points"]) - 1:
                 addLine(line["points"][i] + 4, line["points"][i + 1] + 4, line["type"])
+    for name in data[tile_id]["polygons"]:
+        polygon = data[tile_id]["polygons"][name]
+        addPolygon(polygon["points"], polygon["type"], polygon["north"], polygon["west"], polygon["south"], polygon["east"])
 
-    create_wzt(actual_tile_id, lineData, pointData, pointId, lineRoute, lineSpeedAvg, lineExtType, lineExtId, lineExtLevelByLine, lineSpeedMax, lineAttribute, laneType)
+    create_wzt(tile_id, lineData, pointData, pointId, lineRoute, lineSpeedAvg, lineExtType, lineExtId, lineExtLevelByLine, lineSpeedMax, lineAttribute, laneType, polygonHead, polygonPoint, polygonEx)
     return True
 
 if __name__ == "__main__":
-    # generate(366799430)
     for tile_id in data:
         generate(tile_id)

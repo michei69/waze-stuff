@@ -55,15 +55,15 @@ more specifically, some scripts that help parse and create new tiles for waze us
         - [ ] to_turn_flags
     - [x] street name
     - [x] street city
-    - [ ] polygon head
+    - [x] polygon head
         - [x] first_polygon_point_idx 
         - [x] polygon_point_count 
         - [x] name 
         - [x] cfcc 
-        - [ ] north 
-        - [ ] west 
-        - [ ] east 
-        - [ ] south 
+        - [x] north 
+        - [x] west 
+        - [x] east 
+        - [x] south 
     - [x] polygon point
     - [ ] line ref
     - [ ] line speed average

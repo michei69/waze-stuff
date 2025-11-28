@@ -24,16 +24,10 @@ tiles = split_package_raw(data)
 
 for tile_id in tiles:
     scale = 0
-    tile_id = int(tile_id)
-    for i in range(1, MAX_SCALE + 1):
-        if ScaleData[i]["base_index"] > tile_id:
-            scale = i - 1
-            break
-    tile_id = str(tile_id)
 
     exists = os.path.exists(f"temp/{tile_id}.wzt")
     if not exists:
-        exists = generate(tile_id, scale)
+        exists = generate(tile_id)
     if exists:
         print(f"Serving {tile_id} from generated")
         with open(f"temp/{tile_id}.wzt", "rb") as f:

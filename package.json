@@ -17,8 +17,11 @@
 	},
 	"license": "MIT",
 	"dependencies": {
+		"@types/cli-progress": "^3.11.6",
 		"axios": "^1.10.0",
+		"cli-progress": "^3.12.0",
 		"express": "^5.1.0",
+		"lineclip": "^2.0.0",
 		"fuse.js": "^7.1.0",
 		"protobufjs": "^7.5.3",
 		"typescript": "^5.8.3"

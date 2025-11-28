@@ -18,14 +18,14 @@ type Feature = {
         endNodeUid: string
     },
     geometry: {
-        type: "LineString" | "Point",
+        type: "LineString" | "Point" | "Polygon",
         coordinates: Array<Array<number>> // lon, lat
     }
 }
 
 async function main() {
     console.log("reading")
-    const data: { features: Feature[] } = await Bun.file("./ets2-search.geojson").json()
+    const data: { features: Feature[] } = await Bun.file("C:/Users/miki/Desktop/New Folder/generated/ets2.geojson").json()
 
     const scale = 1/19
 
@@ -35,11 +35,11 @@ async function main() {
             if (feature.geometry.type == "Point") {
                 //@ts-ignore icba to actually type
                 feature.geometry.coordinates = [feature.geometry.coordinates[0] * scale, feature.geometry.coordinates[1] * scale]
-            } else if (feature.geometry.type == "LineString") {
-                feature.geometry.coordinates = feature.geometry.coordinates.map(([lon, lat]) => [lon * scale, lat * scale])
-            } else {
+            } else if (feature.geometry.type == "Polygon") {
                 //@ts-ignore icba to actually type
-                feature.geometry.coordinates = feature.geometry.coordinates.map((array) => array.map(([lon, lat]) => [lon * scale, lat * scale]))
+                feature.geometry.coordinates = feature.geometry.coordinates.map(coords => coords.map(([lon, lat]) => [lon * scale, lat * scale]))
+            } else {
+                feature.geometry.coordinates = feature.geometry.coordinates.map(([lon, lat]) => [lon * scale, lat * scale])
             }
         } catch (e) {
             console.error(e, feature)
@@ -48,7 +48,7 @@ async function main() {
     }
 
     console.log("writing")
-    await Bun.write("./ets2-search-scaled.geojson", JSON.stringify(data))
+    await Bun.write("./ets2-scaled.geojson", JSON.stringify(data))
     console.log("done")
 }
 main()

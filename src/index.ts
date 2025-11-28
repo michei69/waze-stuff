@@ -36,6 +36,26 @@ async function main() {
 
     initializeRTHandler()
 
+     app.post("/rtserver/distrib/static", async (req, res) => {
+        const { body } = req
+        const temp = await axios.post("https://rt.waze.com/rtserver/distrib/static", body, {
+            headers: {
+                "X-Waze-Network-Version": "3",
+                "X-Waze-Wait-Timeout": "10500"
+            },
+            responseType: "arraybuffer"
+        })
+        const retData = temp.data
+        const parsed: any = Batch.decode(retData)
+
+        res.setHeader("Content-Type", "application/x-protobuf")
+        res.setHeader("x-rt-name", "4099")
+        res.setHeader("via", "1.1 google")
+        for (const cookie of temp.headers["set-cookie"]) {
+            res.setHeader("set-cookie", cookie)
+        }
+        res.send(Batch.encode(parsed).finish())
+    })
     app.post("/rtserver/distrib/login", async (req, res) => {
         const { body } = req
         const temp = await axios.post("https://rt.waze.com/rtserver/distrib/login", body, {
