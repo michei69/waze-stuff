@@ -32,12 +32,18 @@ def split_package(file_name: str):
 
 
 if __name__ == "__main__":
-    file_name = input("File: ")
-    
+    import sys
+
+    if len(sys.argv) > 1:
+        file_name = sys.argv[1]
+    else:
+        file_name = input("File: ")
+
     same_dir = str(Path(file_name).parent)
     tiles = split_package(file_name)
-    for id in tiles:
-        with open(Path(same_dir).joinpath(f"{id}.wzdf"), "wb") as f:
-            f.write(tiles[id])
+    for tile_id, tile_data in tiles.items():
+        out_path = Path(same_dir).joinpath(f"{tile_id}.wzdf")
+        with open(out_path, "wb") as f:
+            f.write(tile_data)
 
-    print("Done")
+    print(f"Extracted {len(tiles)} tiles → {same_dir}")

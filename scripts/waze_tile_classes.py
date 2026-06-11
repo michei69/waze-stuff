@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from waze_scales import SCALE_STEP, SQUARE_SIZE, MAX_SQUARE_SIZE, ScaleData, MAX_SCALE
+from waze_scales import ScaleData, MAX_SCALE
 
 def get_string_at_offset(data: bytes, offset: int) -> str:
     if not data or offset < 0 or offset >= len(data):
@@ -17,24 +17,35 @@ def get_current_data(raw_data: bytes, size: int, offset: int) -> bytes:
 
 @dataclass
 class LineSummary():
+    next_lines: list[int] = []
     roundabout_count: int = 0
+    first_brokens: list[int] = []
     broken_count: int = 0
-    prefix_data: bytes = b''
     def __init__(self, offset = 0, raw_data: bytes = b""):
         if raw_data != b"":
             raw_data = get_current_data(raw_data, 62, offset)
-            self.prefix_data = raw_data[:42]
+            for i in range(0x14):
+                self.next_lines.append(int.from_bytes(raw_data[i*2:i*2 + 2]), "little")
             self.roundabout_count = int.from_bytes(raw_data[42:44], "little")
+            for i in range(7):
+                self.first_brokens.append(int.from_bytes(raw_data[44 + i*2:46 + i*2]), "little")
             self.broken_count = int.from_bytes(raw_data[60:], "little")
-    
+
 @dataclass
 class LineRouteData():
     type: int = 3
 
     from_flags: int = 0
     to_flags: int = 0
-    from_turn_flags: int = 0
-    to_turn_flags: int = 0
+
+    # this is a mask, meaning each bit represents a line restriction
+    # e.g. we have 3 connecting lines, and you can only go on the first one:
+    # to_turn_mask = 01100000
+    # e.g. we have 5 connecting lines, and you can only come on this line
+    # from the second and third lines
+    # from_turn_mask = 10011000
+    from_turn_mask: int = 0
+    to_turn_mask: int = 0
 
     a_to_b: bool = False
     b_to_a: bool = False
@@ -44,20 +55,21 @@ class LineRouteData():
         if raw_data == b"": return
         self.from_flags = raw_data[0]
         self.to_flags = raw_data[1]
-        self.from_turn_flags = raw_data[2]
-        self.to_turn_flags = raw_data[3]
+        self.from_turn_mask = raw_data[2]
+        self.to_turn_mask = raw_data[3]
 
+        # ROUTE_CAR_ALLOWED
         self.a_to_b = self.from_flags & 1 == 1
         self.b_to_a = self.to_flags & 1 == 1
 
 
         if self.from_flags & 1 == 0:
             if self.to_flags & 1 == 0:
-                self.type = 0
+                self.type = 0 # two way street
             else:
-                self.type = 2
+                self.type = 2 # 1 way (a -> b)
         else:
-            self.type = 1
+            self.type = 1 # 1 way (b -> a)
     
 @dataclass
 class PointData():
@@ -66,8 +78,11 @@ class PointData():
     def __init__(self, offset = 0, raw_data: bytes = b""):
         raw_data = get_current_data(raw_data, 4, offset)
         if raw_data != b"":
-            self.x = int.from_bytes(raw_data[:2], "little") & 0x7fff
-            self.y = int.from_bytes(raw_data[2:], "little") & 0x7fff
+            # Coordinates are full u16 values (0–65535). The 0x7fff mask is
+            # for LineData from/to fields (which are point INDEXES with the
+            # POINT_FAKE_FLAG in bit 15), NOT for point coordinates.
+            self.x = int.from_bytes(raw_data[:2], "little")
+            self.y = int.from_bytes(raw_data[2:], "little")
     
 @dataclass
 class Street():
@@ -98,30 +113,23 @@ class Street():
 
 @dataclass
 class LineSpeedAverage():
-    data: int = 0
+    a_to_b_avg_speed: int
+    b_to_a_avg_speed: int
 
     def __init__(self, offset = 0, raw_data: bytes = b""):
         raw_data = get_current_data(raw_data, 2, offset)
-        self.data = int.from_bytes(raw_data, "little")
-
-@dataclass
-class MaxSpeed():
-    max1: int = 0 # kmh
-    max2: int = 0 # kmh
-
-    def __init__(self, max1: int = 0, max2: int = 0):
-        self.max1 = max1
-        self.max2 = max2
+        self.a_to_b_avg_speed = raw_data[0]
+        self.b_to_a_avg_speed = raw_data[1]
 
 @dataclass
 class LineSpeedMax():
-    a_to_b: MaxSpeed = field(default_factory=MaxSpeed)
-    b_to_a: MaxSpeed = field(default_factory=MaxSpeed)
+    a_to_b: int
+    b_to_a: int
 
     def __init__(self, offset = 0, raw_data = b""):
-        raw_data = get_current_data(raw_data, 4, offset)
-        self.a_to_b = MaxSpeed(int.from_bytes(raw_data[:1], "little"), int.from_bytes(raw_data[1:2], "little"))
-        self.b_to_a = MaxSpeed(int.from_bytes(raw_data[2:3], "little"), int.from_bytes(raw_data[3:4], "little"))
+        raw_data = get_current_data(raw_data, 2, offset)
+        self.a_to_b = raw_data[0]
+        self.b_to_a = raw_data[1]
 
 @dataclass
 class SegmentId:
@@ -136,6 +144,18 @@ class LineAttributes():
     def __init__(self, offset = 0, raw_data: bytes = b""):
         raw_data = get_current_data(raw_data, 4, offset)
         self.data = int.from_bytes(raw_data, "little")
+
+@dataclass
+class ShapePoint():
+    dx: int = 0
+    dy: int = 0
+
+    def __init__(self, offset: int = 0, raw_data: bytes = b""):
+        raw_data = get_current_data(raw_data, 4, offset)
+        if raw_data != b"":
+            self.dx = int.from_bytes(raw_data[:2], "little", signed=True)
+            self.dy = int.from_bytes(raw_data[2:4], "little", signed=True)
+
 
 @dataclass
 class LineData():
@@ -153,12 +173,14 @@ class LineData():
     max_speed: LineSpeedMax = field(default_factory=LineSpeedMax)
     attributes: LineAttributes = field(default_factory=LineAttributes)
     lane_type: int = 0
+    shapes: list[ShapePoint] = []
+    shape_chain: list = field(default_factory=list)  # list of (x,y) absolute coords
 
     def __init__(
             self,
             offset = 0,
-            raw_line_data: bytes = b"", 
-            ranges: bytes = b"", 
+            raw_line_data: bytes = b"",
+            ranges: bytes = b"",
             streets: list[Street] = [],
             raw_line_routes: bytes = b"",
             raw_line_ext_types = b"",
@@ -166,12 +188,17 @@ class LineData():
             raw_line_level_by_line = b"",
             raw_line_speed_max = b"",
             raw_line_attributes = b"",
-            raw_lane_types = b""
+            raw_lane_types = b"",
+            raw_shapes = b""
         ):
         raw_line_data = get_current_data(raw_line_data, 8, offset)
         self.first_point_idx = int.from_bytes(raw_line_data[:2], "little") & 0x7fff
         self.second_point_idx = int.from_bytes(raw_line_data[2:4], "little") & 0x7fff
         self.shape_idx = int.from_bytes(raw_line_data[4:6], "little", signed=True)
+
+        temp = ShapePoint(self.shape_idx, raw_shapes)
+        for i in range(temp.dy):
+            self.shapes.append(ShapePoint(self.shape_idx + i, raw_shapes))
 
         temp = raw_line_data[6:]
         temp_u = int.from_bytes(temp, "little")
@@ -192,6 +219,28 @@ class LineData():
         self.max_speed = LineSpeedMax(offset, raw_line_speed_max)
         self.attributes = LineAttributes(offset, raw_line_attributes)
         self.lane_type = int.from_bytes(get_current_data(raw_lane_types, 1, offset), "little")
+
+    def compute_shape_chain(self, points: list, scale_factor: int):
+        """Compute absolute (x,y) chain from delta-encoded shapes and starting point."""
+        if not self.shapes:
+            return
+        marker = self.shapes[0]
+        if marker.dx != 0 or marker.dy <= 0:
+            return
+        count = marker.dy
+        if len(self.shapes) < 1 + count:
+            return
+        if self.first_point_idx >= len(points):
+            return
+        p0 = points[self.first_point_idx]
+        cur_x, cur_y = p0.x, p0.y
+        pts = [(cur_x, cur_y)]
+        for j in range(count):
+            sp = self.shapes[1 + j]
+            cur_x += sp.dx * scale_factor
+            cur_y += sp.dy * scale_factor
+            pts.append((cur_x, cur_y))
+        self.shape_chain = pts
 
 @dataclass
 class SquareData():
@@ -293,7 +342,7 @@ class WazeTile():
     point_data_count: int = 0
     raw_point_ids = b''
     point_ids_count: int = 0
-    raw_shapes = b''
+    shapes = b''
     shapes_count: int = 0
     raw_str0 = b''
     raw_str1 = b''
@@ -490,7 +539,7 @@ class WazeTile():
         self.str7 = [i.decode("utf-8") if i else "" for i in self.raw_str7.split(b"\0")]
 
         self.points = []
-        for i in range(len(self.raw_point_data)):
+        for i in range(self.point_data_count):
             try:
                 self.points.append(PointData(i, self.raw_point_data))
             except:
@@ -513,7 +562,7 @@ class WazeTile():
         self.lines = []
         for i in range(self.line_data_count):
             try:
-                self.lines.append(LineData(i, self.raw_line_data, self.raw_ranges, self.streets, self.raw_line_routes, self.raw_line_ext_types, self.raw_line_ext_ids, self.raw_line_ext_level_by_line, self.raw_line_speed_max, self.raw_line_attributes, self.raw_lane_types))
+                self.lines.append(LineData(i, self.raw_line_data, self.raw_ranges, self.streets, self.raw_line_routes, self.raw_line_ext_types, self.raw_line_ext_ids, self.raw_line_ext_level_by_line, self.raw_line_speed_max, self.raw_line_attributes, self.raw_lane_types, self.shapes))
             except:
                 pass
 
@@ -523,3 +572,8 @@ class WazeTile():
                 self.line_levels.append(LineExtLevel(i, self.raw_line_ext_levels))
             except:
                 pass
+
+        # Compute shape chains per line
+        sf = ScaleData[self.square_data.actual_scale]["scale_factor"]
+        for line in self.lines:
+            line.compute_shape_chain(self.points, sf)

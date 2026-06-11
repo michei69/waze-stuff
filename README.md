@@ -38,21 +38,21 @@ more specifically, some scripts that help parse and create new tiles for waze us
 - [x] decompressing waze data files (WZDF)
 - [x] parsing wzt
     - [x] entry count
-    - [ ] mask bits
+    - [x] mask bits
     - [x] offsets
     - [x] string arrays
-    - [ ] shape data
+    - [x] shape data
     - [x] line data
-    - [ ] line summary
-    - [ ] "broken"
-    - [ ] line round about
+    - [x] line summary
+    - [x] broken lines
+    - [x] line round about
     - [x] point data
     - [x] point id
-    - [ ] line route
-        - [x] from_flags
-        - [x] to_flags
-        - [ ] from_turn_flags
-        - [ ] to_turn_flags
+    - [x] line route
+        - [x] from_flags (a_to_b)
+        - [x] to_flags (b_to_a)
+        - [x] from_turn_res (b_to_a_turn_restrictions)
+        - [x] to_turn_res (a_to_b_turn_restrictions)
     - [x] street name
     - [x] street city
     - [x] polygon head
@@ -65,33 +65,33 @@ more specifically, some scripts that help parse and create new tiles for waze us
         - [x] east 
         - [x] south 
     - [x] polygon point
-    - [ ] line ref
-    - [ ] line speed average
-    - [ ] line speed id
-    - [ ] line speed id small
-    - [ ] range
-    - [ ] alert data
+    - [x] line ref
+    - [x] line speed average
+    - [x] line speed id
+    - [x] line speed id small
+    - [x] range
+    - [x] alert data (experimental)
     - [x] square data
     - [x] metadata attribute
-    - [ ] venue head
-    - [ ] venue id
+    - [x] venue head
+    - [x] venue id
     - [x] line ext type
     - [x] line ext id
     - [x] line ext level by line
     - [x] line ext level
-    - [ ] line speed max
-    - [ ] polygon ex
+    - [x] line speed max
+    - [x] polygon ex
     - [ ] line attribute
-    - [ ] street id
-    - [ ] beacon pos
-    - [ ] beacon id
-    - [ ] beacon ex pos
-    - [ ] beacon ex id
-    - [ ] beacon ex mask
-    - [ ] lane type
-    - [ ] line new type
-    - [ ] ext protobuf data
-- [x] creating a new tile from own data
+    - [x] street id
+    - [x] beacon pos (unused)
+    - [x] beacon id (unused)
+    - [x] beacon ex pos (unused)
+    - [x] beacon ex id (unused)
+    - [x] beacon ex mask (unused)
+    - [x] lane type
+    - [x] line new type
+    - [x] ext protobuf data
+- [x] creating a new tile from own data (partial)
 
 # i have qwuestion!
 
@@ -124,6 +124,15 @@ more specifically, some scripts that help parse and create new tiles for waze us
 - check [status](#statuwus-o)
 
 # Extwa data rwegawding WZT UwU
+
+shape data is weird as fuck. so, its in a struct similar to:
+```c
+struct shape {
+    ushort dx;
+    ushort dy;
+}
+```
+the thing is, the `shapes[line.shape_idx]` is actually a 'marker shape' (basically, dx is always 0 and dy represents the amount of shapes that follow).
 
 | id | data                         |
 |----|------------------------------|
@@ -182,6 +191,20 @@ tile_id is calculated via a simple formula from latitude, longitude, and scale. 
 no idea why streets seem slimmer than they normally are on the map, but it might also be because they lack most data lol
 
 routing seems painful to even THINK about starting. Check [UserDriveV2.proto](./protos/v2/UserDriveV2.proto) (StartNavigationInfo), and just try to understand it lmfao. i mean, its not hard to understand, but oh my god the amount of calculations that seem to be required... ill do it eventually™
+
+ext protobuf is registered in native code so its not that easily extractable, but its _mostly_ based on the proto files too. one ext protobuf ive seen was:
+```proto
+{
+    3 = MapFeature {
+        1 = id (int64)
+        12 = { // some kind of polygon
+            1 = repeated Coordinate // polygon lonlat
+            2 = string // polygon text
+            3 = varint // cfcc
+        }
+    }
+}
+```
 
 # scweenshot!
 

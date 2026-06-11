@@ -34,11 +34,21 @@ def decompress(file_name: str):
     return decompress_raw(data)
 
 if __name__ == "__main__":
-    file_name = input("File: ")
+    import sys
+
+    if len(sys.argv) > 1:
+        file_name = sys.argv[1]
+    else:
+        file_name = input("File: ")
 
     decompressed = decompress(file_name)
 
-    with open(file_name.replace(".wzdf", ".wzt"), "wb") as f:
+    if file_name.endswith(".wzdf"):
+        out_name = file_name.replace(".wzdf", ".wzt")
+    else:
+        out_name = file_name + ".wzt"
+
+    with open(out_name, "wb") as f:
         f.write(decompressed)
-    
-    print("Done")
+
+    print(f"Decompressed {len(decompressed)} bytes → {out_name}")
