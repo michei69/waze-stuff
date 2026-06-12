@@ -4,6 +4,7 @@ project(waze-tools C)
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -O2 -g")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # ---- Shared library sources ----
 set(SHARED_SOURCES
@@ -47,9 +48,48 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(raylib)
 
 add_executable(waze-renderer
-    renderer.c
+    renderer/main.c
     ${SHARED_SOURCES}
-        utils.h
+    renderer/utils.h
 )
-target_include_directories(waze-renderer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(waze-renderer PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+                                             ${CMAKE_CURRENT_SOURCE_DIR}/renderer)
 target_link_libraries(waze-renderer PRIVATE raylib ZLIB::ZLIB)
+
+# ============================================================================
+#  Target 3: geojson-parser (GeoJSON converter)
+# ============================================================================
+
+# ---- cJSON via FetchContent ----
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5 CACHE STRING "" FORCE)
+set(ENABLE_CJSON_TEST OFF CACHE BOOL "" FORCE)
+set(ENABLE_CJSON_UTILS OFF CACHE BOOL "" FORCE)
+set(BUILD_SHARED_AND_STATIC_LIBS OFF CACHE BOOL "" FORCE)
+
+FetchContent_Declare(
+    cjson
+    GIT_REPOSITORY "https://github.com/DaveGamble/cJSON.git"
+    GIT_TAG "v1.7.18"
+    GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(cjson)
+
+unset(CMAKE_POLICY_VERSION_MINIMUM CACHE)
+
+add_executable(geojson-parser
+    geojson/main.c
+    ${SHARED_SOURCES}
+)
+target_include_directories(geojson-parser PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+                                                   ${cjson_SOURCE_DIR})
+target_link_libraries(geojson-parser PRIVATE cjson ZLIB::ZLIB)
+
+# ============================================================================
+#  Target 4: json-to-wzdf (JSON tile data -> WZT binary)
+# ============================================================================
+add_executable(json-to-wzdf
+    json-to-wzdf/main.c
+)
+target_include_directories(json-to-wzdf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+                                                 ${cjson_SOURCE_DIR})
+target_link_libraries(json-to-wzdf PRIVATE cjson)

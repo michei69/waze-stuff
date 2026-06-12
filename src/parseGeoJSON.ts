@@ -118,7 +118,7 @@ generateScales()
 
 async function main() {
     console.log("Loading geojson...")
-    const { features }: { features: Feature[] } = JSON.parse(fs.readFileSync("./ets2-scaled.geojson", "utf-8"))
+    const { features }: { features: Feature[] } = JSON.parse(fs.readFileSync("/home/miki/Desktop/maps/geojson/ets2.geojson", "utf-8"))
 
     const tileData: { [key: number]: TileLine } = {}
 

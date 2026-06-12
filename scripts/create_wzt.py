@@ -166,3 +166,7 @@ def create_wzt(tile_id: str):
         add(EXTPROTOBUFDATA)
 
         f.write(data)
+
+if __name__ == "__main__":
+    tile_id = input("tile id: ")
+    create_wzt(tile_id)

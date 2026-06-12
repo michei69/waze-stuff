@@ -651,7 +651,7 @@ static void draw_line_popup(HoverResult hr, Vector2 mouse) {
                               ? line->street->full_name : "(unnamed)";
     const char *lane_type = line->lane_type <= 5 && LANE_TYPE_LABELS[line->lane_type] ? LANE_TYPE_LABELS[line->lane_type] : "UNKNOWN";
 
-    int rows = 9;
+    int rows = 10;
     int popup_w = 260, popup_h = rows * line_h + 12;
     if (px + popup_w > scr_w) px = (int)mouse.x - popup_w - 8;
     if (py + popup_h > scr_h) py = (int)mouse.y - popup_h - 8;
@@ -670,8 +670,11 @@ static void draw_line_popup(HoverResult hr, Vector2 mouse) {
     DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
     row++;
 
-    snprintf(buf, sizeof(buf), "Level: %d   Lane: %s   Attr: 0x%08X",
-             line->level, lane_type, line->attributes);
+    snprintf(buf, sizeof(buf), "Id: %d   Attr: 0x%08X", hr.elem_idx, line->attributes);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Level: %d   Lane: %s   ", line->level, lane_type);
     DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
     row++;
 
@@ -691,7 +694,7 @@ static void draw_line_popup(HoverResult hr, Vector2 mouse) {
     snprintf(buf, sizeof(buf), "Pt: %u->%u   Shapes: %u   StIdx: %u",
              line->first_point_idx & POINT_INDEX_MASK,
              line->last_point_idx  & POINT_INDEX_MASK,
-             line->shape_count, line->street_idx);
+             line->shape_count, tile->streets[line->street_idx].ext_id);
     DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
     row++;
 

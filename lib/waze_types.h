@@ -453,6 +453,7 @@ struct WazeStreet {
     const char *prefix_part; /* fetype -> raw_str[3] */
     const char *suffix_part; /* fedirs -> raw_str[4] */
     char       *full_name;   /* assembled name (malloc'd) */
+    uint32_t   ext_id;
 };
 
 struct WazeSquare {

@@ -200,6 +200,7 @@ WazeTile *wzt_parse(const uint8_t *data, size_t data_size)
         }
 
     /* ---- Streets (section 16) ---- */
+    WZT_SEC(37, uint32_t);
     WZT_SEC(16, StreetNameRaw);
     tile->street_count = _c16;
     tile->streets = (WazeStreet *)calloc(_c16, sizeof(WazeStreet));
@@ -211,6 +212,7 @@ WazeTile *wzt_parse(const uint8_t *data, size_t data_size)
             st->prefix_part = lookup_string(tile->sec_ptr[3], tile->sec_size[3], _p16[i].prefix_part);
             st->suffix_part = lookup_string(tile->sec_ptr[4], tile->sec_size[4], _p16[i].suffix_part);
             st->full_name   = assemble_street_name(st->type_part, st->name_part, st->prefix_part, st->suffix_part);
+            st->ext_id      = _p37[i];
         }
 
     /* ---- Lines (section 9) ---- */

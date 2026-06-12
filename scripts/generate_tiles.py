@@ -254,5 +254,7 @@ def generate(tile_id):
     return True
 
 if __name__ == "__main__":
-    for tile_id in data:
-        generate(tile_id)
+    tile_id = input("tile_id: ")
+    generate(tile_id)
+    # for tile_id in data:
+    #     generate(tile_id)

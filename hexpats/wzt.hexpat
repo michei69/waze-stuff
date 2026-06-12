@@ -263,8 +263,17 @@ struct LineSpeedMax {
     u8 a_to_b;
     u8 b_to_a;
 };
+bitfield LineFlagsThing {
+    Tunnel: 1;
+    padding: 3;
+    Unpaved: 1;
+    HeadlightRequired: 1;
+    Beacons: 1; // TODO
+    AdjacentToHOVOrBusLane: 1;
+};
 struct LineAttributes {
-    u8 data[4];
+    LineFlagsThing flags;
+    u8 data[3];
 };
 enum LaneType : u8 {
     Regular = 0,
@@ -411,7 +420,7 @@ struct File {
     MetadataAttributes metadataAttrib[(offsets[27] - offsets[26]) / sizeof(MetadataAttributes)] @ a27 + temp;
     VenueHead venueHeads[(offsets[28] - offsets[27]) / sizeof(VenueHead)] @ a28 + temp;
     VenueId venueIds[(offsets[29] - offsets[28]) / sizeof(VenueId)] @ a29 + temp;
-    LineExtType lineExtTypes[(offsets[30] - offsets[29]) / sizeof(LineExtType)] @ a30 + temp - 2;
+    LineExtType lineExtTypes[(offsets[30] - offsets[29]) / sizeof(LineExtType)] @ a30 + temp;
     LineExtId lineExtIds[(offsets[31] - offsets[30]) / sizeof(LineExtId)] @ a31 + temp;
     LineExtLevelByLine lineExtLevelByLines[(offsets[32] - offsets[31]) / sizeof(LineExtLevelByLine)] @ a32 + temp;
     LineExtLevels lineExtLevels[(offsets[33] - offsets[32]) / sizeof(LineExtLevels)] @ a33 + temp;
