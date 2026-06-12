@@ -17,18 +17,20 @@ def get_current_data(raw_data: bytes, size: int, offset: int) -> bytes:
 
 @dataclass
 class LineSummary():
-    next_lines: list[int] = []
+    next_lines: list[int] = field(default_factory=list)
     roundabout_count: int = 0
-    first_brokens: list[int] = []
+    first_brokens: list[int] = field(default_factory=list)
     broken_count: int = 0
     def __init__(self, offset = 0, raw_data: bytes = b""):
         if raw_data != b"":
             raw_data = get_current_data(raw_data, 62, offset)
+            self.next_lines = []
             for i in range(0x14):
-                self.next_lines.append(int.from_bytes(raw_data[i*2:i*2 + 2]), "little")
+                self.next_lines.append(int.from_bytes(raw_data[i*2:i*2 + 2], "little"))
             self.roundabout_count = int.from_bytes(raw_data[42:44], "little")
+            self.first_brokens = []
             for i in range(7):
-                self.first_brokens.append(int.from_bytes(raw_data[44 + i*2:46 + i*2]), "little")
+                self.first_brokens.append(int.from_bytes(raw_data[44 + i*2:46 + i*2], "little"))
             self.broken_count = int.from_bytes(raw_data[60:], "little")
 
 @dataclass
@@ -173,7 +175,7 @@ class LineData():
     max_speed: LineSpeedMax = field(default_factory=LineSpeedMax)
     attributes: LineAttributes = field(default_factory=LineAttributes)
     lane_type: int = 0
-    shapes: list[ShapePoint] = []
+    shapes: list[ShapePoint] = field(default_factory=list)
     shape_chain: list = field(default_factory=list)  # list of (x,y) absolute coords
 
     def __init__(
@@ -195,6 +197,8 @@ class LineData():
         self.first_point_idx = int.from_bytes(raw_line_data[:2], "little") & 0x7fff
         self.second_point_idx = int.from_bytes(raw_line_data[2:4], "little") & 0x7fff
         self.shape_idx = int.from_bytes(raw_line_data[4:6], "little", signed=True)
+        self.shapes = []
+        self.shape_chain = []
 
         temp = ShapePoint(self.shape_idx, raw_shapes)
         for i in range(temp.dy):
