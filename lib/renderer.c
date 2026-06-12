@@ -72,6 +72,11 @@ static const Color ROAD_TYPE_COLORS[] = {
 #define ROAD_TYPE_MAX 16
 #define DEFAULT_LINE_RGB ((Color){100, 100, 100, 255})
 
+static const char *LANE_TYPE_LABELS[] = {
+    [0] = "REGULAR", [1] = "HOV",        [2] = "HOT",
+    [3] = "EXPRESS", [4] = "REG_NO_TTS", [5] = "FAST"
+};
+
 static const char *ROAD_LABELS[] = {
     [1] = "FREEWAY",   [2] = "HIGHWAY",   [3] = "BOULEVARD",
     [4] = "RAMP",      [5] = "PRIMARY",   [6] = "PASSAGE",
@@ -143,16 +148,36 @@ static void draw_polygons(const WazeTile *tile, const float ox, const float oy, 
 
         const Color fill = poly->cfcc <= CFCC_MAX && CFCC_COLORS[poly->cfcc].r != 0 ? CFCC_COLORS[poly->cfcc] : DEFAULT_POLYGON_RGB;
         const Color outline = (Color){fill.r, fill.g, fill.b, 165};
+
+        float cx = 0, cy = 0, total_area = 0;
+
         // fill
         for (int i = 0; i < triCount; i++) {
             const Vector2 *t = &tris[i*3];
             DrawTriangle(t[0], t[1], t[2], fill);
+            float ta = fabsf(cross2d(&t[0], &t[1], &t[2])) * 0.5f;
+            cx += (t[0].x + t[1].x + t[2].x) / 3.0f * ta;
+            cy += (t[0].y + t[1].y + t[2].y) / 3.0f * ta;
+            total_area += ta;
         }
+        if (total_area > 0) { cx /= total_area; cy /= total_area; }
         // outline
         for (uint16_t i = 1; i < count; i++) {
             DrawLineV(points[i-1], points[i], outline);
         }
         DrawLineV(points[count-1], points[0], outline);
+
+        // Venue name label
+        if (poly->cfcc != 16 && poly->name && *poly->name && total_area > 400.0f) {
+            int lbl_fs = (int)(14 * zoom);
+            if (lbl_fs < 8) lbl_fs = 8;
+            if (lbl_fs > 14) lbl_fs = 14;
+            Vector2 ts = MeasureTextEx(GetFontDefault(), poly->name, (float)lbl_fs, 1);
+            DrawTextPro(GetFontDefault(), poly->name,
+                        (Vector2){ cx, cy },
+                        (Vector2){ ts.x / 2, ts.y / 2 },
+                        0, (float)lbl_fs, 1, Fade(BLACK, 0.55f));
+        }
 
         // free ts
         free(tris);
@@ -208,6 +233,51 @@ static void draw_roads(const WazeTile *tile, float ox, float oy, float zoom, boo
         // Draw polyline
         for (int i = 0; i < pt_count - 1; i++) {
             DrawLineEx(scr_pts[i], scr_pts[i + 1], (float)width, color);
+        }
+
+        // One-way arrows
+        {
+            bool a_allowed = line->a_to_b & ROUTE_CAR_ALLOWED;
+            bool b_allowed = line->b_to_a & ROUTE_CAR_ALLOWED;
+            if (a_allowed != b_allowed) {
+                int start = 0, end = pt_count - 1, step = 1;
+                if (!a_allowed) { start = pt_count - 1; end = 0; step = -1; }
+
+                float acc = 0;
+                float spacing = 60.0f;
+                float next_arrow = spacing * 0.5f;
+                float arrow_sz = (float)(width + 3) * 1.5f;
+
+                for (int i = start; i != end; i += step) {
+                    float seg_dx = scr_pts[i + step].x - scr_pts[i].x;
+                    float seg_dy = scr_pts[i + step].y - scr_pts[i].y;
+                    float seg_len = hypotf(seg_dx, seg_dy);
+                    if (seg_len < 0.5f) { acc += seg_len; continue; }
+
+                    float dir_x = seg_dx / seg_len;
+                    float dir_y = seg_dy / seg_len;
+                    float perp_x = -dir_y;
+                    float perp_y = dir_x;
+
+                    while (next_arrow <= acc + seg_len) {
+                        float t = (next_arrow - acc) / seg_len;
+                        float cx = scr_pts[i].x + t * seg_dx;
+                        float cy = scr_pts[i].y + t * seg_dy;
+
+                        Vector2 tri[] = {
+                            { cx + dir_x * arrow_sz, cy + dir_y * arrow_sz },
+                            { cx + perp_x * arrow_sz * 0.5f, cy + perp_y * arrow_sz * 0.5f },
+                            { cx - perp_x * arrow_sz * 0.5f, cy - perp_y * arrow_sz * 0.5f }
+                        };
+                        makeCCW(tri, 3);
+
+                        DrawTriangle(tri[0], tri[1], tri[2], Fade(BLACK, 0.25f));
+
+                        next_arrow += spacing;
+                    }
+                    acc += seg_len;
+                }
+            }
         }
 
         // Street name label
@@ -283,6 +353,234 @@ static void draw_broken_markers(const WazeTile *tile, float ox, float oy, float 
         }
     }
     free(seen);
+}
+
+// ============================================================================
+//  Hover: find closest line/poly & draw popups
+// ============================================================================
+
+static float point_to_segment_dist_sq(Vector2 p, Vector2 a, Vector2 b) {
+    float dx = b.x - a.x, dy = b.y - a.y;
+    float len_sq = dx * dx + dy * dy;
+    if (len_sq < 0.0001f) {
+        float ddx = p.x - a.x, ddy = p.y - a.y;
+        return ddx * ddx + ddy * ddy;
+    }
+    float t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / len_sq;
+    if (t < 0) t = 0;
+    if (t > 1) t = 1;
+    float proj_x = a.x + t * dx;
+    float proj_y = a.y + t * dy;
+    float sx = p.x - proj_x, sy = p.y - proj_y;
+    return sx * sx + sy * sy;
+}
+
+static bool point_in_polygon_screen(Vector2 p, Vector2 *verts, int count) {
+    if (count < 3) return false;
+    bool inside = false;
+    for (int i = 0, j = count - 1; i < count; j = i++) {
+        if ((verts[i].y > p.y) != (verts[j].y > p.y)) {
+            float xint = (verts[j].x - verts[i].x) * (p.y - verts[i].y)
+                       / (verts[j].y - verts[i].y) + verts[i].x;
+            if (p.x < xint) inside = !inside;
+        }
+    }
+    return inside;
+}
+
+static int32_t find_hovered_line(const WazeTile *tile, float ox, float oy,
+                                  float zoom, Vector2 mouse_screen) {
+    if (!tile->lines || tile->line_count == 0) return -1;
+
+    float best_dist_sq = (10 * 10);
+    int32_t best_line = -1;
+
+    for (uint32_t i = 0; i < tile->line_count; i++) {
+        const WazeLine *line = &tile->lines[i];
+        if (line->first_point_idx >= tile->point_count ||
+            line->last_point_idx  >= tile->point_count) continue;
+
+        if (line->shapes && line->shape_count > 0 && line->shape_count < 500) {
+            float wx, wy;
+            wx = tile->points[line->first_point_idx].x;
+            wy = tile->points[line->first_point_idx].y;
+            Vector2 prev = world_to_screen(wx, wy, ox, oy, zoom);
+            for (uint16_t s = 0; s < line->shape_count; s++) {
+                wx += line->shapes[s].dx;
+                wy += line->shapes[s].dy;
+                Vector2 cur = world_to_screen(wx, wy, ox, oy, zoom);
+                float d = point_to_segment_dist_sq(mouse_screen, prev, cur);
+                if (d < best_dist_sq) {
+                    best_dist_sq = d;
+                    best_line = (int32_t)i;
+                }
+                prev = cur;
+            }
+            const WazePoint *ep = &tile->points[line->last_point_idx];
+            Vector2 end = world_to_screen(ep->x, ep->y, ox, oy, zoom);
+            float d = point_to_segment_dist_sq(mouse_screen, prev, end);
+            if (d < best_dist_sq) { best_dist_sq = d; best_line = (int32_t)i; }
+        } else {
+            const WazePoint *p1 = &tile->points[line->first_point_idx];
+            const WazePoint *p2 = &tile->points[line->last_point_idx];
+            Vector2 a = world_to_screen(p1->x, p1->y, ox, oy, zoom);
+            Vector2 b = world_to_screen(p2->x, p2->y, ox, oy, zoom);
+            float d = point_to_segment_dist_sq(mouse_screen, a, b);
+            if (d < best_dist_sq) { best_dist_sq = d; best_line = (int32_t)i; }
+        }
+    }
+    return best_line;
+}
+
+static int32_t find_hovered_polygon(const WazeTile *tile, float ox, float oy,
+                                     float zoom, Vector2 mouse_screen) {
+    if (!tile->polygons || tile->polygon_count == 0) return -1;
+
+    for (uint32_t pi = 0; pi < tile->polygon_count; pi++) {
+        const WazePolygon *poly = &tile->polygons[pi];
+        if (poly->point_count < 3) continue;
+        if (poly->first_point_idx + poly->point_count > tile->polygon_point_count) continue;
+
+        Vector2 points[poly->point_count];
+        int valid = 0;
+        for (uint16_t i = 0; i < poly->point_count; i++) {
+            uint16_t pt_idx = tile->polygon_points[poly->first_point_idx + i] & 0x7FFF;
+            if (pt_idx >= tile->point_count) continue;
+            points[valid++] = world_to_screen(tile->points[pt_idx].x, tile->points[pt_idx].y, ox, oy, zoom);
+        }
+        if (valid < 3) continue;
+
+        if (poly->cfcc != 16 && point_in_polygon_screen(mouse_screen, points, valid))
+            return (int32_t)pi;
+    }
+    return -1;
+}
+
+static void draw_line_popup(const WazeTile *tile, int32_t line_idx, Vector2 mouse) {
+    if (line_idx < 0 || line_idx >= (int32_t)tile->line_count) return;
+    const WazeLine *line = &tile->lines[line_idx];
+
+    int font_size = 11;
+    int line_h = font_size + 4;
+    int row = 0;
+
+    char buf[256];
+
+    int px = (int)mouse.x + 16;
+    int py = (int)mouse.y + 16;
+    int scr_w = GetScreenWidth(), scr_h = GetScreenHeight();
+
+    char ab_avg_s[8], ab_max_s[8], ba_avg_s[8], ba_max_s[8];
+#define FMT_SPD(dst, v) \
+    ((v) == 0 || (v) == 255 ? snprintf(dst, sizeof(dst), "N/A") : snprintf(dst, sizeof(dst), "%d", (v)))
+    FMT_SPD(ab_avg_s, line->a_to_b_avg_speed);
+    FMT_SPD(ab_max_s, line->a_to_b_max_speed);
+    FMT_SPD(ba_avg_s, line->b_to_a_avg_speed);
+    FMT_SPD(ba_max_s, line->b_to_a_max_speed);
+#undef FMT_SPD
+
+    const char *type_label = (line->road_type <= ROAD_TYPE_MAX && ROAD_LABELS[line->road_type])
+                             ? ROAD_LABELS[line->road_type] : "UNKNOWN";
+    const char *street_name = (line->street && line->street->full_name && *line->street->full_name)
+                              ? line->street->full_name : "(unnamed)";
+    const char *lane_type = line->lane_type <= 5 && LANE_TYPE_LABELS[line->lane_type] ? LANE_TYPE_LABELS[line->lane_type] : "UNKNOWN";
+
+    int rows = 8;
+    int popup_w = 260, popup_h = rows * line_h + 12;
+    if (px + popup_w > scr_w) px = (int)mouse.x - popup_w - 8;
+    if (py + popup_h > scr_h) py = (int)mouse.y - popup_h - 8;
+
+    DrawRectangle(px, py, popup_w, popup_h, Fade(BLACK, 0.85f));
+    DrawRectangleLines(px, py, popup_w, popup_h, (Color){180, 180, 180, 255});
+
+    int tx = px + 8, ty = py + 6;
+
+    snprintf(buf, sizeof(buf), "Road: %s (%d)", type_label, line->road_type);
+    DrawText(buf, tx, ty + row * line_h, font_size, (Color){255, 240, 150, 255});
+    row++;
+
+    snprintf(buf, sizeof(buf), "Name: %s", street_name);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Level: %d   Lane: %s   Attr: 0x%08X",
+             line->level, lane_type, line->attributes);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Speed A->B: %s avg / %s max", ab_avg_s, ab_max_s);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Speed B->A: %s avg / %s max", ba_avg_s, ba_max_s);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Flags A:0x%02X B:0x%02X   ExtID: %u",
+             line->a_to_b, line->b_to_a, line->ext_id);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Pt: %u->%u   Shapes: %u   StIdx: %u",
+             line->first_point_idx & POINT_INDEX_MASK,
+             line->last_point_idx  & POINT_INDEX_MASK,
+             line->shape_count, line->street_idx);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Broken: %s, Roundabout: %s", line->is_broken ? "Yes" : "No", line->is_roundabout ? "Yes" : "No");
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+}
+
+static void draw_polygon_popup(const WazeTile *tile, int32_t poly_idx, Vector2 mouse) {
+    if (poly_idx < 0 || poly_idx >= (int32_t)tile->polygon_count) return;
+    const WazePolygon *poly = &tile->polygons[poly_idx];
+
+    int font_size = 11;
+    int line_h = font_size + 4;
+    int row = 0;
+
+    char buf[256];
+
+    int px = (int)mouse.x + 16;
+    int py = (int)mouse.y + 16;
+    int scr_w = GetScreenWidth(), scr_h = GetScreenHeight();
+
+    const char *cfcc_label = (poly->cfcc <= CFCC_MAX && CFCC_LABELS[poly->cfcc])
+                             ? CFCC_LABELS[poly->cfcc] : "UNKNOWN";
+    const char *name = (poly->name && *poly->name) ? poly->name : "(unnamed)";
+
+    int rows = 5;
+    int popup_w = 250, popup_h = rows * line_h + 12;
+    if (px + popup_w > scr_w) px = (int)mouse.x - popup_w - 8;
+    if (py + popup_h > scr_h) py = (int)mouse.y - popup_h - 8;
+
+    DrawRectangle(px, py, popup_w, popup_h, Fade(BLACK, 0.85f));
+    DrawRectangleLines(px, py, popup_w, popup_h, (Color){180, 180, 180, 255});
+
+    int tx = px + 8, ty = py + 6;
+
+    snprintf(buf, sizeof(buf), "CFCC: %s (%d)", cfcc_label, poly->cfcc);
+    DrawText(buf, tx, ty + row * line_h, font_size, (Color){160, 255, 160, 255});
+    row++;
+
+    snprintf(buf, sizeof(buf), "Name: %s", name);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Points: %u   Ext: 0x%08X",
+             poly->point_count, poly->ex_data);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Bounds N:%u W:%u E:%u S:%u",
+             poly->north, poly->west, poly->east, poly->south);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
+    row++;
+
+    snprintf(buf, sizeof(buf), "Idx: pt[%u]  count:%u",
+             poly->first_point_idx, poly->point_count);
+    DrawText(buf, tx, ty + row * line_h, font_size, WHITE);
 }
 
 // ============================================================================
@@ -613,6 +911,18 @@ int main(int argc, char **argv) {
         // Point nodes (debug)
         if (show_points)
             draw_points(tile, ox, oy, zoom);
+
+        // Hover popups
+        {
+            Vector2 mouse = GetMousePosition();
+            int32_t hl = find_hovered_line(tile, ox, oy, zoom, mouse);
+            if (hl >= 0) {
+                draw_line_popup(tile, hl, mouse);
+            } else {
+                int32_t hp = find_hovered_polygon(tile, ox, oy, zoom, mouse);
+                if (hp >= 0) draw_polygon_popup(tile, hp, mouse);
+            }
+        }
 
         // Overlays
         if (show_info)

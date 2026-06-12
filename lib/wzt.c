@@ -272,8 +272,8 @@ WazeTile *wzt_parse(const uint8_t *data, size_t data_size)
 
             /* Route */
             if (i < _c15) {
-                line->a_to_b = _p15[i].a_to_b & ROUTE_CAR_ALLOWED;
-                line->b_to_a = _p15[i].b_to_a & ROUTE_CAR_ALLOWED;
+                line->a_to_b = _p15[i].a_to_b;
+                line->b_to_a = _p15[i].b_to_a;
             }
             /* Speed average / max */
             if (i < _c21) {
