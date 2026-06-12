@@ -4,21 +4,25 @@ a rev eng project regarding [waze's](https://www.waze.com/) tile map formats
 
 more specifically, some scripts that help parse and create new tiles for waze using geojson (mainly aiming to bring Waze into ETS2, sorta)
 
+note: understanding the file format itself is mostly done. proper parsing is still WIP and creation of new tiles hasn't even started (cause im lazy and i lack the required data)
+
 # Stwuctwue :<zero-width space>P
 
 - `/hexpats` contains hexpat files for use in apps like [ImHex](https://imhex.werwolv.net/) to understand waze tile files
 - `/protos` contains the protobuf files used by waze (for proper server faking)
 - `/scripts` contains python scripts regarding the processing of waze tile files (WZM/MAP_PKG/RDM, WZDF, WZT)
 - `/src` contains server-related TS code. also contains a few tests, and the some intermediate scripts
+- `/lib` contains a few of the useful python scripts rewritten in C for speed
 
 # How do i use thwis? >w<
 
 - generate a geojson file using [truckermudgeon's lovely map parser/generator](https://github.com/truckermudgeon/maps)
 - shove it into `/src/scaleGeoJSON.ts` to scale it down to size (ETS2 uses maps 1:19 at scale)
-- run `/src/parseGeoJSON.ts` to generate a json file representing the data to be converted into waze tiles
+- run `/src/parseGeoJSON.ts` (or `/lib/build/geojson-parser`) to generate a json file representing the data to be converted into waze tiles
 - then you can either
     - run `/src/index.ts` and have it generate the tiles on the fly
     - run `/src/generate_tiles.py` and have it generate tiles ahead of time
+    - run `/lib/build/json-to-wzdf` and have it quickly generate tiles ahead of time
 - note, tiles are often cached in the app after receiving them, so generating on the fly isnt slow
 
 
@@ -38,14 +42,14 @@ more specifically, some scripts that help parse and create new tiles for waze us
 - [x] decompressing waze data files (WZDF)
 - [x] parsing wzt
     - [x] entry count
-    - [x] mask bits
+    - [x] mask bits (partial?)
     - [x] offsets
     - [x] string arrays
     - [x] shape data
     - [x] line data
     - [x] line summary
     - [x] broken lines
-    - [x] line round about
+    - [x] line roundabout
     - [x] point data
     - [x] point id
     - [x] line route
@@ -57,7 +61,7 @@ more specifically, some scripts that help parse and create new tiles for waze us
     - [x] street city
     - [x] polygon head
         - [x] first_polygon_point_idx 
-        - [x] polygon_point_count 
+        - [x] polygon_point_count
         - [x] name 
         - [x] cfcc 
         - [x] north 
@@ -70,10 +74,10 @@ more specifically, some scripts that help parse and create new tiles for waze us
     - [x] line speed id
     - [x] line speed id small
     - [x] range
-    - [x] alert data (experimental)
+    - [x] alert data (partial?)
     - [x] square data
     - [x] metadata attribute
-    - [x] venue head
+    - [x] venue head (partial?)
     - [x] venue id
     - [x] line ext type
     - [x] line ext id
@@ -82,6 +86,10 @@ more specifically, some scripts that help parse and create new tiles for waze us
     - [x] line speed max
     - [x] polygon ex
     - [ ] line attribute
+        - [x] byte 0 (flags)
+        - [ ] byte 1
+        - [ ] byte 2
+        - [ ] byte 3
     - [x] street id
     - [x] beacon pos (unused)
     - [x] beacon id (unused)
@@ -97,13 +105,16 @@ more specifically, some scripts that help parse and create new tiles for waze us
 
 ### Why a separate script for parsing the geojson?
 - python is stupidly slow at parsing json and looping through objects
+- the C program may also be even faster than the TS version, maybe
 
-### Why python and TS?
+### Why python, TS, and C?
 - python is simple enough to use for parsing the binary files themselves (although i do plan to write a rust lib EVENTUALLY, once i finish understanding the format) but too slow for most operations
 - typescript is sth im super familiar with already, but i dont wanna deal with `Uint8Array`s, trust me.
+- C is fast and i can access raw memory directly. i also wanted a small challenge, so i chose it instead of c++
 
 ### Generating the tiles manually with a python script seems slow!
 - only cause i didnt get to create a server-client approach yet, so the giant-ass json file that results from `parseGeoJSON.ts` takes forever to process and is reprocessed PER tile. multiply that by 20x (because thats how many tiles are by default in a map_pkg request) and yeah
+- try generating the tiles ahead of time using the C program
 
 ### Wtf is going on with `AA_test.ts` and `redirector_test.ts`???
 - i initially wanted to use [ETS2LA's](https://github.com/ETS2LA/Euro-Truck-Simulator-2-Lane-Assist) navigation sockets but for some reason theyre broken on my machine, so i just edited the nav sockets to instead use http posts to a hardcoded link lol
